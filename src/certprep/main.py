@@ -1,19 +1,21 @@
 """FastAPI app. The browser sends only certification ids, section codes, question and session IDs,
-option keys, and fixed choices (FR1, SR6); every id is pattern-checked and must exist in the
-registry before it touches a file (v2 SR-3). No AI model runs here and the app makes no network
-calls (v2 decision V2)."""
+option keys, fixed choices, and short notes (FR1, SR6); every id is pattern-checked and must exist
+in the registry before it touches a file (v2 SR-3). `security.SecurityMiddleware` checks every
+request first (v2 SR-1, SR-2, SR-4). No AI model runs here and the app makes no network calls
+(v2 decision V2)."""
 
+import html
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Annotated, Literal
 
 from fastapi import FastAPI, HTTPException, Path as PathParam, Query
-from fastapi.responses import FileResponse
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field, StrictBool, StrictInt
+from pydantic import BaseModel, Field, StrictBool, StrictInt, field_validator
 
-from . import certs, pool, sessions, tracker
+from . import certs, pool, security, sessions, tracker
 from .config import APP_NAME
 from .objectives import load_section, load_sections, objective_names
 
@@ -28,8 +30,10 @@ REPORT_REASONS = ("wrong-answer", "ambiguous", "factual-error", "off-objective",
                   "too-easy", "other")
 EXAM_GRACE_S = 30
 
-app = FastAPI(title=APP_NAME, docs_url=None, redoc_url=None)
+app = FastAPI(title=APP_NAME, docs_url=None, redoc_url=None, openapi_url=None)
+app.add_middleware(security.SecurityMiddleware)
 app.mount("/static", StaticFiles(directory=STATIC), name="static")
+CSRF_PLACEHOLDER = "__CSRF_TOKEN__"
 
 
 def _cert_or_404(cert_id: str) -> certs.Cert:
@@ -55,7 +59,9 @@ def _question_or_404(cert_id: str, question_id: str, allow_retired: bool = False
 
 @app.get("/")
 def index():
-    return FileResponse(STATIC / "index.html")
+    """The page, carrying this launch's CSRF token (the page sends it back on every change)."""
+    page = (STATIC / "index.html").read_text(encoding="utf-8")
+    return HTMLResponse(page.replace(CSRF_PLACEHOLDER, html.escape(security.CSRF_TOKEN, quote=True)))
 
 
 # ---- certifications and sections -----------------------------------------
@@ -112,13 +118,18 @@ class ReportRequest(BaseModel):
     reason: Literal[REPORT_REASONS]  # type: ignore[valid-type]
     note: Annotated[str, Field(max_length=300)] = ""
 
+    @field_validator("note")
+    @classmethod
+    def _clean_note(cls, v: str) -> str:
+        return security.clean_text(v, 300)
+
 
 @app.post("/api/certs/{cert_id}/questions/{question_id}/report")
 def report(cert_id: CertIdPath, question_id: QuestionIdPath, req: ReportRequest):
     cert = _cert_or_404(cert_id)
     q = _question_or_404(cert.id, question_id)
-    # The note is stored for the user's own records only.
-    reason = req.reason + (f": {req.note.strip()}" if req.note.strip() else "")
+    # The note (already cleaned) is stored for the user's own records only.
+    reason = req.reason + (f": {req.note}" if req.note else "")
     pool.retire(cert.id, q.id, f"Reported by user ({tracker.now_iso()}): {reason}")
     return {"id": q.id, "status": "retired"}
 

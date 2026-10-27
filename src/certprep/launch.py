@@ -68,7 +68,9 @@ def main(argv: list[str] | None = None) -> None:
     print("Keep this window open while you study. Close it, or press Ctrl+C, to stop the app.", flush=True)
     if not args.no_browser:
         threading.Thread(target=_open_when_ready, args=(url,), daemon=True).start()
-    uvicorn.run("certprep.main:app", host=HOST, port=port, log_level="warning")
+    # No proxy sits in front of this app, so forwarded headers are never trusted.
+    uvicorn.run("certprep.main:app", host=HOST, port=port, log_level="warning",
+                proxy_headers=False, server_header=False)
 
 
 if __name__ == "__main__":

@@ -13,8 +13,11 @@ const store = {
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* storage unavailable */ } },
 };
 
+// Sent with every request; the server refuses changes without it (SR-1). It changes each time the app starts.
+const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]')?.content ?? "";
+
 async function api(path, opts = {}) {
-  const r = await fetch(path, { headers: { "Content-Type": "application/json" }, ...opts });
+  const r = await fetch(path, { headers: { "Content-Type": "application/json", "X-CSRF-Token": CSRF_TOKEN }, ...opts });
   const body = await r.json().catch(() => ({}));
   if (!r.ok) {
     const d = body.detail;

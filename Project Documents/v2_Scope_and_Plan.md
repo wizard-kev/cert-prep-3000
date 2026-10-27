@@ -289,3 +289,25 @@ Each phase ends with the tests passing, a commit, and a short note in this docum
     - **Tests:** 99 pytest and the installer library checks pass. New tests cover the registry and allowlists, `cert.json` validation, the migration (run-once, original kept), the schema guard, backup pruning, per-certification reset, and traversal attempts on certification ids and sections.
     - **Pool checks:** `audit` passes on the 917 active questions. `coverage` fails only for C09-23, the gap from Q-C09-0100, which the user reported on 2026-10-22.
     - **UI** (tested on a copy): home, drill, feedback, report, results, tracker, export and review queue all work with no console errors. The real launcher served the real data.
+- **P3 done (2026-10-27):** security baseline. `src/certprep/security.py` adds ASGI middleware that runs before every route, so routes added later are covered automatically.
+  - **SR-1 (Host):** only `127.0.0.1` or `localhost` (any port) are served, which defeats DNS rebinding. Anything else gets 403, including other names that resolve locally and `[::1]`.
+  - **SR-1 (changes):** every POST needs:
+    - an `Origin` exactly equal to `http://<Host>`;
+    - no cross-site or same-site `Sec-Fetch-Site`;
+    - the per-launch CSRF token in `X-CSRF-Token`.
+  - **The token:** `/` serves the page with the token filled into a meta tag (`Cache-Control: no-store`), and `app.js` sends it back with every request. A page left open from an earlier launch gets a plain "reload the page" message.
+  - **SR-2 (bodies):** request bodies must be JSON (415 otherwise), have a Content-Length (411 for chunked), and be at most 1 MB (413).
+  - **SR-2 (free text):** `clean_text` applies Unicode NFKC, strips control and invisible characters (zero-width, bidirectional overrides), collapses whitespace, and checks the length after normalizing. The report note uses it now; P4 and P7 inputs will too.
+  - **SR-4 (headers):** every response, including errors, refusals and static files, carries a strict CSP (`default-src 'none'`, scripts and styles from the app only, no inline code, no eval, `frame-ancestors 'none'`), plus `nosniff`, `X-Frame-Options: DENY`, `no-referrer`, COOP/CORP and a restrictive Permissions-Policy. API responses are `no-store`.
+  - **Smaller changes:** the OpenAPI schema and docs are no longer served. The launcher turns off uvicorn's forwarded-header trust and its `Server` header.
+  - **SR-3:** done in P2.
+  - **Tests:** 45 new (`tests/test_security.py`), 144 pytest in total, all passing. They cover:
+    - allowed and refused hosts;
+    - ten ways a change request can lack proof of origin;
+    - a sweep confirming every POST route is protected;
+    - body type, size and chunking;
+    - headers on every kind of response;
+    - the page token;
+    - a static scan that fails if the UI ever builds HTML from strings or the page gains inline script, style or event handlers;
+    - text cleaning.
+  - **Verified by hand:** a full drill in the browser under the CSP, with no violations. Stale-token and no-token requests were refused, and the real launcher refused a rebinding Host and a token-less reset.

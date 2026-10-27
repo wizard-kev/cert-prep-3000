@@ -28,8 +28,11 @@ def fresh_data():
 
 @pytest.fixture
 def client():
+    """Behaves like the app's own page: right host, same origin, this launch's CSRF token."""
+    from certprep import security
     from certprep.main import app
-    return TestClient(app)
+    return TestClient(app, base_url="http://127.0.0.1:8000",
+                      headers={"Origin": "http://127.0.0.1:8000", "X-CSRF-Token": security.CSRF_TOKEN})
 
 
 # ---- status rules (plan 8.4) ------------------------------------------

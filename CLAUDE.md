@@ -18,7 +18,8 @@ Local web app for certification exam practice. Each certification has objective 
 - `src/certprep/pool.py`: per-section pools, atomic writes; verify / retire.
 - `src/certprep/tracker.py`: `progress.db` (schema version in `meta`), v1 migration, `backup(reason)` (keeps 10 per reason); objective status derived from attempts (plan 8.4).
 - `src/certprep/sessions.py`: selection per mode, exam allocation by `cert.json` weights, reports, export summary.
-- `src/certprep/main.py`: FastAPI routes (`/api/certs/{cert}/...`; sessions at `/api/sessions/{id}`); `static/`: UI.
+- `src/certprep/main.py`: FastAPI routes (`/api/certs/{cert}/...`; sessions at `/api/sessions/{id}`); `/` serves `static/index.html` with this launch's CSRF token filled in; `static/`: UI.
+- `src/certprep/security.py`: middleware run before every route (Host allowlist; Origin + CSRF token on POST; JSON-only, 1 MB body cap; CSP and other headers on every response) and `clean_text` for any free text from the user.
 - `src/certprep/launch.py`: starts the app on 127.0.0.1 (`CERTPREP_PORT`, default 8000) and opens the browser; reuses a running instance.
 - `tests/`: pytest; `conftest.py` points `CERTPREP_DATA_DIR` at a temp dir holding a copy of the CCST `cert.json` and objectives with empty pools, so tests never touch real data.
 - UI testing: run the `certprep-uitest` launch config, whose `CERTPREP_DATA_DIR` points at a scratch copy of `data/` (certs plus a copy of `progress.db`), never the real progress.
@@ -53,8 +54,9 @@ Write `{"questions": [...]}` files using the GeneratedQuestion fields (CCST's ar
 - Reported questions are retired by the app; check `coverage` and write replacements (e.g. `ch09_v2_fix1.json`) on a different angle from the surviving partner. Open gap: C09-23 (Q-C09-0100 reported 2026-10-22).
 
 ## Rules
-- The browser sends only certification ids, section codes, question and session IDs, option keys, and fixed choices; all are pattern-checked and must exist in the registry. Never put user text into prompts (SR6).
-- Treat model output as untrusted: validate, and render with `textContent` only (SR7).
+- The browser sends only certification ids, section codes, question and session IDs, option keys, fixed choices, and short notes; ids are pattern-checked and must exist in the registry. Never put user text into prompts (SR6).
+- Security baseline (v2 SR-1 to SR-4, `security.py`): every new route is covered by the middleware automatically; any new free-text field goes through `security.clean_text` with a length cap; never use user text in paths, SQL strings, regexes, or shell. Tests and API clients must send `Host: 127.0.0.1`/`localhost`, plus `Origin` and `X-CSRF-Token` on POSTs (see the test fixtures).
+- Treat model output as untrusted: validate, and render with `textContent` only (SR7). The CSP forbids inline scripts, inline styles, and `eval`; `tests/test_security.py` fails if the UI builds HTML from strings.
 - Imported questions enter the pool as `draft`; exam simulation uses `verified` only (D7, until v2 P5 changes it). Retire, never edit in place.
 - Never use real exam questions (brain dumps).
 - No API keys in code or the browser; `.env` is gitignored.
