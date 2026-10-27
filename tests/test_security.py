@@ -127,6 +127,12 @@ def test_page_carries_the_token_and_is_not_cached(client):
     assert client.get("/api/certs").headers["cache-control"] == "no-store"
 
 
+def test_static_files_are_revalidated_so_updates_are_never_mixed(client):
+    r = client.get("/static/app.js")
+    assert r.headers["cache-control"] == "no-cache" and r.headers.get("etag")
+    assert client.get("/static/app.js", headers={"If-None-Match": r.headers["etag"]}).status_code == 304
+
+
 def test_api_schema_and_docs_are_not_served(client):
     for path in ("/openapi.json", "/docs", "/redoc"):
         assert client.get(path).status_code == 404

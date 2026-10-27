@@ -64,6 +64,11 @@
     <p class="muted">Drafts must be spot-checked before they can appear in an exam simulation.</p>
     <div id="pool-actions" class="pool-actions"></div>
 
+    <h2>Work with Claude</h2>
+    <p class="muted">Get new questions, or a guided study session, from Claude in a web chat. The app writes the
+      prompt; you paste it into claude.ai and bring Claude's questions back here.</p>
+    <div class="row"><button type="button" id="claude-btn">Open the Claude workspace</button></div>
+
     <h2>Progress</h2>
     <div class="row">
       <button type="button" id="progress-btn">View objective tracker</button>
@@ -138,6 +143,53 @@
     <h2 id="q-h">Review drafts</h2>
     <p id="q-progress" class="muted"></p>
     <div id="q-card"></div>
+    <button type="button" class="back-btn secondary">Back to home</button>
+  </section>
+
+  <!-- Work with Claude: prompts and imports -->
+  <section id="v-claude" class="view" hidden aria-labelledby="c-h">
+    <h2 id="c-h">Work with Claude</h2>
+    <ol class="steps">
+      <li>Choose the objectives you want questions on, or want to study.</li>
+      <li>Build a prompt and copy it.</li>
+      <li>Open a new chat at <strong>claude.ai</strong> and paste the prompt.</li>
+      <li>For questions: copy Claude's whole reply (or download the file it gives you) and import it below.</li>
+    </ol>
+
+    <h3>1. Choose objectives</h3>
+    <div class="row">
+      <button type="button" class="secondary small" id="pick-gaps">Fewer than 2 questions (<span id="gap-count">0</span>)</button>
+      <button type="button" class="secondary small" id="pick-weak">My weak objectives (<span id="weak-count">0</span>)</button>
+      <button type="button" class="secondary small" id="pick-clear">Clear choices</button>
+    </div>
+    <div class="row">
+      <label for="obj-section">Browse a section</label>
+      <select id="obj-section"></select>
+    </div>
+    <div id="obj-list" class="obj-list" role="group" aria-label="Objectives"></div>
+    <p id="obj-picked" class="muted" aria-live="polite"></p>
+
+    <h3>2. Build a prompt</h3>
+    <div class="row">
+      <label for="per-objective">Questions per objective</label>
+      <select id="per-objective"><option>1</option><option>2</option><option>3</option></select>
+      <button type="button" id="build-questions">Build question prompt</button>
+      <button type="button" id="build-study" class="secondary">Build study-session prompt</button>
+    </div>
+    <p id="claude-msg" class="msg" aria-live="polite"></p>
+    <div id="prompt-box" hidden></div>
+
+    <h3>3. Import Claude's questions</h3>
+    <p class="muted">Paste Claude's whole reply, or choose the .json file it gave you. Questions that pass the
+      checks are added as drafts; any others come back with the reasons and a prompt that asks Claude to fix them.</p>
+    <label for="import-text" class="sr-only">Claude's reply</label>
+    <textarea id="import-text" rows="8" placeholder="Paste Claude's reply here"></textarea>
+    <div class="row">
+      <label for="import-file" class="muted">or choose a file</label>
+      <input type="file" id="import-file" accept=".json,.txt,application/json,text/plain">
+      <button type="button" id="import-btn">Import</button>
+    </div>
+    <div id="import-result" aria-live="polite"></div>
     <button type="button" class="back-btn secondary">Back to home</button>
   </section>
 

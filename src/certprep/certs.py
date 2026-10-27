@@ -17,6 +17,7 @@ from .config import settings
 CERT_ID = r"^[a-z0-9][a-z0-9-]{1,31}$"
 SECTION_CODE = r"^[A-Z]{1,3}\d{2}$"
 QUESTION_ID = r"^Q-[A-Z]{1,3}\d{2}-\d{4}$"
+OBJECTIVE_ID = r"^[A-Z]{1,3}\d{2}-\d{2}$"
 _CERT_ID = re.compile(CERT_ID)
 _SECTION_CODE = re.compile(SECTION_CODE)
 _QUESTION_ID = re.compile(r"^Q-([A-Z]{1,3}\d{2})-\d{4}$")

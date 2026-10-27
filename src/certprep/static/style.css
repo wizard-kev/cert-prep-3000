@@ -48,6 +48,14 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .mode p { margin: 0; font-size: .9rem; flex: 1; }
 .mode label { font-size: .9rem; display: flex; justify-content: space-between; align-items: center; }
 .pool-actions { display: flex; flex-wrap: wrap; gap: .4rem; }
+.steps { margin: .2rem 0 .8rem; padding-left: 1.3rem; }
+.obj-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .3rem; max-height: 22rem; overflow-y: auto; }
+.obj-list label { display: flex; gap: .5rem; align-items: flex-start; padding: .3rem .5rem; border: 1px solid var(--line); border-radius: 6px; font-size: .92rem; }
+.obj-list small { display: block; color: var(--muted); }
+.prompt-widget { margin: .5rem 0; }
+.prompt-widget textarea { min-height: 10rem; }
+.ok-list { color: var(--ok); }
+.problems { margin: .2rem 0 .4rem 1.2rem; color: var(--bad); font-size: .9rem; }
 
 .session-head { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
 .timer { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 600; }

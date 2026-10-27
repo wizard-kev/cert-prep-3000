@@ -14,7 +14,9 @@ Local web app for certification exam practice. Each certification has objective 
 - `src/certprep/certs.py`: certification registry; ids and section codes are pattern-checked and must exist on disk before they touch a path.
 - `src/certprep/objectives.py`: section objective files and table parser.
 - `src/certprep/schema.py`: question schema (plan 8.3).
-- `src/certprep/generator.py`: question import, automated checks (plan 10.2) and surface-cue checks, option shuffle; `plan_targets` (coverage + angle rotation) for the v2 prompt builder.
+- `src/certprep/generator.py`: question import, automated checks (plan 10.2) and surface-cue checks, option shuffle; `targets_for` assigns each chosen objective the angles it has used least (retired questions count, so a replacement takes a new approach).
+- `src/certprep/prompts.py`: prompts for a Claude chat (questions, repair, study session, ask about a question); `RULES` mirrors the import checks, `PROMPT_ANGLES` the angles offered. Reply format `certprep-questions` version 1.
+- `src/certprep/importer.py`: imports a pasted reply: envelope and field checks (unknown fields rejected), `clean_text` on every text field, per-question checks via `generator.import_items`, a dry run of the full checks on early rejects, a repair prompt for anything rejected, and an archive copy in the certification's `imports/` (`claude-<time>-<hash>.json`).
 - `src/certprep/pool.py`: per-section pools, atomic writes; verify / retire.
 - `src/certprep/tracker.py`: `progress.db` (schema version in `meta`), v1 migration, `backup(reason)` (keeps 10 per reason); objective status derived from attempts (plan 8.4).
 - `src/certprep/sessions.py`: selection per mode, exam allocation by `cert.json` weights, reports, export summary.
@@ -38,8 +40,11 @@ Local web app for certification exam practice. Each certification has objective 
 - `.gitattributes` sets `* -text` so files are stored byte-exact (pool JSON is CRLF, the rest LF). Don't add line-ending normalization.
 - Commit one logical change at a time; never commit progress databases or `.env`.
 
-## Authoring a section pool (v2 format since 2026-10-21)
-Write `{"questions": [...]}` files using the GeneratedQuestion fields (CCST's are in `data/certs/ccst-cyber/imports/`, e.g. `ch01_v2_set1a.json`). Rules:
+## Adding questions
+- **In the app (the normal way, v2 P4):** home page > "Open the Claude workspace": choose objectives (quick picks: fewer than 2 questions, weak), build the question prompt, paste it into claude.ai, paste the reply back under "Import". Rejected questions come back with reasons and a repair prompt. The rules Claude is given are `prompts.RULES`; keep them in step with the checks in `generator.py`.
+- **By hand or in a Claude Code session:** write `{"questions": [...]}` files using the GeneratedQuestion fields (CCST's are in `data/certs/ccst-cyber/imports/`, e.g. `ch01_v2_set1a.json`) and use the CLI import. The rules below apply either way.
+
+## Authoring rules (v2 format since 2026-10-21)
 - One question per objective as primary (`objectives[0]`); add look-alike IDs as secondary. Two sets, a different angle per objective in each.
 - Every option has a `role`: `best` (keyed answer), `partial` (technically correct, not best), `related` (neighbouring concept/protocol/practice), `wrong` (plausible misconception). Use one of each where it fits. A `partial` option requires a BEST/FIRST/MOST qualifier in the stem.
 - No surface cues: options of similar length and form; no absolutes (always, never, only, all, every...) in wrong options unless the answer has one too; the answer must not repeat the stem's wording; no joke options. The import rejects violations.
@@ -51,7 +56,7 @@ Write `{"questions": [...]}` files using the GeneratedQuestion fields (CCST's ar
 - Use only the section's own objective IDs, at most 3 per question. Never use specific-looking CVE IDs.
 - Run `--dry-run` before importing; after importing run `coverage --sections <CODE>` and `audit --sections <CODE>` (both must pass).
 - Replacing a pool: `python -m certprep.cli retire --section <CODE> --all-active --superseded --reason "..."`, then import. `--superseded` keeps the learner's answers counting; without it (reported or flawed questions) their answers are dropped from objective status.
-- Reported questions are retired by the app; check `coverage` and write replacements (e.g. `ch09_v2_fix1.json`) on a different angle from the surviving partner. Open gap: C09-23 (Q-C09-0100 reported 2026-10-22).
+- Reported questions are retired by the app; check `coverage` (or the workspace's "Fewer than 2 questions" pick) and write replacements on a different angle (the prompt builder does this automatically). Q-C09-0100 (reported 2026-10-22) was replaced by Q-C09-0154 through the in-app flow on 2026-10-27.
 
 ## Rules
 - The browser sends only certification ids, section codes, question and session IDs, option keys, fixed choices, and short notes; ids are pattern-checked and must exist in the registry. Never put user text into prompts (SR6).

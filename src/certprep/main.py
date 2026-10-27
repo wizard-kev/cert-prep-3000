@@ -15,12 +15,13 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, StrictBool, StrictInt, field_validator
 
-from . import certs, pool, security, sessions, tracker
+from . import certs, importer, pool, prompts, security, sessions, tracker
 from .config import APP_NAME
-from .objectives import load_section, load_sections, objective_names
+from .objectives import UnknownObjective, load_section, load_sections, objective_names
 
 STATIC = Path(__file__).parent / "static"
 QuestionId = Annotated[str, Field(pattern=certs.QUESTION_ID)]
+ObjectiveId = Annotated[str, Field(pattern=certs.OBJECTIVE_ID)]
 QuestionIdPath = Annotated[str, PathParam(pattern=certs.QUESTION_ID)]
 CertIdPath = Annotated[str, PathParam(pattern=certs.CERT_ID)]
 SectionCode = Annotated[str, Field(pattern=certs.SECTION_CODE)]
@@ -91,6 +92,70 @@ def sections_view(cert_id: CertIdPath):
             "retired": sum(q.status == "retired" for q in qs),
         })
     return out
+
+
+@app.get("/api/certs/{cert_id}/objectives")
+def objectives_view(cert_id: CertIdPath):
+    """Every objective with its active question count, angles, and the learner's status (for choosing
+    what to generate or study)."""
+    cert = _cert_or_404(cert_id)
+    stats = sessions.current_stats(cert.id)
+    out = []
+    for s in load_sections(cert.id):
+        active = pool.active(cert.id, [s.code])
+        for o in s.objectives.values():
+            mine = [q for q in active if q.objectives[0] == o.id]
+            st = stats.get(o.id)
+            out.append({"id": o.id, "section": s.code, "name": o.objective, "questions": len(mine),
+                        "angles": sorted({q.angle for q in mine}), "status": st.status if st else "New",
+                        "attempts": st.attempts if st else 0})
+    return out
+
+
+# ---- prompts for a Claude chat, and importing the reply (v2 section 5) ----
+
+ObjectiveQuery = Annotated[list[ObjectiveId], Query(min_length=1, max_length=prompts.MAX_OBJECTIVES)]
+
+
+def _prompt_or_422(build):
+    try:
+        return build()
+    except (prompts.PromptError, UnknownObjective) as e:
+        raise HTTPException(422, str(e)) from None
+
+
+@app.get("/api/certs/{cert_id}/prompts/questions")
+def question_prompt(cert_id: CertIdPath, objective: ObjectiveQuery,
+                    per_objective: Annotated[int, Query(ge=1, le=3)] = 1):
+    cert = _cert_or_404(cert_id)
+    return _prompt_or_422(lambda: prompts.question_prompt(cert.id, objective, per_objective))
+
+
+@app.get("/api/certs/{cert_id}/prompts/study")
+def study_prompt(cert_id: CertIdPath, objective: ObjectiveQuery):
+    cert = _cert_or_404(cert_id)
+    return {"prompt": _prompt_or_422(lambda: prompts.study_prompt(cert.id, objective))}
+
+
+@app.get("/api/certs/{cert_id}/prompts/ask/{question_id}")
+def ask_prompt(cert_id: CertIdPath, question_id: QuestionIdPath,
+               selected: Annotated[list[Annotated[str, Field(pattern=r"^[A-F]$")]], Query(max_length=6)] = []):
+    cert = _cert_or_404(cert_id)
+    _question_or_404(cert.id, question_id, allow_retired=True)
+    return {"prompt": _prompt_or_422(lambda: prompts.ask_prompt(cert.id, question_id, selected))}
+
+
+class ImportRequest(BaseModel):
+    text: Annotated[str, Field(min_length=1, max_length=importer.MAX_TEXT_CHARS)]
+
+
+@app.post("/api/certs/{cert_id}/imports")
+def import_questions(cert_id: CertIdPath, req: ImportRequest):
+    cert = _cert_or_404(cert_id)
+    try:
+        return importer.import_reply(cert.id, req.text).as_dict()
+    except importer.ImportProblem as e:
+        raise HTTPException(422, str(e)) from None
 
 
 # ---- question review: verify / report (D7, FR6) -------------------------

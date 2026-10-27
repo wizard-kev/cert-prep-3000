@@ -298,7 +298,7 @@ function showFeedback(correct, full, selected) {
     el("p", null, full.explanation),
     el("p", "muted", `Discriminator: ${full.discriminator_tested}`),
     el("p", "muted", `${full.objectives.map((o) => `${o} ${names[o] ?? ""}`.trim()).join(" · ")} · angle: ${full.angle} · ${full.id}`),
-    questionTools(full, correct, S.id),
+    questionTools(full, correct, S.id, selected),
   );
   fb.hidden = false;
   $("s-submit").hidden = true;
@@ -307,8 +307,29 @@ function showFeedback(correct, full, selected) {
   if (!last) $("s-next").focus();
 }
 
-// Error type (for misses) and report controls shared by feedback and reports.
-function questionTools(full, correct, sessionId) {
+// A prompt ready to copy into a Claude chat: read-only text, a Copy button, and where to paste it.
+function promptWidget(title, text, hint) {
+  const box = el("div", "prompt-widget");
+  const area = el("textarea");
+  area.readOnly = true;
+  area.rows = 10;
+  area.value = text;
+  area.setAttribute("aria-label", title);
+  const copy = el("button", "small", "Copy prompt");
+  copy.type = "button";
+  const status = el("span", "muted", `${text.length.toLocaleString()} characters. ${hint ?? "Paste it into a new chat at claude.ai."}`);
+  copy.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(area.value); status.textContent = "Copied. Paste it into a new chat at claude.ai."; }
+    catch { area.select(); status.textContent = "Press Ctrl+C to copy the selected text."; }
+  });
+  const row = el("div", "row");
+  row.append(copy, status);
+  box.append(el("strong", null, title), area, row);
+  return box;
+}
+
+// Error type (for misses), report, and ask-Claude controls shared by feedback and reports.
+function questionTools(full, correct, sessionId, selected = []) {
   const tools = el("div", "tools");
   if (!correct && sessionId) {
     const sel = el("select");
@@ -325,8 +346,23 @@ function questionTools(full, correct, sessionId) {
     });
     tools.append(sel, status);
   }
-  tools.append(reportControl(full.id));
-  return tools;
+  const ask = el("button", "secondary small", "Ask Claude about this");
+  ask.type = "button";
+  const askOut = el("div");
+  ask.addEventListener("click", async () => {
+    ask.disabled = true;
+    try {
+      const q = selected.map((k) => `selected=${encodeURIComponent(k)}`).join("&");
+      const { prompt } = await api(certPath(`/prompts/ask/${encodeURIComponent(full.id)}${q ? `?${q}` : ""}`));
+      askOut.replaceChildren(promptWidget("Prompt about this question", prompt,
+        "Paste it into a new chat at claude.ai. If Claude says the answer key is wrong, report the question here."));
+    } catch (e) { askOut.replaceChildren(el("p", "msg", e.message)); }
+    finally { ask.disabled = false; }
+  });
+  tools.append(ask, reportControl(full.id));
+  const wrap = el("div");
+  wrap.append(tools, askOut);
+  return wrap;
 }
 
 function reportControl(questionId, onDone, preset) {
@@ -412,7 +448,7 @@ function renderReport(rep, timeUp) {
     markOptions(opts, q, it.attempt?.selected ?? []);
     box.append(opts, el("p", null, q.explanation), el("p", "muted", `Discriminator: ${q.discriminator_tested}`));
     if (it.attempt) box.append(el("p", "muted", `Your confidence: ${it.attempt.confidence}`));
-    if (!q.retired_reason) box.append(questionTools(q, it.correct || !it.attempt, s.id));
+    if (!q.retired_reason) box.append(questionTools(q, it.correct || !it.attempt, s.id, it.attempt?.selected ?? []));
     // Misses start expanded where feedback was withheld until now.
     box.open = !it.correct && (s.mode === "exam" || s.mode === "diagnostic");
     return box;
@@ -470,6 +506,133 @@ function renderQueueCard() {
     actions,
   );
   verify.focus();
+}
+
+// ---- work with Claude: choose objectives, build prompts, import ------------
+
+const MAX_PROMPT_OBJECTIVES = 30;
+const MAX_IMPORT_CHARS = 900000;
+let CL = { objectives: [], picked: new Set() };
+
+async function openClaude() {
+  CL.objectives = await api(certPath("/objectives"));
+  const known = new Set(CL.objectives.map((o) => o.id));
+  CL.picked = new Set([...CL.picked].filter((id) => known.has(id)));
+  const sel = $("obj-section");
+  const prev = sel.value;
+  sel.replaceChildren(...sections.map((s) => { const o = el("option", null, s.name); o.value = s.code; return o; }));
+  if (sections.some((s) => s.code === prev)) sel.value = prev;
+  $("gap-count").textContent = String(CL.objectives.filter((o) => o.questions < 2).length);
+  $("weak-count").textContent = String(CL.objectives.filter((o) => o.status === "Weak").length);
+  $("claude-msg").textContent = "";
+  renderObjectiveList();
+  show("claude");
+}
+
+function renderObjectiveList() {
+  const code = $("obj-section").value;
+  $("obj-list").replaceChildren(...CL.objectives.filter((o) => o.section === code).map((o) => {
+    const label = el("label");
+    const box = el("input");
+    box.type = "checkbox";
+    box.value = o.id;
+    box.checked = CL.picked.has(o.id);
+    box.addEventListener("change", () => {
+      if (box.checked) CL.picked.add(o.id); else CL.picked.delete(o.id);
+      renderPicked();
+    });
+    const text = el("span");
+    const count = `${o.questions} question${o.questions === 1 ? "" : "s"}`;
+    text.append(el("span", null, `${o.id} ${o.name}`), el("small", null, `${count} · ${o.status}`));
+    label.append(box, text);
+    return label;
+  }));
+  renderPicked();
+}
+
+function renderPicked() {
+  const n = CL.picked.size;
+  $("obj-picked").textContent = n ? `${n} objective${n === 1 ? "" : "s"} chosen: ${[...CL.picked].sort().join(", ")}` +
+    (n > MAX_PROMPT_OBJECTIVES ? ` (a prompt takes at most ${MAX_PROMPT_OBJECTIVES})` : "") : "No objectives chosen yet.";
+}
+
+function pickWhere(test, label) {
+  const ids = CL.objectives.filter(test).map((o) => o.id);
+  if (!ids.length) { $("claude-msg").textContent = `No ${label} right now.`; return; }
+  for (const id of ids.slice(0, MAX_PROMPT_OBJECTIVES)) CL.picked.add(id);
+  $("claude-msg").textContent = ids.length > MAX_PROMPT_OBJECTIVES
+    ? `${ids.length} ${label}; added the first ${MAX_PROMPT_OBJECTIVES}. Build a prompt, then come back for the rest.` : "";
+  renderObjectiveList();
+}
+
+async function buildPrompt(kind) {
+  $("claude-msg").textContent = "";
+  const ids = [...CL.picked].sort();
+  if (!ids.length) { $("claude-msg").textContent = "Choose at least one objective first."; return; }
+  if (ids.length > MAX_PROMPT_OBJECTIVES) { $("claude-msg").textContent = `Choose at most ${MAX_PROMPT_OBJECTIVES} objectives.`; return; }
+  const q = ids.map((id) => `objective=${encodeURIComponent(id)}`).join("&");
+  try {
+    if (kind === "questions") {
+      const r = await api(certPath(`/prompts/questions?${q}&per_objective=${$("per-objective").value}`));
+      $("prompt-box").replaceChildren(promptWidget(`Question prompt (${r.targets.length} question${r.targets.length === 1 ? "" : "s"})`, r.prompt,
+        "Paste it into a new chat at claude.ai, then import Claude's reply in step 3."));
+    } else {
+      const r = await api(certPath(`/prompts/study?${q}`));
+      $("prompt-box").replaceChildren(promptWidget("Study-session prompt", r.prompt,
+        "Paste it into a new chat at claude.ai and answer Claude's questions."));
+    }
+    $("prompt-box").hidden = false;
+  } catch (e) { $("claude-msg").textContent = e.message; }
+}
+
+function loadImportFile() {
+  const file = $("import-file").files[0];
+  if (!file) return;
+  if (file.size > MAX_IMPORT_CHARS) { $("claude-msg").textContent = "That file is too large to import."; $("import-file").value = ""; return; }
+  const reader = new FileReader();
+  reader.onload = () => { $("import-text").value = String(reader.result); };
+  reader.onerror = () => { $("claude-msg").textContent = "Couldn't read that file."; };
+  reader.readAsText(file);
+}
+
+async function runImport() {
+  const text = $("import-text").value;
+  const out = $("import-result");
+  if (!text.trim()) { out.replaceChildren(el("p", "msg", "Paste Claude's reply (or choose its file) first.")); return; }
+  if (text.length > MAX_IMPORT_CHARS) { out.replaceChildren(el("p", "msg", "That reply is too long to import at once.")); return; }
+  $("import-btn").disabled = true;
+  try {
+    const r = await post(certPath("/imports"), { text });
+    const parts = [];
+    if (r.accepted.length) {
+      parts.push(el("p", "ok-list", `Added ${r.accepted.length === 1 ? "1 question as a draft" : `${r.accepted.length} questions as drafts`}: ` +
+        r.accepted.map((a) => `${a.id} (${a.objective})`).join(", ")));
+    }
+    if (r.rejected.length) {
+      parts.push(el("p", "msg", `${r.rejected.length} question${r.rejected.length === 1 ? " was" : "s were"} not added:`));
+      for (const x of r.rejected) {
+        const item = el("div", "item");
+        item.append(el("strong", null, `Question ${x.index + 1}${x.objective ? ` (${x.objective})` : ""}`));
+        if (x.stem) item.append(el("p", "muted", x.stem));
+        const ul = el("ul", "problems");
+        for (const p of x.problems) ul.append(el("li", null, p));
+        item.append(ul);
+        parts.push(item);
+      }
+      parts.push(promptWidget("Repair prompt", r.repair_prompt,
+        "Paste it into the same Claude chat, then import the corrected questions here."));
+    }
+    for (const w of r.warnings) parts.push(el("p", "muted", w));
+    parts.push(el("p", "muted", `Saved a copy of this reply as ${r.archive}.`));
+    out.replaceChildren(...parts);
+    if (r.accepted.length) $("import-text").value = "";
+    $("import-file").value = "";
+    await openClaude();
+  } catch (e) {
+    out.replaceChildren(el("p", "msg", e.message));
+  } finally {
+    $("import-btn").disabled = false;
+  }
 }
 
 // ---- tracker, export, reset ----------------------------------------------
@@ -577,6 +740,15 @@ $("progress-btn").addEventListener("click", openProgress);
 $("export-btn").addEventListener("click", exportSummary);
 $("copy-btn").addEventListener("click", () => navigator.clipboard?.writeText($("export-text").value));
 $("reset-btn").addEventListener("click", resetProgress);
+$("claude-btn").addEventListener("click", () => openClaude().catch((e) => { $("home-msg").textContent = e.message; }));
+$("obj-section").addEventListener("change", renderObjectiveList);
+$("pick-gaps").addEventListener("click", () => pickWhere((o) => o.questions < 2, "objectives with fewer than 2 questions"));
+$("pick-weak").addEventListener("click", () => pickWhere((o) => o.status === "Weak", "weak objectives"));
+$("pick-clear").addEventListener("click", () => { CL.picked.clear(); $("claude-msg").textContent = ""; renderObjectiveList(); });
+$("build-questions").addEventListener("click", () => buildPrompt("questions"));
+$("build-study").addEventListener("click", () => buildPrompt("study"));
+$("import-file").addEventListener("change", loadImportFile);
+$("import-btn").addEventListener("click", runImport);
 $("home-link").addEventListener("click", (e) => { e.preventDefault(); if (!S || confirm("Leave this session?")) { clearInterval(timerHandle); S = null; loadHome(); } });
 for (const b of document.querySelectorAll(".back-btn")) b.addEventListener("click", loadHome);
 

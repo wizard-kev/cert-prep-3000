@@ -87,15 +87,18 @@ class SecurityMiddleware:
             await JSONResponse({"detail": message}, status_code=status,
                                headers={**SECURITY_HEADERS, "Cache-Control": "no-store"})(scope, receive, send)
             return
-        no_store = scope["path"] == "/" or scope["path"].startswith("/api/")
+        # The page and API answers are never cached. Static files are revalidated on every load
+        # (cheap: unchanged files get 304), so after an update the browser can't mix an old
+        # app.js with a new page.
+        path = scope["path"]
+        cache = "no-store" if path == "/" or path.startswith("/api/") else "no-cache"
 
         async def send_with_headers(message):
             if message["type"] == "http.response.start":
                 h = MutableHeaders(scope=message)
                 for key, value in SECURITY_HEADERS.items():
                     h[key] = value
-                if no_store:
-                    h["Cache-Control"] = "no-store"
+                h["Cache-Control"] = cache
             await send(message)
 
         await self.app(scope, receive, send_with_headers)

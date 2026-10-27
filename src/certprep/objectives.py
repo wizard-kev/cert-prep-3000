@@ -73,3 +73,20 @@ def load_sections(cert_id: str) -> list[Section]:
 
 def objective_names(cert_id: str) -> dict[str, str]:
     return {o.id: o.objective for s in load_sections(cert_id) for o in s.objectives.values()}
+
+
+class UnknownObjective(ValueError):
+    pass
+
+
+def find_objective(cert_id: str, objective_id: object) -> tuple[Section, Objective]:
+    """The section and row for an objective ID such as C09-23 (its section is the part before the dash)."""
+    if not isinstance(objective_id, str) or not re.match(certs.OBJECTIVE_ID, objective_id):
+        raise UnknownObjective(f"not an objective id: {objective_id!r}")
+    try:
+        section = load_section(cert_id, objective_id.split("-")[0])
+    except (certs.UnknownSection, OSError, ValueError):
+        raise UnknownObjective(f"unknown objective: {objective_id}") from None
+    if objective_id not in section.objectives:
+        raise UnknownObjective(f"unknown objective: {objective_id}")
+    return section, section.objectives[objective_id]

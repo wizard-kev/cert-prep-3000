@@ -311,3 +311,27 @@ Each phase ends with the tests passing, a commit, and a short note in this docum
     - a static scan that fails if the UI ever builds HTML from strings or the page gains inline script, style or event handlers;
     - text cleaning.
   - **Verified by hand:** a full drill in the browser under the CSP, with no violations. Stale-token and no-token requests were refused, and the real launcher refused a rebinding Host and a token-less reset.
+- **P4 done (2026-10-27):** prompt builder and in-app import.
+  - **`prompts.py`:** four prompts.
+    - **Question generation:** Claude's role; one numbered target per question, each with an objective, an angle and a type; the objective rows; neighbouring objectives for look-alike distractors; the learner's recent wrong choices when there is history; `RULES`, which mirror the import checks; and the exact reply format (`certprep-questions` v1) with a template. Up to 30 objectives, 1-3 questions each, at most 30 questions.
+    - **Repair:** the rejected questions with their problems, asking for fixes that don't break another rule.
+    - **Study session:** a tutor role, how to run the dialogue, the objectives, and the learner's progress and mistakes.
+    - **Ask about this question:** replaces the old Explain button. It includes the learner's answer and asks Claude to say plainly if the key looks wrong, so the question can be reported.
+  - **Angles:** `generator.targets_for` gives each objective the angles it has used least and never repeats its newest one. Retired questions count as used, so a replacement for a reported question takes a different approach.
+  - **`importer.py`:**
+    - **Parsing:** accepts a reply with or without a ```json fence and checks the wrapper (format, version, certification, 1-50 questions).
+    - **Per question:** unknown fields are rejected, `clean_text` runs on every text field, and questions are grouped by the section of their primary objective and pass through the existing checks.
+    - **Early rejects:** a question rejected for its fields still gets a dry run of the full checks, so one repair round fixes everything.
+    - **After import:** the result adds a repair prompt and a pool answer-pattern warning when an import tips a section outside the audit bands. The cleaned reply is archived as `imports/claude-<time>-<hash>.json`.
+  - **UI:**
+    - a "Work with Claude" page with numbered steps;
+    - objective picks ("fewer than 2 questions", "my weak objectives", or browsing by section);
+    - question and study prompts with Copy buttons;
+    - import by paste or file, with accepted and rejected results and the repair prompt;
+    - "Ask Claude about this" on every question's feedback and report.
+  - **Cache fix:** static files are now sent `Cache-Control: no-cache` (revalidated with ETag). Testing showed a browser mixing a cached old `app.js` with the new page after an update.
+  - **Exit test, run on the real data through the real UI:**
+    - "Fewer than 2 questions" found the one gap, C09-23 (Q-C09-0100, reported 2026-10-22), and built a prompt that assigned the classify-element angle, which C09-23 had never used.
+    - A reply written to that prompt imported as **Q-C09-0154** (draft, claude/claude-chat), archived as `claude-20261027T173734Z-3dcc7933.json`. The reply was written in this Claude Code session standing in for claude.ai.
+    - `coverage` passes for all 13 sections again; `audit` passes on 918 active questions.
+  - **Tests:** 173 pytest pass, including 29 new prompt and import tests.

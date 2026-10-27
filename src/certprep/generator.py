@@ -31,7 +31,8 @@ class Target:
 class BatchResult:
     requested: int
     accepted: list[Question] = field(default_factory=list)
-    rejected: list[dict] = field(default_factory=list)
+    accepted_index: list[int] = field(default_factory=list)  # position of each accepted question in the input
+    rejected: list[dict] = field(default_factory=list)       # each has "index", "target", "problems"
     model: str = ""
 
     def summary(self) -> dict:
@@ -62,6 +63,29 @@ def plan_targets(section: Section, existing: list[Question], n: int, rng: random
         angle = rng.choice([a for a in choices if used[a] == fewest])
         qtype = "multi" if rng.random() < MULTI_SHARE else "single"
         targets.append(Target(obj_id, angle, qtype))
+    return targets
+
+
+def targets_for(objective_ids: list[str], existing: list[Question], per_objective: int, angles: list[str],
+                rng: random.Random) -> list[Target]:
+    """Targets for chosen objectives: `per_objective` each, every one on the angle the objective's
+    questions have used least (never the newest active one), so new questions add variety. Retired
+    questions count as used too: a replacement for a reported question takes a different approach."""
+    active = [q for q in existing if q.status != "retired"]
+    last = pool.last_angle(active)
+    used: dict[str, Counter] = {}
+    for q in existing:
+        used.setdefault(q.objectives[0], Counter())[q.angle] += 1
+    targets = []
+    for obj_id in objective_ids:
+        counts = Counter(used.get(obj_id, Counter()))
+        for _ in range(per_objective):
+            choices = [a for a in angles if a != last.get(obj_id)] or list(angles)
+            fewest = min(counts[a] for a in choices)
+            angle = rng.choice([a for a in choices if counts[a] == fewest])
+            counts[angle] += 1
+            qtype = "multi" if rng.random() < MULTI_SHARE else "single"
+            targets.append(Target(obj_id, angle, qtype))
     return targets
 
 
@@ -248,6 +272,14 @@ def import_items(cert_id: str, section_code: str, items: list, provider_name: st
     return result
 
 
+def _loc(loc: tuple) -> str:
+    """A schema error location in plain words: ("options", 2, "text") -> "options[2].text"."""
+    out = ""
+    for part in loc:
+        out += f"[{part}]" if isinstance(part, int) else (f".{part}" if out else str(part))
+    return out or "question"
+
+
 def _store(section: Section, items: list, targets: list[Target], provider_name: str, model: str,
            rng: random.Random, result: BatchResult, strict: bool = True) -> None:
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -256,22 +288,24 @@ def _store(section: Section, items: list, targets: list[Target], provider_name: 
         # Retired questions are never served, so they don't block a corrected replacement.
         seen = [content_words(q) for q in existing if q.status != "retired"]
         valid: list[GeneratedQuestion] = []
+        result.accepted_index = []
         for i, target in enumerate(targets):
             if i >= len(items):
-                result.rejected.append({"target": target.objective, "problems": ["missing from output"]})
+                result.rejected.append({"index": i, "target": target.objective, "problems": ["missing from output"]})
                 continue
             try:
                 q = repair(GeneratedQuestion.model_validate(items[i]))
             except ValidationError as e:
-                result.rejected.append({"target": target.objective,
-                                        "problems": [f"schema: {err['loc']} {err['msg']}" for err in e.errors()]})
+                result.rejected.append({"index": i, "target": target.objective,
+                                        "problems": [f"{_loc(err['loc'])}: {err['msg']}" for err in e.errors()]})
                 continue
             problems = check(q, target, section, seen, strict)
             if problems:
-                result.rejected.append({"target": target.objective, "problems": problems})
+                result.rejected.append({"index": i, "target": target.objective, "problems": problems})
                 continue
             seen.append(content_words(q))
             valid.append(shuffle_options(q, rng))
+            result.accepted_index.append(i)
         ids = pool.next_ids(section.code, existing, len(valid))
         return [
             Question(

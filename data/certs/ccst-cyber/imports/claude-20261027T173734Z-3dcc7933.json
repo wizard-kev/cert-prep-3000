@@ -1,0 +1,49 @@
+{
+  "format": "certprep-questions",
+  "format_version": 1,
+  "cert": "ccst-cyber",
+  "questions": [
+    {
+      "objectives": [
+        "C09-23",
+        "C09-24"
+      ],
+      "type": "single",
+      "angle": "classify-element",
+      "difficulty": 2,
+      "stem": "On a workgroup laptop that has never joined a domain, an admin opens gpedit.msc and sets a 10-minute screen lock. Which description BEST classifies this change?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Local group policy for this one laptop",
+          "rationale": "Correct: gpedit.msc edits local group policy, whose scope is the single machine it is set on.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "A domain GPO pushed to the computers in an OU",
+          "rationale": "A domain GPO comes from Active Directory, and this laptop has never joined a domain.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "A site-level GPO from Active Directory",
+          "rationale": "Site GPOs also come from Active Directory and reach the computers in a site, not one standalone laptop.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "An SELinux rule enforced by the Linux kernel",
+          "rationale": "SELinux is mandatory access control on Linux, not a Windows policy setting.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Local group policy configures a single computer, is edited with gpedit.msc, and needs no domain. Domain, site, and OU GPOs come from Active Directory, reach many computers, and override local settings where they conflict.",
+      "discriminator_tested": "Scope: local policy covers one machine, while Active Directory GPOs cover many."
+    }
+  ]
+}
