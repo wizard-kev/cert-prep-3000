@@ -26,6 +26,12 @@ Read `Project Documents/CCST_Project_Scope_and_Plan.md` before changing scope, s
 - Import authored questions: `... -m ccst.cli import --chapter 1 --file data\authored\ch01_claude.json --model <model-id> [--dry-run]`
 - Tests: `.\.venv\Scripts\python.exe -m pytest -q`
 
+## Version control (git, since 2026-10-27)
+- Branch `main`. Tag `v1` = the app before the v2 scope revision, identical to `C:\Claude\CCST Snapshots\CCST_v1_snapshot_2026-10-27.zip` apart from the untracked files below. Back to it: `git switch --detach v1` (or `git switch -c v1-restore v1`).
+- Not tracked (`.gitignore`): `.env`, `.venv`, caches, `install/install.log`, and `data/tracker.db` (the learner's answer history). The v1 copy of `tracker.db` lives only in the snapshot zip; back it up separately before risky changes.
+- `.gitattributes` sets `* -text` so files are stored byte-exact (pool JSON is CRLF, the rest LF). Don't add line-ending normalization.
+- Commit one logical change at a time; never commit `data/tracker.db` or `.env`.
+
 ## Authoring a chapter pool (current generation source, plan D1 amended; v2 format since 2026-10-21)
 Write `data/authored/chNN_v2_set1a.json` etc. as `{"questions": [...]}` using the GeneratedQuestion fields. Rules:
 - One question per objective as primary (`objectives[0]`); add look-alike IDs as secondary. Two sets, a different angle per objective in each.
