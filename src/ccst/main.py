@@ -1,9 +1,6 @@
 """FastAPI app. The browser sends only chapter numbers, IDs, option keys, and fixed choices
-(FR1, SR6); nothing it sends is ever placed in a model prompt."""
+(FR1, SR6). No AI model runs here and the app makes no network calls (v2 decision V2)."""
 
-import asyncio
-import json
-import time
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -15,10 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, StrictBool, StrictInt
 
 from . import pool, sessions, tracker
-from .config import settings
-from .generator import generate_batch
 from .objectives import CHAPTERS, load_chapter
-from .providers import ProviderError, get_provider
 
 STATIC = Path(__file__).parent / "static"
 QID_PATTERN = r"^Q-C(0[1-9]|1[0-3])-\d{4}$"
@@ -33,12 +27,6 @@ EXAM_GRACE_S = 30
 
 app = FastAPI(title="CCST Cybersecurity Prep", docs_url=None, redoc_url=None)
 app.mount("/static", StaticFiles(directory=STATIC), name="static")
-provider = get_provider()
-
-# Model calls are serialized and rate-limited (SR5): one job at a time, plus a cooldown for generation.
-_jobs: dict[str, dict] = {}
-_model_lock = asyncio.Lock()
-_last_generate = 0.0
 
 
 def _chapter_of(question_id: str) -> int:
@@ -57,13 +45,7 @@ def index():
     return FileResponse(STATIC / "index.html")
 
 
-# ---- status, chapters ---------------------------------------------------
-
-@app.get("/api/status")
-async def status():
-    return {"provider": provider.name, "model": provider.model,
-            "health": await provider.health(), "busy": _model_lock.locked()}
-
+# ---- chapters -----------------------------------------------------------
 
 @app.get("/api/chapters")
 def chapters():
@@ -81,85 +63,6 @@ def chapters():
             "retired": sum(q.status == "retired" for q in qs),
         })
     return out
-
-
-# ---- model jobs (generation, explanations) ------------------------------
-
-async def _run_job(job_id: str, work):
-    global _last_generate
-    job = _jobs[job_id]
-    async with _model_lock:
-        job.update(status="running", started=time.time())
-        try:
-            job.update(status="done", result=await work())
-        except ProviderError as e:
-            job.update(status="failed", error=str(e))
-        except Exception as e:  # noqa: BLE001 - surface any failure to the UI
-            job.update(status="failed", error=f"{type(e).__name__}: {e}")
-        finally:
-            if job["kind"] == "generate":
-                _last_generate = time.monotonic()
-
-
-def _start_job(kind: str, work, **meta) -> dict:
-    if _model_lock.locked() or any(j["status"] in ("queued", "running") for j in _jobs.values()):
-        raise HTTPException(409, "the model is busy with another job")
-    job_id = uuid.uuid4().hex[:12]
-    _jobs[job_id] = {"id": job_id, "kind": kind, "status": "queued", **meta}
-    asyncio.create_task(_run_job(job_id, work))
-    return _jobs[job_id]
-
-
-class GenerateRequest(BaseModel):
-    chapter: ChapterNo
-    count: Annotated[StrictInt, Field(ge=1, le=settings.max_batch_size)] = settings.batch_size
-
-
-@app.post("/api/generate", status_code=202)
-async def generate(req: GenerateRequest):
-    wait = settings.generate_cooldown_s - (time.monotonic() - _last_generate)
-    if _last_generate and wait > 0:
-        raise HTTPException(429, f"try again in {wait:.0f} s")
-
-    async def work():
-        return (await generate_batch(provider, req.chapter, req.count)).summary()
-
-    return _start_job("generate", work, chapter=req.chapter, count=req.count)
-
-
-EXPLAIN_SYSTEM = """You are a tutor for the Cisco CCST Cybersecurity exam. Explain the practice question below to a learner who got it wrong.
-Use only the objective rows provided as your source of truth. Name the discriminator: the one fact that separates the correct answer from the most tempting wrong option.
-Plain text only, no markdown, at most 150 words. Do not invent facts beyond the objective rows."""
-
-
-@app.post("/api/questions/{question_id}/explain", status_code=202)
-async def explain(question_id: QuestionIdPath):
-    q = _question_or_404(question_id)
-    chapter = load_chapter(q.chapter)
-    rows = [chapter.objectives[o] for o in q.objectives if o in chapter.objectives]
-    # The prompt is built only from stored question data and the objective file (SR6).
-    user = json.dumps({
-        "objectives": [{"id": r.id, "objective": r.objective, "core_idea": r.core_idea,
-                        "discriminator": r.discriminator} for r in rows],
-        "question": {"stem": q.stem, "exhibit": q.exhibit, "options": [o.model_dump() for o in q.options],
-                     "answer": q.answer, "discriminator_tested": q.discriminator_tested},
-    }, ensure_ascii=False)
-    schema = {"type": "object", "properties": {"explanation": {"type": "string"}}, "required": ["explanation"]}
-
-    async def work():
-        completion = await provider.complete_json(EXPLAIN_SYSTEM, user, schema, max_tokens=500)
-        text = str(json.loads(completion.text).get("explanation", "")).strip()
-        return {"question_id": q.id, "explanation": text[:2000], "provider": provider.name,
-                "model": completion.model, "seconds": completion.seconds}
-
-    return _start_job("explain", work, question_id=q.id)
-
-
-@app.get("/api/jobs/{job_id}")
-def job(job_id: Annotated[str, PathParam(pattern=r"^[0-9a-f]{12}$")]):
-    if job_id not in _jobs:
-        raise HTTPException(404, "unknown job")
-    return _jobs[job_id]
 
 
 # ---- question review: verify / report (D7, FR6) -------------------------

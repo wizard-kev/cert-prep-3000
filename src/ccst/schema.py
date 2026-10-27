@@ -1,4 +1,4 @@
-"""Question schema (plan section 8.3) and the JSON schema sent to the model."""
+"""Question schema (plan section 8.3)."""
 
 from typing import Literal
 
@@ -55,9 +55,9 @@ class Option(BaseModel):
 
 
 class GeneratedQuestion(BaseModel):
-    """What the model returns. Everything else is filled in by the backend."""
+    """What the question author (Claude) supplies. Everything else is filled in by the backend."""
     objectives: list[str] = Field(min_length=1, max_length=3)
-    type: Literal["single", "multi"]
+    type: Literal[QUESTION_TYPES]  # type: ignore[valid-type]
     angle: Literal[ANGLES]  # type: ignore[valid-type]
     difficulty: int = Field(ge=1, le=3)
     stem: str = Field(min_length=10, max_length=1200)
@@ -69,55 +69,15 @@ class GeneratedQuestion(BaseModel):
     discriminator_tested: str = Field(min_length=1, max_length=400)
 
 
-class GeneratedBatch(BaseModel):
-    questions: list[GeneratedQuestion]
-
-
 class Question(GeneratedQuestion):
     id: str
     chapter: int
     domain: str | None
     source_ref: str
-    provider: Literal["claude", "ollama"]
+    # Who wrote the question (provenance only), e.g. provider "claude", model "claude-opus-5-5".
+    provider: str = Field(pattern=r"^[a-z0-9][a-z0-9._-]{0,31}$")
     model: str
     status: Literal["draft", "verified", "retired"] = "draft"
     created_at: str
     verified_at: str | None = None
     retired_reason: str | None = None
-
-
-def model_output_schema(n: int) -> dict:
-    """Plain JSON schema for structured outputs. Kept free of $refs so local models
-    can follow it; Ollama ignores 'description', so field guidance lives in the prompt."""
-    option = {
-        "type": "object",
-        "properties": {
-            "key": {"type": "string", "enum": ["A", "B", "C", "D", "E"]},
-            "text": {"type": "string"},
-            "rationale": {"type": "string"},
-            "role": {"type": "string", "enum": list(ROLES)},
-        },
-        "required": ["key", "text", "rationale", "role"],
-    }
-    question = {
-        "type": "object",
-        "properties": {
-            "objectives": {"type": "array", "items": {"type": "string"}, "minItems": 1, "maxItems": 3},
-            "type": {"type": "string", "enum": list(QUESTION_TYPES)},
-            "angle": {"type": "string", "enum": list(GENERIC_ANGLES)},
-            "difficulty": {"type": "integer", "enum": [1, 2, 3]},
-            "stem": {"type": "string"},
-            "options": {"type": "array", "items": option, "minItems": 4, "maxItems": 5},
-            "answer": {"type": "array", "items": {"type": "string", "enum": ["A", "B", "C", "D", "E"]},
-                       "minItems": 1, "maxItems": 3},
-            "explanation": {"type": "string"},
-            "discriminator_tested": {"type": "string"},
-        },
-        "required": ["objectives", "type", "angle", "difficulty", "stem", "options",
-                     "answer", "explanation", "discriminator_tested"],
-    }
-    return {
-        "type": "object",
-        "properties": {"questions": {"type": "array", "items": question, "minItems": n, "maxItems": n}},
-        "required": ["questions"],
-    }

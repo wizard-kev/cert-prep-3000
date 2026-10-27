@@ -1,4 +1,4 @@
-// All question and model text is inserted with textContent, never innerHTML (SR7).
+// All question text is inserted with textContent, never innerHTML (SR7).
 "use strict";
 
 const $ = (id) => document.getElementById(id);
@@ -58,16 +58,6 @@ function selectedChapters() {
 
 // ---- home ---------------------------------------------------------------
 
-async function loadStatus() {
-  try {
-    const s = await api("/api/status");
-    const state = !s.health.reachable ? "not reachable" : s.health.model_present ? "ready" : "model not pulled";
-    $("provider").textContent = `Local model: ${s.provider} · ${s.model} · ${state}`;
-  } catch {
-    $("provider").textContent = "Local model: unknown";
-  }
-}
-
 async function loadHome() {
   chapters = await api("/api/chapters");
   const saved = new Set(store.get("ccst.chapters", [1]));
@@ -97,12 +87,6 @@ async function loadHome() {
     return b;
   }));
   if (!$("pool-actions").children.length) $("pool-actions").append(el("span", "muted", "No drafts waiting for review."));
-
-  $("gen-chapter").replaceChildren(...chapters.map((c) => {
-    const o = el("option", null, `Ch${c.chapter}`);
-    o.value = String(c.chapter);
-    return o;
-  }));
 
   const nameRows = await api(`/api/tracker?${chapters.map((c) => `chapter=${c.chapter}`).join("&")}`);
   names = Object.fromEntries(nameRows.map((r) => [r.objective, r.name]));
@@ -274,7 +258,7 @@ function showFeedback(correct, full, selected) {
   if (!last) $("s-next").focus();
 }
 
-// Error type (for misses), report, and explain controls shared by feedback and reports.
+// Error type (for misses) and report controls shared by feedback and reports.
 function questionTools(full, correct, sessionId) {
   const tools = el("div", "tools");
   if (!correct && sessionId) {
@@ -292,12 +276,7 @@ function questionTools(full, correct, sessionId) {
     });
     tools.append(sel, status);
   }
-  const explainBtn = el("button", "secondary small", "Explain this (local model)");
-  explainBtn.type = "button";
-  const out = el("div", "explain-out");
-  out.hidden = true;
-  explainBtn.addEventListener("click", () => runExplain(full.id, explainBtn, out));
-  tools.append(explainBtn, reportControl(full.id), out);
+  tools.append(reportControl(full.id));
   return tools;
 }
 
@@ -326,32 +305,6 @@ function reportControl(questionId, onDone, preset) {
   });
   wrap.append(btn);
   return wrap;
-}
-
-async function pollJob(job, onTick) {
-  const t0 = Date.now();
-  while (job.status === "queued" || job.status === "running") {
-    onTick?.(((Date.now() - t0) / 60000).toFixed(1));
-    await new Promise((r) => setTimeout(r, 3000));
-    job = await api(`/api/jobs/${job.id}`);
-  }
-  return job;
-}
-
-async function runExplain(questionId, btn, out) {
-  btn.disabled = true;
-  out.hidden = false;
-  try {
-    const job = await pollJob(await post(`/api/questions/${questionId}/explain`),
-      (m) => { out.textContent = `Asking the local model… ${m} min (CPU explanations can take a few minutes)`; });
-    out.textContent = job.status === "done"
-      ? `${job.result.explanation}\n\n(${job.result.provider}/${job.result.model}, ${job.result.seconds} s; check it against the objective file)`
-      : `Explanation failed: ${job.error}`;
-  } catch (e) {
-    out.textContent = `Explanation failed: ${e.message}`;
-  } finally {
-    btn.disabled = false;
-  }
 }
 
 async function finishSession(timeUp = false) {
@@ -532,26 +485,6 @@ async function resetProgress() {
   alert("Progress reset.");
 }
 
-async function generate() {
-  const chapter = Number($("gen-chapter").value);
-  const count = Number($("gen-count").value);
-  $("gen-btn").disabled = true;
-  try {
-    const job = await pollJob(await post("/api/generate", { chapter, count }),
-      (m) => { $("gen-status").textContent = `Generating ${count} locally… ${m} min`; });
-    if (job.status === "failed") $("gen-status").textContent = `Generation failed: ${job.error}`;
-    else {
-      const r = job.result;
-      $("gen-status").textContent = `Added ${r.accepted.length} of ${r.requested} as draft (${r.rejected.length} rejected) in ${r.seconds} s.`;
-    }
-  } catch (e) {
-    $("gen-status").textContent = `Generation failed: ${e.message}`;
-  } finally {
-    $("gen-btn").disabled = false;
-    loadHome();
-  }
-}
-
 // ---- wiring -------------------------------------------------------------
 
 for (const b of document.querySelectorAll("[data-mode]")) b.addEventListener("click", () => startSession(b.dataset.mode));
@@ -588,9 +521,7 @@ $("progress-btn").addEventListener("click", openProgress);
 $("export-btn").addEventListener("click", exportSummary);
 $("copy-btn").addEventListener("click", () => navigator.clipboard?.writeText($("export-text").value));
 $("reset-btn").addEventListener("click", resetProgress);
-$("gen-btn").addEventListener("click", generate);
 $("home-link").addEventListener("click", (e) => { e.preventDefault(); if (!S || confirm("Leave this session?")) { clearInterval(timerHandle); S = null; loadHome(); } });
 for (const b of document.querySelectorAll(".back-btn")) b.addEventListener("click", loadHome);
 
-loadStatus();
 loadHome();

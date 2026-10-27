@@ -9,7 +9,6 @@
 <body>
 <header>
   <h1><a href="#" id="home-link">CCST Cybersecurity Prep</a></h1>
-  <span id="provider" class="badge" aria-live="polite">checking provider…</span>
 </header>
 
 <main>
@@ -45,7 +44,7 @@
       </div>
       <div class="mode">
         <h3>Review misses</h3>
-        <p class="muted">Replay questions you last got wrong. Ask the local model to explain.</p>
+        <p class="muted">Replay questions you last got wrong.</p>
         <button type="button" data-mode="review">Start review</button>
       </div>
     </div>
@@ -56,16 +55,6 @@
     <h2>Question pool</h2>
     <p class="muted">Drafts must be spot-checked before they can appear in an exam simulation.</p>
     <div id="pool-actions" class="pool-actions"></div>
-
-    <details id="gen-box">
-      <summary>Generate with the local model (slow on CPU)</summary>
-      <div class="row">
-        <label for="gen-chapter">Chapter</label><select id="gen-chapter"></select>
-        <label for="gen-count">Count</label><input id="gen-count" type="number" min="1" max="10" value="3">
-        <button type="button" id="gen-btn">Generate</button>
-      </div>
-      <p id="gen-status" class="muted" aria-live="polite"></p>
-    </details>
 
     <h2>Progress</h2>
     <div class="row">

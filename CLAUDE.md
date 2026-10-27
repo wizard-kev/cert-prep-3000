@@ -1,6 +1,6 @@
 # CCST Cybersecurity Exam Prep
 
-Local web app that generates CCST (100-160) practice questions from per-chapter objective files using a local Ollama model (Claude API is Phase 2), stores them in a reviewed pool, and serves drills.
+Local web app that serves CCST (100-160) practice questions from a reviewed pool built against per-chapter objective files. Questions are written with Claude (in a chat or a Claude Code session) and imported; the app runs no AI model and makes no network calls (v2 P1).
 
 **v2 in progress (2026-10-27):** the app is being generalized into *Kevin's Super Cert Prep 3000* (any certification, prompts for Claude web chat instead of a local model, no Docker). `Project Documents/v2_Scope_and_Plan.md` is the governing plan; read it before changing anything and follow its phase order. Until a phase lands, the sections below describe the v1 app as it still exists in the code.
 
@@ -9,9 +9,9 @@ Read `Project Documents/CCST_Project_Scope_and_Plan.md` for the v1 history and C
 ## Map
 - `Objective Documents/CCST_ChXX.md` (01-13): source of truth. Objective IDs `Cxx-yy` are frozen: never rename, retire instead.
 - `src/ccst/objectives.py`: chapter allowlist (int 1-13) and table parser.
-- `src/ccst/schema.py`: question schema (plan 8.3) and the JSON schema sent to the model.
-- `src/ccst/generator.py`: target planning (coverage + angle rotation), prompt, automated checks (plan 10.2), option shuffle.
-- `src/ccst/providers/`: provider interface; `ollama.py` live, `claude.py` stub.
+- `src/ccst/schema.py`: question schema (plan 8.3).
+- `src/ccst/generator.py`: question import, automated checks (plan 10.2) and surface-cue checks, option shuffle; `plan_targets` (coverage + angle rotation) for the v2 prompt builder.
+- `src/ccst/launch.py`: starts the app on 127.0.0.1 (`CCST_PORT`, default 8000) and opens the browser; reuses a running instance.
 - `src/ccst/pool.py`: `data/questions/chNN.json`, atomic writes; verify / retire.
 - `src/ccst/tracker.py`: SQLite sessions and attempts (`data/tracker.db`); objective status derived from attempts (plan 8.4).
 - `src/ccst/sessions.py`: question selection per mode, exam domain allocation, reports, export summary.
@@ -20,12 +20,10 @@ Read `Project Documents/CCST_Project_Scope_and_Plan.md` for the v1 history and C
 - UI testing: run a second instance with `CCST_DATA_DIR` set to a scratch copy of `data/`, never the real tracker.
 
 ## Commands
-- Install / repair (Phase 5): `install\install.cmd` (idempotent; `-Bundle <dir>`, `-Model`, `-Port`, `-StopNativeOllama`, `-NonInteractive`, `-NoBrowser`). Uninstall: `install\uninstall.cmd` (keeps `data\tracker.db` unless `-RemoveProgress`). Offline bundle: `install\make-bundle.ps1 -Out <empty dir>`.
-- Docker directly: `docker compose up -d`, then http://127.0.0.1:8000. Optional manual model pull: `docker compose --profile pull run --rm ollama-pull`.
-- Installer model-choice test: `powershell -ExecutionPolicy Bypass -File tests\test_install_select_model.ps1`
-- Run app without Docker: `.\run.ps1` (http://127.0.0.1:8000); first install `pip install -r requirements-dev.txt` into `.venv`
-- Generate from CLI: `.\.venv\Scripts\python.exe -m ccst.cli generate --chapter 1 --count 5` (run from `src` or set `PYTHONPATH=src`)
-- Import authored questions: `... -m ccst.cli import --chapter 1 --file data\authored\ch01_claude.json --model <model-id> [--dry-run]`
+- Install / repair: `install\install.cmd` (idempotent: finds Python 3.12+, builds `.venv` from `requirements.txt`, removes obsolete model settings from `.env`, adds desktop and Start-menu shortcuts, starts the app; `-Port`, `-NoShortcuts`, `-NoStart`). Uninstall: `install\uninstall.cmd` (stops the app, removes shortcuts and `.venv`; keeps `data\tracker.db` unless `-RemoveProgress`).
+- Run: `.\run.ps1` or the desktop shortcut (http://127.0.0.1:8000; `-NoBrowser`). Development: `pip install -r requirements-dev.txt` into `.venv`; the `ccst-dev` launch config runs uvicorn with reload on port 8001 against the real data.
+- Installer library tests: `powershell -ExecutionPolicy Bypass -File tests\test_install_lib.ps1`
+- Import authored questions: `.\.venv\Scripts\python.exe -m ccst.cli import --chapter 1 --file data\authored\ch01_claude.json --model <model-id> [--dry-run]` (run from `src` or set `PYTHONPATH=src`)
 - Tests: `.\.venv\Scripts\python.exe -m pytest -q`
 
 ## Version control (git, since 2026-10-27)

@@ -1,11 +1,13 @@
-# Shared helpers for install.ps1, uninstall.ps1 and make-bundle.ps1.
-# Windows PowerShell 5.1 compatible (no ternary, no ??, no &&).
+# Shared helpers for install.ps1 and uninstall.ps1.
+# Windows PowerShell 5.1 compatible (no ternary, no ??, no &&). Keep this file ASCII-only:
+# PowerShell 5.1 reads BOM-less scripts in the system code page.
 
 $Script:Root = Split-Path -Parent $PSScriptRoot
-$Script:Project = 'ccst'
-$Script:ModelVolume = 'ccst_ollama-models'
-$Script:AppImage = 'ccst-app:1.0.0'
-$Script:OllamaImage = 'ollama/ollama:0.40.0'
+$Script:AppName = "Kevin's Super Cert Prep 3000"
+$Script:MinPython = [version]'3.12'
+# Settings written by the old Docker / local-model installer; removed from .env on install.
+$Script:ObsoleteEnvKeys = @('CCST_PROVIDER', 'OLLAMA_URL', 'OLLAMA_MODEL', 'OLLAMA_NUM_CTX', 'OLLAMA_TIMEOUT_S',
+                            'CCST_BATCH_SIZE', 'CCST_GENERATE_COOLDOWN_S', 'COMPOSE_FILE')
 
 function Write-Step([string]$msg) { Write-Host ""; Write-Host "==> $msg" -ForegroundColor Cyan }
 function Write-Ok([string]$msg) { Write-Host "    OK  $msg" -ForegroundColor Green }
@@ -22,6 +24,8 @@ function Invoke-Native {
     try {
         $out = & $Exe @Arguments 2>&1 | ForEach-Object { "$_" }
         $code = $LASTEXITCODE
+    } catch {
+        $out = @("$_"); $code = 1
     } finally {
         $ErrorActionPreference = $old
     }
@@ -32,41 +36,91 @@ function Invoke-Native {
     return ,@($out)
 }
 
-function Test-DockerCli { return [bool](Get-Command docker -ErrorAction SilentlyContinue) }
-
-function Test-DockerEngine {
-    $old = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
-    & docker info --format '{{.ServerVersion}}' 2>$null | Out-Null
-    $ok = ($LASTEXITCODE -eq 0)
-    $ErrorActionPreference = $old
-    return $ok
+# True if a "major.minor[.patch]" version string is at least the minimum the app supports.
+function Test-PythonVersion([string]$text) {
+    $v = $null
+    if (-not [version]::TryParse(($text.Trim() -replace '[^0-9.].*$', ''), [ref]$v)) { return $false }
+    return ($v -ge $Script:MinPython)
 }
 
-function Test-ImagePresent([string]$image) {
-    $old = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
-    & docker image inspect $image 2>$null | Out-Null
-    $ok = ($LASTEXITCODE -eq 0)
-    $ErrorActionPreference = $old
-    return $ok
+# Ask a Python interpreter for its version and real executable path; $null if it doesn't run.
+# (The Microsoft Store "python" placeholder prints nothing and fails, so it's skipped.)
+function Get-PythonInfo([string]$exe, [string[]]$prefix) {
+    # Single quotes only: Windows PowerShell 5.1 doesn't escape double quotes in native arguments.
+    $probe = 'import sys; print(''%d.%d.%d'' % sys.version_info[:3]); print(sys.executable)'
+    $out = Invoke-Native $exe ($prefix + @('-c', $probe)) -Quiet -AllowFail
+    $lines = @($out | Where-Object { $_ -match '\S' })
+    if ($lines.Count -lt 2 -or $lines[0] -notmatch '^\d+\.\d+\.\d+$') { return $null }
+    return @{ Version = $lines[0]; Exe = $lines[1].Trim() }
 }
 
-function Test-VolumePresent([string]$name) {
-    $old = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
-    & docker volume inspect $name 2>$null | Out-Null
-    $ok = ($LASTEXITCODE -eq 0)
-    $ErrorActionPreference = $old
-    return $ok
+# The newest suitable Python on this PC: the "py" launcher first, then "python" on PATH.
+function Find-Python {
+    $candidates = @()
+    if (Get-Command py -ErrorAction SilentlyContinue) { $candidates += , @('py', @('-3')) }
+    if (Get-Command python -ErrorAction SilentlyContinue) { $candidates += , @('python', @()) }
+    foreach ($c in $candidates) {
+        $info = Get-PythonInfo $c[0] $c[1]
+        if ($info -and (Test-PythonVersion $info.Version)) { return $info }
+    }
+    return $null
 }
 
-# Create the model volume with Compose labels so Compose adopts it without warnings.
-function New-ModelVolume {
-    if (Test-VolumePresent $Script:ModelVolume) { return }
-    $v = (Invoke-Native docker @('compose', 'version', '--short') -Quiet)[0].Trim()
-    Invoke-Native docker @('volume', 'create',
-        '--label', "com.docker.compose.project=$Script:Project",
-        '--label', 'com.docker.compose.volume=ollama-models',
-        '--label', "com.docker.compose.version=$v",
-        $Script:ModelVolume) -Quiet | Out-Null
+# True if this app (not some other program) answers on the port. Bypasses any system proxy.
+function Test-AppAnswers([int]$port) {
+    try {
+        $req = [System.Net.HttpWebRequest]::Create("http://127.0.0.1:$port/api/chapters")
+        $req.Proxy = $null
+        $req.Timeout = 3000
+        $resp = $req.GetResponse()
+        try {
+            $text = (New-Object IO.StreamReader($resp.GetResponseStream())).ReadToEnd()
+        } finally {
+            $resp.Close()
+        }
+        return $text.TrimStart().StartsWith('[')
+    } catch {
+        return $false
+    }
+}
+
+# This project's running app: the run.ps1 window, the .venv launcher, and the interpreter it starts.
+function Get-AppProcesses {
+    $root = $Script:Root
+    $venv = Join-Path $root '.venv'
+    $all = @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue)
+    $launchers = @($all | Where-Object { $_.CommandLine -match 'ccst\.launch' -and $_.ExecutablePath -and
+                                         $_.ExecutablePath.StartsWith($venv, [StringComparison]::OrdinalIgnoreCase) })
+    $ids = @($launchers | ForEach-Object { $_.ProcessId })
+    $children = @($all | Where-Object { $ids -contains $_.ParentProcessId -and $_.CommandLine -match 'ccst\.launch' })
+    $windows = @($all | Where-Object { $_.Name -eq 'powershell.exe' -and $_.CommandLine -and
+                                       $_.CommandLine.IndexOf((Join-Path $root 'run.ps1'), [StringComparison]::OrdinalIgnoreCase) -ge 0 })
+    return @($children + $launchers + $windows)
+}
+
+function Test-PortListening([int]$port) {
+    return [bool](Get-NetTCPConnection -State Listen -LocalPort $port -ErrorAction SilentlyContinue)
+}
+
+# Where the app's shortcuts live: the desktop and the Start menu.
+function Get-ShortcutPaths {
+    $name = "$Script:AppName.lnk"
+    return @(
+        (Join-Path ([Environment]::GetFolderPath('Desktop')) $name),
+        (Join-Path ([Environment]::GetFolderPath('Programs')) $name)
+    )
+}
+
+# Create (or refresh) a shortcut that starts the app with run.ps1.
+function New-AppShortcut([string]$path, [string]$root) {
+    $ps = Join-Path $env:SystemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+    $shell = New-Object -ComObject WScript.Shell
+    $lnk = $shell.CreateShortcut($path)
+    $lnk.TargetPath = $ps
+    $lnk.Arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$(Join-Path $root 'run.ps1')`" -PauseOnError"
+    $lnk.WorkingDirectory = $root
+    $lnk.Description = "Start $Script:AppName and open it in the browser"
+    $lnk.Save()
 }
 
 # Read and write simple KEY=VALUE pairs in the project .env, keeping other lines intact.
@@ -88,50 +142,19 @@ function Set-EnvValue([string]$key, [string]$value) {
         if ($lines[$i] -match "^\s*$([regex]::Escape($key))\s*=") { $lines[$i] = "$key=$value"; $found = $true }
     }
     if (-not $found) { $lines += "$key=$value" }
-    # UTF-8 without BOM: Compose reads the file too.
     [IO.File]::WriteAllLines($path, [string[]]$lines, (New-Object Text.UTF8Encoding($false)))
 }
 
-function Remove-EnvValue([string]$key) {
+# Remove keys from .env; returns the keys that were present.
+function Remove-EnvValue([string[]]$keys) {
     $path = Join-Path $Script:Root '.env'
-    if (-not (Test-Path $path)) { return }
-    $lines = @(Get-Content $path | Where-Object { $_ -notmatch "^\s*$([regex]::Escape($key))\s*=" })
-    [IO.File]::WriteAllLines($path, [string[]]$lines, (New-Object Text.UTF8Encoding($false)))
-}
-
-# Native Windows Ollama keeps its models here (OLLAMA_MODELS overrides).
-function Get-NativeModelStore {
-    if ($env:OLLAMA_MODELS) { return $env:OLLAMA_MODELS }
-    return (Join-Path $env:USERPROFILE '.ollama\models')
-}
-
-# Files (relative to the models dir) that make up one model: its manifest plus every blob it lists.
-function Get-ModelFiles([string]$store, [string]$model) {
-    $name, $tag = $model.Split(':')
-    if (-not $tag) { $tag = 'latest' }
-    $rel = "manifests/registry.ollama.ai/library/$name/$tag"
-    $manifest = Join-Path $store ($rel -replace '/', '\')
-    if (-not (Test-Path $manifest)) { return $null }
-    $m = Get-Content $manifest -Raw | ConvertFrom-Json
-    $digests = @($m.config.digest) + @($m.layers | ForEach-Object { $_.digest })
-    $files = @($rel) + @($digests | ForEach-Object { 'blobs/' + ($_ -replace ':', '-') })
-    foreach ($f in $files) {
-        if (-not (Test-Path (Join-Path $store ($f -replace '/', '\')))) { return $null }
+    if (-not (Test-Path $path)) { return @() }
+    $removed = @()
+    $kept = @()
+    foreach ($line in Get-Content $path) {
+        $hit = $keys | Where-Object { $line -match "^\s*$([regex]::Escape($_))\s*=" } | Select-Object -First 1
+        if ($hit) { $removed += $hit } else { $kept += $line }
     }
-    return $files
-}
-
-# Model choice from detected hardware (plan section 13). Kept here so it can be tested.
-function Select-Model($hw) {
-    # Plan section 13. Docker Desktop on Windows can use only NVIDIA GPUs (via WSL2); AMD and
-    # Intel GPUs fall back to CPU.
-    if ($hw.Nvidia) {
-        if ($hw.VramGB -ge 15) { return @{ Model = 'qwen3:14b'; Gpu = $true; Why = "NVIDIA GPU with $($hw.VramGB) GB" } }
-        if ($hw.VramGB -ge 7.5) { return @{ Model = 'qwen3:8b'; Gpu = $true; Why = "NVIDIA GPU with $($hw.VramGB) GB" } }
-        return @{ Model = 'qwen3:4b'; Gpu = $true; Why = "small NVIDIA GPU ($($hw.VramGB) GB)" }
-    }
-    if ($hw.DockerMemGB -gt 0 -and $hw.DockerMemGB -lt 6) {
-        return @{ Model = 'qwen3:1.7b'; Gpu = $false; Why = "no usable GPU and only $($hw.DockerMemGB) GB for Docker" }
-    }
-    return @{ Model = 'qwen3:4b'; Gpu = $false; Why = 'no NVIDIA GPU; runs on CPU' }
+    if ($removed.Count) { [IO.File]::WriteAllLines($path, [string[]]$kept, (New-Object Text.UTF8Encoding($false))) }
+    return $removed
 }

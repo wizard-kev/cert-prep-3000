@@ -239,3 +239,28 @@ Each phase ends with the tests passing, a commit, and a short note in this docum
 - **Claude output conformance:** first drafts often fail the cue checks. Mitigation: the repair-prompt loop, and prompts that state the checks explicitly.
 - **Exam facts accuracy:** vendors don't always publish weights or passing scores. Mitigation: per-fact confidence labels and user review in the wizard.
 - **Passive validation is weak evidence:** a wrong answer key is most convincing right after the learner gets the question wrong. Mitigation: a one-click "Disagree with this answer?" on the feedback after every wrong answer.
+
+## 15. Progress log
+
+- **Plan signed off (2026-10-27).**
+- **P1 done (2026-10-27):** local model and Docker removed.
+  - **Removed:** the provider package (Ollama, Claude API stub); the generate, explain, status and job endpoints with their model lock and cooldowns; the UI model badge, Explain button and Generate box; the CLI `generate` command; the Dockerfile, compose files and `.dockerignore`; the offline model bundle script; and the model-selection installer test.
+  - **Question provenance:** `provider` is now a validated free-text field, since the pool still records two retired questions written by the old local model.
+  - **New launcher:** `src/ccst/launch.py` runs the app on 127.0.0.1 only. It refuses a port held by another program, reuses an instance that's already running, and opens the browser once the app answers. `run.ps1` wraps it.
+  - **New native installer** (`install/install.ps1`, `lib.ps1`, `uninstall.ps1`):
+    - finds Python 3.12+ (skipping the Microsoft Store placeholder);
+    - builds or repairs `.venv`;
+    - removes obsolete model settings from `.env`;
+    - checks the port;
+    - creates desktop and Start-menu shortcuts that run `run.ps1 -PauseOnError`.
+  - **Uninstaller:** stops this project's app processes, removes the shortcuts and `.venv`, and keeps progress unless asked.
+  - **Dependencies:** `httpx` moved to the dev requirements (only the test client uses it).
+  - **Tests:** 71 pytest (4 new launcher tests) and 17 PowerShell checks (`tests/test_install_lib.ps1`) pass.
+  - **Verified by hand:**
+    - the installer ran on this PC (shortcuts skipped);
+    - `run.ps1` served the app on 127.0.0.1:8000;
+    - the removed endpoints return 404;
+    - a second launch reused the running app;
+    - the uninstaller's process detection found and stopped both Python processes;
+    - in a UI check against a scratch copy of the data, the feedback panel no longer offers Explain.
+  - The v1 authoring rules that the old model prompt carried live on in `CLAUDE.md` and in `git show v1:src/ccst/generator.py`, for the P4 prompt builder.

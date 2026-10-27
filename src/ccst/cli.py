@@ -1,16 +1,15 @@
-"""Command-line generation, e.g.: python -m ccst.cli generate --chapter 1 --count 5"""
+"""Command-line tools for the question pool, e.g.:
+python -m ccst.cli import --chapter 1 --file data\\authored\\ch01_v2_set1a.json --model claude-opus-5-5 --dry-run"""
 
 import argparse
-import asyncio
 import json
 from pathlib import Path
 
 from pydantic import ValidationError
 
 from . import pool
-from .generator import Target, check, content_words, generate_batch, import_items, parse_items, repair
+from .generator import Target, check, content_words, import_items, parse_items, repair
 from .objectives import load_chapter
-from .providers import get_provider
 from .schema import GeneratedQuestion
 
 
@@ -44,14 +43,10 @@ def coverage_report(chapters: list[int], minimum: int) -> bool:
 def main() -> None:
     parser = argparse.ArgumentParser(prog="ccst")
     sub = parser.add_subparsers(dest="cmd", required=True)
-    gen = sub.add_parser("generate", help="generate a batch of draft questions")
-    gen.add_argument("--chapter", type=int, required=True)
-    gen.add_argument("--count", type=int, default=5)
-    gen.add_argument("--seed", type=int)
     imp = sub.add_parser("import", help="validate and add authored questions as draft")
     imp.add_argument("--chapter", type=int, required=True)
     imp.add_argument("--file", required=True, help='JSON file: {"questions": [...]}')
-    imp.add_argument("--provider", choices=["claude", "ollama"], default="claude")
+    imp.add_argument("--provider", default="claude", help="who wrote the questions (provenance only)")
     imp.add_argument("--model", required=True, help="model that wrote the questions")
     imp.add_argument("--seed", type=int)
     imp.add_argument("--dry-run", action="store_true", help="check only; write nothing")
@@ -105,13 +100,6 @@ def main() -> None:
                 print(f"{q.objectives[0]}: {'OK' if not problems else problems}")
             return
         result = import_items(args.chapter, items, args.provider, args.model, args.seed)
-        print(json.dumps(result.summary(), indent=2))
-        return
-
-    if args.cmd == "generate":
-        if not 1 <= args.count <= 10:
-            parser.error("--count must be 1 to 10")
-        result = asyncio.run(generate_batch(get_provider(), args.chapter, args.count, args.seed))
         print(json.dumps(result.summary(), indent=2))
 
 

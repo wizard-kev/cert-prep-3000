@@ -1,4 +1,6 @@
-"""Batch question generation: plan targets, prompt the provider, validate, store as draft."""
+"""Question import: validate authored questions, check them for surface cues, shuffle the
+options, and store them as draft. `plan_targets` picks the objectives and angles a new batch
+should cover."""
 
 import json
 import random
@@ -12,39 +14,10 @@ from pydantic import ValidationError
 
 from . import pool
 from .objectives import Chapter, load_chapter
-from .providers import Provider
-from .schema import EXHIBIT_MAX_LINES, GENERIC_ANGLES, GeneratedQuestion, Question, model_output_schema
+from .schema import EXHIBIT_MAX_LINES, GENERIC_ANGLES, GeneratedQuestion, Question
 
-TOKENS_PER_QUESTION = 900
 MULTI_SHARE = 0.25
 NEAR_DUPLICATE = 0.8
-
-SYSTEM_PROMPT = """You write original practice questions for the Cisco CCST Cybersecurity (100-160) exam.
-
-Rules:
-- Use ONLY the chapter objective table you are given. Each objective has an ID, a core idea, and a DISCRIMINATOR: the one fact that separates it from look-alike concepts. Every question must test the discriminator of its assigned objective, not a bare definition.
-- Write each question for exactly the objective ID and angle assigned to it, in the order given. Put the assigned ID first in "objectives".
-- Distractors must be genuine look-alikes from the same table (for example tailgating vs piggybacking, virus vs worm, rogue AP vs evil twin). Never use "all of the above" or "none of the above", and never a joke option.
-- type "single": 4 options (A-D), exactly 1 correct answer.
-- type "multi": 5 options (A-E), exactly 2 correct answers, and the stem must end with "(Choose two.)".
-- Every option needs a "role": "best" (the keyed answer), "partial" (technically correct but not the best answer), "related" (a neighbouring concept, protocol, or practice), or "wrong" (a plausible misconception). Where it fits, a single-answer question has one of each. If any option is "partial", the stem must ask for the BEST, FIRST, or MOST appropriate answer.
-- No surface cues: all options about the same length, the same grammatical form, and the same level of detail. Never make the answer the longest or most detailed option, never put absolute words (always, never, only, all) only in wrong options, and never let the answer repeat the stem's wording.
-- Every option needs a "rationale": why it is correct, or which different concept it actually describes.
-- Never refer to options by letter in rationales or the explanation (options are shuffled later). Never write "according to the book" or similar.
-- Stems must be unambiguous and ask one thing. Describe a situation instead of naming the concept being tested, so the learner has to recognise it.
-- "discriminator_tested": one sentence naming the distinguishing fact.
-- "difficulty": 1 = recall in context, 2 = apply to a scenario, 3 = choose the best of several valid options or reason in two steps.
-- Never reproduce real exam questions. All content must be original.
-
-Angles:
-- symptom-to-attack: describe observed symptoms; ask which attack or concept explains them.
-- attack-to-mitigation: name or describe an attack; ask for the best mitigation.
-- mitigation-to-threat: describe a control; ask which threat it addresses.
-- neighbor-discrimination: two look-alike concepts; ask for the fact that separates them, or which one fits.
-- scenario-with-distractor: a scenario containing a detail that points to a different concept; the correct answer depends on the discriminator.
-- which-is-not: ask which option is NOT an example or property (the stem must contain NOT in capitals).
-- root-cause-vs-symptom: separate the underlying cause from what was observed.
-- cause-and-effect-ordering: ask for the correct sequence or the effect of a cause."""
 
 
 @dataclass
@@ -60,8 +33,6 @@ class BatchResult:
     accepted: list[Question] = field(default_factory=list)
     rejected: list[dict] = field(default_factory=list)
     model: str = ""
-    seconds: float | None = None
-    output_tokens: int | None = None
 
     def summary(self) -> dict:
         return {
@@ -69,8 +40,6 @@ class BatchResult:
             "accepted": [q.id for q in self.accepted],
             "rejected": self.rejected,
             "model": self.model,
-            "seconds": self.seconds,
-            "output_tokens": self.output_tokens,
         }
 
 
@@ -94,17 +63,6 @@ def plan_targets(chapter: Chapter, existing: list[Question], n: int, rng: random
         qtype = "multi" if rng.random() < MULTI_SHARE else "single"
         targets.append(Target(obj_id, angle, qtype))
     return targets
-
-
-def build_user_prompt(chapter: Chapter, targets: list[Target]) -> str:
-    lines = [f"{i}. objective {t.objective} | angle {t.angle} | type {t.type}"
-             for i, t in enumerate(targets, 1)]
-    return (
-        f"CHAPTER OBJECTIVES (source of truth):\n\n{chapter.text}\n\n"
-        f"Write exactly {len(targets)} questions, one per line below, in this order:\n"
-        + "\n".join(lines)
-        + '\n\nReturn JSON: {"questions": [...]}'
-    )
 
 
 _WORD = re.compile(r"[a-z0-9]+")
@@ -252,7 +210,7 @@ def repair(q: GeneratedQuestion) -> GeneratedQuestion:
 
 
 def shuffle_options(q: GeneratedQuestion, rng: random.Random) -> GeneratedQuestion:
-    """Models favour early answer positions; reshuffle and relabel A, B, C...
+    """Authors favour early answer positions; reshuffle and relabel A, B, C...
     Ordering questions are shuffled too: each option is a complete sequence."""
     opts = list(q.options)
     rng.shuffle(opts)
@@ -275,27 +233,10 @@ def parse_items(text: str) -> list:
     return items
 
 
-async def generate_batch(provider: Provider, chapter_no: int, n: int, seed: int | None = None) -> BatchResult:
-    chapter = load_chapter(chapter_no)
-    rng = random.Random(seed)
-    targets = plan_targets(chapter, pool.load(chapter_no), n, rng)
-    completion = await provider.complete_json(
-        SYSTEM_PROMPT,
-        build_user_prompt(chapter, targets),
-        model_output_schema(len(targets)),
-        max_tokens=TOKENS_PER_QUESTION * len(targets) + 300,
-    )
-    result = BatchResult(requested=len(targets), model=completion.model,
-                         seconds=completion.seconds, output_tokens=completion.output_tokens)
-    items = parse_items(completion.text)
-    _store(chapter, items, targets, provider.name, completion.model, rng, result)
-    return result
-
-
 def import_items(chapter_no: int, items: list, provider_name: str, model: str, seed: int | None = None,
                  strict: bool = True) -> BatchResult:
-    """Add questions written outside the provider loop (e.g. authored in a Claude Code session).
-    Same checks as generated output; each item's own objective/angle/type is its target.
+    """Add authored questions (e.g. written in a Claude chat or a Claude Code session).
+    Each item's own objective/angle/type is its target.
     `strict=False` skips the v2 surface-cue checks (only for loading the original v1 pools)."""
     chapter = load_chapter(chapter_no)
     targets = []

@@ -1,2 +1,4 @@
 -r requirements.txt
 pytest==9.1.1
+# FastAPI's TestClient needs httpx; the app itself makes no HTTP requests.
+httpx==0.28.1
