@@ -4,7 +4,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import pytest
 
-from ccst import launch
+from certprep import launch
 
 
 def test_app_url_is_localhost_only():

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kevin's Super Cert Prep 3000</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1><a href="#" id="home-link">Kevin's Super Cert Prep 3000</a></h1>
+  <div class="cert-pick">
+    <label for="cert-select" class="muted">Studying</label>
+    <select id="cert-select" hidden></select>
+    <span id="cert-name" class="badge"></span>
+  </div>
+</header>
+
+<main>
+  <!-- Home -->
+  <section id="v-home" class="view" aria-labelledby="home-h">
+    <h2 id="home-h">Sections</h2>
+    <p class="muted">Pick the parts of the exam to practice. Each section has its own list of objectives.</p>
+    <div id="section-list" class="section-list" role="group" aria-label="Sections"></div>
+    <p id="section-empty" class="muted"></p>
+    <div class="row">
+      <button type="button" class="secondary small" id="sel-all">Select all with questions</button>
+      <button type="button" class="secondary small" id="sel-none">Clear</button>
+    </div>
+
+    <h2>Practice</h2>
+    <div class="modes">
+      <div class="mode">
+        <h3>Diagnostic</h3>
+        <p class="muted">About one question per objective. Feedback at the end. Seeds your tracker.</p>
+        <button type="button" data-mode="diagnostic">Start diagnostic</button>
+      </div>
+      <div class="mode">
+        <h3>Targeted drill</h3>
+        <p class="muted">Weighted toward Weak objectives, with spaced revisits. Immediate feedback.</p>
+        <label>Questions <input id="drill-count" type="number" min="1" max="200" value="10"></label>
+        <button type="button" data-mode="drill">Start drill</button>
+      </div>
+      <div class="mode">
+        <h3>Exam simulation</h3>
+        <p class="muted">Verified questions only, timed, flag and navigate, no feedback until the end.
+          <span id="exam-note"></span></p>
+        <label>Questions <input id="exam-count" type="number" min="1" max="200" value="40"></label>
+        <label>Minutes <input id="exam-minutes" type="number" min="5" max="300" value="60"></label>
+        <button type="button" data-mode="exam">Start exam</button>
+      </div>
+      <div class="mode">
+        <h3>Review misses</h3>
+        <p class="muted">Replay questions you last got wrong.</p>
+        <button type="button" data-mode="review">Start review</button>
+      </div>
+    </div>
+    <label class="recall-pref"><input type="checkbox" id="recall-first">
+      <span>Recall first: hide the options until I've worked out my answer <small class="muted">(all modes except exam simulation)</small></span></label>
+    <p id="home-msg" class="msg" aria-live="polite"></p>
+
+    <h2>Question pool</h2>
+    <p class="muted">Drafts must be spot-checked before they can appear in an exam simulation.</p>
+    <div id="pool-actions" class="pool-actions"></div>
+
+    <h2>Progress</h2>
+    <div class="row">
+      <button type="button" id="progress-btn">View objective tracker</button>
+      <button type="button" id="export-btn" class="secondary">Export summary for chat</button>
+      <button type="button" id="reset-btn" class="secondary danger">Reset progress for this certification</button>
+    </div>
+    <div id="export-box" hidden>
+      <label for="export-text">Copy this into the chat:</label>
+      <textarea id="export-text" rows="8" readonly></textarea>
+      <button type="button" id="copy-btn" class="secondary small">Copy</button>
+    </div>
+  </section>
+
+  <!-- Session -->
+  <section id="v-session" class="view" hidden aria-labelledby="s-progress">
+    <div class="session-head">
+      <span id="s-mode" class="badge"></span>
+      <span id="s-progress" class="muted"></span>
+      <span id="s-timer" class="timer" aria-live="off"></span>
+    </div>
+    <nav id="s-nav" class="navigator" aria-label="Question navigator" hidden></nav>
+    <p id="s-meta"></p>
+    <p id="s-stem" class="stem"></p>
+    <pre id="s-exhibit" class="exhibit" hidden></pre>
+    <div id="s-recall" class="recall-box" hidden>
+      <label for="s-recall-note">Your answer before seeing the options <small class="muted">(stays in this browser; never sent or saved)</small></label>
+      <textarea id="s-recall-note" rows="2"></textarea>
+      <div class="row">
+        <button type="button" id="s-reveal">Show options</button>
+        <span class="muted">Ctrl+Enter also shows them.</span>
+      </div>
+    </div>
+    <p id="s-recall-shown" class="recall-note" hidden></p>
+    <form id="s-form">
+      <fieldset>
+        <legend id="s-legend" class="sr-only">Options</legend>
+        <div id="s-options"></div>
+      </fieldset>
+      <fieldset class="confidence">
+        <legend>Confidence</legend>
+        <label><input type="radio" name="conf" value="guess"> Guess</label>
+        <label><input type="radio" name="conf" value="unsure" checked> Unsure</label>
+        <label><input type="radio" name="conf" value="sure"> Sure</label>
+      </fieldset>
+      <div class="row">
+        <button type="button" id="s-prev" class="secondary" hidden>Previous</button>
+        <button type="submit" id="s-submit">Submit</button>
+        <button type="button" id="s-next" hidden>Next</button>
+        <label id="s-flag-wrap" hidden><input type="checkbox" id="s-flag"> Flag for review</label>
+        <button type="button" id="s-finish" class="secondary">Finish</button>
+      </div>
+    </form>
+    <div id="s-feedback" hidden aria-live="polite"></div>
+  </section>
+
+  <!-- Report -->
+  <section id="v-report" class="view" hidden aria-labelledby="r-h">
+    <h2 id="r-h">Results</h2>
+    <p id="r-score" class="score"></p>
+    <p id="r-note" class="muted"></p>
+    <h3>By domain</h3>
+    <table id="r-domains"></table>
+    <h3>By objective</h3>
+    <table id="r-objectives"></table>
+    <h3>Questions</h3>
+    <div id="r-items"></div>
+    <button type="button" class="back-btn">Back to home</button>
+  </section>
+
+  <!-- Draft review queue -->
+  <section id="v-queue" class="view" hidden aria-labelledby="q-h">
+    <h2 id="q-h">Review drafts</h2>
+    <p id="q-progress" class="muted"></p>
+    <div id="q-card"></div>
+    <button type="button" class="back-btn secondary">Back to home</button>
+  </section>
+
+  <!-- Tracker -->
+  <section id="v-progress" class="view" hidden aria-labelledby="p-h">
+    <h2 id="p-h">Objective tracker</h2>
+    <p id="p-summary" class="muted"></p>
+    <div class="table-wrap"><table id="p-table"></table></div>
+    <h3>Possibly too easy</h3>
+    <p class="muted">Questions you answered correctly and marked Sure in each of your last three sessions with them.
+      Keep the ones that still make you think; retire the ones you can answer without engaging.</p>
+    <div id="p-easy"></div>
+    <button type="button" class="back-btn">Back to home</button>
+  </section>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

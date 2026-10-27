@@ -77,15 +77,17 @@ try {
     Write-Step 'Configuration (.env)'
     $removed = @(Remove-EnvValue $Script:ObsoleteEnvKeys)
     if ($removed.Count) { Write-Ok "Removed old settings no longer used: $($removed -join ', ')" }
+    $renamed = @(Rename-EnvKey $Script:RenamedEnvKeys)
+    if ($renamed.Count) { Write-Ok "Renamed settings: $($renamed -join ', ')" }
     if ($Port -ne 0) {
-        Set-EnvValue 'CCST_PORT' "$Port"
+        Set-EnvValue 'CERTPREP_PORT' "$Port"
     } else {
         $Port = 8000
-        $saved = Get-EnvValue 'CCST_PORT'
+        $saved = Get-EnvValue 'CERTPREP_PORT'
         if ($saved -match '^\d+$') { $Port = [int]$saved }
     }
     Write-Ok "Port $Port (bound to 127.0.0.1 only)"
-    foreach ($d in @('data', 'data\questions')) { New-Item -ItemType Directory -Force (Join-Path $Script:Root $d) | Out-Null }
+    foreach ($d in @('data', 'data\certs', 'data\backups')) { New-Item -ItemType Directory -Force (Join-Path $Script:Root $d) | Out-Null }
 
     $running = Test-AppAnswers $Port
     if (-not $running -and (Test-PortListening $Port)) {

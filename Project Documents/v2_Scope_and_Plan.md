@@ -264,3 +264,28 @@ Each phase ends with the tests passing, a commit, and a short note in this docum
     - the uninstaller's process detection found and stopped both Python processes;
     - in a UI check against a scratch copy of the data, the feedback panel no longer offers Explain.
   - The v1 authoring rules that the old model prompt carried live on in `CLAUDE.md` and in `git show v1:src/ccst/generator.py`, for the P4 prompt builder.
+- **P2 done (2026-10-27):** certification data model, CCST moved into it, app renamed, progress migrated.
+  - **Package:** `src/ccst` renamed to `src/certprep` (history kept with `git mv`). Settings are `CERTPREP_PORT`, `CERTPREP_DATA_DIR` and `CERTPREP_CERTS_DIR`; the installer renames `CCST_*` keys in `.env`.
+  - **Layout:** `data/certs/ccst-cyber/` holds:
+    - `cert.json`: exam facts from the v1 plan with confidence labels (50 minutes official; 40 questions estimate; passing score unknown); the five domains with the estimated 4:5:6:4:4 weights; 13 sections C01-C13 with their domains; the Cisco sources.
+    - `objectives/C01.md`-`C13.md`, moved from `Objective Documents/`.
+    - `questions/C01.json`-`C13.json`, moved from `data/questions/`. Each question's `chapter` became `section`, and `source_ref` now points at `objectives/<CODE>.md`. A one-off conversion verified that only those two fields changed across all 1,942 questions.
+    - `imports/`, moved from `data/authored/`.
+  - **IDs:** question and objective IDs are unchanged.
+  - **New `certs.py`:** a registry built from disk. Folder ids and section codes are pattern-checked and must exist before any path is built. `cert.json` is validated strictly: unknown fields, duplicate sections, unknown domains and non-https sources are all rejected.
+  - **Cert-aware code:** objectives, pool, generator, sessions, audit and CLI now take a certification and section codes. Exam defaults (count, minutes) and domain weights come from `cert.json`.
+  - **API:** routes are under `/api/certs/{cert}/...`; session routes stay at `/api/sessions/{id}`.
+  - **UI:**
+    - the new app name, with the certification shown in the header (a selector when more than one is installed);
+    - sections labelled with their names;
+    - saved browser preferences carried over from the old `ccst.*` keys.
+  - **Progress:**
+    - `data/progress.db` gets a certification id on every session and answer, a schema version, automatic backups (10 kept per reason), a guard against databases from newer versions, and a backup before every reset.
+    - Reset is now per certification.
+    - On first start, the v1 `data/tracker.db` was migrated; the original moved unchanged to `data/backups/tracker-v1-20261027T170949-913714Z.db`.
+  - **Verification:**
+    - **Baseline:** before any code changed, objective stats, session reports, the export summary and the too-easy list were dumped from a copy using the v1 code.
+    - **Rehearsal and real migration:** the migration was rehearsed on a copy, then run on the real data. In both, all 18 sessions and 318 answers migrated; all 212 objectives' stats, every session report and the too-easy list were identical; and the export summary differed only in the intended label changes. 315 of the 318 answers count toward objective status in both versions, because 3 are to reported questions.
+    - **Tests:** 99 pytest and the installer library checks pass. New tests cover the registry and allowlists, `cert.json` validation, the migration (run-once, original kept), the schema guard, backup pruning, per-certification reset, and traversal attempts on certification ids and sections.
+    - **Pool checks:** `audit` passes on the 917 active questions. `coverage` fails only for C09-23, the gap from Q-C09-0100, which the user reported on 2026-10-22.
+    - **UI** (tested on a copy): home, drill, feedback, report, results, tracker, export and review queue all work with no console errors. The real launcher served the real data.

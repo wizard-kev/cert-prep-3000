@@ -4,11 +4,13 @@
 
 .DESCRIPTION
   Safe to run more than once. Stops the app if it is running, removes the desktop and
-  Start-menu shortcuts and the .venv folder. Your practice progress (data\tracker.db) and the
-  question pools are kept by default, so a later install picks up where you left off.
+  Start-menu shortcuts and the .venv folder. Your practice progress (data\progress.db and its
+  backups in data\backups) and the certifications with their question pools (data\certs) are kept
+  by default, so a later install picks up where you left off.
 
 .PARAMETER RemoveProgress
-  Also delete data\tracker.db (all sessions and answers). Asks for confirmation unless -Yes.
+  Also delete your practice progress: data\progress.db and data\backups (all sessions, answers,
+  and progress backups). Asks for confirmation unless -Yes.
 .PARAMETER Yes
   Don't ask for confirmation.
 #>
@@ -38,21 +40,22 @@ try {
     if (Test-Path $venv) { Remove-Item -LiteralPath $venv -Recurse -Force; Write-Ok 'Removed' } else { Write-Ok 'Not present' }
 
     Write-Step 'Your data'
-    $db = Join-Path $Script:Root 'data\tracker.db'
-    if ($RemoveProgress -and (Test-Path $db)) {
+    $progress = @('data\progress.db', 'data\tracker.db', 'data\backups') | ForEach-Object { Join-Path $Script:Root $_ } |
+        Where-Object { Test-Path $_ }
+    if ($RemoveProgress -and $progress) {
         $go = $Yes
         if (-not $go) {
-            $a = Read-Host '    ??  Delete all practice progress (data\tracker.db)? This cannot be undone. Type DELETE to confirm'
+            $a = Read-Host '    ??  Delete all practice progress (data\progress.db and data\backups)? This cannot be undone. Type DELETE to confirm'
             $go = ($a -ceq 'DELETE')
         }
         if ($go) {
-            [IO.File]::Delete($db)
-            Write-Ok 'Practice progress deleted'
+            foreach ($p in $progress) { Remove-Item -LiteralPath $p -Recurse -Force }
+            Write-Ok 'Practice progress and its backups deleted'
         } else {
             Write-Ok 'Practice progress kept'
         }
     } else {
-        Write-Ok 'Kept: practice progress (data\tracker.db) and question pools (data\questions)'
+        Write-Ok 'Kept: practice progress (data\progress.db, data\backups) and certifications (data\certs)'
     }
 
     Write-Host ''

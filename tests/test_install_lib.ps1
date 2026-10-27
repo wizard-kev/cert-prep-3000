@@ -32,6 +32,15 @@ try {
     Check 'updates a value in place' ((Get-EnvValue 'CCST_PORT') -eq '8200' -and @(Get-Content (Join-Path $tmp '.env')).Count -eq 2)
     Check 'second cleanup removes nothing' (@(Remove-EnvValue $Script:ObsoleteEnvKeys).Count -eq 0)
 
+    # CCST_* settings move to their CERTPREP_* names, keeping the value
+    $notes = @(Rename-EnvKey $Script:RenamedEnvKeys)
+    Check 'renames CCST_PORT' (($notes -join ',') -eq 'CCST_PORT -> CERTPREP_PORT')
+    Check 'keeps the port value' ((Get-EnvValue 'CERTPREP_PORT') -eq '8200' -and $null -eq (Get-EnvValue 'CCST_PORT'))
+    Set-EnvValue 'CCST_PORT' '9999'
+    [void](Rename-EnvKey $Script:RenamedEnvKeys)
+    Check 'an existing new key wins' ((Get-EnvValue 'CERTPREP_PORT') -eq '8200' -and $null -eq (Get-EnvValue 'CCST_PORT'))
+    Check 'second rename does nothing' (@(Rename-EnvKey $Script:RenamedEnvKeys).Count -eq 0)
+
     # Shortcut points at run.ps1 in the project root
     $lnkPath = Join-Path $tmp 'test.lnk'
     New-AppShortcut $lnkPath 'C:\Some Folder\App'

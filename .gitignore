@@ -9,9 +9,11 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
-# Local tracker state (the question pool in data/questions/ is kept; it is reviewed content)
+# Learner progress and its backups stay local (certifications in data/certs/ are reviewed content and kept)
 data/*.db
-data/questions/*.tmp
+data/*.db.migrating
+data/backups/
+data/certs/*/questions/*.tmp
 
 # Installer output
 install/install.log

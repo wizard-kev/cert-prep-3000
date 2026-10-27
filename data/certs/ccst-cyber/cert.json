@@ -1,0 +1,48 @@
+{
+  "format_version": 1,
+  "id": "ccst-cyber",
+  "name": "Cisco Certified Support Technician (CCST) Cybersecurity",
+  "short_name": "CCST Cybersecurity",
+  "vendor": "Cisco",
+  "exam_code": "100-160",
+  "objectives_source": "Objective files written from the Sybex CCST Cybersecurity Study Guide chapter lists (user-supplied), one file per chapter.",
+  "facts_gathered": "2026-10-07",
+  "exam": {
+    "minutes": {"value": 50, "confidence": "official", "note": "Cisco exam page and exam topics page."},
+    "question_count": {"value": 40, "confidence": "estimate", "note": "Cisco says the number of questions may vary; third-party sites give about 35 to 50."},
+    "passing_score": {"value": null, "confidence": "unknown", "note": "Not published by Cisco. Third-party figures (70%, or a 750 to 850 scaled score) are unsupported."},
+    "question_formats": [
+      {"format": "single", "served": true, "note": "Multiple choice, one answer."},
+      {"format": "multi", "served": true, "note": "Multiple response (choose two)."},
+      {"format": "performance-based", "served": false, "note": "Cisco states the exam uses performance-based (lab-style) items; no itemized list of types is published."}
+    ]
+  },
+  "domains": [
+    {"id": "1.0", "name": "Essential Security Principles", "weight": 4},
+    {"id": "2.0", "name": "Basic Network Security Concepts", "weight": 5},
+    {"id": "3.0", "name": "Endpoint Security Concepts", "weight": 6},
+    {"id": "4.0", "name": "Vulnerability Assessment and Risk Management", "weight": 4},
+    {"id": "5.0", "name": "Incident Handling", "weight": 4}
+  ],
+  "weights": {"confidence": "estimate", "note": "Cisco does not publish domain weights. These are proportional to the number of official sub-objectives per domain (4, 5, 6, 4, 4 of 23)."},
+  "untagged_weight": 4,
+  "sections": [
+    {"code": "C01", "name": "Chapter 1: Security Concepts", "domain": "1.0"},
+    {"code": "C02", "name": "Chapter 2: Network Security Devices", "domain": null},
+    {"code": "C03", "name": "Chapter 3: IP, IPv6, and NAT", "domain": "2.0"},
+    {"code": "C04", "name": "Chapter 4: Network Device Access", "domain": null},
+    {"code": "C05", "name": "Chapter 5: Secure Access Technology", "domain": null},
+    {"code": "C06", "name": "Chapter 6: OS Basics and Security", "domain": "3.0"},
+    {"code": "C07", "name": "Chapter 7: Endpoint Security", "domain": "3.0"},
+    {"code": "C08", "name": "Chapter 8: Risk Management", "domain": "4.0"},
+    {"code": "C09", "name": "Chapter 9: Vulnerability", "domain": "4.0"},
+    {"code": "C10", "name": "Chapter 10: Disaster Recovery", "domain": null},
+    {"code": "C11", "name": "Chapter 11: Incident Handling", "domain": "5.0"},
+    {"code": "C12", "name": "Chapter 12: Digital Forensics", "domain": "5.0"},
+    {"code": "C13", "name": "Chapter 13: Incident Response", "domain": "5.0"}
+  ],
+  "sources": [
+    {"title": "Cisco CCST Cybersecurity exam page", "url": "https://www.cisco.com/site/us/en/learn/training-certifications/exams/ccst-cybersecurity.html"},
+    {"title": "Cisco Learning Network: CCST Cybersecurity exam topics", "url": "https://learningnetwork.cisco.com/s/ccst-cybersecurity-exam-topics"}
+  ]
+}

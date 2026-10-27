@@ -1,4 +1,4 @@
-# Starts the app on http://127.0.0.1:8000 (localhost only; the port can be changed with CCST_PORT in .env)
+# Starts the app on http://127.0.0.1:8000 (localhost only; the port can be changed with CERTPREP_PORT in .env)
 # and opens it in the browser. Close the window, or press Ctrl+C, to stop it.
 # Install first with install\install.cmd, which also adds desktop and Start-menu shortcuts that run this.
 param(
@@ -14,7 +14,7 @@ if (-not (Test-Path $python)) {
     Write-Host "The app isn't installed yet. Run install\install.cmd first." -ForegroundColor Red
 } else {
     $env:PYTHONPATH = Join-Path $PSScriptRoot "src"
-    $launchArgs = @("-m", "ccst.launch")
+    $launchArgs = @("-m", "certprep.launch")
     if ($NoBrowser) { $launchArgs += "--no-browser" }
     & $python @launchArgs
     $code = $LASTEXITCODE

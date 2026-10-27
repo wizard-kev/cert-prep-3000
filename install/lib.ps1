@@ -7,7 +7,9 @@ $Script:AppName = "Kevin's Super Cert Prep 3000"
 $Script:MinPython = [version]'3.12'
 # Settings written by the old Docker / local-model installer; removed from .env on install.
 $Script:ObsoleteEnvKeys = @('CCST_PROVIDER', 'OLLAMA_URL', 'OLLAMA_MODEL', 'OLLAMA_NUM_CTX', 'OLLAMA_TIMEOUT_S',
-                            'CCST_BATCH_SIZE', 'CCST_GENERATE_COOLDOWN_S', 'COMPOSE_FILE')
+                            'CCST_BATCH_SIZE', 'CCST_GENERATE_COOLDOWN_S', 'COMPOSE_FILE', 'CCST_OBJECTIVES_DIR')
+# Settings renamed when the app was generalized (old name = new name); values carry over.
+$Script:RenamedEnvKeys = [ordered]@{ 'CCST_PORT' = 'CERTPREP_PORT'; 'CCST_DATA_DIR' = 'CERTPREP_DATA_DIR' }
 
 function Write-Step([string]$msg) { Write-Host ""; Write-Host "==> $msg" -ForegroundColor Cyan }
 function Write-Ok([string]$msg) { Write-Host "    OK  $msg" -ForegroundColor Green }
@@ -69,7 +71,7 @@ function Find-Python {
 # True if this app (not some other program) answers on the port. Bypasses any system proxy.
 function Test-AppAnswers([int]$port) {
     try {
-        $req = [System.Net.HttpWebRequest]::Create("http://127.0.0.1:$port/api/chapters")
+        $req = [System.Net.HttpWebRequest]::Create("http://127.0.0.1:$port/api/certs")
         $req.Proxy = $null
         $req.Timeout = 3000
         $resp = $req.GetResponse()
@@ -89,10 +91,10 @@ function Get-AppProcesses {
     $root = $Script:Root
     $venv = Join-Path $root '.venv'
     $all = @(Get-CimInstance Win32_Process -ErrorAction SilentlyContinue)
-    $launchers = @($all | Where-Object { $_.CommandLine -match 'ccst\.launch' -and $_.ExecutablePath -and
+    $launchers = @($all | Where-Object { $_.CommandLine -match 'certprep\.launch' -and $_.ExecutablePath -and
                                          $_.ExecutablePath.StartsWith($venv, [StringComparison]::OrdinalIgnoreCase) })
     $ids = @($launchers | ForEach-Object { $_.ProcessId })
-    $children = @($all | Where-Object { $ids -contains $_.ParentProcessId -and $_.CommandLine -match 'ccst\.launch' })
+    $children = @($all | Where-Object { $ids -contains $_.ParentProcessId -and $_.CommandLine -match 'certprep\.launch' })
     $windows = @($all | Where-Object { $_.Name -eq 'powershell.exe' -and $_.CommandLine -and
                                        $_.CommandLine.IndexOf((Join-Path $root 'run.ps1'), [StringComparison]::OrdinalIgnoreCase) -ge 0 })
     return @($children + $launchers + $windows)
@@ -143,6 +145,20 @@ function Set-EnvValue([string]$key, [string]$value) {
     }
     if (-not $found) { $lines += "$key=$value" }
     [IO.File]::WriteAllLines($path, [string[]]$lines, (New-Object Text.UTF8Encoding($false)))
+}
+
+# Rename keys in .env (old -> new), keeping the value; an existing new key wins. Returns "OLD -> NEW" notes.
+function Rename-EnvKey([System.Collections.IDictionary]$renames) {
+    $notes = @()
+    foreach ($old in @($renames.Keys)) {
+        $new = $renames[$old]
+        $value = Get-EnvValue $old
+        if ($null -eq $value) { continue }
+        if ($null -eq (Get-EnvValue $new)) { Set-EnvValue $new $value }
+        [void](Remove-EnvValue @($old))
+        $notes += "$old -> $new"
+    }
+    return $notes
 }
 
 # Remove keys from .env; returns the keys that were present.
