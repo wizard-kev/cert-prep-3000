@@ -335,3 +335,42 @@ Each phase ends with the tests passing, a commit, and a short note in this docum
     - A reply written to that prompt imported as **Q-C09-0154** (draft, claude/claude-chat), archived as `claude-20261027T173734Z-3dcc7933.json`. The reply was written in this Claude Code session standing in for claude.ai.
     - `coverage` passes for all 13 sections again; `audit` passes on 918 active questions.
   - **Tests:** 173 pytest pass, including 29 new prompt and import tests.
+- **P5 done (2026-10-27):** question statuses and disputes, Practice and Exam modes, 1-5 confidence, scoring.
+  - **Statuses (section 6):** `unreviewed`, `passive` (Passively-Validated), `validated`, `disputed`, `retired`.
+    - The first three are served in every mode.
+    - Answering marks an Unreviewed question Passively-Validated and records when it was first seen.
+    - "Looks right" marks it Validated.
+    - On startup the app brings statuses in line with the answer history. Legacy `draft`/`verified` values load as `unreviewed`/`validated`.
+  - **Disputes:**
+    - **Practice:** "Report a problem" (and "Disagree with this answer?" after a miss) makes a question Disputed at once. The results page and a new "Disputed questions" page offer Confirm (retire with `Reported by user`) or Undo (restore the previous status).
+    - **Exam:** reports are held in `held_disputes`. They can be taken back during the exam and are confirmed or withdrawn on the results page, after the answer is shown.
+    - Reporting on the normal route during an unfinished exam is refused.
+  - **Confidence:** a 1-5 scale (Guessing, Unsure, Leaning, Confident, Certain) with no default.
+    - Mastery rules are unchanged: 1 is not credited, a wrong answer at 4+ forces Weak, and "too easy" needs 5.
+    - v1 values map guess -> 1, unsure -> 2, sure -> 5.
+  - **Modes:**
+    - **Practice** replaces Diagnostic, Drill and Review. It serves due misses first (1, 3 and 7 days after each miss, up to 30% of the session), then at least 20% untried objectives, then a weighted pick that favours Weak objectives. One question per objective.
+    - **Exam** prefers unseen questions within each domain's share.
+    - Old sessions keep their mode names in history.
+  - **Scores:**
+    - Every report shows all questions, validated-only (Passively-Validated or Validated when the session started), new and repeat.
+    - Confirmed and pending disputes are left out.
+    - Pass or fail appears only when `cert.json` gives the passing score as a percentage (CCST's is unknown, so the report says why there is none).
+  - **Progress schema 2:** confidence is stored as an integer with a 1-5 check. Older databases are upgraded after a `progress-upgrade-*` backup.
+  - **UI:**
+    - The draft review queue is removed.
+    - New: the confidence scale, keyboard shortcuts (letters for options, 1-5 for confidence, Enter to submit or move on), status tags that update in place, score cards and the disputes page.
+    - Red "danger" buttons now have a transparent background, so they stay legible.
+  - **Real-data upgrade:** the `certprep-dev` server (auto-reload, real data) applied the upgrade as soon as the code was saved, before the planned rehearsal. It was then verified after the fact:
+    - **Progress:** the P4 code on the `progress-upgrade-20261027T174804-789754Z.db` backup and the P5 code on a copy of the upgraded database gave the same 18 sessions and 318 answers (confidence mapped), and identical stats for all 212 objectives apart from the confidence breakdown's labels. Two old sessions score higher because the 3 questions reported in v1 are now left out of their scores, as designed.
+    - **Pools:** against the P4 commit, 711 unanswered drafts became Unreviewed, 207 answered drafts became Passively-Validated, and 305 answered questions gained a first-seen time. Nothing else changed.
+    - `coverage` passes for all 13 sections; `audit` passes on 918 active questions.
+  - **Tests:** 187 pytest pass. `test_phase3.py` was rewritten for the new statuses, disputes, held reports, both selection modes, scores and the pass mark; the progress tests add the schema 1 -> 2 upgrade.
+  - **Verified by hand** (scratch copy of the real data, in the browser):
+    - practice driven by keyboard;
+    - "Looks right";
+    - a practice report with Undo on the results page;
+    - an exam with a held report taken back, held again, then confirmed after the exam;
+    - a report confirmed from the Disputed questions page;
+    - the tracker.
+    No console errors.

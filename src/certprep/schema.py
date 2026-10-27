@@ -2,7 +2,7 @@
 
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from .certs import QUESTION_ID, SECTION_CODE
 
@@ -41,7 +41,14 @@ CHAPTER_ANGLES = (
 ANGLES = GENERIC_ANGLES + CHAPTER_ANGLES
 # Phase 1 builds single and multi first (Phase 0 decision); ordering/matching come later.
 QUESTION_TYPES = ("single", "multi")
-STATUSES = ("draft", "verified", "retired")
+# Question lifecycle (v2 plan section 6). Unreviewed: passed the import checks. Passive
+# (Passively-Validated): answered at least once without a dispute. Validated: the learner marked it
+# "Looks right". Disputed: reported, waiting for the learner to confirm or undo; not served.
+STATUSES = ("unreviewed", "passive", "validated", "disputed", "retired")
+SERVED_STATUSES = ("unreviewed", "passive", "validated")
+STATUS_LABELS = {"unreviewed": "Unreviewed", "passive": "Passively-Validated", "validated": "Validated",
+                 "disputed": "Disputed", "retired": "Retired"}
+LEGACY_STATUSES = {"draft": "unreviewed", "verified": "validated"}  # v1 names, still read
 # Option roles (v2 pools): best = the keyed answer; partial = technically correct but not the best
 # answer the stem asks for; related = a neighbouring concept, protocol, or practice; wrong = a
 # plausible misconception. Shown to the learner only after answering.
@@ -79,7 +86,21 @@ class Question(GeneratedQuestion):
     # Who wrote the question (provenance only), e.g. provider "claude", model "claude-opus-5-5".
     provider: str = Field(pattern=r"^[a-z0-9][a-z0-9._-]{0,31}$")
     model: str
-    status: Literal["draft", "verified", "retired"] = "draft"
+    status: Literal[STATUSES] = "unreviewed"  # type: ignore[valid-type]
     created_at: str
-    verified_at: str | None = None
+    verified_at: str | None = None    # when the learner marked it "Looks right" (Validated)
+    seen_at: str | None = None        # first answered, in any mode (passive validation)
     retired_reason: str | None = None
+    disputed_reason: str | None = None
+    disputed_at: str | None = None
+    disputed_session: str | None = None
+    status_before_dispute: str | None = None
+
+    @field_validator("status", mode="before")
+    @classmethod
+    def _v1_status(cls, v):
+        return LEGACY_STATUSES.get(v, v)
+
+    @property
+    def served(self) -> bool:
+        return self.status in SERVED_STATUSES

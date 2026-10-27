@@ -17,14 +17,14 @@ Local web app for certification exam practice. Each certification has objective 
 - `src/certprep/generator.py`: question import, automated checks (plan 10.2) and surface-cue checks, option shuffle; `targets_for` assigns each chosen objective the angles it has used least (retired questions count, so a replacement takes a new approach).
 - `src/certprep/prompts.py`: prompts for a Claude chat (questions, repair, study session, ask about a question); `RULES` mirrors the import checks, `PROMPT_ANGLES` the angles offered. Reply format `certprep-questions` version 1.
 - `src/certprep/importer.py`: imports a pasted reply: envelope and field checks (unknown fields rejected), `clean_text` on every text field, per-question checks via `generator.import_items`, a dry run of the full checks on early rejects, a repair prompt for anything rejected, and an archive copy in the certification's `imports/` (`claude-<time>-<hash>.json`).
-- `src/certprep/pool.py`: per-section pools, atomic writes; verify / retire.
-- `src/certprep/tracker.py`: `progress.db` (schema version in `meta`), v1 migration, `backup(reason)` (keeps 10 per reason); objective status derived from attempts (plan 8.4).
-- `src/certprep/sessions.py`: selection per mode, exam allocation by `cert.json` weights, reports, export summary.
-- `src/certprep/main.py`: FastAPI routes (`/api/certs/{cert}/...`; sessions at `/api/sessions/{id}`); `/` serves `static/index.html` with this launch's CSRF token filled in; `static/`: UI.
+- `src/certprep/pool.py`: per-section pools, atomic writes; question statuses (plan section 6): `mark_seen` (Unreviewed -> Passively-Validated on first answer), `validate` ("Looks right"), `dispute` / `confirm_dispute` (retires with `Reported by user`) / `undo_dispute`, `retire`.
+- `src/certprep/tracker.py`: `progress.db` (schema version in `meta`; schema 2 = confidence 1-5 and `held_disputes` for exam reports), v1 migration, upgrades of older schemas after a `progress-upgrade-*` backup, `backup(reason)` (keeps 10 per reason); objective status derived from attempts (plan 8.4).
+- `src/certprep/sessions.py`: Practice selection (weak first, missed questions again after 1/3/7 days, a share of untried objectives) and Exam selection (unseen first, by `cert.json` weights); reports with all / validated-only / new / repeat scores and the pass mark; export summary.
+- `src/certprep/main.py`: FastAPI routes (`/api/certs/{cert}/...`; sessions at `/api/sessions/{id}`); `/` serves `static/index.html` with this launch's CSRF token filled in; on startup, marks answered Unreviewed questions Passively-Validated. `static/`: UI.
 - `src/certprep/security.py`: middleware run before every route (Host allowlist; Origin + CSRF token on POST; JSON-only, 1 MB body cap; CSP and other headers on every response) and `clean_text` for any free text from the user.
 - `src/certprep/launch.py`: starts the app on 127.0.0.1 (`CERTPREP_PORT`, default 8000) and opens the browser; reuses a running instance.
 - `tests/`: pytest; `conftest.py` points `CERTPREP_DATA_DIR` at a temp dir holding a copy of the CCST `cert.json` and objectives with empty pools, so tests never touch real data.
-- UI testing: run the `certprep-uitest` launch config, whose `CERTPREP_DATA_DIR` points at a scratch copy of `data/` (certs plus a copy of `progress.db`), never the real progress.
+- UI testing: run the `certprep-uitest` launch config, whose `CERTPREP_DATA_DIR` points at a scratch copy of `data/` (certs plus a copy of `progress.db`), never the real progress. The `certprep-dev` config runs on the real data with reload: while it runs, saving a change to the progress schema or the startup sync applies it to the real files at once. Stop it before such changes and verify them on a copy first.
 
 ## Commands
 - Install / repair: `install\install.cmd` (idempotent: finds Python 3.12+, builds `.venv` from `requirements.txt`, removes obsolete model settings and renames `CCST_*` settings in `.env`, adds desktop and Start-menu shortcuts, starts the app; `-Port`, `-NoShortcuts`, `-NoStart`). Uninstall: `install\uninstall.cmd` (stops the app, removes shortcuts and `.venv`; keeps progress and certifications unless `-RemoveProgress`).
@@ -56,12 +56,12 @@ Local web app for certification exam practice. Each certification has objective 
 - Use only the section's own objective IDs, at most 3 per question. Never use specific-looking CVE IDs.
 - Run `--dry-run` before importing; after importing run `coverage --sections <CODE>` and `audit --sections <CODE>` (both must pass).
 - Replacing a pool: `python -m certprep.cli retire --section <CODE> --all-active --superseded --reason "..."`, then import. `--superseded` keeps the learner's answers counting; without it (reported or flawed questions) their answers are dropped from objective status.
-- Reported questions are retired by the app; check `coverage` (or the workspace's "Fewer than 2 questions" pick) and write replacements on a different angle (the prompt builder does this automatically). Q-C09-0100 (reported 2026-10-22) was replaced by Q-C09-0154 through the in-app flow on 2026-10-27.
+- Reported questions are Disputed (out of play) until the learner confirms the report, which retires them, or undoes it. After a confirmation, check `coverage` (or the workspace's "Fewer than 2 questions" pick) and write replacements on a different angle (the prompt builder does this automatically). Q-C09-0100 (reported 2026-10-22) was replaced by Q-C09-0154 through the in-app flow on 2026-10-27.
 
 ## Rules
 - The browser sends only certification ids, section codes, question and session IDs, option keys, fixed choices, and short notes; ids are pattern-checked and must exist in the registry. Never put user text into prompts (SR6).
 - Security baseline (v2 SR-1 to SR-4, `security.py`): every new route is covered by the middleware automatically; any new free-text field goes through `security.clean_text` with a length cap; never use user text in paths, SQL strings, regexes, or shell. Tests and API clients must send `Host: 127.0.0.1`/`localhost`, plus `Origin` and `X-CSRF-Token` on POSTs (see the test fixtures).
 - Treat model output as untrusted: validate, and render with `textContent` only (SR7). The CSP forbids inline scripts, inline styles, and `eval`; `tests/test_security.py` fails if the UI builds HTML from strings.
-- Imported questions enter the pool as `draft`; exam simulation uses `verified` only (D7, until v2 P5 changes it). Retire, never edit in place.
+- Imported questions enter the pool as `unreviewed`. Unreviewed, Passively-Validated (`passive`) and Validated questions are served in every mode; Disputed and Retired are never served and are left out of scores (v2 plan section 6). Legacy `draft`/`verified` values load as `unreviewed`/`validated`. Retire, never edit in place.
 - Never use real exam questions (brain dumps).
 - No API keys in code or the browser; `.env` is gitignored.

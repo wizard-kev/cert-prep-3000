@@ -6,6 +6,7 @@ request first (v2 SR-1, SR-2, SR-4). No AI model runs here and the app makes no 
 
 import html
 import uuid
+from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Annotated, Literal
@@ -18,6 +19,7 @@ from pydantic import BaseModel, Field, StrictBool, StrictInt, field_validator
 from . import certs, importer, pool, prompts, security, sessions, tracker
 from .config import APP_NAME
 from .objectives import UnknownObjective, load_section, load_sections, objective_names
+from .schema import SERVED_STATUSES, STATUSES
 
 STATIC = Path(__file__).parent / "static"
 QuestionId = Annotated[str, Field(pattern=certs.QUESTION_ID)]
@@ -31,7 +33,17 @@ REPORT_REASONS = ("wrong-answer", "ambiguous", "factual-error", "off-objective",
                   "too-easy", "other")
 EXAM_GRACE_S = 30
 
-app = FastAPI(title=APP_NAME, docs_url=None, redoc_url=None, openapi_url=None)
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    """On start: make question statuses agree with recorded answers (after a migration or a
+    progress restore, an answered question may still read Unreviewed)."""
+    for cert in certs.list_certs():
+        pool.mark_seen_many(cert.id, tracker.first_answered(cert.id))
+    yield
+
+
+app = FastAPI(title=APP_NAME, docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 app.add_middleware(security.SecurityMiddleware)
 app.mount("/static", StaticFiles(directory=STATIC), name="static")
 CSRF_PLACEHOLDER = "__CSRF_TOKEN__"
@@ -56,6 +68,10 @@ def _question_or_404(cert_id: str, question_id: str, allow_retired: bool = False
     if q is None or (q.status == "retired" and not allow_retired):
         raise HTTPException(404, "unknown question")
     return q
+
+
+def _reason_text(reason: str, note: str) -> str:
+    return reason + (f": {note}" if note else "")
 
 
 @app.get("/")
@@ -85,12 +101,9 @@ def sections_view(cert_id: CertIdPath):
     out = []
     for s in load_sections(cert.id):
         qs = pool.load(cert.id, s.code)
-        out.append({
-            "code": s.code, "name": s.name, "objectives": len(s.objectives), "domain": s.domain,
-            "draft": sum(q.status == "draft" for q in qs),
-            "verified": sum(q.status == "verified" for q in qs),
-            "retired": sum(q.status == "retired" for q in qs),
-        })
+        counts = {status: sum(q.status == status for q in qs) for status in STATUSES}
+        out.append({"code": s.code, "name": s.name, "objectives": len(s.objectives), "domain": s.domain,
+                    "served": sum(counts[st] for st in SERVED_STATUSES), **counts})
     return out
 
 
@@ -158,30 +171,22 @@ def import_questions(cert_id: CertIdPath, req: ImportRequest):
         raise HTTPException(422, str(e)) from None
 
 
-# ---- question review: verify / report (D7, FR6) -------------------------
+# ---- question statuses: Looks right, report, disputes (v2 section 6) -------
 
-@app.get("/api/certs/{cert_id}/review-queue")
-def review_queue(cert_id: CertIdPath, section: Annotated[str, Query(pattern=certs.SECTION_CODE)]):
-    cert = _cert_or_404(cert_id)
-    (code,) = _sections_or_404(cert, [section])
-    names = objective_names(cert.id)
-    drafts = [q for q in pool.load(cert.id, code) if q.status == "draft"]
-    return [{**sessions.question_full(q), "objective_names": [names.get(o, "") for o in q.objectives]}
-            for q in drafts]
-
-
-@app.post("/api/certs/{cert_id}/questions/{question_id}/verify")
-def verify(cert_id: CertIdPath, question_id: QuestionIdPath):
+@app.post("/api/certs/{cert_id}/questions/{question_id}/validate")
+def validate(cert_id: CertIdPath, question_id: QuestionIdPath):
+    """The learner marks a question "Looks right" (Validated)."""
     cert = _cert_or_404(cert_id)
     q = _question_or_404(cert.id, question_id)
-    if not pool.verify(cert.id, q.id, tracker.now_iso()):
-        raise HTTPException(409, f"question is {q.status}, not draft")
-    return {"id": q.id, "status": "verified"}
+    if not pool.validate(cert.id, q.id, tracker.now_iso()):
+        raise HTTPException(409, f"this question is already {q.status}")
+    return {"id": q.id, "status": "validated"}
 
 
 class ReportRequest(BaseModel):
     reason: Literal[REPORT_REASONS]  # type: ignore[valid-type]
     note: Annotated[str, Field(max_length=300)] = ""
+    session_id: Annotated[str, Field(pattern=r"^[0-9a-f]{16}$")] | None = None
 
     @field_validator("note")
     @classmethod
@@ -191,24 +196,54 @@ class ReportRequest(BaseModel):
 
 @app.post("/api/certs/{cert_id}/questions/{question_id}/report")
 def report(cert_id: CertIdPath, question_id: QuestionIdPath, req: ReportRequest):
+    """Dispute a question: it leaves play at once and waits for the learner to confirm (retire) or
+    undo. During an unfinished exam, use the session's held reports instead."""
     cert = _cert_or_404(cert_id)
     q = _question_or_404(cert.id, question_id)
+    if req.session_id:
+        s = _session_or_404(req.session_id)
+        if s["mode"] == "exam" and not s["finished_at"]:
+            raise HTTPException(409, "during an exam, reports are held until the results page")
     # The note (already cleaned) is stored for the user's own records only.
-    reason = req.reason + (f": {req.note}" if req.note else "")
-    pool.retire(cert.id, q.id, f"Reported by user ({tracker.now_iso()}): {reason}")
-    return {"id": q.id, "status": "retired"}
+    if not pool.dispute(cert.id, q.id, _reason_text(req.reason, req.note), tracker.now_iso(), req.session_id):
+        raise HTTPException(409, f"this question is {q.status}")
+    return {"id": q.id, "status": "disputed"}
 
 
-# ---- sessions (four modes) ----------------------------------------------
+@app.get("/api/certs/{cert_id}/disputes")
+def disputes(cert_id: CertIdPath):
+    cert = _cert_or_404(cert_id)
+    names = objective_names(cert.id)
+    return [{**sessions.question_full(q), "disputed_at": q.disputed_at,
+             "objective_names": [names.get(o, "") for o in q.objectives]} for q in pool.disputed(cert.id)]
+
+
+class DisputeDecision(BaseModel):
+    decision: Literal["confirm", "undo"]
+
+
+@app.post("/api/certs/{cert_id}/questions/{question_id}/dispute")
+def decide_dispute(cert_id: CertIdPath, question_id: QuestionIdPath, req: DisputeDecision):
+    """Confirm (the question is retired) or undo (it goes back into play) a pending dispute."""
+    cert = _cert_or_404(cert_id)
+    q = _question_or_404(cert.id, question_id)
+    done = (pool.confirm_dispute(cert.id, q.id, tracker.now_iso()) if req.decision == "confirm"
+            else pool.undo_dispute(cert.id, q.id))
+    if not done:
+        raise HTTPException(409, "this question has no pending dispute")
+    return {"id": q.id, "status": pool.get(cert.id, q.id).status}
+
+
+# ---- sessions (Practice, Exam; Focus arrives in P7) ------------------------
 
 class SessionRequest(BaseModel):
-    mode: Literal[tracker.MODES]  # type: ignore[valid-type]
+    mode: Literal["practice", "exam"]
     sections: Annotated[list[SectionCode], Field(min_length=1, max_length=200)]
     count: Annotated[StrictInt, Field(ge=1, le=200)] | None = None
     minutes: Annotated[StrictInt, Field(ge=5, le=300)] | None = None
 
 
-DEFAULT_COUNTS = {"drill": 10, "review": 20}
+PRACTICE_COUNT = 10
 
 
 @app.post("/api/certs/{cert_id}/sessions", status_code=201)
@@ -216,19 +251,18 @@ def create_session(cert_id: CertIdPath, req: SessionRequest):
     cert = _cert_or_404(cert_id)
     codes = _sections_or_404(cert, req.sections)
     defaults = sessions.exam_defaults(cert)
-    count = req.count or (defaults["questions"] if req.mode == "exam" else DEFAULT_COUNTS.get(req.mode, 200))
+    count = req.count or (defaults["questions"] if req.mode == "exam" else PRACTICE_COUNT)
     picked = sessions.select(cert.id, req.mode, codes, count)
     if not picked:
-        msg = {"exam": "no verified questions in these sections yet; verify drafts first",
-               "review": "no missed questions to review yet"}.get(req.mode, "no questions in these sections yet")
-        raise HTTPException(409, msg)
+        raise HTTPException(409, "There are no questions in these sections yet. Add some in the Claude workspace.")
     limit = (req.minutes or defaults["minutes"]) * 60 if req.mode == "exam" else None
     s = tracker.create_session(uuid.uuid4().hex[:16], cert.id, req.mode, codes, [q.id for q in picked], limit)
     return _session_view(s)
 
 
 def _session_view(s: dict) -> dict:
-    qs = {q.id: q for q in pool.active(s["cert_id"], s["sections"])}
+    ids = set(s["question_ids"])
+    qs = {q.id: q for q in pool.all_questions(s["cert_id"], s["sections"]) if q.id in ids}
     attempts = {a["question_id"]: a for a in tracker.session_attempts(s["id"])}
     deferred = s["mode"] in sessions.DEFERRED_FEEDBACK and not s["finished_at"]
     answers = {}
@@ -266,8 +300,8 @@ def get_session(session_id: SessionIdPath):
 class AnswerRequest(BaseModel):
     question_id: QuestionId
     selected: Annotated[list[OptionKey], Field(min_length=1, max_length=6)]
-    confidence: Literal[tracker.CONFIDENCE]  # type: ignore[valid-type]
-    flagged: StrictBool = False
+    confidence: Annotated[StrictInt, Field(ge=1, le=5)]  # 1 Guessing ... 5 Certain
+    flagged: StrictBool = False  # "Mark for review" in an exam
 
 
 @app.post("/api/sessions/{session_id}/answer")
@@ -282,9 +316,59 @@ def answer(session_id: SessionIdPath, req: AnswerRequest):
         raise HTTPException(409, "time is up")
     q = _question_or_404(s["cert_id"], req.question_id)
     correct = tracker.record_attempt(s["id"], s["cert_id"], q, req.selected, req.confidence, req.flagged)
+    pool.mark_seen(s["cert_id"], q.id, tracker.now_iso())  # answered: passively validated
     if s["mode"] in sessions.DEFERRED_FEEDBACK:
         return {"recorded": True}
-    return {"recorded": True, "correct": correct, "question": sessions.question_full(q)}
+    return {"recorded": True, "correct": correct, "question": sessions.question_full(pool.get(s["cert_id"], q.id))}
+
+
+class HeldReportRequest(BaseModel):
+    question_id: QuestionId
+    reason: Literal[REPORT_REASONS]  # type: ignore[valid-type]
+    note: Annotated[str, Field(max_length=300)] = ""
+
+    @field_validator("note")
+    @classmethod
+    def _clean_note(cls, v: str) -> str:
+        return security.clean_text(v, 300)
+
+
+@app.post("/api/sessions/{session_id}/held-reports")
+def hold_report(session_id: SessionIdPath, req: HeldReportRequest):
+    """Report a question during an exam: held until the results page, where the learner sees the
+    answer and confirms or withdraws it (v2 decision V8). The exam is not interrupted."""
+    s = _session_or_404(session_id)
+    if s["mode"] != "exam" or s["finished_at"]:
+        raise HTTPException(409, "held reports are for exams in progress; report the question directly")
+    if req.question_id not in s["question_ids"]:
+        raise HTTPException(404, "question is not part of this session")
+    tracker.hold_dispute(s["id"], req.question_id, _reason_text(req.reason, req.note))
+    return {"ok": True}
+
+
+class HeldDecision(BaseModel):
+    question_id: QuestionId
+    decision: Literal["confirm", "withdraw"]
+
+
+@app.post("/api/sessions/{session_id}/held-reports/decide")
+def decide_held_report(session_id: SessionIdPath, req: HeldDecision):
+    """Before the exam ends: withdraw takes the report back. After it ends: confirm retires the
+    question (it leaves the score); withdraw keeps it counted."""
+    s = _session_or_404(session_id)
+    held = tracker.held_disputes(s["id"]).get(req.question_id)
+    if held is None or held["decision"] is not None:
+        raise HTTPException(404, "no undecided report for that question in this session")
+    if not s["finished_at"]:
+        if req.decision != "withdraw":
+            raise HTTPException(409, "finish the exam first; you'll see the answer before confirming")
+        tracker.drop_held_dispute(s["id"], req.question_id)
+        return {"ok": True}
+    if req.decision == "confirm":
+        pool.retire(s["cert_id"], req.question_id,
+                    f"{pool.REPORTED_PREFIX} ({held['created_at']}): {held['reason']}")
+    tracker.decide_held_dispute(s["id"], req.question_id, "confirmed" if req.decision == "confirm" else "withdrawn")
+    return sessions.session_report(tracker.get_session(s["id"]))
 
 
 class FlagRequest(BaseModel):
@@ -352,10 +436,10 @@ def tracker_view(cert_id: CertIdPath, section: SectionQuery):
 
 @app.get("/api/certs/{cert_id}/too-easy")
 def too_easy(cert_id: CertIdPath, section: SectionQuery):
-    """Questions answered correctly and "sure" every recent time: candidates to keep or retire."""
+    """Questions answered correctly at Certain every recent time: candidates to keep or retire."""
     cert = _cert_or_404(cert_id)
     codes = _sections_or_404(cert, section)
-    flagged = tracker.too_easy(tracker.all_attempts(cert.id, exclude_questions=pool.retired_ids(cert.id)))
+    flagged = tracker.too_easy(tracker.all_attempts(cert.id, exclude_questions=pool.inactive_ids(cert.id)))
     names = objective_names(cert.id)
     return [{**sessions.question_full(q), "attempts": flagged[q.id],
              "objective_names": [names.get(o, "") for o in q.objectives]}

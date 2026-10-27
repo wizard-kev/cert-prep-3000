@@ -17,16 +17,23 @@ from pathlib import Path
 
 from .config import settings
 
-CONFIDENCE = ("guess", "unsure", "sure")
+# Confidence per answer, 1-5 (v2 plan 8.2). A correct answer at GUESSING proves nothing; a wrong
+# answer at SURE or above keeps the objective Weak.
+CONFIDENCE = (1, 2, 3, 4, 5)
+CONFIDENCE_LABELS = {1: "Guessing", 2: "Unsure", 3: "Leaning", 4: "Confident", 5: "Certain"}
+GUESSING, SURE, CERTAIN = 1, 4, 5
+LEGACY_CONFIDENCE = {"guess": 1, "unsure": 2, "sure": 5}  # v1 values, converted on upgrade
 ERROR_TYPES = ("concept-gap", "terminology-confusion", "misread-question", "scenario-application")
-MODES = ("diagnostic", "drill", "exam", "review")
+MODES = ("practice", "focus", "exam")
+LEGACY_MODES = ("diagnostic", "drill", "review")  # kept in old sessions' history
 # Spaced revisits for Solid objectives (proposed in 8.4, tunable): 3, 7, then 14 days.
 REVISIT_DAYS = (3, 7, 14)
-# A question answered correctly and "sure" this many times in a row (one per session) is probably
-# too easy to teach anything; it is listed for the user to keep or retire.
+# A question answered correctly at "Certain" this many times in a row (one per session) is
+# probably too easy to teach anything; it is listed for the user to keep or retire.
 TOO_EASY_STREAK = 3
+DISPUTE_DECISIONS = ("confirmed", "withdrawn")
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 # The v1 app was CCST-only, so its sessions and answers belong to this certification.
 LEGACY_CERT = "ccst-cyber"
 KEEP_BACKUPS = 10  # automatic progress backups kept per kind
@@ -56,15 +63,49 @@ CREATE TABLE IF NOT EXISTS attempts (
     angle TEXT NOT NULL,
     selected TEXT NOT NULL,
     correct INTEGER NOT NULL,
-    confidence TEXT NOT NULL,
+    confidence INTEGER NOT NULL CHECK (confidence BETWEEN 1 AND 5),
     error_type TEXT,
     flagged INTEGER NOT NULL DEFAULT 0,
     answered_at TEXT NOT NULL,
     PRIMARY KEY (session_id, question_id)
 );
+CREATE TABLE IF NOT EXISTS held_disputes (
+    session_id TEXT NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
+    question_id TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    decision TEXT,
+    decided_at TEXT,
+    PRIMARY KEY (session_id, question_id)
+);
 CREATE INDEX IF NOT EXISTS sessions_cert ON sessions(cert_id);
 CREATE INDEX IF NOT EXISTS attempts_cert_objective ON attempts(cert_id, objective);
 """
+
+
+def _upgrade_1_to_2(conn: sqlite3.Connection) -> None:
+    """Schema 2: confidence becomes 1-5 (guess -> 1, unsure -> 2, sure -> 5), and exams can hold
+    disputes. The attempts table is rebuilt because SQLite can't change a column's type."""
+    conn.executescript("""
+        ALTER TABLE attempts RENAME TO attempts_v1;
+        CREATE TABLE attempts (
+            session_id TEXT NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
+            cert_id TEXT NOT NULL, question_id TEXT NOT NULL, section TEXT NOT NULL, objective TEXT NOT NULL,
+            domain TEXT, angle TEXT NOT NULL, selected TEXT NOT NULL, correct INTEGER NOT NULL,
+            confidence INTEGER NOT NULL CHECK (confidence BETWEEN 1 AND 5),
+            error_type TEXT, flagged INTEGER NOT NULL DEFAULT 0, answered_at TEXT NOT NULL,
+            PRIMARY KEY (session_id, question_id));
+        INSERT INTO attempts SELECT session_id, cert_id, question_id, section, objective, domain, angle, selected,
+            correct, CASE confidence WHEN 'guess' THEN 1 WHEN 'unsure' THEN 2 WHEN 'sure' THEN 5
+                                     ELSE CAST(confidence AS INTEGER) END,
+            error_type, flagged, answered_at FROM attempts_v1;
+        DROP TABLE attempts_v1;
+        CREATE INDEX IF NOT EXISTS attempts_cert_objective ON attempts(cert_id, objective);
+    """)
+    conn.executescript(_SCHEMA)  # adds held_disputes
+
+
+_UPGRADES = {1: _upgrade_1_to_2}
 
 
 class ProgressError(RuntimeError):
@@ -141,8 +182,8 @@ def migrate_legacy(legacy: Path, target: Path) -> Path:
                                          selected, correct, confidence, error_type, flagged, answered_at)
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (a["session_id"], LEGACY_CERT, a["question_id"], _section_code(a["chapter"]), a["objective"],
-                 a["domain"], a["angle"], a["selected"], a["correct"], a["confidence"], a["error_type"],
-                 a["flagged"], a["answered_at"]))
+                 a["domain"], a["angle"], a["selected"], a["correct"], LEGACY_CONFIDENCE[a["confidence"]],
+                 a["error_type"], a["flagged"], a["answered_at"]))
         if _counts(new) != _counts(old):
             raise ProgressError(f"migration lost rows: {_counts(old)} -> {_counts(new)}")
         new.executemany("INSERT INTO meta VALUES (?, ?)", [
@@ -179,19 +220,21 @@ def _prepare() -> None:
             migrate_legacy(settings.legacy_tracker_db, path)
         conn = sqlite3.connect(path)
         try:
-            conn.executescript(_SCHEMA)
-            row = conn.execute("SELECT value FROM meta WHERE key = 'schema_version'").fetchone()
-            if row is None:
-                conn.execute("INSERT INTO meta VALUES ('schema_version', ?)", (str(SCHEMA_VERSION),))
-            elif int(row[0]) > SCHEMA_VERSION:
+            has_meta = conn.execute("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'meta'").fetchone()
+            row = conn.execute("SELECT value FROM meta WHERE key = 'schema_version'").fetchone() if has_meta else None
+            version = int(row[0]) if row else SCHEMA_VERSION
+            if version > SCHEMA_VERSION:
                 raise ProgressError(f"{path.name} was written by a newer version of the app "
-                                    f"(schema {row[0]}, this app reads {SCHEMA_VERSION}); update the app")
-            elif int(row[0]) < SCHEMA_VERSION:
+                                    f"(schema {version}, this app reads {SCHEMA_VERSION}); update the app")
+            if version < SCHEMA_VERSION:
                 conn.close()
                 backup("upgrade")  # always before changing the schema
                 conn = sqlite3.connect(path)
-                # Upgrade steps for later schema versions go here.
-                conn.execute("UPDATE meta SET value = ? WHERE key = 'schema_version'", (str(SCHEMA_VERSION),))
+                for step in range(version, SCHEMA_VERSION):
+                    _UPGRADES[step](conn)
+            conn.executescript(_SCHEMA)
+            conn.execute("INSERT INTO meta VALUES ('schema_version', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+                         (str(SCHEMA_VERSION),))
             conn.commit()
         finally:
             conn.close()
@@ -246,7 +289,7 @@ def last_finished_session(cert_id: str) -> dict | None:
 
 # ---- attempts -------------------------------------------------------------
 
-def record_attempt(session_id: str, cert_id: str, question, selected: list[str], confidence: str,
+def record_attempt(session_id: str, cert_id: str, question, selected: list[str], confidence: int,
                    flagged: bool) -> bool:
     """Upsert: in exam mode the user may change an answer before finishing."""
     correct = sorted(set(selected)) == sorted(question.answer)
@@ -290,6 +333,47 @@ def all_attempts(cert_id: str, exclude_questions: set[str] = frozenset(),
             if r["question_id"] not in exclude_questions and r["session_id"] != exclude_session]
 
 
+def first_answered(cert_id: str) -> dict[str, str]:
+    """Question ID -> when it was first answered (any mode), for passive validation."""
+    with connect() as c:
+        rows = c.execute("SELECT question_id, MIN(answered_at) AS first FROM attempts WHERE cert_id = ? "
+                         "GROUP BY question_id", (cert_id,)).fetchall()
+    return {r["question_id"]: r["first"] for r in rows}
+
+
+# ---- disputes held during an exam (decided on the results page) ----------
+
+def hold_dispute(session_id: str, question_id: str, reason: str) -> None:
+    with connect() as c:
+        c.execute("""INSERT INTO held_disputes (session_id, question_id, reason, created_at) VALUES (?, ?, ?, ?)
+                     ON CONFLICT(session_id, question_id) DO UPDATE SET reason = excluded.reason,
+                       created_at = excluded.created_at, decision = NULL, decided_at = NULL""",
+                  (session_id, question_id, reason, now_iso()))
+
+
+def drop_held_dispute(session_id: str, question_id: str) -> bool:
+    """Take back a report before the exam is finished."""
+    with connect() as c:
+        cur = c.execute("DELETE FROM held_disputes WHERE session_id = ? AND question_id = ? AND decision IS NULL",
+                        (session_id, question_id))
+    return cur.rowcount == 1
+
+
+def held_disputes(session_id: str) -> dict[str, dict]:
+    with connect() as c:
+        rows = c.execute("SELECT * FROM held_disputes WHERE session_id = ?", (session_id,)).fetchall()
+    return {r["question_id"]: dict(r) for r in rows}
+
+
+def decide_held_dispute(session_id: str, question_id: str, decision: str) -> bool:
+    if decision not in DISPUTE_DECISIONS:
+        raise ValueError(f"decision must be one of {DISPUTE_DECISIONS}")
+    with connect() as c:
+        cur = c.execute("UPDATE held_disputes SET decision = ?, decided_at = ? WHERE session_id = ? "
+                        "AND question_id = ? AND decision IS NULL", (decision, now_iso(), session_id, question_id))
+    return cur.rowcount == 1
+
+
 def reset(cert_id: str) -> None:
     """Delete one certification's sessions and answers (a backup is taken first)."""
     if settings.progress_db.exists():
@@ -304,7 +388,7 @@ def reset(cert_id: str) -> None:
 @dataclass
 class ObjectiveStats:
     """`correct`, `last5`, and the Solid evidence count only credited answers: correct and not
-    marked "guess". A lucky guess is recorded (and scored in the session) but proves nothing."""
+    marked Guessing (1). A lucky guess is recorded (and scored in the session) but proves nothing."""
     objective: str
     attempts: int = 0
     correct: int = 0
@@ -362,7 +446,7 @@ def objective_stats(attempts: list[dict]) -> dict[str, ObjectiveStats]:
     for a in attempts:
         s = out.setdefault(a["objective"], ObjectiveStats(a["objective"]))
         right = bool(a["correct"])
-        ok = right and a["confidence"] != "guess"  # credited toward mastery
+        ok = right and a["confidence"] > GUESSING  # credited toward mastery
         s.attempts += 1
         s.correct += ok
         s.guessed_correct += right and not ok
@@ -379,21 +463,21 @@ def objective_stats(attempts: list[dict]) -> dict[str, ObjectiveStats]:
         if ok:
             s.sessions_correct.add(a["session_id"])
             s.angles_correct.add(a["angle"])
-    # "Sure but wrong" within the last five answers keeps an objective Weak.
+    # Wrong while Confident or Certain, within the last five answers, keeps an objective Weak.
     recent: dict[str, list[dict]] = {}
     for a in attempts:
         recent.setdefault(a["objective"], []).append(a)
     for obj, rows in recent.items():
-        out[obj].sure_wrong_recent = sum(1 for a in rows[-5:] if a["confidence"] == "sure" and not a["correct"])
+        out[obj].sure_wrong_recent = sum(1 for a in rows[-5:] if a["confidence"] >= SURE and not a["correct"])
     return out
 
 
 def too_easy(attempts: list[dict]) -> dict[str, int]:
     """Question ID -> attempts, for questions whose last TOO_EASY_STREAK answers (one per session)
-    were all correct and marked "sure". `attempts` must be in answer order (oldest first)."""
+    were all correct at Certain (5). `attempts` must be in answer order (oldest first)."""
     by_q: dict[str, list[dict]] = {}
     for a in attempts:
         by_q.setdefault(a["question_id"], []).append(a)
     return {qid: len(rows) for qid, rows in by_q.items()
             if len(rows) >= TOO_EASY_STREAK
-            and all(a["correct"] and a["confidence"] == "sure" for a in rows[-TOO_EASY_STREAK:])}
+            and all(a["correct"] and a["confidence"] == CERTAIN for a in rows[-TOO_EASY_STREAK:])}

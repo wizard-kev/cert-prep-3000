@@ -95,8 +95,8 @@ def test_too_many_questions_for_one_prompt_is_refused(client):
 def test_study_prompt_includes_the_learners_mistakes(client):
     q = generator.import_items(CERT, "C01", [_v2("ch01_v2_set1a.json")], "claude", "test").accepted[0]
     wrong = next(o for o in q.options if o.key not in q.answer)
-    tracker.create_session("d" * 16, CERT, "drill", ["C01"], [q.id], None)
-    tracker.record_attempt("d" * 16, CERT, q, [wrong.key], "sure", False)
+    tracker.create_session("d" * 16, CERT, "practice", ["C01"], [q.id], None)
+    tracker.record_attempt("d" * 16, CERT, q, [wrong.key], 5, False)
     p = client.get(f"{API}/prompts/study?objective=C01-01&objective=C01-02").json()["prompt"]
     assert "tutor" in p and "- C01-01: Weak, 1 answered, last five 0%, recently wrong while sure" in p
     assert f'chose "{wrong.text}"' in p and "- C01-02: not practiced yet" in p
@@ -122,7 +122,7 @@ def test_valid_reply_is_imported_as_draft_and_archived(client):
     assert [a["id"] for a in body["accepted"]] == ["Q-C01-0001"] and body["rejected"] == []
     assert body["repair_prompt"] is None
     q = pool.get(CERT, "Q-C01-0001")
-    assert q.status == "draft" and q.provider == "claude" and q.model == "claude-chat"
+    assert q.status == "unreviewed" and q.provider == "claude" and q.model == "claude-chat"
     assert re.fullmatch(r"claude-\d{8}T\d{6}Z-[0-9a-f]{8}\.json", body["archive"])
     archived = json.loads((certs.cert_dir(CERT) / "imports" / body["archive"]).read_text(encoding="utf-8"))
     assert archived["questions"][0]["objectives"] == ["C01-01"]

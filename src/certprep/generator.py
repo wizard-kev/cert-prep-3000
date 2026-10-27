@@ -71,7 +71,7 @@ def targets_for(objective_ids: list[str], existing: list[Question], per_objectiv
     """Targets for chosen objectives: `per_objective` each, every one on the angle the objective's
     questions have used least (never the newest active one), so new questions add variety. Retired
     questions count as used too: a replacement for a reported question takes a different approach."""
-    active = [q for q in existing if q.status != "retired"]
+    active = [q for q in existing if q.served]
     last = pool.last_angle(active)
     used: dict[str, Counter] = {}
     for q in existing:
@@ -316,7 +316,7 @@ def _store(section: Section, items: list, targets: list[Target], provider_name: 
                 source_ref=f"objectives/{section.code}.md#{q.objectives[0]}",
                 provider=provider_name,
                 model=model,
-                status="draft",
+                status="unreviewed",
                 created_at=now,
             )
             for qid, q in zip(ids, valid)

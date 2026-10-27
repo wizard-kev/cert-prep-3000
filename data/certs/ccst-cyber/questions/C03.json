@@ -51,7 +51,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -110,7 +115,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -163,7 +173,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -215,7 +230,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -267,7 +287,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": "2026-10-20T15:46:06+00:00",
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -325,7 +350,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -377,7 +407,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -436,7 +471,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -487,7 +527,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -538,7 +583,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -591,7 +641,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -643,7 +698,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -695,7 +755,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -747,7 +812,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -799,7 +869,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -857,7 +932,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -908,7 +988,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -960,7 +1045,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1011,7 +1101,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1062,7 +1157,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1113,7 +1213,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1164,7 +1269,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": "2026-10-20T15:41:48+00:00",
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1216,7 +1326,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1274,7 +1389,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1325,7 +1445,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1377,7 +1502,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1436,7 +1566,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1488,7 +1623,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1540,7 +1680,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1592,7 +1737,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1644,7 +1794,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1695,7 +1850,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1746,7 +1906,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1797,7 +1962,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1849,7 +2019,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1900,7 +2075,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -1951,7 +2131,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2009,7 +2194,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2061,7 +2251,12 @@
       "status": "retired",
       "created_at": "2026-10-07T17:28:39+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2113,7 +2308,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2165,7 +2365,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2224,7 +2429,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2276,7 +2486,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2327,7 +2542,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2378,7 +2598,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2430,7 +2655,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2481,7 +2711,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2532,7 +2767,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2590,7 +2830,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": "2026-10-20T17:31:36+00:00",
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2641,7 +2886,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2693,7 +2943,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2745,7 +3000,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": "2026-10-20T15:51:06+00:00",
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2796,7 +3056,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2847,7 +3112,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2899,7 +3169,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -2950,7 +3225,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3002,7 +3282,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3061,7 +3346,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": "2026-10-20T17:36:01+00:00",
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3112,7 +3402,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3170,7 +3465,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3221,7 +3521,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3272,7 +3577,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": "2026-10-20T17:31:55+00:00",
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3323,7 +3633,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3374,7 +3689,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3425,7 +3745,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3477,7 +3802,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3529,7 +3859,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3581,7 +3916,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3640,7 +3980,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3692,7 +4037,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3743,7 +4093,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3801,7 +4156,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3859,7 +4219,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3918,7 +4283,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": "2026-10-20T15:30:21+00:00",
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -3969,7 +4339,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4020,7 +4395,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4072,7 +4452,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4123,7 +4508,12 @@
       "status": "retired",
       "created_at": "2026-10-07T18:02:02+00:00",
       "verified_at": null,
-      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+      "seen_at": "2026-10-20T15:34:10+00:00",
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)",
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4172,10 +4562,15 @@
       "source_ref": "objectives/C03.md#C03-01",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4224,10 +4619,15 @@
       "source_ref": "objectives/C03.md#C03-02",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4276,10 +4676,15 @@
       "source_ref": "objectives/C03.md#C03-03",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4328,10 +4733,15 @@
       "source_ref": "objectives/C03.md#C03-04",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4380,10 +4790,15 @@
       "source_ref": "objectives/C03.md#C03-05",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-22T20:26:20+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4431,10 +4846,15 @@
       "source_ref": "objectives/C03.md#C03-06",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4483,10 +4903,15 @@
       "source_ref": "objectives/C03.md#C03-07",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4542,10 +4967,15 @@
       "source_ref": "objectives/C03.md#C03-08",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4593,10 +5023,15 @@
       "source_ref": "objectives/C03.md#C03-09",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4644,10 +5079,15 @@
       "source_ref": "objectives/C03.md#C03-10",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4696,10 +5136,15 @@
       "source_ref": "objectives/C03.md#C03-11",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4748,10 +5193,15 @@
       "source_ref": "objectives/C03.md#C03-12",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T18:43:17+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4800,10 +5250,15 @@
       "source_ref": "objectives/C03.md#C03-13",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-22T14:28:45+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4852,10 +5307,15 @@
       "source_ref": "objectives/C03.md#C03-14",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4904,10 +5364,15 @@
       "source_ref": "objectives/C03.md#C03-15",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-22T14:07:48+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -4962,10 +5427,15 @@
       "source_ref": "objectives/C03.md#C03-16",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5013,10 +5483,15 @@
       "source_ref": "objectives/C03.md#C03-17",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5065,10 +5540,15 @@
       "source_ref": "objectives/C03.md#C03-18",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5116,10 +5596,15 @@
       "source_ref": "objectives/C03.md#C03-19",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5168,10 +5653,15 @@
       "source_ref": "objectives/C03.md#C03-20",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:35+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5220,10 +5710,15 @@
       "source_ref": "objectives/C03.md#C03-21",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5272,10 +5767,15 @@
       "source_ref": "objectives/C03.md#C03-22",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5331,10 +5831,15 @@
       "source_ref": "objectives/C03.md#C03-23",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-22T20:23:06+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5383,10 +5888,15 @@
       "source_ref": "objectives/C03.md#C03-24",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5435,10 +5945,15 @@
       "source_ref": "objectives/C03.md#C03-25",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5487,10 +6002,15 @@
       "source_ref": "objectives/C03.md#C03-26",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5546,10 +6066,15 @@
       "source_ref": "objectives/C03.md#C03-27",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5598,10 +6123,15 @@
       "source_ref": "objectives/C03.md#C03-28",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T13:30:06+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5650,10 +6180,15 @@
       "source_ref": "objectives/C03.md#C03-29",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5702,10 +6237,15 @@
       "source_ref": "objectives/C03.md#C03-30",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5754,10 +6294,15 @@
       "source_ref": "objectives/C03.md#C03-31",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5805,10 +6350,15 @@
       "source_ref": "objectives/C03.md#C03-32",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-22T19:42:24+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5857,10 +6407,15 @@
       "source_ref": "objectives/C03.md#C03-33",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5909,10 +6464,15 @@
       "source_ref": "objectives/C03.md#C03-34",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-22T19:55:46+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -5961,10 +6521,15 @@
       "source_ref": "objectives/C03.md#C03-35",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-22T19:47:09+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6013,10 +6578,15 @@
       "source_ref": "objectives/C03.md#C03-36",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T18:48:41+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6064,10 +6634,15 @@
       "source_ref": "objectives/C03.md#C03-37",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6116,10 +6691,15 @@
       "source_ref": "objectives/C03.md#C03-38",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T19:03:16+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6175,10 +6755,15 @@
       "source_ref": "objectives/C03.md#C03-39",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6235,10 +6820,15 @@
       "source_ref": "objectives/C03.md#C03-01",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6287,10 +6877,15 @@
       "source_ref": "objectives/C03.md#C03-02",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6339,10 +6934,15 @@
       "source_ref": "objectives/C03.md#C03-03",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6398,10 +6998,15 @@
       "source_ref": "objectives/C03.md#C03-04",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6449,10 +7054,15 @@
       "source_ref": "objectives/C03.md#C03-05",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-22T19:43:53+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6500,10 +7110,15 @@
       "source_ref": "objectives/C03.md#C03-06",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6552,10 +7167,15 @@
       "source_ref": "objectives/C03.md#C03-07",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6603,10 +7223,15 @@
       "source_ref": "objectives/C03.md#C03-08",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T17:30:03+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6654,10 +7279,15 @@
       "source_ref": "objectives/C03.md#C03-09",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6705,10 +7335,15 @@
       "source_ref": "objectives/C03.md#C03-10",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T17:40:49+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6757,10 +7392,15 @@
       "source_ref": "objectives/C03.md#C03-11",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6809,10 +7449,15 @@
       "source_ref": "objectives/C03.md#C03-12",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6861,10 +7506,15 @@
       "source_ref": "objectives/C03.md#C03-13",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T17:39:17+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6920,10 +7570,15 @@
       "source_ref": "objectives/C03.md#C03-14",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -6972,10 +7627,15 @@
       "source_ref": "objectives/C03.md#C03-15",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7024,10 +7684,15 @@
       "source_ref": "objectives/C03.md#C03-16",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7082,10 +7747,15 @@
       "source_ref": "objectives/C03.md#C03-17",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7134,10 +7804,15 @@
       "source_ref": "objectives/C03.md#C03-18",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T19:45:34+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7185,10 +7860,15 @@
       "source_ref": "objectives/C03.md#C03-19",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7236,10 +7916,15 @@
       "source_ref": "objectives/C03.md#C03-20",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7288,10 +7973,15 @@
       "source_ref": "objectives/C03.md#C03-21",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T18:06:48+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7340,10 +8030,15 @@
       "source_ref": "objectives/C03.md#C03-22",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T13:22:24+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7391,10 +8086,15 @@
       "source_ref": "objectives/C03.md#C03-23",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T14:03:55+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7450,10 +8150,15 @@
       "source_ref": "objectives/C03.md#C03-24",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7501,10 +8206,15 @@
       "source_ref": "objectives/C03.md#C03-25",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7553,10 +8263,15 @@
       "source_ref": "objectives/C03.md#C03-26",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "passive",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": "2026-10-23T19:00:56+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7605,10 +8320,15 @@
       "source_ref": "objectives/C03.md#C03-27",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7656,10 +8376,15 @@
       "source_ref": "objectives/C03.md#C03-28",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7708,10 +8433,15 @@
       "source_ref": "objectives/C03.md#C03-29",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7768,10 +8498,15 @@
       "source_ref": "objectives/C03.md#C03-30",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7820,10 +8555,15 @@
       "source_ref": "objectives/C03.md#C03-31",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7879,10 +8619,15 @@
       "source_ref": "objectives/C03.md#C03-32",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7931,10 +8676,15 @@
       "source_ref": "objectives/C03.md#C03-33",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -7989,10 +8739,15 @@
       "source_ref": "objectives/C03.md#C03-34",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -8041,10 +8796,15 @@
       "source_ref": "objectives/C03.md#C03-35",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -8092,10 +8852,15 @@
       "source_ref": "objectives/C03.md#C03-36",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -8143,10 +8908,15 @@
       "source_ref": "objectives/C03.md#C03-37",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -8202,10 +8972,15 @@
       "source_ref": "objectives/C03.md#C03-38",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     },
     {
       "objectives": [
@@ -8253,10 +9028,15 @@
       "source_ref": "objectives/C03.md#C03-39",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "draft",
+      "status": "unreviewed",
       "created_at": "2026-10-21T19:21:36+00:00",
       "verified_at": null,
-      "retired_reason": null
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
     }
   ]
 }

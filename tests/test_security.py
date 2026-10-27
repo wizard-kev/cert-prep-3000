@@ -11,7 +11,7 @@ from certprep.main import app
 BASE = "http://127.0.0.1:8000"
 GOOD = {"Origin": BASE, "X-CSRF-Token": security.CSRF_TOKEN}
 NEW_SESSION = "/api/certs/ccst-cyber/sessions"
-BODY = {"mode": "drill", "sections": ["C01"], "count": 1}
+BODY = {"mode": "practice", "sections": ["C01"], "count": 1}
 STATIC = Path(security.__file__).parent / "static"
 
 
@@ -98,7 +98,7 @@ def test_oversized_body_is_refused(client):
 
 def test_chunked_body_is_refused(client):
     def chunks():
-        yield b'{"mode": "drill", "sections": ["C01"]}'
+        yield b'{"mode": "practice", "sections": ["C01"]}'
     r = client.post(NEW_SESSION, content=chunks(), headers={**GOOD, "Content-Type": "application/json"})
     assert r.status_code == 411
 

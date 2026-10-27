@@ -1,15 +1,19 @@
-"""Question pool (D6): one JSON file per section, `<cert folder>/questions/<CODE>.json`."""
+"""Question pool (D6): one JSON file per section, `<cert folder>/questions/<CODE>.json`.
+
+Statuses (v2 plan section 6): unreviewed -> passive (first answered) -> validated ("Looks right");
+any served status -> disputed (reported) -> retired (dispute confirmed) or back (dispute undone)."""
 
 import json
 import os
 import threading
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 
 from . import certs
-from .schema import Question
+from .schema import SERVED_STATUSES, Question
 
 _lock = threading.Lock()
+REPORTED_PREFIX = "Reported by user"
 
 
 def _pool_path(cert_id: str, section: str) -> Path:
@@ -51,30 +55,35 @@ def add(cert_id: str, section: str, build) -> list[Question]:
         return new
 
 
-def _set_status(cert_id: str, question_id: str, allowed_from: tuple[str, ...], **update) -> bool:
+def _update(cert_id: str, question_id: str, change) -> Question | None:
+    """Apply `change(q) -> updated or None` to one question under the lock; save only if it changed."""
     section = certs.section_of(question_id)
     with _lock:
         questions = load(cert_id, section)
         for i, q in enumerate(questions):
-            if q.id == question_id and q.status in allowed_from:
-                questions[i] = q.model_copy(update=update)
+            if q.id == question_id:
+                new = change(q)
+                if new is None or new == q:
+                    return None
+                questions[i] = new
                 _save(cert_id, section, questions)
-                return True
-        return False
+                return new
+        return None
 
 
 def retire(cert_id: str, question_id: str, reason: str) -> bool:
     """Questions are retired with a reason, never edited in place (section 10.2)."""
-    return _set_status(cert_id, question_id, ("draft", "verified"), status="retired", retired_reason=reason)
+    return _update(cert_id, question_id, lambda q: q.model_copy(update={"status": "retired", "retired_reason": reason})
+                   if q.status != "retired" else None) is not None
 
 
 def retire_many(cert_id: str, section: str, question_ids: set[str], reason: str) -> list[str]:
-    """Retire several active questions in one write (e.g. a whole pool superseded by a rewrite)."""
+    """Retire several questions in one write (e.g. a whole pool superseded by a rewrite)."""
     with _lock:
         questions = load(cert_id, section)
         done = []
         for i, q in enumerate(questions):
-            if q.id in question_ids and q.status in ("draft", "verified"):
+            if q.id in question_ids and q.status != "retired":
                 questions[i] = q.model_copy(update={"status": "retired", "retired_reason": reason})
                 done.append(q.id)
         if done:
@@ -82,21 +91,101 @@ def retire_many(cert_id: str, section: str, question_ids: set[str], reason: str)
         return done
 
 
-def verify(cert_id: str, question_id: str, when: str) -> bool:
-    """Promote draft -> verified after the user's spot-check (D7)."""
-    return _set_status(cert_id, question_id, ("draft",), status="verified", verified_at=when)
+def validate(cert_id: str, question_id: str, when: str) -> bool:
+    """The learner marked the question "Looks right" (Validated)."""
+    return _update(cert_id, question_id, lambda q: q.model_copy(update={"status": "validated", "verified_at": when})
+                   if q.status in ("unreviewed", "passive") else None) is not None
+
+
+def _seen(q: Question, when: str) -> Question | None:
+    update = {}
+    if q.seen_at is None or when < q.seen_at:
+        update["seen_at"] = when
+    if q.status == "unreviewed":
+        update["status"] = "passive"
+    return q.model_copy(update=update) if update else None
+
+
+def mark_seen(cert_id: str, question_id: str, when: str) -> bool:
+    """Answered (in any mode): an unreviewed question becomes Passively-Validated."""
+    return _update(cert_id, question_id, lambda q: _seen(q, when)) is not None
+
+
+def mark_seen_many(cert_id: str, first_answered: dict[str, str]) -> int:
+    """Bring statuses in line with recorded answers (after a migration or a progress restore).
+    `first_answered` maps question ID -> earliest answer time. Returns how many changed."""
+    by_section = defaultdict(dict)
+    for qid, when in first_answered.items():
+        try:
+            by_section[certs.section_of(qid)][qid] = when
+        except ValueError:
+            continue
+    changed = 0
+    with _lock:
+        for section, whens in by_section.items():
+            try:
+                questions = load(cert_id, section)
+            except certs.UnknownSection:
+                continue
+            dirty = False
+            for i, q in enumerate(questions):
+                if q.id in whens and (new := _seen(q, whens[q.id])) is not None:
+                    questions[i] = new
+                    dirty = True
+                    changed += 1
+            if dirty:
+                _save(cert_id, section, questions)
+    return changed
+
+
+def dispute(cert_id: str, question_id: str, reason: str, when: str, session_id: str | None = None) -> bool:
+    """Reported by the learner: out of play until the dispute is confirmed (retired) or undone."""
+    def change(q: Question):
+        if not q.served:
+            return None
+        return q.model_copy(update={"status": "disputed", "disputed_reason": reason, "disputed_at": when,
+                                    "disputed_session": session_id, "status_before_dispute": q.status})
+    return _update(cert_id, question_id, change) is not None
+
+
+def confirm_dispute(cert_id: str, question_id: str, when: str) -> bool:
+    def change(q: Question):
+        if q.status != "disputed":
+            return None
+        return q.model_copy(update={"status": "retired",
+                                    "retired_reason": f"{REPORTED_PREFIX} ({q.disputed_at or when}): {q.disputed_reason}"})
+    return _update(cert_id, question_id, change) is not None
+
+
+def undo_dispute(cert_id: str, question_id: str) -> bool:
+    def change(q: Question):
+        if q.status != "disputed":
+            return None
+        return q.model_copy(update={"status": q.status_before_dispute or "unreviewed", "disputed_reason": None,
+                                    "disputed_at": None, "disputed_session": None, "status_before_dispute": None})
+    return _update(cert_id, question_id, change) is not None
 
 
 def _all_sections(cert_id: str, sections) -> list[str]:
     return list(sections) if sections is not None else certs.get_cert(cert_id).section_codes
 
 
+def all_questions(cert_id: str, sections=None) -> list[Question]:
+    return [q for s in _all_sections(cert_id, sections) for q in load(cert_id, s)]
+
+
 def active(cert_id: str, sections=None) -> list[Question]:
-    return [q for s in _all_sections(cert_id, sections) for q in load(cert_id, s) if q.status != "retired"]
+    """Questions that can be served: unreviewed, Passively-Validated, or Validated."""
+    return [q for q in all_questions(cert_id, sections) if q.status in SERVED_STATUSES]
 
 
-def retired_ids(cert_id: str, sections=None) -> set[str]:
-    return {q.id for s in _all_sections(cert_id, sections) for q in load(cert_id, s) if q.status == "retired"}
+def inactive_ids(cert_id: str, sections=None) -> set[str]:
+    """Disputed or retired: never served."""
+    return {q.id for q in all_questions(cert_id, sections) if q.status not in SERVED_STATUSES}
+
+
+def disputed(cert_id: str) -> list[Question]:
+    return [q for q in all_questions(cert_id) if q.status == "disputed"]
 
 
 # Retired only because a rewritten pool replaced it: nothing was wrong with the question, so the
@@ -105,9 +194,11 @@ SUPERSEDED_PREFIX = "Superseded"
 
 
 def flawed_ids(cert_id: str, sections=None) -> set[str]:
-    """Retired because something was wrong (reported, factual error, mislabelled): answers don't count."""
-    return {q.id for s in _all_sections(cert_id, sections) for q in load(cert_id, s)
-            if q.status == "retired" and not (q.retired_reason or "").startswith(SUPERSEDED_PREFIX)}
+    """Disputed, or retired because something was wrong (reported, factual error...): answers to
+    these don't count toward objective status."""
+    return {q.id for q in all_questions(cert_id, sections)
+            if q.status == "disputed"
+            or (q.status == "retired" and not (q.retired_reason or "").startswith(SUPERSEDED_PREFIX))}
 
 
 def get(cert_id: str, question_id: str) -> Question | None:
@@ -119,8 +210,8 @@ def get(cert_id: str, question_id: str) -> Question | None:
 
 
 def coverage(questions: list[Question]) -> Counter:
-    """Active questions per primary objective."""
-    return Counter(q.objectives[0] for q in questions if q.status != "retired")
+    """Served questions per primary objective."""
+    return Counter(q.objectives[0] for q in questions if q.status in SERVED_STATUSES)
 
 
 def last_angle(questions: list[Question]) -> dict[str, str]:
