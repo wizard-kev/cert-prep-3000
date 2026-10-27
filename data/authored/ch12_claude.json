@@ -1,0 +1,135 @@
+{
+  "questions": [
+    {
+      "objectives": ["C12-01"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What separates forensic incident response from simply restoring service?",
+      "options": [
+        {"key": "A", "text": "It investigates what happened, how far it spread, and why, while keeping the evidence intact", "rationale": "Correct: an investigation that preserves evidence integrity."},
+        {"key": "B", "text": "It restores service as fast as possible by wiping everything", "rationale": "Wiping destroys the evidence forensics needs."},
+        {"key": "C", "text": "It is only a legal formality with no technical work", "rationale": "It is hands-on technical investigation."},
+        {"key": "D", "text": "They are the same thing", "rationale": "Restoring service alone doesn't explain what happened."}
+      ],
+      "answer": ["A"],
+      "explanation": "Forensic incident response uses forensic techniques during incident response to learn what happened, how far it spread, and why, while preserving evidence. It is investigation with evidence integrity, not only restoring service.",
+      "discriminator_tested": "Forensic response investigates while preserving evidence integrity."
+    },
+    {
+      "objectives": ["C12-02", "C12-06"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "Malware from an intrusion contains comments in one language and reuses a tool linked to a known hacking group. A manager wants to name that group publicly today. Why should the team be cautious about attack attribution?",
+      "options": [
+        {"key": "A", "text": "Attribution is uncertain: language strings can be planted and tools are shared or reused, so evidence may be a false flag", "rationale": "Correct."},
+        {"key": "B", "text": "Attribution is certain as soon as a tool matches", "rationale": "Tools are sold, leaked, and reused by other groups."},
+        {"key": "C", "text": "Attribution never uses technical evidence", "rationale": "It relies heavily on technical evidence; the issue is how reliable that evidence is."},
+        {"key": "D", "text": "Only the attacker's IP address matters for attribution", "rationale": "IP addresses are easily spoofed or borrowed."}
+      ],
+      "answer": ["A"],
+      "explanation": "Attack attribution identifies who is behind an attack from evidence such as TTPs, infrastructure, malware, and timing. It identifies the actor, but it is uncertain because evidence can be spoofed or planted.",
+      "discriminator_tested": "Attribution identifies the actor, but evidence can be spoofed or planted."
+    },
+    {
+      "objectives": ["C12-03"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Which sequence correctly orders the stages of the Lockheed Martin Cyber Kill Chain?",
+      "options": [
+        {"key": "A", "text": "Reconnaissance, weaponization, delivery, exploitation, installation, command and control, actions on objectives", "rationale": "Correct."},
+        {"key": "B", "text": "Delivery, reconnaissance, weaponization, exploitation, installation, actions on objectives, command and control", "rationale": "Reconnaissance comes first, and C2 comes before actions on objectives."},
+        {"key": "C", "text": "Reconnaissance, delivery, weaponization, installation, exploitation, command and control, actions on objectives", "rationale": "Weaponization comes before delivery, and exploitation before installation."},
+        {"key": "D", "text": "Weaponization, reconnaissance, exploitation, delivery, command and control, installation, actions on objectives", "rationale": "Several stages are out of order."}
+      ],
+      "answer": ["A"],
+      "explanation": "The Lockheed Martin Cyber Kill Chain has seven stages: reconnaissance, weaponization, delivery, exploitation, installation, command and control, and actions on objectives. It is an ordered, linear model, and stopping any stage disrupts the attack.",
+      "discriminator_tested": "The Kill Chain is an ordered, linear seven-stage model."
+    },
+    {
+      "objectives": ["C12-04", "C12-03"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "How does the MITRE ATT&CK matrix differ from the Cyber Kill Chain?",
+      "options": [
+        {"key": "A", "text": "ATT&CK is a non-linear knowledge base of real-world tactics (why) and techniques (how), used to map detection coverage; the Kill Chain is an ordered, linear sequence", "rationale": "Correct."},
+        {"key": "B", "text": "ATT&CK is a seven-stage linear sequence; the Kill Chain is a matrix", "rationale": "This is reversed."},
+        {"key": "C", "text": "They are the same model under different names", "rationale": "Their structure and purpose differ."},
+        {"key": "D", "text": "ATT&CK lists only vulnerabilities and their CVSS scores", "rationale": "ATT&CK describes adversary behavior, not vulnerabilities."}
+      ],
+      "answer": ["A"],
+      "explanation": "The MITRE ATT&CK matrix is a knowledge base of real-world adversary tactics and techniques. It is not linear: tactics (why) form the columns and techniques (how) sit beneath them, and it is used to map detection coverage.",
+      "discriminator_tested": "ATT&CK is a non-linear matrix of tactics and techniques; the Kill Chain is linear."
+    },
+    {
+      "objectives": ["C12-05"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "In a Diamond Model analysis of one intrusion event, which feature is the phishing kit with a custom malware loader that the attacker used?",
+      "options": [
+        {"key": "A", "text": "Capability", "rationale": "Correct: the tools and malware used in the event."},
+        {"key": "B", "text": "Adversary", "rationale": "That is the actor behind the event."},
+        {"key": "C", "text": "Infrastructure", "rationale": "That covers the servers, domains, and IPs used to deliver and control the attack."},
+        {"key": "D", "text": "Victim", "rationale": "That is the target."}
+      ],
+      "answer": ["A"],
+      "explanation": "The Diamond Model describes an intrusion event through four connected features: adversary, capability, infrastructure, and victim. Analysts pivot between them.",
+      "discriminator_tested": "Diamond Model: adversary, capability, infrastructure, victim."
+    },
+    {
+      "objectives": ["C12-06"], "type": "multi", "angle": "classify-element", "difficulty": 3,
+      "stem": "Which two of these are TTPs rather than IoCs? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "The group's habit of phishing finance staff with fake invoices, then using PowerShell to download a loader", "rationale": "Correct: a behavior pattern, covering tactics, techniques, and procedures."},
+        {"key": "B", "text": "Using stolen VPN credentials to move between systems at night", "rationale": "Correct: a technique and procedure."},
+        {"key": "C", "text": "A specific malicious IP address", "rationale": "That is an IoC."},
+        {"key": "D", "text": "A specific malware file hash", "rationale": "That is an IoC."},
+        {"key": "E", "text": "A specific domain used for command and control", "rationale": "That is an IoC."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "TTPs are tactics (goals), techniques (methods), and procedures (specific implementations) that describe attacker behavior. They are behavior-based and harder for attackers to change than IoCs such as IPs or hashes.",
+      "discriminator_tested": "TTPs describe behavior; IoCs are specific observables."
+    },
+    {
+      "objectives": ["C12-07", "C12-09"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Responders reach a compromised server that is still running. Following the order of volatility for artifacts and sources of evidence, what should they collect first?",
+      "options": [
+        {"key": "A", "text": "Memory (RAM) and the running state", "rationale": "Correct: it is lost the moment the server is powered off."},
+        {"key": "B", "text": "A full disk image", "rationale": "The disk survives a shutdown; memory doesn't."},
+        {"key": "C", "text": "Old backup tapes", "rationale": "Those are the least volatile."},
+        {"key": "D", "text": "Printed documentation", "rationale": "Not volatile at all."}
+      ],
+      "answer": ["A"],
+      "explanation": "Artifacts and sources of evidence include logs, memory, disk images, network captures, registry data, browser history, email, device and cloud data, and metadata. Collect volatile data first: memory and running state before disk.",
+      "discriminator_tested": "Order of volatility: memory and running state before disk."
+    },
+    {
+      "objectives": ["C12-08", "C12-10"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "How does evidence handling relate to chain of custody?",
+      "options": [
+        {"key": "A", "text": "Evidence handling is the umbrella: collecting, labeling, storing, transferring, and controlling access to evidence, documented at each step; chain of custody is the documented record within it", "rationale": "Correct."},
+        {"key": "B", "text": "They are exactly the same", "rationale": "Chain of custody is one part of evidence handling."},
+        {"key": "C", "text": "Chain of custody is the broader process, and evidence handling is one log entry within it", "rationale": "This is reversed."},
+        {"key": "D", "text": "Evidence handling means only putting labels on evidence", "rationale": "Labeling is just one part of it."}
+      ],
+      "answer": ["A"],
+      "explanation": "Evidence handling covers collecting, labeling, storing, transferring, and controlling access to evidence, with documentation at every step. It is the umbrella for preservation and chain of custody.",
+      "discriminator_tested": "Evidence handling is the umbrella for preservation and chain of custody."
+    },
+    {
+      "objectives": ["C12-09"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "An investigator analyzes a seized drive by plugging it straight into a workstation, with no write blocker and no hash taken. What should have been done to preserve the digital evidence?",
+      "options": [
+        {"key": "A", "text": "Make a bit-for-bit copy through a write blocker, hash the original and the copy, and work only on the copy", "rationale": "Correct: the original stays untouched and its integrity is provable."},
+        {"key": "B", "text": "Format the drive first to remove any malware", "rationale": "That destroys the evidence."},
+        {"key": "C", "text": "Run antivirus on the original drive", "rationale": "Scanning the original can change it."},
+        {"key": "D", "text": "Email a copy of the drive to the team", "rationale": "That neither preserves integrity nor protects the evidence."}
+      ],
+      "answer": ["A"],
+      "explanation": "Preserving digital evidence means making bit-for-bit forensic copies, working from the copy, using write blockers, and verifying integrity with hashes. Never examine the original; matching hashes show the copy is unchanged.",
+      "discriminator_tested": "Never examine the original; matching hashes prove integrity."
+    },
+    {
+      "objectives": ["C12-10", "C12-08"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "A seized laptop goes from the responder to an unnamed courier and then to the lab. The only log entry reads 'received at lab'. What is the problem?",
+      "options": [
+        {"key": "A", "text": "A gap in the chain of custody: there is no record of who handled the laptop, when, where, or why", "rationale": "Correct: the gap undermines integrity and admissibility."},
+        {"key": "B", "text": "The laptop wasn't hashed", "rationale": "Hashing matters, but the problem described is the missing handling record."},
+        {"key": "C", "text": "The laptop wasn't patched", "rationale": "Unrelated to evidence handling."},
+        {"key": "D", "text": "The laptop runs the wrong operating system", "rationale": "Unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "Chain of custody is the documented record of who handled evidence, when, where, and why. A gap undermines the integrity and admissibility of the evidence.",
+      "discriminator_tested": "A chain-of-custody gap undermines integrity and admissibility."
+    }
+  ]
+}

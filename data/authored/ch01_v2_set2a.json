@@ -1,0 +1,325 @@
+{
+  "questions": [
+    {
+      "objectives": ["C01-01", "C01-02"], "type": "multi", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "A web shop is hit by a flood from tens of thousands of botnet hosts that saturates its 1 Gbps internet link. Which two measures would MOST effectively restore service? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Ask the ISP to filter the attack traffic upstream", "rationale": "Correct: filtering before the link removes the flood.", "role": "best"},
+        {"key": "B", "text": "Route traffic through a cloud DDoS scrubbing service", "rationale": "Correct: the scrubbing provider absorbs the flood and passes on clean traffic.", "role": "best"},
+        {"key": "C", "text": "Block the attacking addresses on the shop's firewall", "rationale": "The link is already full before the firewall sees the traffic, and there are tens of thousands of sources.", "role": "partial"},
+        {"key": "D", "text": "Add more web servers behind the load balancer", "rationale": "More servers don't help when the internet link itself is saturated.", "role": "related"},
+        {"key": "E", "text": "Restart the web servers to clear their sessions", "rationale": "The flood resumes the moment they come back.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A DDoS uses many distributed sources. Once the link itself is full, filtering has to happen upstream, at the ISP or a scrubbing service, before the traffic reaches you; a DoS from one source can be blocked locally.",
+      "discriminator_tested": "DDoS = many sources; filtering must happen upstream."
+    },
+    {
+      "objectives": ["C01-02", "C01-03"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Which sequence BEST describes how a botnet is built and then used in a DDoS?",
+      "options": [
+        {"key": "A", "text": "Compromise devices, connect them to C2, launch the flood", "rationale": "Correct: devices are recruited, enrolled under control, then directed.", "role": "best"},
+        {"key": "B", "text": "Launch the flood, compromise devices, connect them to C2", "rationale": "There is nothing to launch the flood from until devices are compromised.", "role": "wrong"},
+        {"key": "C", "text": "Connect devices to C2, compromise them, launch the flood", "rationale": "A device only connects to the attacker's C2 after it is compromised.", "role": "related"},
+        {"key": "D", "text": "Compromise devices, launch the flood, connect them to C2", "rationale": "Without C2 the devices can't be told when or what to attack.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "A botnet is a network of compromised devices under attacker control. Devices are compromised first, then enrolled under command and control (C2), and only then directed at a target: the botnet is the means, not the attack.",
+      "discriminator_tested": "Botnet = the means: compromise, enroll under C2, then attack."
+    },
+    {
+      "objectives": ["C01-03"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "Malware on 40 workstations receives its instructions from a single external domain. Which action would MOST quickly cut the attacker off from these hosts while they are cleaned?",
+      "options": [
+        {"key": "A", "text": "Block that domain and its IPs at the egress firewall", "rationale": "Correct: cutting the control path isolates every infected host from its orders at once.", "role": "best"},
+        {"key": "B", "text": "Reimage each of the 40 workstations one by one", "rationale": "Needed eventually, but slow; the hosts stay under control meanwhile.", "role": "partial"},
+        {"key": "C", "text": "Reset the passwords of the 40 affected users", "rationale": "The malware doesn't need the users' passwords to take orders.", "role": "related"},
+        {"key": "D", "text": "Enable DHCP snooping on the access switches", "rationale": "DHCP snooping counters rogue DHCP servers, not outbound control traffic.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Command and control (C2) is the channel used to issue commands to compromised devices. Cutting that control path at the egress point isolates each infected host from its orders at once, buying time for cleanup.",
+      "discriminator_tested": "C2 is the control path; cut it to isolate compromised devices."
+    },
+    {
+      "objectives": ["C01-04", "C01-01"], "type": "multi", "angle": "classify-element", "difficulty": 3,
+      "stem": "Website traffic has tripled in the last hour. Which two findings would MOST strongly suggest legitimate demand rather than an attack? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "The surge began minutes after a marketing email went out", "rationale": "Correct: timing matches a real event that drives visitors.", "role": "best"},
+        {"key": "B", "text": "Visitors browse and buy like real customers", "rationale": "Correct: real customers behave like customers.", "role": "best"},
+        {"key": "C", "text": "Requests come from many different source addresses", "rationale": "Both a DDoS and a real surge come from many sources, so it decides nothing.", "role": "partial"},
+        {"key": "D", "text": "Volume is three times the usual daily peak", "rationale": "Volume alone is the symptom being investigated.", "role": "related"},
+        {"key": "E", "text": "Most requests hit one URL with identical headers", "rationale": "Identical, repetitive requests point toward an automated attack.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A traffic spike is a symptom only; its cause may be malicious or legitimate. Timing that matches a real event and normal user behaviour point to legitimate demand; volume and many sources alone don't decide it.",
+      "discriminator_tested": "A traffic spike's cause can be legitimate; behaviour and timing decide it."
+    },
+    {
+      "objectives": ["C01-05", "C01-01"], "type": "multi", "angle": "symptom-to-attack", "difficulty": 3,
+      "stem": "A bank's login page, payment API, and DNS provider all come under attack within the same morning. Which two observations MOST strongly indicate this is one coordinated attack rather than unrelated incidents? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "The different attacks began within the same minute", "rationale": "Correct: synchronized timing is the hallmark.", "role": "best"},
+        {"key": "B", "text": "Forum posts show an agreed start time", "rationale": "Correct: direct evidence of planning together.", "role": "best"},
+        {"key": "C", "text": "The attacks targeted services of the same bank", "rationale": "Consistent with coordination, but a popular target can attract unrelated attackers.", "role": "partial"},
+        {"key": "D", "text": "Traffic came from thousands of source addresses", "rationale": "That shows a distributed attack, not coordination between actors.", "role": "related"},
+        {"key": "E", "text": "Each attack used a different malware family", "rationale": "Different tools say nothing about whether the actors coordinated.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A coordinated attack is multiple sources or actors acting together. It overlaps with DDoS, but the emphasis is synchronization: shared timing and evidence of planning, not just many sources.",
+      "discriminator_tested": "Coordinated attack = synchronization between actors."
+    },
+    {
+      "objectives": ["C01-06", "C01-04"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An internal reporting server becomes unresponsive each night around 2 a.m. No external traffic is involved. Given the output below, what is the BEST description of the root cause?",
+      "exhibit": "$ crontab -l\n0 2 * * *   /opt/backup/full-backup.sh\n0 2 * * *   /usr/sbin/logrotate /etc/logrotate.conf\n\n$ iostat -x 5   (sampled at 02:05)\nDevice   r/s     w/s     %util\nsda      812.0   944.0   100.0",
+      "options": [
+        {"key": "A", "text": "A scheduling mistake causing an unintentional DoS", "rationale": "Correct: two heavy jobs collide at 2 a.m.; there is no attacker.", "role": "best"},
+        {"key": "B", "text": "Resource exhaustion on the server's disk subsystem", "rationale": "True, but that is how the outage happens, not why.", "role": "partial"},
+        {"key": "C", "text": "An insider deliberately sabotaging the reports", "rationale": "Nothing suggests intent; the jobs are routine maintenance.", "role": "related"},
+        {"key": "D", "text": "A slow DoS attack timed to avoid business hours", "rationale": "No external traffic is involved.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A friendly or unintentional DoS is an outage with no malicious intent, such as a misconfiguration or a runaway process. Disk exhaustion is how it happens; the overlapping schedule is why.",
+      "discriminator_tested": "No attacker: intent is the differentiator."
+    },
+    {
+      "objectives": ["C01-07"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "A colocation provider worries that someone could cut the power or cables to its customers' racks. Which control BEST addresses this threat to availability?",
+      "options": [
+        {"key": "A", "text": "Locked cages, access logging, and redundant feeds", "rationale": "Correct: physical access control plus redundancy.", "role": "best"},
+        {"key": "B", "text": "Redundant internet links from two providers", "rationale": "Helps if a cable is cut, but does nothing for power or physical access.", "role": "partial"},
+        {"key": "C", "text": "A network IDS that alerts on unusual traffic", "rationale": "Cutting a cable creates no malicious traffic for it to see.", "role": "related"},
+        {"key": "D", "text": "Stronger passwords on the rack PDU web pages", "rationale": "That protects against remote power-off over the network, not someone in the room.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A physical attack damages, cuts, or powers off infrastructure and hits availability with no network traffic, so network tools won't see it coming. Physical access control plus redundancy is the defence.",
+      "discriminator_tested": "Physical attacks need physical controls; they make no traffic."
+    },
+    {
+      "objectives": ["C01-08", "C01-37"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A switch's firmware was deliberately corrupted and it no longer boots. Which step is needed FIRST to restore it to service?",
+      "options": [
+        {"key": "A", "text": "Reflash the firmware or replace the switch", "rationale": "Correct: nothing else works until the device can boot.", "role": "best"},
+        {"key": "B", "text": "Restore the switch's saved configuration file", "rationale": "Needed, but only after the device can boot again.", "role": "partial"},
+        {"key": "C", "text": "Block the attacker's traffic at the firewall", "rationale": "Stops a flood, but this damage persists without any traffic.", "role": "related"},
+        {"key": "D", "text": "Power-cycle the switch and wait for it to boot", "rationale": "A reboot can't repair corrupted firmware.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A permanent DoS corrupts device firmware so the device is unusable. A reboot won't fix it: it needs a reflash or replacement, and the configuration can only be restored after that.",
+      "discriminator_tested": "Permanent DoS needs reflash or replacement."
+    },
+    {
+      "objectives": ["C01-09", "C01-11"], "type": "multi", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "Your network is being used to bounce ICMP echo replies at a victim: attackers ping your broadcast address with the victim's spoofed source address. Which two measures BEST stop your network being used this way? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Stop routers forwarding directed broadcasts", "rationale": "Correct: the broadcast ping never reaches your hosts.", "role": "best"},
+        {"key": "B", "text": "Make hosts ignore broadcast pings", "rationale": "Correct: hosts that don't answer can't flood the victim.", "role": "best"},
+        {"key": "C", "text": "Rate-limit ICMP traffic at the network edge", "rationale": "Reduces the volume, but still sends replies to the victim.", "role": "partial"},
+        {"key": "D", "text": "Enable SYN cookies on the web servers", "rationale": "SYN cookies counter SYN floods, not ICMP.", "role": "related"},
+        {"key": "E", "text": "Change the native VLAN on trunk links", "rationale": "That counters double-tagging VLAN hopping.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A smurf attack sends ICMP echo requests to a broadcast address with the victim's spoofed source IP, so every host replies to the victim. Disabling directed broadcasts on routers and having hosts ignore broadcast pings removes the amplifier.",
+      "discriminator_tested": "Smurf needs a broadcast address that answers echo requests."
+    },
+    {
+      "objectives": ["C01-10"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "A web server's connection table keeps filling with half-open TCP connections from spoofed addresses. Which measure BEST lets it keep serving real clients?",
+      "options": [
+        {"key": "A", "text": "Enable SYN cookies on the server", "rationale": "Correct: no table entry is held until the client completes the handshake.", "role": "best"},
+        {"key": "B", "text": "Shorten the timeout for half-open connections", "rationale": "Frees entries faster but can still be outpaced by the flood.", "role": "partial"},
+        {"key": "C", "text": "Block ICMP echo requests at the firewall", "rationale": "That addresses ICMP floods such as smurf, not TCP handshakes.", "role": "related"},
+        {"key": "D", "text": "Lengthen the server's TLS keys to 4096 bits", "rationale": "Key length has nothing to do with the connection table.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A SYN flood sends SYNs and never completes the handshake, filling the half-open connection table. SYN cookies avoid storing state until the client finishes the handshake, so spoofed SYNs can't fill the table.",
+      "discriminator_tested": "SYN flood fills the half-open table; SYN cookies hold no state."
+    },
+    {
+      "objectives": ["C01-11"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Two attacks both use spoofed requests to third-party servers. What makes one of them amplified rather than only reflected?",
+      "options": [
+        {"key": "A", "text": "Each response is much larger than the request that caused it", "rationale": "Correct: amplification means the reply outweighs the request.", "role": "best"},
+        {"key": "B", "text": "A third party sends the response to the spoofed victim", "rationale": "That is reflection, which both attacks share.", "role": "related"},
+        {"key": "C", "text": "The attacker's own address stays hidden from the victim", "rationale": "Also true of plain reflection.", "role": "related"},
+        {"key": "D", "text": "The attack is launched from many botnet hosts at once", "rationale": "That makes an attack distributed, not amplified.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "In reflective and amplified attacks, spoofed requests go to third-party servers. Reflective means the third party bounces the traffic to the victim; amplified means the response is larger than the request.",
+      "discriminator_tested": "Amplified = response larger than request."
+    },
+    {
+      "objectives": ["C01-12", "C01-19"], "type": "multi", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which two measures BEST protect users from having their sessions read or altered by someone positioned between them and the server? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Use TLS and treat certificate warnings as a stop sign", "rationale": "Correct: verified end-to-end encryption defeats an interceptor.", "role": "best"},
+        {"key": "B", "text": "Tunnel remote staff traffic over a VPN", "rationale": "Correct: the tunnel can't be read or changed in transit.", "role": "best"},
+        {"key": "C", "text": "Change the office Wi-Fi password once a month", "rationale": "Doesn't help on networks the company doesn't control.", "role": "related"},
+        {"key": "D", "text": "Enable account lockout after failed sign-ins", "rationale": "Lockout counters password guessing, not interception.", "role": "related"},
+        {"key": "E", "text": "Use a longer DHCP lease time on the network", "rationale": "Lease time has no effect on interception.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "An on-path attack (formerly MitM) places the attacker between two parties to read or alter a live session. Verified end-to-end encryption or a VPN tunnel keeps an on-path attacker from reading or silently changing traffic.",
+      "discriminator_tested": "On-path breaks confidentiality and integrity; verified encryption defeats it."
+    },
+    {
+      "objectives": ["C01-13"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which measure BEST protects a company's resolvers from accepting forged records?",
+      "options": [
+        {"key": "A", "text": "Validate responses with DNSSEC signatures", "rationale": "Correct: the resolver can verify records really came from the zone owner.", "role": "best"},
+        {"key": "B", "text": "Flush the resolver cache when users complain", "rationale": "Removes poison after the damage, without preventing it.", "role": "partial"},
+        {"key": "C", "text": "Enable DHCP snooping on access switches", "rationale": "That counters rogue DHCP, not forged DNS records.", "role": "related"},
+        {"key": "D", "text": "Block outbound ICMP at the firewall", "rationale": "DNS doesn't use ICMP.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DNS poisoning inserts false records into a resolver or cache, so users enter the right name and reach the wrong IP. DNSSEC lets the resolver verify that records really came from the zone's owner.",
+      "discriminator_tested": "DNS poisoning plants false records; validate them."
+    },
+    {
+      "objectives": ["C01-14", "C01-35"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "A user's PC starts negotiating with its switch as if it were another switch, and then receives traffic from VLANs it isn't assigned to. Which method is this, and what BEST stops it?",
+      "options": [
+        {"key": "A", "text": "Switch spoofing; disable trunk negotiation", "rationale": "Correct: an access port that can't negotiate can't become a trunk.", "role": "best"},
+        {"key": "B", "text": "Switch spoofing; change the trunks' native VLAN", "rationale": "Right method, wrong fix: the native VLAN matters for double tagging.", "role": "related"},
+        {"key": "C", "text": "Double tagging; change the trunks' native VLAN", "rationale": "Double tagging uses stacked tags, not trunk negotiation.", "role": "related"},
+        {"key": "D", "text": "ARP spoofing; enable DHCP snooping on the switch", "rationale": "Nothing here involves ARP or DHCP.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "VLAN hopping reaches a VLAN you aren't assigned to, by switch spoofing or double tagging. Switch spoofing makes the attacker's port a trunk, so turning off negotiation stops it; double tagging exploits the native VLAN.",
+      "discriminator_tested": "Switch spoofing vs double tagging, and the fix for each."
+    },
+    {
+      "objectives": ["C01-15"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "An attacker on the guest subnet tries to redirect traffic belonging to hosts on the finance subnet, across a router, by sending forged ARP replies. Why does this fail?",
+      "options": [
+        {"key": "A", "text": "ARP resolves addresses inside one local subnet", "rationale": "Correct: ARP messages don't cross the router.", "role": "best"},
+        {"key": "B", "text": "Routers encrypt traffic between subnets by default", "rationale": "Routers don't encrypt traffic by default.", "role": "wrong"},
+        {"key": "C", "text": "DHCP snooping on the finance switch blocks it", "rationale": "DHCP snooping filters DHCP offers, not ARP replies.", "role": "related"},
+        {"key": "D", "text": "Router ACLs are needed to drop the forged replies", "rationale": "Routers don't forward ARP anyway; no ACL is needed.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "ARP spoofing sends forged ARP replies mapping the attacker's MAC to another host's IP. ARP works only on the local subnet, so the attacker must share the victim's broadcast domain.",
+      "discriminator_tested": "ARP spoofing is local-subnet only."
+    },
+    {
+      "objectives": ["C01-16"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "A laptop joins a network where an unauthorized server answers address requests faster than the real one. Which sequence is correct?",
+      "options": [
+        {"key": "A", "text": "Request sent, rogue offer accepted, traffic routed via attacker", "rationale": "Correct: the client takes the first offer, then uses the rogue gateway.", "role": "best"},
+        {"key": "B", "text": "Rogue offer accepted, request sent, traffic routed via attacker", "rationale": "A client can't accept an offer before it asks for one.", "role": "related"},
+        {"key": "C", "text": "Traffic routed via attacker, request sent, rogue offer accepted", "rationale": "The client has no route through the attacker until it accepts the offer.", "role": "related"},
+        {"key": "D", "text": "Request sent, traffic routed via attacker, rogue offer accepted", "rationale": "The bad gateway arrives in the offer, so routing comes after acceptance.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A rogue DHCP server is an unauthorized DHCP server that hands out a bad gateway or DNS server. The client broadcasts a request, accepts the first offer (the rogue one), then sends its traffic to the attacker's gateway. DHCP snooping counters it.",
+      "discriminator_tested": "Rogue DHCP wins by answering first with a bad gateway."
+    },
+    {
+      "objectives": ["C01-17", "C01-32"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 3,
+      "stem": "A city's 900 traffic cameras join a botnet within a day of installation. The cameras were updated to the latest firmware before deployment. What is the MOST likely root cause?",
+      "options": [
+        {"key": "A", "text": "Factory default logins were left in place", "rationale": "Correct: with firmware current, published default credentials are the classic way in.", "role": "best"},
+        {"key": "B", "text": "The cameras were reachable from the internet", "rationale": "An enabling condition, but exposure alone doesn't let malware in.", "role": "partial"},
+        {"key": "C", "text": "The camera video feeds weren't encrypted", "rationale": "A real IoT weakness, but it exposes video rather than handing over control.", "role": "related"},
+        {"key": "D", "text": "A rogue DHCP server gave them bad settings", "rationale": "Bad network settings wouldn't enroll devices in a botnet.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "IoT vulnerabilities include default credentials, unpatched firmware, and weak or no encryption, and IoT devices are a frequent source of botnet recruits. With the firmware current, unchanged default logins are the likeliest way in.",
+      "discriminator_tested": "IoT default credentials are a frequent source of botnet recruits."
+    },
+    {
+      "objectives": ["C01-18", "C01-19"], "type": "multi", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which two controls BEST detect or block an unauthorized access point plugged into an office wall jack? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "802.1X authentication on wired switch ports", "rationale": "Correct: the device can't get onto the wired network without authenticating.", "role": "best"},
+        {"key": "B", "text": "Scans that flag unknown wireless APs", "rationale": "Correct: finds devices broadcasting that IT didn't install.", "role": "best"},
+        {"key": "C", "text": "WPA3 on the company's own wireless network", "rationale": "Protects the company's own Wi-Fi, not the rogue device.", "role": "related"},
+        {"key": "D", "text": "Training users to check the network name", "rationale": "That helps against evil twins, which target users.", "role": "related"},
+        {"key": "E", "text": "Changing the native VLAN on trunk ports", "rationale": "That counters double tagging.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A rogue AP is an unauthorized access point plugged into the wired network, a backdoor inside it. Port authentication stops it getting network access, and wireless scanning finds it; user training addresses evil twins.",
+      "discriminator_tested": "Rogue AP sits inside the network; block the port, scan the air."
+    },
+    {
+      "objectives": ["C01-19", "C01-12"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "Staff often work from airports and cafes. Which control BEST protects their traffic if they connect to a fake copy of a familiar network name?",
+      "options": [
+        {"key": "A", "text": "Using the company VPN on any public network", "rationale": "Correct: the twin's operator sees only encrypted tunnel traffic.", "role": "best"},
+        {"key": "B", "text": "Forgetting saved networks after each trip", "rationale": "Reduces automatic joining, but doesn't protect a user who joins manually.", "role": "partial"},
+        {"key": "C", "text": "802.1X on the office switch ports", "rationale": "That keeps rogue devices off the office LAN, not travellers safe.", "role": "related"},
+        {"key": "D", "text": "Disabling Bluetooth on company laptops", "rationale": "Bluetooth isn't involved in joining a Wi-Fi network.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An evil twin is an attacker AP imitating a legitimate SSID; it targets users. A VPN encrypts traffic end to end, so the twin's operator can't read or alter what passes through it.",
+      "discriminator_tested": "Evil twin targets users; protect the traffic, not the network."
+    },
+    {
+      "objectives": ["C01-20", "C01-38"], "type": "multi", "angle": "assess-risk", "difficulty": 2,
+      "stem": "Which two practices MOST reduce the damage an attack that encrypts company data for payment can do? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Offline or immutable backups that are tested regularly", "rationale": "Correct: data can be restored without paying.", "role": "best"},
+        {"key": "B", "text": "Segmentation to limit its spread", "rationale": "Correct: less of the network gets encrypted.", "role": "best"},
+        {"key": "C", "text": "Cyber insurance that covers ransom payments", "rationale": "Shifts some cost, but nothing less is encrypted or lost.", "role": "related"},
+        {"key": "D", "text": "Blocking common passwords at account creation", "rationale": "Good hygiene, but it doesn't limit the damage once the attack runs.", "role": "related"},
+        {"key": "E", "text": "Disabling ICMP echo replies on the servers", "rationale": "Unrelated to encryption attacks.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Ransomware encrypts data and demands payment for the key: extortion for access. Backups the malware can't reach mean data can be restored without paying, and segmentation limits how much gets encrypted.",
+      "discriminator_tested": "Ransomware is extortion for access; unreachable backups remove the leverage."
+    },
+    {
+      "objectives": ["C01-21"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which control BEST prevents malware disguised as a free utility, such as a fake PDF converter, from being installed in the first place?",
+      "options": [
+        {"key": "A", "text": "Allow only approved software to be installed", "rationale": "Correct: the user can't run the disguised installer.", "role": "best"},
+        {"key": "B", "text": "Scan downloads with up-to-date antivirus", "rationale": "Helps, but new or repackaged malware often isn't detected yet.", "role": "partial"},
+        {"key": "C", "text": "Patch the operating system each month", "rationale": "Patching closes flaws worms exploit; a Trojan is run by the user.", "role": "related"},
+        {"key": "D", "text": "Block ICMP at the perimeter firewall", "rationale": "Unrelated to software installation.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A Trojan is malicious code disguised as legitimate software; the user must run it, and it doesn't self-replicate. Application allow-listing stops users installing disguised software in the first place.",
+      "discriminator_tested": "Trojan: the user must run it."
+    },
+    {
+      "objectives": ["C01-22", "C01-36"], "type": "multi", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Self-spreading malware is exploiting a flaw in a listening service on unpatched servers. Which two actions BEST stop it spreading further? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Patch the vulnerable service", "rationale": "Correct: removes the flaw it uses to spread.", "role": "best"},
+        {"key": "B", "text": "Block that service's port between network segments", "rationale": "Correct: cuts the path it travels on.", "role": "best"},
+        {"key": "C", "text": "Remind users not to open unknown attachments", "rationale": "This malware spreads without any user action.", "role": "related"},
+        {"key": "D", "text": "Scan email attachments at the gateway", "rationale": "It isn't arriving by email.", "role": "related"},
+        {"key": "E", "text": "Reset the passwords of the server admins", "rationale": "It exploits a code flaw, not a password.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A worm self-replicates over networks with no user action and no host file. Removing the flaw it exploits and blocking the port it travels on stop it; user-awareness controls don't, because no user is involved.",
+      "discriminator_tested": "Worm needs no user action; fix the flaw and block the path."
+    },
+    {
+      "objectives": ["C01-23", "C01-22"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "Malicious code in a shared spreadsheet template copies itself into each workbook created from it. Machines whose users never open those workbooks stay clean. Which malware type BEST explains this?",
+      "options": [
+        {"key": "A", "text": "Virus", "rationale": "Correct: it rides in a host file and spreads when users open it.", "role": "best"},
+        {"key": "B", "text": "Worm", "rationale": "A worm would reach machines whose users never opened anything.", "role": "related"},
+        {"key": "C", "text": "Trojan", "rationale": "A Trojan doesn't copy itself into other files.", "role": "related"},
+        {"key": "D", "text": "Spyware", "rationale": "Nothing suggests information gathering.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A virus attaches to a legitimate file or program and needs a host and user action to spread. Machines whose users never open the infected workbooks stay clean, which rules out a worm.",
+      "discriminator_tested": "Virus needs a host and user action."
+    },
+    {
+      "objectives": ["C01-24", "C01-27"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Two unwanted programs are found on a laptop. What BEST distinguishes the one that is spyware from the one that is adware?",
+      "options": [
+        {"key": "A", "text": "It covertly gathers user information", "rationale": "Correct: covert collection is spyware's purpose.", "role": "best"},
+        {"key": "B", "text": "It is usually installed without the user's consent", "rationale": "Often true, but adware is frequently installed that way too.", "role": "partial"},
+        {"key": "C", "text": "It shows unwanted ads to generate revenue", "rationale": "That describes adware.", "role": "related"},
+        {"key": "D", "text": "It encrypts files until a ransom is paid", "rationale": "That describes ransomware.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Spyware secretly collects user activity and data; its goal is covert information gathering. Adware's focus is ads and tracking for revenue.",
+      "discriminator_tested": "Spyware's goal is covert information gathering."
+    }
+  ]
+}

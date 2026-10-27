@@ -1,0 +1,298 @@
+{
+  "questions": [
+    {
+      "objectives": ["C02-01"], "type": "multi", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An incident register lists the entries below. Which two are primarily violations of integrity? (Choose two.)",
+      "exhibit": "INC-101  Web server unreachable for 3 hours after a power failure\nINC-102  Payroll file's bank details altered by an unknown process\nINC-103  Laptop holding an unencrypted customer list stolen from a car\nINC-104  Database rows silently changed by a faulty sync script\nINC-105  Executives' email read by an intercepting proxy",
+      "options": [
+        {"key": "A", "text": "INC-101", "rationale": "An outage is an availability problem.", "role": "related"},
+        {"key": "B", "text": "INC-102", "rationale": "Correct: data was changed without authorization.", "role": "best"},
+        {"key": "C", "text": "INC-103", "rationale": "Exposure of data is a confidentiality problem.", "role": "related"},
+        {"key": "D", "text": "INC-104", "rationale": "Correct: unauthorized change, even though it was accidental.", "role": "best"},
+        {"key": "E", "text": "INC-105", "rationale": "Reading someone's email is eavesdropping: confidentiality.", "role": "wrong"}
+      ],
+      "answer": ["B", "D"],
+      "explanation": "The CIA triad is confidentiality (no unauthorized disclosure), integrity (no unauthorized change), and availability (accessible when needed). Altered payroll details and silently changed rows are integrity violations, whatever the intent.",
+      "discriminator_tested": "Tampering = integrity, even when accidental."
+    },
+    {
+      "objectives": ["C02-02"], "type": "multi", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which two controls MOST directly reduce the risk from people who already have legitimate access to company systems? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Least-privilege access for each role", "rationale": "Correct: limits what any one insider can reach.", "role": "best"},
+        {"key": "B", "text": "Logging and review of user activity", "rationale": "Correct: makes misuse visible and deters it.", "role": "best"},
+        {"key": "C", "text": "A stronger perimeter firewall", "rationale": "Insiders are already past the perimeter.", "role": "related"},
+        {"key": "D", "text": "Intrusion prevention at the internet edge", "rationale": "Guards the edge; insider activity never crosses it.", "role": "related"},
+        {"key": "E", "text": "Hiding the corporate SSID", "rationale": "Insiders already know it, and hiding isn't a security control.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Internal threats originate from people or systems inside the organization. They already have legitimate access and may be malicious or accidental, so perimeter controls don't touch them; limiting and watching that access does.",
+      "discriminator_tested": "Internal threats already have legitimate access."
+    },
+    {
+      "objectives": ["C02-03", "C02-02"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes an external threat from an internal one?",
+      "options": [
+        {"key": "A", "text": "It must first get past the perimeter", "rationale": "Correct: it starts with no legitimate access.", "role": "best"},
+        {"key": "B", "text": "It originates from people who are not employees", "rationale": "Close, but contractors with granted access count as internal.", "role": "partial"},
+        {"key": "C", "text": "It is carried out by criminals rather than by staff members", "rationale": "Insiders can be criminals too; the source is what matters.", "role": "related"},
+        {"key": "D", "text": "It causes more damage than internal threats do", "rationale": "Insiders often cause the most damage.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "External threats originate outside the organization and must first get past the perimeter; internal threats already have legitimate access.",
+      "discriminator_tested": "External threats must first get past the perimeter."
+    },
+    {
+      "objectives": ["C02-04"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A switch logs the sequence below when a device is plugged into port Gi1/0/14. What BEST describes how the network handled the device?",
+      "exhibit": "Gi1/0/14  EAPOL start        MAC 3c:52:82:aa:10:7e\nGi1/0/14  auth dot1x         result=FAIL (no supplicant response)\nGi1/0/14  fallback MAB       MAC 3c:52:82:aa:10:7e  result=SUCCESS (known printer)\nGi1/0/14  policy applied     VLAN 40 (printers), ACL PRINT-ONLY",
+      "options": [
+        {"key": "A", "text": "It admitted a known printer to a restricted segment by policy", "rationale": "Correct: identity was established by fallback, and policy decided where it goes.", "role": "best"},
+        {"key": "B", "text": "It identified the device before letting it on the network", "rationale": "True, but it leaves out the policy-based placement that followed.", "role": "partial"},
+        {"key": "C", "text": "It checked the printer's patch level and antivirus status", "rationale": "No health checks appear in the log.", "role": "related"},
+        {"key": "D", "text": "It rejected the printer because the 802.1X login failed", "rationale": "The fallback succeeded and the printer was admitted.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Network Access Control (NAC) decides whether a device or user may join the network based on identity and policy. When 802.1X failed, the switch fell back to MAC authentication, recognized the printer, and applied the printer policy.",
+      "discriminator_tested": "NAC enforces policy at connection time."
+    },
+    {
+      "objectives": ["C02-05", "C02-04"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 2,
+      "stem": "A NAC policy refuses network access to laptops whose antivirus definitions are more than three days old. Which risk does this check MOST directly reduce?",
+      "options": [
+        {"key": "A", "text": "Unhealthy devices bringing malware onto the network", "rationale": "Correct: it keeps non-compliant endpoints off until they are fixed.", "role": "best"},
+        {"key": "B", "text": "Unauthorized users signing in to the network", "rationale": "Who signs in is an identity check, not a health check.", "role": "related"},
+        {"key": "C", "text": "Attackers intercepting traffic on the wireless network", "rationale": "Encryption addresses interception.", "role": "related"},
+        {"key": "D", "text": "Users visiting gambling sites during work hours", "rationale": "A web filter handles that.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Posture assessment checks a device's health and compliance (patches, antivirus, configuration) before or during access. Non-compliant devices are denied, quarantined, or remediated.",
+      "discriminator_tested": "Posture assessment checks device health, not identity."
+    },
+    {
+      "objectives": ["C02-06"], "type": "single", "angle": "find-config-error", "difficulty": 3,
+      "stem": "The firewall rules for the guest VLAN are below, evaluated top to bottom. Which rule MOST clearly defeats the purpose of a guest network?",
+      "exhibit": "Guest VLAN 50 rules\n1  permit  VLAN50 -> 10.0.0.53     udp/tcp 53   (internal DNS resolver)\n2  permit  VLAN50 -> 10.0.0.0/8    any\n3  permit  VLAN50 -> internet      tcp 80, 443\n4  deny    VLAN50 -> any           any",
+      "options": [
+        {"key": "A", "text": "Rule 1", "rationale": "A small exposure that could use an external resolver instead, but it allows only DNS to one host.", "role": "partial"},
+        {"key": "B", "text": "Rule 2", "rationale": "Correct: it opens the entire internal network to guests.", "role": "best"},
+        {"key": "C", "text": "Rule 3", "rationale": "Internet web access is what a guest network is for.", "role": "related"},
+        {"key": "D", "text": "Rule 4", "rationale": "The final deny is good practice.", "role": "wrong"}
+      ],
+      "answer": ["B"],
+      "explanation": "A guest network is a separate, restricted segment for visitors, isolated from internal resources; internet-only access is typical. Rule 2 lets guests reach the whole internal 10.0.0.0/8 network.",
+      "discriminator_tested": "Guest network is isolated from internal resources."
+    },
+    {
+      "objectives": ["C02-07"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements describe persistent NAC agents? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "They stay installed on the endpoint between sessions", "rationale": "Correct: permanent software on the device.", "role": "best"},
+        {"key": "B", "text": "They suit IT-managed company devices", "rationale": "Correct: the organization controls what is installed.", "role": "best"},
+        {"key": "C", "text": "They remove themselves after each assessment", "rationale": "That describes a nonpersistent agent.", "role": "related"},
+        {"key": "D", "text": "They suit guests and personally owned devices", "rationale": "That is where nonpersistent agents fit.", "role": "related"},
+        {"key": "E", "text": "They replace the need for a NAC server", "rationale": "Agents report to a NAC server; they don't replace it.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A persistent agent is software permanently installed on the endpoint; a nonpersistent agent is temporary and removed after the assessment, which suits guests and BYOD.",
+      "discriminator_tested": "Persistent = permanent; nonpersistent = temporary."
+    },
+    {
+      "objectives": ["C02-08"], "type": "single", "angle": "choose-tool", "difficulty": 3,
+      "stem": "Which setup BEST lets a security team detect an attacker who is already moving between systems inside the network?",
+      "options": [
+        {"key": "A", "text": "A decoy server on an internal segment, with alerts on any contact", "rationale": "Correct: nothing legitimate touches it, so any internal contact is a strong signal.", "role": "best"},
+        {"key": "B", "text": "A decoy server on the internet, logging scans for research", "rationale": "Studies outside attackers, but won't see movement inside the network.", "role": "partial"},
+        {"key": "C", "text": "An IDS sensor on the core switch's SPAN port", "rationale": "Useful detection, but it is not a decoy and must separate real from bad traffic.", "role": "related"},
+        {"key": "D", "text": "A production file server with extra logging", "rationale": "Real users generate constant legitimate noise there.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A honeypot is a decoy system that lures attackers so they can be detected and studied. It has no legitimate use, so any interaction is suspicious, which makes an internal honeypot a sharp detector of lateral movement.",
+      "discriminator_tested": "Honeypot: no legitimate use, so any interaction is suspicious."
+    },
+    {
+      "objectives": ["C02-09", "C02-10"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which statement BEST separates a WPAN from a WLAN?",
+      "options": [
+        {"key": "A", "text": "A WPAN serves one person's devices nearby", "rationale": "Correct: scale is the defining difference.", "role": "best"},
+        {"key": "B", "text": "A WPAN typically uses Bluetooth rather than Wi-Fi", "rationale": "Common, but the defining feature is scale, not the technology.", "role": "partial"},
+        {"key": "C", "text": "A WPAN covers a city; a WLAN covers a building", "rationale": "City scale describes a WMAN.", "role": "related"},
+        {"key": "D", "text": "A WPAN needs an access point to connect devices", "rationale": "WPAN devices usually pair directly.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A WPAN (wireless personal area network) has very short range, such as Bluetooth. It is the smallest scale: one person's devices; a WLAN covers a building or campus.",
+      "discriminator_tested": "WPAN = smallest scale: one person's devices."
+    },
+    {
+      "objectives": ["C02-10", "C02-12"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "A small business wants staff laptops, phones, and handheld scanners to connect anywhere in its single-floor office and loading dock, using equipment it owns. Which network type BEST fits?",
+      "options": [
+        {"key": "A", "text": "A WLAN built with the company's own access points", "rationale": "Correct: building-scale Wi-Fi the company controls.", "role": "best"},
+        {"key": "B", "text": "A WWAN, giving each device its own carrier data plan", "rationale": "Would work, but it is carrier-provided, costs per device, and isn't company-owned.", "role": "partial"},
+        {"key": "C", "text": "A WPAN, pairing each device with one central hub", "rationale": "A WPAN's few meters can't cover an office and dock.", "role": "related"},
+        {"key": "D", "text": "A WMAN, connecting the office to nearby buildings", "rationale": "There is only one site to cover.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A WLAN (wireless local area network) is Wi-Fi within a building or campus, the common enterprise and home wireless scale.",
+      "discriminator_tested": "WLAN is the common enterprise/home wireless scale."
+    },
+    {
+      "objectives": ["C02-11", "C02-10", "C02-12"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which of these is BEST described as a WMAN?",
+      "options": [
+        {"key": "A", "text": "A city's wireless links joining offices across town", "rationale": "Correct: city scale.", "role": "best"},
+        {"key": "B", "text": "A Wi-Fi network covering a university campus", "rationale": "Campus Wi-Fi is a WLAN.", "role": "related"},
+        {"key": "C", "text": "A carrier's 5G service across several states", "rationale": "Carrier coverage across regions is a WWAN.", "role": "related"},
+        {"key": "D", "text": "A Bluetooth link from a phone to a headset", "rationale": "That is a WPAN.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A WMAN (wireless metropolitan area network) spans a city or large area. It sits between WLAN and WWAN in scale.",
+      "discriminator_tested": "WMAN spans a city."
+    },
+    {
+      "objectives": ["C02-12", "C02-11"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes a WWAN from a WMAN?",
+      "options": [
+        {"key": "A", "text": "A WWAN is carrier-provided, region-wide", "rationale": "Correct: the largest scale, from a carrier.", "role": "best"},
+        {"key": "B", "text": "A WWAN usually costs more per device to run", "rationale": "Often true, but cost isn't what defines it.", "role": "partial"},
+        {"key": "C", "text": "A WWAN is built from the company's own Wi-Fi APs", "rationale": "That describes a WLAN.", "role": "wrong"},
+        {"key": "D", "text": "A WWAN covers a single city and its suburbs", "rationale": "City scale is a WMAN.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "A WWAN (wireless wide area network) provides cellular-style coverage over large regions; it is the largest scale and carrier-provided. A WMAN spans a city.",
+      "discriminator_tested": "WWAN = largest scale; carrier-provided."
+    },
+    {
+      "objectives": ["C02-13", "C02-14"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "Laptops join the office Wi-Fi with full signal but can't reach any wired servers or the internet. The access point's uplink port shows no link light. Which function is failing?",
+      "options": [
+        {"key": "A", "text": "The AP's bridge to the wired network", "rationale": "Correct: clients associate, but the AP can't pass their traffic onward.", "role": "best"},
+        {"key": "B", "text": "The laptops' wireless network adapters", "rationale": "They connected with full signal, so the client side works.", "role": "related"},
+        {"key": "C", "text": "The access point's radio and antennas", "rationale": "Full signal shows the radio side is fine.", "role": "wrong"},
+        {"key": "D", "text": "The SSID broadcast settings on the AP", "rationale": "Clients found and joined the network.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "A wireless access point connects wireless clients to the wired network; it is the bridge between wireless and wired. With its uplink down, clients can associate but their traffic goes nowhere.",
+      "discriminator_tested": "WAP bridges wireless and wired."
+    },
+    {
+      "objectives": ["C02-14", "C02-13"], "type": "single", "angle": "choose-device", "difficulty": 1,
+      "stem": "A desktop PC in a room with good Wi-Fi coverage has only an Ethernet port, and no cable can be run to it. What does the PC need in order to join the network?",
+      "options": [
+        {"key": "A", "text": "A wireless network adapter", "rationale": "Correct: the client-side hardware the PC lacks.", "role": "best"},
+        {"key": "B", "text": "A wireless access point", "rationale": "The room already has coverage; the AP is the infrastructure side.", "role": "related"},
+        {"key": "C", "text": "A directional antenna", "rationale": "An antenna is no use without a wireless adapter to attach it to.", "role": "related"},
+        {"key": "D", "text": "A new SSID for the network", "rationale": "A name change doesn't give the PC a radio.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A wireless network access card is the client-side adapter that lets a device connect wirelessly. The WAP is the infrastructure-side device.",
+      "discriminator_tested": "Wireless NIC = client-side hardware."
+    },
+    {
+      "objectives": ["C02-15"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which statement BEST compares omnidirectional and directional antennas?",
+      "options": [
+        {"key": "A", "text": "Omni spreads coverage around; directional reaches farther", "rationale": "Correct: wide coverage versus a focused, longer beam.", "role": "best"},
+        {"key": "B", "text": "Directional antennas give a stronger signal", "rationale": "True within their beam, but weaker everywhere else.", "role": "partial"},
+        {"key": "C", "text": "Omni antennas reach farther than directional ones", "rationale": "This is reversed.", "role": "wrong"},
+        {"key": "D", "text": "Directional antennas are for 5 GHz use", "rationale": "Both types exist for both bands.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Wireless antennae radiate and receive signal. Omnidirectional antennas cover all directions for wider coverage; directional antennas focus a beam for longer reach.",
+      "discriminator_tested": "Omni = all directions; directional = focused beam, longer reach."
+    },
+    {
+      "objectives": ["C02-16", "C02-09"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "At a disaster site with no access point, rescuers' laptops share maps over Wi-Fi with each other. One laptop also shares its cellular connection with a phone over Bluetooth. How are the laptops' Wi-Fi links arranged?",
+      "options": [
+        {"key": "A", "text": "As an independent BSS, peer to peer", "rationale": "Correct: Wi-Fi with no AP is ad hoc.", "role": "best"},
+        {"key": "B", "text": "As an infrastructure BSS around one laptop", "rationale": "An infrastructure BSS needs an access point.", "role": "related"},
+        {"key": "C", "text": "As an extended service set across the site", "rationale": "An ESS links multiple APs; there are none.", "role": "related"},
+        {"key": "D", "text": "As a WPAN, because Bluetooth is involved", "rationale": "The Bluetooth link is separate; the laptops share maps over Wi-Fi.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An Independent BSS (ad hoc) has devices connecting directly to each other with no AP: peer-to-peer. The Bluetooth tether is a separate WPAN link.",
+      "discriminator_tested": "IBSS: no AP; peer-to-peer."
+    },
+    {
+      "objectives": ["C02-17", "C02-19"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Three access points all broadcast the same network name. Which identifier distinguishes each AP's basic service set from the others?",
+      "options": [
+        {"key": "A", "text": "The BSSID, the AP radio's MAC address", "rationale": "Correct: each BSS has its own BSSID.", "role": "best"},
+        {"key": "B", "text": "The SSID, the network's name", "rationale": "All three share the same SSID.", "role": "related"},
+        {"key": "C", "text": "The channel each AP uses", "rationale": "Channels can repeat across APs; they don't identify a BSS.", "role": "wrong"},
+        {"key": "D", "text": "The clients' IP addresses", "rationale": "Client addressing has nothing to do with the BSS identity.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A Basic Service Set (BSS) is one AP plus its associated clients, the basic wireless building block, identified by its BSSID (the AP radio's MAC address). The SSID is shared by every BSS in an ESS.",
+      "discriminator_tested": "A BSS is a single AP's coverage, identified by its BSSID."
+    },
+    {
+      "objectives": ["C02-18", "C02-16"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "In an infrastructure BSS, laptop A sends a file to laptop B on the same Wi-Fi network. Which path do the frames take?",
+      "options": [
+        {"key": "A", "text": "Laptop A to the AP, then the AP to laptop B", "rationale": "Correct: clients communicate through the AP.", "role": "best"},
+        {"key": "B", "text": "Laptop A directly to laptop B over the air", "rationale": "Direct links are ad hoc (IBSS).", "role": "related"},
+        {"key": "C", "text": "Laptop A to the switch, then to laptop B", "rationale": "Wireless clients reach the network through the AP first.", "role": "related"},
+        {"key": "D", "text": "Laptop A to the internet router and back", "rationale": "Local traffic doesn't need to leave via the router.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An infrastructure BSS is a BSS in which clients communicate through the AP; in ad hoc mode, they talk directly with no AP.",
+      "discriminator_tested": "Infrastructure BSS: traffic flows via the AP."
+    },
+    {
+      "objectives": ["C02-19"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "IT says the second network below is 'secured because it is hidden'. Based on this scan, which statement is BEST?",
+      "exhibit": "SSID 1 : CorpNet    Auth WPA2-Enterprise   BSSID 00:3a:9a:10:22:01\nSSID 2 :            Auth WPA2-Personal     BSSID 00:3a:9a:10:22:05\nSSID 3 : Guest      Auth Open              BSSID 00:3a:9a:10:22:09",
+      "options": [
+        {"key": "A", "text": "Hiding the name doesn't hide the network", "rationale": "Correct: it still beacons and appears in the scan; only the name is blank.", "role": "best"},
+        {"key": "B", "text": "It uses WPA2-Personal, which is weaker than Enterprise", "rationale": "True, but it doesn't address the claim that hiding secures it.", "role": "partial"},
+        {"key": "C", "text": "It is invisible to scanners, so attackers won't find it", "rationale": "The scan shows it plainly.", "role": "wrong"},
+        {"key": "D", "text": "It belongs to the CorpNet ESS because the BSSIDs match", "rationale": "The BSSIDs differ, and an ESS shares one SSID.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "The SSID is the name identifying a wireless network; it is a network name, not a security control. A hidden network still beacons with its BSSID and shows up in scans with a blank name.",
+      "discriminator_tested": "SSID is a name, not a security control."
+    },
+    {
+      "objectives": ["C02-20", "C02-17"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "Users lose their connection each time they walk between the two wings of a building. The east wing's AP broadcasts 'Wing-A' and the west wing's AP broadcasts 'Wing-B'. Which change BEST lets them roam?",
+      "options": [
+        {"key": "A", "text": "Give both APs the same SSID and security settings", "rationale": "Correct: one SSID across linked APs forms an ESS.", "role": "best"},
+        {"key": "B", "text": "Raise both APs' power so their coverage overlaps", "rationale": "Overlap helps, but clients still won't move between two different networks.", "role": "partial"},
+        {"key": "C", "text": "Set up the laptops as an ad hoc network", "rationale": "Ad hoc removes the APs and the wired network altogether.", "role": "related"},
+        {"key": "D", "text": "Hide both SSIDs so laptops choose the strongest AP by themselves", "rationale": "Hiding names doesn't merge two networks into one.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An Extended Service Set (ESS) is two or more BSSs linked by a wired distribution system under one SSID. That shared SSID is what enables roaming across multiple APs.",
+      "discriminator_tested": "ESS = multiple BSSs under one SSID; enables roaming."
+    },
+    {
+      "objectives": ["C02-21", "C02-25"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What is the BEST explanation for why channel crowding is more common in 2.4 GHz than in 5 GHz?",
+      "options": [
+        {"key": "A", "text": "It has only three nonoverlapping channels", "rationale": "Correct: 1, 6, and 11 in the US, so neighbours collide.", "role": "best"},
+        {"key": "B", "text": "More household devices also use 2.4 GHz", "rationale": "True, but that is non-Wi-Fi interference rather than channel crowding.", "role": "partial"},
+        {"key": "C", "text": "It uses wider channels than 5 GHz does", "rationale": "5 GHz supports the wider channels.", "role": "wrong"},
+        {"key": "D", "text": "It is the band WPA3 requires", "rationale": "WPA3 works in both bands.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "In the 2.4 GHz band there are only three nonoverlapping channels (1, 6, 11 in the US). With so few channels, crowding is common; 5 GHz has many more.",
+      "discriminator_tested": "Few channels, so crowding is common."
+    },
+    {
+      "objectives": ["C02-22", "C02-23", "C02-24"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two statements about 802.11ac are true? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "It operates in the 5 GHz band", "rationale": "Correct: 802.11ac is 5 GHz only.", "role": "best"},
+        {"key": "B", "text": "It has many more nonoverlapping channels than 2.4 GHz", "rationale": "Correct: less crowding than 2.4 GHz.", "role": "best"},
+        {"key": "C", "text": "It works in both 2.4 GHz and 5 GHz", "rationale": "That describes 802.11n.", "role": "related"},
+        {"key": "D", "text": "It is also known as Wi-Fi 6", "rationale": "Wi-Fi 6 is 802.11ax.", "role": "related"},
+        {"key": "E", "text": "It uses channels 1, 6, and 11", "rationale": "Those are 2.4 GHz channels.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "802.11ac operates in 5 GHz only, with many more nonoverlapping channels and less crowding. 802.11n is the dual-band standard, and Wi-Fi 6 is 802.11ax.",
+      "discriminator_tested": "802.11ac is 5 GHz only, with more channels."
+    }
+  ]
+}

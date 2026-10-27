@@ -1,0 +1,257 @@
+{
+  "questions": [
+    {
+      "objectives": ["C09-20"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A new web server image runs FTP, Telnet, and a print spooler that the web application never uses. What is the BEST hardening step?",
+      "options": [
+        {"key": "A", "text": "Disable the unneeded services", "rationale": "Correct: fewer exposed components, fewer vulnerabilities.", "role": "best"},
+        {"key": "B", "text": "Firewall off the unused ports", "rationale": "Reduces exposure, but the services still run and can be reached locally.", "role": "partial"},
+        {"key": "C", "text": "Patch the unneeded services", "rationale": "Patching something you don't need keeps the attack surface.", "role": "related"},
+        {"key": "D", "text": "Change their default ports", "rationale": "Obscurity, not reduction.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Reducing the surface area for attack means disabling unneeded services, ports, accounts, and software. Fewer exposed components means fewer vulnerabilities.",
+      "discriminator_tested": "Fewer exposed components, fewer vulnerabilities."
+    },
+    {
+      "objectives": ["C09-21", "C09-24"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "An admin must enforce a 15-minute screen lock on 3,000 Windows PCs in the domain. What BEST fits?",
+      "options": [
+        {"key": "A", "text": "Group Policy", "rationale": "Correct: central enforcement across the domain.", "role": "best"},
+        {"key": "B", "text": "Local policy on each PC", "rationale": "Works, but means 3,000 separate edits.", "role": "partial"},
+        {"key": "C", "text": "An MDM for phones", "rationale": "These are domain Windows PCs.", "role": "related"},
+        {"key": "D", "text": "A SELinux policy", "rationale": "SELinux is for Linux.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Group Policy centrally manages and enforces settings on Windows computers and users.",
+      "discriminator_tested": "Group Policy = central enforcement."
+    },
+    {
+      "objectives": ["C09-22", "C09-24"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A Finance PC at the HQ site receives the four conflicting settings below. Which value applies?",
+      "exhibit": "Setting: Screen saver timeout\n  Local policy:        30 minutes\n  Site GPO (HQ):       20 minutes\n  Domain GPO:          15 minutes\n  OU GPO (Finance):    10 minutes",
+      "options": [
+        {"key": "A", "text": "10 minutes, from the OU GPO", "rationale": "Correct: the OU is applied last, so it wins.", "role": "best"},
+        {"key": "B", "text": "15 minutes, from the domain GPO", "rationale": "The OU GPO applies after the domain GPO.", "role": "related"},
+        {"key": "C", "text": "30 minutes, from local policy", "rationale": "Local applies first and is overridden.", "role": "related"},
+        {"key": "D", "text": "20 minutes, from the site GPO", "rationale": "Site comes before domain and OU.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "GPOs are bundles of settings linked to a site, domain, or OU. They apply in the order local, site, domain, OU, and later ones override earlier ones.",
+      "discriminator_tested": "Applied local, site, domain, OU; later overrides earlier."
+    },
+    {
+      "objectives": ["C09-23", "C09-24"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What BEST describes the scope of local group policy?",
+      "options": [
+        {"key": "A", "text": "Settings on a single computer", "rationale": "Correct: one machine.", "role": "best"},
+        {"key": "B", "text": "Settings stored on the PC itself", "rationale": "True, but it doesn't state the scope.", "role": "partial"},
+        {"key": "C", "text": "Settings for each PC in a domain", "rationale": "That is domain group policy.", "role": "related"},
+        {"key": "D", "text": "Settings for Linux hosts via SELinux", "rationale": "Unrelated.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Local group policy applies settings to a single computer; its scope is one machine.",
+      "discriminator_tested": "Local policy scope is one machine."
+    },
+    {
+      "objectives": ["C09-24", "C09-23"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "A PC's local policy sets a 30-minute screen lock, and a domain GPO sets 15 minutes. What BEST describes the result?",
+      "options": [
+        {"key": "A", "text": "15 minutes; domain overrides local", "rationale": "Correct: domain policy wins on conflict.", "role": "best"},
+        {"key": "B", "text": "30 minutes; local settings win on their own PC", "rationale": "Local applies first and is overridden.", "role": "related"},
+        {"key": "C", "text": "The stricter setting applies", "rationale": "Right result here, wrong rule: order decides, not strictness.", "role": "partial"},
+        {"key": "D", "text": "Neither; conflicts disable the setting", "rationale": "Conflicts are resolved by order.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Domain group policy applies settings centrally to many computers and users through Active Directory. Its scope is many machines, and it overrides local settings on conflict.",
+      "discriminator_tested": "Domain policy overrides local on conflict."
+    },
+    {
+      "objectives": ["C09-25"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A web server wrote to its uploads folder even though SELinux logged a denial for it. Given the output below, what BEST explains this?",
+      "exhibit": "$ getenforce\nPermissive\n$ ausearch -m avc -ts recent\ntype=AVC msg=audit(...): avc:  denied  { write } for  pid=2211 comm=\"httpd\" name=\"uploads\" ...",
+      "options": [
+        {"key": "A", "text": "Permissive mode logs but doesn't block", "rationale": "Correct: the denial is recorded, but the action proceeds.", "role": "best"},
+        {"key": "B", "text": "SELinux recorded the violation", "rationale": "True, but it doesn't say why the write succeeded.", "role": "partial"},
+        {"key": "C", "text": "Enforcing mode allows writes it logs", "rationale": "Enforcing mode blocks and logs.", "role": "related"},
+        {"key": "D", "text": "SELinux is disabled on this server", "rationale": "Disabled wouldn't log anything; it is permissive.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "SELinux provides mandatory access control on Linux in three modes: enforcing, permissive, and disabled (getenforce, setenforce). Enforcing blocks and logs violations; permissive only logs.",
+      "discriminator_tested": "Enforcing blocks and logs; permissive only logs."
+    },
+    {
+      "objectives": ["C09-26", "C09-20"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "A Linux file server's Samba configuration is shown below. Which change BEST reduces its attack surface?",
+      "exhibit": "[global]\n   server min protocol = NT1\n   map to guest = Bad User\n[public]\n   path = /srv/public\n   guest ok = yes\n   writable = yes",
+      "options": [
+        {"key": "A", "text": "Require SMB2+ and remove guest write access", "rationale": "Correct: drops SMBv1 and anonymous writing.", "role": "best"},
+        {"key": "B", "text": "Keep Samba patched to the latest release", "rationale": "Good practice, but it leaves SMBv1 and guest write enabled.", "role": "partial"},
+        {"key": "C", "text": "Rename the [public] share", "rationale": "A new name doesn't change access.", "role": "related"},
+        {"key": "D", "text": "Open TCP 445 to the internet for testing", "rationale": "That increases exposure.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Samba is the Linux/Unix implementation of SMB file and print sharing. Exposed SMB is attack surface: disable it if unused, restrict shares, require authentication, disable SMBv1, and keep it patched.",
+      "discriminator_tested": "Restrict shares, require authentication, disable SMBv1."
+    },
+    {
+      "objectives": ["C09-27", "C09-19"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "Assessment results must be presented to both the board and the engineering team. What is the BEST approach to the report?",
+      "options": [
+        {"key": "A", "text": "Summary plus technical appendix", "rationale": "Correct: tailored to each audience.", "role": "best"},
+        {"key": "B", "text": "One detailed technical report for both", "rationale": "Serves engineers, but loses the board.", "role": "partial"},
+        {"key": "C", "text": "Raw scanner output for both groups", "rationale": "Useful to no one without analysis.", "role": "related"},
+        {"key": "D", "text": "A verbal briefing with nothing written", "rationale": "Leaves no record.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Security reports summarize assessment findings, vulnerabilities, and recommendations. Tailor them to the audience: technical detail versus an executive summary.",
+      "discriminator_tested": "Tailor to the audience."
+    },
+    {
+      "objectives": ["C09-28", "C09-15"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A blog post claims a new attack affects every router in the world. What should the security team do FIRST?",
+      "options": [
+        {"key": "A", "text": "Check credible sources first", "rationale": "Correct: verify credibility before acting.", "role": "best"},
+        {"key": "B", "text": "Check their router models against it", "rationale": "A sensible next step once the claim is confirmed.", "role": "partial"},
+        {"key": "C", "text": "Replace the routers immediately", "rationale": "Drastic, on an unverified claim.", "role": "related"},
+        {"key": "D", "text": "Ignore it, since blogs are unreliable", "rationale": "Some are credible; verify instead.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Cybersecurity news sources report emerging threats and vulnerabilities. They build awareness, but their credibility must be verified.",
+      "discriminator_tested": "News builds awareness; verify credibility."
+    },
+    {
+      "objectives": ["C09-29", "C09-28"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST describes what a paid threat-intelligence subscription typically offers over free news sources?",
+      "options": [
+        {"key": "A", "text": "Curated, timely, deeper intelligence", "rationale": "Correct, at a cost.", "role": "best"},
+        {"key": "B", "text": "Information about threats", "rationale": "Free sources offer that too.", "role": "partial"},
+        {"key": "C", "text": "Automatic patching of affected systems", "rationale": "Intelligence informs; it doesn't patch.", "role": "related"},
+        {"key": "D", "text": "Protection from breaches", "rationale": "Information can't prevent breaches by itself.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Subscription-based sources are paid or subscribed threat-intelligence feeds and advisories. They are curated, timely, and often deeper than free sources, but they cost money.",
+      "discriminator_tested": "Curated and timely; costs money."
+    },
+    {
+      "objectives": ["C09-30"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "An analyst wants new advisories from ten vendor websites delivered automatically, without visiting each site. What BEST fits?",
+      "options": [
+        {"key": "A", "text": "An RSS feed reader", "rationale": "Correct: pulls new items automatically.", "role": "best"},
+        {"key": "B", "text": "A port scanner", "rationale": "Scans hosts, not websites' news.", "role": "related"},
+        {"key": "C", "text": "A weekly manual check", "rationale": "Still visiting each site.", "role": "related"},
+        {"key": "D", "text": "A SIEM correlation rule", "rationale": "Correlates logs, not web content.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An RSS feed delivers new items from chosen sites automatically. It pulls updates to you without visiting each site.",
+      "discriminator_tested": "RSS pulls updates to you."
+    },
+    {
+      "objectives": ["C09-31", "C09-38"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What BEST explains why documenting processes matters for security work?",
+      "options": [
+        {"key": "A", "text": "Repeatable, auditable actions", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "It satisfies the auditors", "rationale": "A side benefit, not the core reason.", "role": "partial"},
+        {"key": "C", "text": "It replaces the need for training", "rationale": "Documents support training; they don't replace it.", "role": "related"},
+        {"key": "D", "text": "It encrypts the procedures", "rationale": "Documentation doesn't encrypt.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Documentation is a written record of processes, changes, and events. It makes actions repeatable and auditable.",
+      "discriminator_tested": "Makes actions repeatable and auditable."
+    },
+    {
+      "objectives": ["C09-32", "C09-31"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "During an outage, responders followed the network diagram, which still showed a firewall replaced a year ago. The fix was delayed by hours. What BEST describes the root cause?",
+      "options": [
+        {"key": "A", "text": "Outdated documentation", "rationale": "Correct: the diagram wasn't kept current.", "role": "best"},
+        {"key": "B", "text": "The responders weren't trained", "rationale": "They did what the documents said.", "role": "related"},
+        {"key": "C", "text": "The diagram was hard to read", "rationale": "Readable but wrong is still wrong.", "role": "related"},
+        {"key": "D", "text": "The new firewall was faulty", "rationale": "Nothing suggests that.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Updating documentation means keeping documents current as systems, processes, and lessons change. Outdated documentation misleads responders.",
+      "discriminator_tested": "Outdated documentation misleads responders."
+    },
+    {
+      "objectives": ["C09-33", "C09-38"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "An incident record reads as shown below. What BEST describes the problem with it?",
+      "exhibit": "Incident IR-0912 log\n- Someone noticed odd traffic.\n- The server was unplugged at some point.\n- Malware was removed.",
+      "options": [
+        {"key": "A", "text": "It lacks times, systems, and names", "rationale": "Correct: it isn't a factual, time-stamped account.", "role": "best"},
+        {"key": "B", "text": "It is too short", "rationale": "Length isn't the issue; missing facts are.", "role": "partial"},
+        {"key": "C", "text": "It should be kept by the vendor", "rationale": "The organization keeps its own records.", "role": "related"},
+        {"key": "D", "text": "It includes too much detail", "rationale": "It includes far too little.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Security incident documentation records the timeline, affected systems, actions taken, and who did what. It is a factual, time-stamped account.",
+      "discriminator_tested": "Factual, time-stamped account."
+    },
+    {
+      "objectives": ["C09-34", "C09-33"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A forensic case has the custody log below. What is the MOST serious problem?",
+      "exhibit": "Item: laptop LT-0457    Case IR-0912\n10/03 09:14   collected by J. Ortiz       sealed bag #5521\n10/03 11:40   received by evidence room   bag #5521\n10/05 15:20   received by forensic lab    bag #5873",
+      "options": [
+        {"key": "A", "text": "No entry shows who moved it, and the bag changed", "rationale": "Correct: a gap in the trail undermines the evidence.", "role": "best"},
+        {"key": "B", "text": "The lab received it two days later", "rationale": "The delay matters less than the undocumented handling.", "role": "partial"},
+        {"key": "C", "text": "The laptop wasn't imaged at collection", "rationale": "Not shown, and not the custody issue.", "role": "related"},
+        {"key": "D", "text": "The evidence room should sign twice", "rationale": "There's no such rule.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Chain of custody is the documented trail of who handled evidence, when, and how. A gap undermines the integrity and admissibility of the evidence.",
+      "discriminator_tested": "A gap undermines integrity and admissibility."
+    },
+    {
+      "objectives": ["C09-35"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A breach exposes customer data in a region whose regulation requires notification within 72 hours. What is the BEST action for the incident lead?",
+      "options": [
+        {"key": "A", "text": "Notify per policy, in time", "rationale": "Correct: the defined path, and the legal deadline.", "role": "best"},
+        {"key": "B", "text": "Tell the security team immediately", "rationale": "Necessary, but not the whole reporting obligation.", "role": "partial"},
+        {"key": "C", "text": "Wait until the investigation is complete", "rationale": "That could miss the mandated deadline.", "role": "related"},
+        {"key": "D", "text": "Post the details on social media first", "rationale": "Not a defined reporting path.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Reporting incidents means notifying the right parties (management, security, legal, regulators, customers) per policy. Follow the defined reporting path; some timing is mandated by regulation.",
+      "discriminator_tested": "Follow the reporting path; some timing is mandated."
+    },
+    {
+      "objectives": ["C09-36", "C09-37"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "A ransomware infection has been contained. Which order of recovery steps is correct?",
+      "options": [
+        {"key": "A", "text": "Restore from clean backups, validate, return to service", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Return to service, then restore, then validate", "rationale": "Systems go live before they are restored.", "role": "related"},
+        {"key": "C", "text": "Validate, return to service, then restore", "rationale": "Nothing to validate before restoring.", "role": "related"},
+        {"key": "D", "text": "Restore from the newest backup, even if infected", "rationale": "An infected backup reinfects.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Incident recovery restores affected systems to normal operation: clean backups, rebuild, validate. It returns systems to service after containment.",
+      "discriminator_tested": "Return to service after containment, from clean sources."
+    },
+    {
+      "objectives": ["C09-37", "C09-36"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What BEST describes the purpose of a post-incident review?",
+      "options": [
+        {"key": "A", "text": "Root causes and improvements", "rationale": "Correct: improvement, not blame.", "role": "best"},
+        {"key": "B", "text": "Discuss what happened", "rationale": "True, but it misses the aim.", "role": "partial"},
+        {"key": "C", "text": "Restore systems to normal operation", "rationale": "That is recovery.", "role": "related"},
+        {"key": "D", "text": "Identify which employee to blame", "rationale": "Reviews aim at improvement, not blame.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Reviewing the incident is a post-incident review to find the root cause and improve controls. It happens after recovery and aims at improvement, not blame.",
+      "discriminator_tested": "After recovery; improvement, not blame."
+    },
+    {
+      "objectives": ["C09-38", "C09-33"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two are documentation best practices during an incident? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Writing entries as events happen", "rationale": "Correct: document as you go.", "role": "best"},
+        {"key": "B", "text": "Storing records securely, with access control", "rationale": "Correct: records can contain sensitive details.", "role": "best"},
+        {"key": "C", "text": "Rewriting the log at the end for clarity", "rationale": "Loses accuracy and timeliness.", "role": "related"},
+        {"key": "D", "text": "Keeping notes in a personal email account", "rationale": "Not secure or controlled.", "role": "related"},
+        {"key": "E", "text": "Leaving out times to save effort", "rationale": "Timestamps are essential.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Documentation best practices: clear, accurate, timely, consistent, version-controlled, and securely stored. Document as you go, and protect the documents because they can contain sensitive details.",
+      "discriminator_tested": "Document as you go; protect the documents."
+    }
+  ]
+}

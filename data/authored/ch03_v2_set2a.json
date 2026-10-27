@@ -1,0 +1,271 @@
+{
+  "questions": [
+    {
+      "objectives": ["C03-01", "C03-05", "C03-02"], "type": "multi", "angle": "identify-from-port", "difficulty": 2,
+      "stem": "A firewall log shows administrators connecting to switches on TCP 23. Which two statements about the protocol on that port are true? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "It provides remote command-line access", "rationale": "Correct: TCP 23 is Telnet.", "role": "best"},
+        {"key": "B", "text": "It sends everything, including passwords, in cleartext", "rationale": "Correct: Telnet has no encryption.", "role": "best"},
+        {"key": "C", "text": "It encrypts sessions with keys exchanged at login", "rationale": "That describes SSH on TCP 22.", "role": "related"},
+        {"key": "D", "text": "It is used to transfer configuration files over UDP", "rationale": "That describes TFTP on UDP 69.", "role": "related"},
+        {"key": "E", "text": "It synchronizes device clocks", "rationale": "That is NTP on UDP 123.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Telnet provides remote command-line access over TCP 23. It is cleartext, so credentials are exposed; SSH on TCP 22 is the secure replacement.",
+      "discriminator_tested": "Telnet: TCP 23, cleartext."
+    },
+    {
+      "objectives": ["C03-02", "C03-01"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An analyst who once recovered a password from a Telnet capture tries the same on the session below. What will they MOST likely find?",
+      "exhibit": "10.1.9.40:50112 > 10.1.1.2:22   SSH  Client: Protocol (SSH-2.0-OpenSSH_9.6)\n10.1.1.2:22 > 10.1.9.40:50112   SSH  Server: Protocol (SSH-2.0-Cisco-1.25)\n10.1.9.40:50112 > 10.1.1.2:22   SSH  Client: Key Exchange Init\n10.1.1.2:22 > 10.1.9.40:50112   SSH  Server: Key Exchange Init\n10.1.9.40:50112 > 10.1.1.2:22   SSH  Client: Encrypted packet (len=96)",
+      "options": [
+        {"key": "A", "text": "Only encrypted packets after the key exchange", "rationale": "Correct: the login happens inside the encrypted channel.", "role": "best"},
+        {"key": "B", "text": "The SSH versions of the client and server", "rationale": "Visible, but useless for recovering the password.", "role": "partial"},
+        {"key": "C", "text": "The password in cleartext, as with Telnet", "rationale": "SSH encrypts the login.", "role": "related"},
+        {"key": "D", "text": "The password in the Key Exchange Init packet", "rationale": "Key exchange happens before the login and carries no password.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "SSH provides encrypted remote access over TCP 22. Keys are negotiated first, and everything after that, including the login, is encrypted; it is the secure replacement for Telnet.",
+      "discriminator_tested": "SSH is encrypted; the secure replacement for Telnet."
+    },
+    {
+      "objectives": ["C03-03", "C03-04"], "type": "single", "angle": "secure-replacement", "difficulty": 2,
+      "stem": "A nightly job uploads payroll files to a partner over FTP. Which replacement BEST protects both the login and the files?",
+      "options": [
+        {"key": "A", "text": "SFTP, running the transfer inside SSH", "rationale": "Correct: credentials and data are both encrypted.", "role": "best"},
+        {"key": "B", "text": "Zip the files with a password before using FTP", "rationale": "Protects the file contents, but the FTP login is still cleartext.", "role": "partial"},
+        {"key": "C", "text": "TFTP, which has less overhead", "rationale": "TFTP has no authentication or encryption at all.", "role": "related"},
+        {"key": "D", "text": "FTP with a longer, stronger password", "rationale": "A strong password still crosses the network in cleartext.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "FTP transfers files over TCP 20/21 with credentials and data in cleartext. SFTP, tunneled through SSH, encrypts both.",
+      "discriminator_tested": "FTP: credentials and data in cleartext."
+    },
+    {
+      "objectives": ["C03-04", "C03-05"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements about SFTP are true? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "It runs over SSH on TCP port 22", "rationale": "Correct: it is file transfer inside SSH.", "role": "best"},
+        {"key": "B", "text": "It encrypts both credentials and file data", "rationale": "Correct: everything travels inside the SSH tunnel.", "role": "best"},
+        {"key": "C", "text": "It is FTP with a stronger password policy", "rationale": "It is a different protocol, not hardened FTP.", "role": "related"},
+        {"key": "D", "text": "It uses UDP 69 with no authentication", "rationale": "That describes TFTP.", "role": "related"},
+        {"key": "E", "text": "It is the same protocol as FTPS", "rationale": "FTPS adds TLS to FTP; SFTP runs over SSH.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "SFTP is file transfer tunneled through SSH (TCP 22): encrypted, and not the same as FTP or TFTP.",
+      "discriminator_tested": "SFTP is encrypted and runs over SSH."
+    },
+    {
+      "objectives": ["C03-05"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "Switches pull their configuration files from a TFTP server each time they boot. What is the MAIN security weakness of this design?",
+      "options": [
+        {"key": "A", "text": "No login is needed to fetch configs", "rationale": "Correct: TFTP has no authentication, so anyone who can reach it can pull configs.", "role": "best"},
+        {"key": "B", "text": "Transfers may fail because UDP is unreliable", "rationale": "TFTP handles its own acknowledgments; this is a reliability point, not security.", "role": "related"},
+        {"key": "C", "text": "The server must hold an SSH key for each switch", "rationale": "TFTP doesn't use SSH.", "role": "related"},
+        {"key": "D", "text": "TFTP sends configs to the internet by default", "rationale": "It sends files only to whoever requests them.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "TFTP is simple file transfer over UDP 69 with no authentication, used for configuration, firmware, and boot files. Anyone who can reach the server can request a config, passwords and all.",
+      "discriminator_tested": "TFTP has no authentication."
+    },
+    {
+      "objectives": ["C03-06"], "type": "single", "angle": "identify-from-port", "difficulty": 3,
+      "stem": "A firewall must let a monitoring server poll switches and also receive the alerts the switches send. Which rules does it need?",
+      "options": [
+        {"key": "A", "text": "UDP 161 to the switches, UDP 162 back to the server", "rationale": "Correct: polling goes to 161; traps come back to 162.", "role": "best"},
+        {"key": "B", "text": "TCP 161 to the switches, TCP 162 back to the server", "rationale": "SNMP uses UDP.", "role": "related"},
+        {"key": "C", "text": "UDP 162 to the switches, UDP 161 back to the server", "rationale": "This is reversed.", "role": "related"},
+        {"key": "D", "text": "TCP 22 both ways, since SNMP runs over SSH", "rationale": "SNMP doesn't run over SSH.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "SNMP monitors and manages network devices over UDP 161, with traps on UDP 162.",
+      "discriminator_tested": "SNMP: UDP 161 for polling; traps on 162."
+    },
+    {
+      "objectives": ["C03-07", "C03-08"], "type": "single", "angle": "secure-replacement", "difficulty": 2,
+      "stem": "A public website still serves its login page and member pages over HTTP. Which change BEST fixes this?",
+      "options": [
+        {"key": "A", "text": "Serve the site over HTTPS and redirect HTTP to it", "rationale": "Correct: every page, and the session, is encrypted.", "role": "best"},
+        {"key": "B", "text": "Move just the login page to HTTPS, keeping the rest on HTTP", "rationale": "Protects the password, but session cookies still travel in cleartext.", "role": "partial"},
+        {"key": "C", "text": "Serve the site on port 8080 instead of 80", "rationale": "A different port is still cleartext HTTP.", "role": "related"},
+        {"key": "D", "text": "Add a login CAPTCHA to stop automated attacks", "rationale": "Doesn't encrypt anything.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "HTTP carries web traffic over TCP 80 in cleartext. Serving the whole site over HTTPS (TLS on 443) and redirecting HTTP protects logins and sessions alike.",
+      "discriminator_tested": "HTTP is cleartext."
+    },
+    {
+      "objectives": ["C03-08"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A user sees the warning below when opening the company portal. What does it MOST likely mean?",
+      "exhibit": "https://portal.example.com\nYour connection is not private\nNET::ERR_CERT_COMMON_NAME_INVALID\nCertificate: issued to *.example.net   issued by Example Issuing CA",
+      "options": [
+        {"key": "A", "text": "The certificate is for a different name", "rationale": "Correct: the certificate is for *.example.net, not portal.example.com.", "role": "best"},
+        {"key": "B", "text": "The connection may not be secure", "rationale": "True, but it doesn't say why the browser objected.", "role": "partial"},
+        {"key": "C", "text": "The page is using HTTP instead of HTTPS", "rationale": "The address is HTTPS; the problem is the certificate.", "role": "related"},
+        {"key": "D", "text": "The user's password has expired", "rationale": "Certificate errors have nothing to do with the user's password.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "HTTPS is HTTP protected by TLS over TCP 443: encrypted and authenticated. The certificate authenticates the server, so a name mismatch means the browser can't confirm it is talking to the real portal, which may indicate interception.",
+      "discriminator_tested": "HTTPS is authenticated: the certificate must match the server."
+    },
+    {
+      "objectives": ["C03-09"], "type": "single", "angle": "identify-from-port", "difficulty": 1,
+      "stem": "Logs from 40 devices must line up to the second for incident investigations. Which protocol and port should each device be configured to use?",
+      "options": [
+        {"key": "A", "text": "NTP on UDP 123", "rationale": "Correct: clock synchronization.", "role": "best"},
+        {"key": "B", "text": "SNMP on UDP 161", "rationale": "SNMP manages devices; it doesn't set their clocks.", "role": "related"},
+        {"key": "C", "text": "DNS on UDP 53", "rationale": "DNS resolves names.", "role": "related"},
+        {"key": "D", "text": "NTP on TCP 23", "rationale": "Right protocol, wrong port: TCP 23 is Telnet.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "NTP synchronizes clocks over UDP 123. Consistent time matters for logs and certificates.",
+      "discriminator_tested": "NTP: UDP 123; consistent time for logs."
+    },
+    {
+      "objectives": ["C03-10"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST explains why DNS sometimes uses TCP instead of UDP?",
+      "options": [
+        {"key": "A", "text": "For large responses and zone transfers", "rationale": "Correct: these exceed what a single UDP reply handles well.", "role": "best"},
+        {"key": "B", "text": "Because TCP is more reliable", "rationale": "True of TCP, but not the specific trigger for DNS.", "role": "partial"},
+        {"key": "C", "text": "Because queries to external servers require it", "rationale": "Ordinary external queries use UDP.", "role": "related"},
+        {"key": "D", "text": "To encrypt queries between resolvers", "rationale": "Plain TCP doesn't encrypt anything.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DNS resolves names to IP addresses on port 53, using UDP for normal queries and TCP for large responses and zone transfers.",
+      "discriminator_tested": "DNS: UDP for queries; TCP for large responses and zone transfers."
+    },
+    {
+      "objectives": ["C03-11", "C03-13"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 3,
+      "stem": "After a new switch is installed, PCs in one area start getting 169.254.x.x addresses, while PCs elsewhere are fine. The DHCP server is up. What is the MOST likely cause?",
+      "options": [
+        {"key": "A", "text": "DHCP requests from that area aren't reaching the server", "rationale": "Correct: the new switch's path or relay is blocking them, so the PCs fall back to APIPA.", "role": "best"},
+        {"key": "B", "text": "The new switch is blocking those PCs' traffic", "rationale": "Possibly, but too general: the DHCP exchange specifically is failing.", "role": "partial"},
+        {"key": "C", "text": "The PCs are configured with static addresses", "rationale": "Static addresses wouldn't change to 169.254.", "role": "related"},
+        {"key": "D", "text": "The DHCP server gave them APIPA addresses", "rationale": "APIPA is self-assigned when no server answers.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DHCP automatically assigns IP configuration over UDP 67 and 68. A 169.254 address is the symptom; the cause is that the DHCP exchange never completes from that part of the network.",
+      "discriminator_tested": "DHCP failure shows up as APIPA addresses."
+    },
+    {
+      "objectives": ["C03-12", "C03-11"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "An old print server is set up so that, at boot, a server hands it a fixed IP address based on its MAC address, and that mapping never changes. Which protocol BEST describes this design?",
+      "options": [
+        {"key": "A", "text": "BootP", "rationale": "Correct: a static MAC-to-IP mapping is BootP's model.", "role": "best"},
+        {"key": "B", "text": "DHCP", "rationale": "DHCP can reserve addresses, but its defining feature is dynamic assignment.", "role": "partial"},
+        {"key": "C", "text": "APIPA", "rationale": "APIPA is self-assigned, not handed out by a server.", "role": "related"},
+        {"key": "D", "text": "ARP", "rationale": "ARP maps IPs to MACs on demand; it doesn't assign addresses.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "BootP is the older predecessor of DHCP, using UDP 67/68 with a static MAC-to-IP mapping. DHCP adds dynamic assignment.",
+      "discriminator_tested": "BootP = static MAC-to-IP mapping."
+    },
+    {
+      "objectives": ["C03-13", "C03-27"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes an APIPA address from an RFC 1918 private address?",
+      "options": [
+        {"key": "A", "text": "It's self-assigned and link-local", "rationale": "Correct: no server assigns it, and it can't be routed.", "role": "best"},
+        {"key": "B", "text": "It starts with 169.254 instead of 10 or 192.168", "rationale": "True, but that is the range, not what it means.", "role": "partial"},
+        {"key": "C", "text": "It is routable on the internet without NAT", "rationale": "APIPA addresses aren't routable at all.", "role": "wrong"},
+        {"key": "D", "text": "It is assigned by the DHCP server as a fallback", "rationale": "It appears precisely because no DHCP server answered.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "APIPA self-assigns a 169.254.0.0/16 address when no DHCP server answers. It signals a DHCP failure and is link-local only, with no gateway.",
+      "discriminator_tested": "APIPA is self-assigned and link-local only."
+    },
+    {
+      "objectives": ["C03-14", "C03-15"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two features does TCP provide that UDP does not? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Acknowledgments and retransmission", "rationale": "Correct: TCP confirms delivery and resends losses.", "role": "best"},
+        {"key": "B", "text": "Sequencing so data arrives in order", "rationale": "Correct: TCP reorders segments.", "role": "best"},
+        {"key": "C", "text": "Port numbers to identify the service", "rationale": "Both TCP and UDP use ports.", "role": "related"},
+        {"key": "D", "text": "Low overhead for real-time traffic", "rationale": "That is UDP's strength.", "role": "related"},
+        {"key": "E", "text": "Encryption of the payload", "rationale": "Neither encrypts; that is TLS's job.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "TCP is connection-oriented, reliable delivery with a three-way handshake, sequencing, and acknowledgments. UDP is connectionless and best-effort.",
+      "discriminator_tested": "TCP provides reliability and ordering."
+    },
+    {
+      "objectives": ["C03-15", "C03-16"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "DNS queries, DHCP, TFTP, and SNMP all share one transport protocol. Which is it, and which reason BEST explains why it suits them?",
+      "options": [
+        {"key": "A", "text": "UDP, since brief exchanges need no setup", "rationale": "Correct: short request/response traffic doesn't justify a connection.", "role": "best"},
+        {"key": "B", "text": "UDP, because it is faster than TCP", "rationale": "Roughly true, but the point is that they need no connection.", "role": "partial"},
+        {"key": "C", "text": "TCP, because they need assured delivery", "rationale": "They use UDP.", "role": "related"},
+        {"key": "D", "text": "ICMP, because they are control messages", "rationale": "ICMP isn't a transport for applications.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "UDP is connectionless, best-effort delivery: low overhead, no delivery guarantee. Short exchanges like these can retry at the application level instead.",
+      "discriminator_tested": "UDP: low overhead, no delivery guarantee."
+    },
+    {
+      "objectives": ["C03-16", "C03-15"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "A video-call app runs over UDP, and a few packets are lost during a call. What BEST describes what happens?",
+      "options": [
+        {"key": "A", "text": "A brief glitch; late audio is useless", "rationale": "Correct: retransmitted audio would arrive too late to play.", "role": "best"},
+        {"key": "B", "text": "The lost packets aren't recovered", "rationale": "True, but it misses why that is acceptable here.", "role": "partial"},
+        {"key": "C", "text": "TCP retransmits the lost packets automatically", "rationale": "The app uses UDP, which doesn't retransmit.", "role": "related"},
+        {"key": "D", "text": "The call drops until the connection resets", "rationale": "UDP has no connection to reset.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "TCP is used where accuracy matters; UDP where speed matters more than retransmission, such as voice and video. A brief glitch beats waiting for data that is already out of date.",
+      "discriminator_tested": "Reliability vs speed trade-off."
+    },
+    {
+      "objectives": ["C03-17"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "A server listens on the ports below. Which two are in the well-known range? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "443", "rationale": "Correct: within 0-1023.", "role": "best"},
+        {"key": "B", "text": "123", "rationale": "Correct: within 0-1023.", "role": "best"},
+        {"key": "C", "text": "3389", "rationale": "Registered range (1024-49151).", "role": "related"},
+        {"key": "D", "text": "8080", "rationale": "Registered range.", "role": "related"},
+        {"key": "E", "text": "51544", "rationale": "Dynamic range, typical of client ephemeral ports.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Port numbers identify the service: well-known 0-1023, registered 1024-49151, dynamic 49152-65535. Servers listen on well-known or registered ports; clients use ephemeral ones.",
+      "discriminator_tested": "Well-known 0-1023, registered 1024-49151, dynamic 49152-65535."
+    },
+    {
+      "objectives": ["C03-18", "C03-20"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which statement BEST describes the job of IP itself?",
+      "options": [
+        {"key": "A", "text": "Addressing and routing, with no delivery guarantee", "rationale": "Correct: logical addressing and best-effort routing.", "role": "best"},
+        {"key": "B", "text": "Moving packets between networks", "rationale": "True, but it leaves out that IP gives no delivery guarantee.", "role": "partial"},
+        {"key": "C", "text": "Ensuring packets arrive in order and complete", "rationale": "That is TCP.", "role": "related"},
+        {"key": "D", "text": "Mapping IP addresses to MAC addresses", "rationale": "That is ARP.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "IP provides logical addressing and routing of packets. It is connectionless and best-effort and carries no delivery guarantee.",
+      "discriminator_tested": "IP is connectionless and best-effort."
+    },
+    {
+      "objectives": ["C03-19"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A firewall team blocks every ICMP message at the perimeter 'for security'. Which side effect is MOST likely?",
+      "options": [
+        {"key": "A", "text": "Ping and traceroute stop working through it", "rationale": "Correct: they depend on ICMP messages.", "role": "best"},
+        {"key": "B", "text": "Web browsing stops, since it uses ICMP", "rationale": "Web traffic uses TCP.", "role": "related"},
+        {"key": "C", "text": "DNS lookups fail, since they use ICMP", "rationale": "DNS uses UDP and TCP.", "role": "related"},
+        {"key": "D", "text": "ARP stops resolving addresses on the LAN", "rationale": "ARP isn't ICMP and never crosses the perimeter.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "ICMP carries error reporting and diagnostics such as ping and traceroute. It carries control messages, not application data, so blocking it breaks diagnostics rather than applications.",
+      "discriminator_tested": "ICMP carries control messages, not application data."
+    },
+    {
+      "objectives": ["C03-20"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A technician runs the commands below on a PC. What does the incomplete entry BEST tell them?",
+      "exhibit": "C:\\> arp -a\nInterface: 10.1.4.20\n  Internet Address    Physical Address     Type\n  10.1.4.1            00-1a-2b-3c-4d-01    dynamic\n  10.1.4.77           (incomplete)\nC:\\> ping 10.1.4.77\nRequest timed out.",
+      "options": [
+        {"key": "A", "text": "No device answered the ARP request", "rationale": "Correct: no MAC was learned for 10.1.4.77.", "role": "best"},
+        {"key": "B", "text": "10.1.4.77 is unreachable from this PC", "rationale": "True, but it doesn't say what failed: address resolution.", "role": "partial"},
+        {"key": "C", "text": "DNS failed to resolve the host's name", "rationale": "No name was involved; the IP was used directly.", "role": "related"},
+        {"key": "D", "text": "The router is blocking ARP between subnets", "rationale": "Both addresses are on the same subnet.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "ARP resolves an IPv4 address to a MAC address on the local segment. An incomplete entry means the request went unanswered, so the host is off, disconnected, or not at that address.",
+      "discriminator_tested": "ARP resolves IPv4 to MAC on the local segment."
+    }
+  ]
+}

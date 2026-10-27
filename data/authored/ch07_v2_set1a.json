@@ -1,0 +1,282 @@
+{
+  "questions": [
+    {
+      "objectives": ["C07-01", "C07-07"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A standard user's workstation shows the output below. Which entry is MOST suspicious?",
+      "exhibit": "C:\\> netstat -ano\nProto  Local Address       Foreign Address       State        PID\nTCP    0.0.0.0:445         0.0.0.0:0             LISTENING    4\nTCP    0.0.0.0:4444        0.0.0.0:0             LISTENING    6120\nTCP    10.1.4.20:51544     198.51.100.10:443     ESTABLISHED  7312\nTCP    10.1.4.20:52011     203.0.113.66:8080     ESTABLISHED  6120",
+      "options": [
+        {"key": "A", "text": "PID 6120 listening on 4444 and calling out on 8080", "rationale": "Correct: one process both listening and connecting out is a classic backdoor pattern.", "role": "best"},
+        {"key": "B", "text": "A process listening on an unusual high port", "rationale": "True, but it misses the same process's outbound connection.", "role": "partial"},
+        {"key": "C", "text": "The System process listening on port 445", "rationale": "SMB listening on 445 under PID 4 is normal for Windows.", "role": "related"},
+        {"key": "D", "text": "The HTTPS session to 198.51.100.10", "rationale": "Ordinary web browsing.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "netstat shows active connections, listening ports, and statistics on the local host (netstat -an). It is a local view of what is connected or listening, which makes it useful for spotting unexpected connections.",
+      "discriminator_tested": "netstat: local view of connections and listeners."
+    },
+    {
+      "objectives": ["C07-02", "C07-03"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A Windows user says www.example.com won't load. The technician wants to check quickly which IP address that name resolves to from the user's PC. Which built-in tool BEST fits?",
+      "options": [
+        {"key": "A", "text": "nslookup", "rationale": "Correct: a basic DNS query from the PC.", "role": "best"},
+        {"key": "B", "text": "netstat", "rationale": "Shows connections, not name resolution.", "role": "related"},
+        {"key": "C", "text": "tracert", "rationale": "Shows the path, after resolution.", "role": "related"},
+        {"key": "D", "text": "gpresult", "rationale": "Shows Group Policy results.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "nslookup queries DNS to resolve names to IPs and back. It is the basic DNS troubleshooting tool on Windows and Linux; dig gives more detail.",
+      "discriminator_tested": "nslookup: basic DNS troubleshooting."
+    },
+    {
+      "objectives": ["C07-03", "C07-02"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An admin runs the command below. What does the output BEST tell them?",
+      "exhibit": "$ dig example.com MX\n;; ANSWER SECTION:\nexample.com.   3600  IN  MX  10 mail1.example.com.\nexample.com.   3600  IN  MX  20 mail2.example.com.\n;; Query time: 23 msec\n;; SERVER: 10.1.9.53#53(10.1.9.53)",
+      "options": [
+        {"key": "A", "text": "Its mail servers, with mail1 first", "rationale": "Correct: MX records, lower preference number tried first.", "role": "best"},
+        {"key": "B", "text": "The DNS server at 10.1.9.53 answered the query", "rationale": "True, but it isn't what the query was for.", "role": "partial"},
+        {"key": "C", "text": "The IP addresses of example.com's web servers", "rationale": "Web addresses are A or AAAA records.", "role": "related"},
+        {"key": "D", "text": "The path packets take to the mail servers", "rationale": "That is traceroute.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "dig is a detailed DNS query tool (dig example.com MX), common on Linux and macOS. It is more detailed than nslookup, showing record sections, TTL, and query time. In MX records, the lower preference number (10) is tried first.",
+      "discriminator_tested": "dig is more detailed than nslookup."
+    },
+    {
+      "objectives": ["C07-04"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A technician pings a web server and each request times out, yet users load the website without trouble. What is the MOST likely explanation?",
+      "options": [
+        {"key": "A", "text": "ICMP is blocked, though the server is up", "rationale": "Correct: a firewall can drop pings while web traffic flows.", "role": "best"},
+        {"key": "B", "text": "The ping didn't reach the server", "rationale": "True, but it doesn't say why.", "role": "partial"},
+        {"key": "C", "text": "The web server is down", "rationale": "Users are loading the site.", "role": "related"},
+        {"key": "D", "text": "DNS is resolving the wrong name", "rationale": "Users reach the right site by the same name.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "ping sends ICMP echo requests to test reachability and round-trip time. A failed ping doesn't prove the host is down, because ICMP may be blocked.",
+      "discriminator_tested": "A failed ping does not prove the host is down."
+    },
+    {
+      "objectives": ["C07-05", "C07-04"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "Users can't reach 203.0.113.80. Based on the trace below, where is the problem MOST likely located?",
+      "exhibit": "C:\\> tracert 203.0.113.80\n  1     1 ms     1 ms     1 ms   10.1.4.1\n  2     8 ms     9 ms     8 ms   198.51.100.1\n  3     *        *        *      Request timed out.\n  4     *        *        *      Request timed out.\n  ...\n 30     *        *        *      Request timed out.\nTrace complete.",
+      "options": [
+        {"key": "A", "text": "Just beyond 198.51.100.1", "rationale": "Correct: nothing answers after hop 2.", "role": "best"},
+        {"key": "B", "text": "Somewhere between the PC and the server", "rationale": "True, but the trace narrows it much further.", "role": "partial"},
+        {"key": "C", "text": "At the PC's own default gateway", "rationale": "Hop 1 (the gateway) answered.", "role": "related"},
+        {"key": "D", "text": "On the destination server's web service", "rationale": "Traffic never gets past hop 2, so the server isn't reached.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "tracert (Windows) or traceroute (Linux/macOS) shows each hop along the path to a destination. It locates where along the path connectivity fails: here, nothing answers after hop 2.",
+      "discriminator_tested": "tracert locates where along the path connectivity fails."
+    },
+    {
+      "objectives": ["C07-06", "C07-01"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "An analyst needs to see the actual DNS packets leaving a Linux server's eth0 interface, including their contents. Which command BEST fits?",
+      "options": [
+        {"key": "A", "text": "tcpdump -i eth0 port 53", "rationale": "Correct: captures the packets themselves.", "role": "best"},
+        {"key": "B", "text": "netstat -an | grep 53", "rationale": "Lists sockets, not packet contents.", "role": "related"},
+        {"key": "C", "text": "nslookup example.com", "rationale": "Makes one query; it doesn't capture traffic.", "role": "related"},
+        {"key": "D", "text": "nmap -p 53 localhost", "rationale": "Checks whether a port is open.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "tcpdump is command-line packet capture and analysis (tcpdump -i eth0 port 53). It captures actual packets; netstat only lists connections.",
+      "discriminator_tested": "tcpdump captures packets; netstat lists connections."
+    },
+    {
+      "objectives": ["C07-07", "C07-09"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A scan of the server subnet returns the result below. Which finding should be addressed FIRST?",
+      "exhibit": "$ nmap -sV 10.1.9.0/24\nNmap scan report for 10.1.9.15\nPORT     STATE  SERVICE  VERSION\n22/tcp   open   ssh      OpenSSH 9.6\n23/tcp   open   telnet   Cisco telnetd\n443/tcp  open   https",
+      "options": [
+        {"key": "A", "text": "Telnet is open on 10.1.9.15", "rationale": "Correct: cleartext management access.", "role": "best"},
+        {"key": "B", "text": "SSH is open on 10.1.9.15", "rationale": "Encrypted management is expected.", "role": "related"},
+        {"key": "C", "text": "HTTPS is open on 10.1.9.15", "rationale": "Encrypted web service; not the priority.", "role": "related"},
+        {"key": "D", "text": "The scan ran from a remote host", "rationale": "That is how nmap works; it isn't a finding.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "nmap scans hosts for live devices, open ports, services, and OS details. It probes other hosts, whereas netstat reports only the local host.",
+      "discriminator_tested": "nmap probes other hosts; netstat reports the local host."
+    },
+    {
+      "objectives": ["C07-08"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A new screen-lock policy should have applied to a user's PC, but the screen never locks. Which command BEST confirms whether the policy actually applied?",
+      "options": [
+        {"key": "A", "text": "gpresult /r", "rationale": "Correct: shows the policies actually applied.", "role": "best"},
+        {"key": "B", "text": "netstat -an", "rationale": "Shows network connections.", "role": "related"},
+        {"key": "C", "text": "ipconfig", "rationale": "Shows IP configuration.", "role": "related"},
+        {"key": "D", "text": "nslookup", "rationale": "Queries DNS.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "gpresult shows the Group Policy settings applied to a user or computer (gpresult /r). It is Windows-only and confirms which policies actually applied.",
+      "discriminator_tested": "gpresult confirms which policies actually applied."
+    },
+    {
+      "objectives": ["C07-09", "C07-11"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which question does a port scanner answer?",
+      "options": [
+        {"key": "A", "text": "Which ports are open here?", "rationale": "Correct: open, closed, or filtered ports on a host.", "role": "best"},
+        {"key": "B", "text": "Which hosts are active on this subnet?", "rationale": "That is an IP scanner.", "role": "related"},
+        {"key": "C", "text": "How much throughput does this link carry?", "rationale": "That is iPerf.", "role": "related"},
+        {"key": "D", "text": "Which policies applied to this computer?", "rationale": "That is gpresult.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A port scanner probes a host to find open, closed, or filtered ports: 'which ports on this host?' An IP scanner answers 'which hosts are on this network?'",
+      "discriminator_tested": "Port scanner = which ports on this host."
+    },
+    {
+      "objectives": ["C07-10"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A link between two buildings is supposed to run at 1 Gbps. The test below is run across it. What does the result MOST likely show?",
+      "exhibit": "$ iperf3 -c 10.1.9.50 -t 10\n[ ID] Interval        Transfer     Bitrate\n[  5] 0.00-10.00 sec  112 MBytes   94.0 Mbits/sec   sender\n[  5] 0.00-10.00 sec  111 MBytes   93.4 Mbits/sec   receiver",
+      "options": [
+        {"key": "A", "text": "About a tenth of the expected speed", "rationale": "Correct: about 94 Mbit/s suggests something negotiated at 100 Mbit/s.", "role": "best"},
+        {"key": "B", "text": "The test completed between two endpoints", "rationale": "True, but it misses what the numbers mean.", "role": "partial"},
+        {"key": "C", "text": "Port 5201 is open on 10.1.9.50", "rationale": "Incidental; iPerf isn't a port scanner.", "role": "related"},
+        {"key": "D", "text": "A security scan found no vulnerabilities", "rationale": "iPerf measures performance, not security.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "iPerf measures network throughput between two endpoints (client and server, TCP or UDP). It is performance testing, not security scanning.",
+      "discriminator_tested": "iPerf is performance testing, not security scanning."
+    },
+    {
+      "objectives": ["C07-11", "C07-09"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "After a rogue access point incident, IT wants to find each device currently responding across 10.1.0.0/22, including unknown ones. Which tool BEST fits?",
+      "options": [
+        {"key": "A", "text": "An IP scanner (ping sweep)", "rationale": "Correct: discovers active hosts across a range.", "role": "best"},
+        {"key": "B", "text": "A port scanner on one host", "rationale": "Examines ports on a host you already know about.", "role": "related"},
+        {"key": "C", "text": "iPerf between two PCs", "rationale": "Measures throughput.", "role": "related"},
+        {"key": "D", "text": "gpresult on each PC", "rationale": "Shows policies on known PCs only.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An IP scanner discovers active devices across an address range (a ping sweep). It answers 'which hosts are on this network?' and helps find rogue devices.",
+      "discriminator_tested": "IP scanner = which hosts are on this network."
+    },
+    {
+      "objectives": ["C07-12", "C07-16"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A breach is traced to a forgotten test server that never received patches; IT didn't know it existed. What is the BEST description of the root cause?",
+      "options": [
+        {"key": "A", "text": "No complete hardware inventory", "rationale": "Correct: an unknown device can't be protected.", "role": "best"},
+        {"key": "B", "text": "The server wasn't patched", "rationale": "True, but it wasn't patched because nobody knew it was there.", "role": "partial"},
+        {"key": "C", "text": "The server had no antivirus", "rationale": "Also a consequence of nobody knowing it existed.", "role": "related"},
+        {"key": "D", "text": "The firewall was misconfigured", "rationale": "Nothing points to the firewall.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A hardware inventory records physical devices (type, serial, owner, location, status). You can't protect devices you don't know exist.",
+      "discriminator_tested": "You cannot protect devices you don't know exist."
+    },
+    {
+      "objectives": ["C07-13", "C07-14"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes an asset management system from an asset tag?",
+      "options": [
+        {"key": "A", "text": "System = lifecycle; tag = ID", "rationale": "Correct: the system is the record from purchase to disposal; the tag is the physical identifier.", "role": "best"},
+        {"key": "B", "text": "The tag holds the device's full history", "rationale": "This is reversed.", "role": "related"},
+        {"key": "C", "text": "Both identify the device", "rationale": "True, but it misses the difference.", "role": "partial"},
+        {"key": "D", "text": "The system replaces the need for tags", "rationale": "Tags link physical devices to their records.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Asset management systems track assets from purchase through disposal and are the system of record. A tag is only the physical identifier.",
+      "discriminator_tested": "The system of record vs the physical identifier."
+    },
+    {
+      "objectives": ["C07-14", "C07-13"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "A laptop is found in a meeting room. Which item BEST lets IT tie it to its inventory record?",
+      "options": [
+        {"key": "A", "text": "Its asset tag", "rationale": "Correct: the unique ID links the device to its record.", "role": "best"},
+        {"key": "B", "text": "Its MAC address", "rationale": "Could help, but it isn't the asset record's key.", "role": "related"},
+        {"key": "C", "text": "Its Wi-Fi SSID", "rationale": "The SSID names a network, not a device.", "role": "wrong"},
+        {"key": "D", "text": "Its warranty card", "rationale": "Not attached to the device or tied to the inventory.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "An asset tag is a physical, barcode, or RFID label with a unique ID on a device. It ties the physical device to its inventory record.",
+      "discriminator_tested": "Asset tag ties the device to its record."
+    },
+    {
+      "objectives": ["C07-15", "C07-12"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A vulnerability bulletin lists a flaw in versions 7.0-7.2 of a widely used PDF library. What lets IT find the affected machines fastest?",
+      "options": [
+        {"key": "A", "text": "A versioned software inventory", "rationale": "Correct: it shows which machines run the affected versions.", "role": "best"},
+        {"key": "B", "text": "A hardware inventory of the PCs", "rationale": "Lists devices, not installed software versions.", "role": "related"},
+        {"key": "C", "text": "An IP scan of the network", "rationale": "Finds hosts, not software versions.", "role": "related"},
+        {"key": "D", "text": "Asset tags on each laptop", "rationale": "Tags identify devices, not their software.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A software inventory records installed software, versions, and licenses. Versions reveal vulnerable software; it also flags unauthorized or unlicensed programs.",
+      "discriminator_tested": "Versions reveal vulnerable software."
+    },
+    {
+      "objectives": ["C07-16", "C07-17"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "A vulnerability scan lists 40 critical findings, and the team files the report. Three months later, the same 40 appear. What was MOST clearly missing?",
+      "options": [
+        {"key": "A", "text": "Acting on the findings", "rationale": "Correct: remediation, meaning patching, reconfiguring, removing, or isolating.", "role": "best"},
+        {"key": "B", "text": "A more frequent scanning schedule", "rationale": "More scans find the same problems; discovery alone fixes nothing.", "role": "related"},
+        {"key": "C", "text": "A second scanner to confirm them", "rationale": "Confirmation isn't the gap.", "role": "related"},
+        {"key": "D", "text": "Encryption of the scan report", "rationale": "Irrelevant to fixing anything.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Remediation means fixing or mitigating identified vulnerabilities and non-compliance: patch, reconfigure, remove, or isolate. Discovery alone fixes nothing.",
+      "discriminator_tested": "Remediation acts on findings; discovery alone fixes nothing."
+    },
+    {
+      "objectives": ["C07-17", "C07-16"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A critical patch applies to a hospital's patient-records servers. Which plan BEST reflects sound remediation considerations?",
+      "options": [
+        {"key": "A", "text": "Test, schedule a window, plan rollback", "rationale": "Correct: weighs risk, impact, and recovery.", "role": "best"},
+        {"key": "B", "text": "Deploy it to the servers immediately", "rationale": "Fast, but skips testing on critical systems.", "role": "partial"},
+        {"key": "C", "text": "Wait for the next annual maintenance cycle", "rationale": "Leaves a critical flaw open for months.", "role": "related"},
+        {"key": "D", "text": "Skip it, since patching risks downtime", "rationale": "Leaves the risk unaddressed.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Remediation considerations weigh risk and priority, business impact, testing, maintenance windows, dependencies, and a rollback plan. Test before wide deployment, and prioritize by risk.",
+      "discriminator_tested": "Test before wide deployment; prioritize by risk."
+    },
+    {
+      "objectives": ["C07-18", "C07-19"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "Before donating old PCs, a technician deletes the users' files and empties the Recycle Bin. What BEST describes the problem?",
+      "options": [
+        {"key": "A", "text": "Deleted data can still be recovered", "rationale": "Correct: deleting isn't sanitizing.", "role": "best"},
+        {"key": "B", "text": "The donation wasn't documented", "rationale": "Documentation matters, but the data is the main problem.", "role": "related"},
+        {"key": "C", "text": "The PCs should be reformatted instead", "rationale": "A standard format also leaves data recoverable.", "role": "related"},
+        {"key": "D", "text": "Recycle Bin contents are encrypted", "rationale": "They aren't.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Destruction and disposal means retiring devices and media so data can't be recovered, following policy and documenting it. Deleting files isn't sanitizing.",
+      "discriminator_tested": "Deleting files is not sanitizing."
+    },
+    {
+      "objectives": ["C07-19", "C07-21"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes a low-level format from a standard format?",
+      "options": [
+        {"key": "A", "text": "It overwrites the sectors themselves", "rationale": "Correct: a standard format only rebuilds file system structures.", "role": "best"},
+        {"key": "B", "text": "It takes much longer to complete", "rationale": "Usually true, but not the defining difference.", "role": "partial"},
+        {"key": "C", "text": "It rebuilds the file system tables", "rationale": "That is what a standard format does.", "role": "related"},
+        {"key": "D", "text": "It encrypts the drive before formatting", "rationale": "Formatting doesn't encrypt.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A standard format rebuilds file system structures; a low-level format overwrites every sector. A standard format leaves data recoverable.",
+      "discriminator_tested": "Standard format leaves data recoverable."
+    },
+    {
+      "objectives": ["C07-20", "C07-23"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "Drives that held top-secret data are being retired and won't be reused. Which method BEST fits?",
+      "options": [
+        {"key": "A", "text": "Physical destruction", "rationale": "Correct: the most certain method, and reuse isn't needed.", "role": "best"},
+        {"key": "B", "text": "A multi-pass overwrite", "rationale": "Suits reuse, but the highest sensitivity points to destruction.", "role": "partial"},
+        {"key": "C", "text": "A standard format", "rationale": "Leaves data recoverable.", "role": "related"},
+        {"key": "D", "text": "Deleting the files", "rationale": "Leaves data recoverable.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Hard drive sanitization makes data unrecoverable; the method depends on data sensitivity and whether the drive will be reused. Reuse allows overwrite or wipe; the highest sensitivity points to destruction.",
+      "discriminator_tested": "Highest sensitivity points to destruction."
+    },
+    {
+      "objectives": ["C07-21", "C07-23"], "type": "single", "angle": "assess-risk", "difficulty": 3,
+      "stem": "A team plans to overwrite retired SSDs with zeros before reselling them. What is the MAIN concern?",
+      "options": [
+        {"key": "A", "text": "SSDs may keep data in unreachable cells", "rationale": "Correct: wear levelling and spare cells can escape an overwrite.", "role": "best"},
+        {"key": "B", "text": "Overwriting takes a long time", "rationale": "True, but time isn't the security concern.", "role": "partial"},
+        {"key": "C", "text": "Degaussing would be faster", "rationale": "Degaussing doesn't work on SSDs.", "role": "related"},
+        {"key": "D", "text": "Zeros can be decrypted back to data", "rationale": "Overwriting isn't encryption.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Overwrite writes patterns over all addressable areas of the media in one or more passes. It allows reuse but is less reliable on SSDs and failed sectors.",
+      "discriminator_tested": "Overwrite is less reliable on SSDs."
+    }
+  ]
+}

@@ -1,0 +1,633 @@
+{
+  "questions": [
+    {
+      "objectives": ["C01-01"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "A web server becomes unreachable. Logs show the flood of requests is arriving from about 40,000 different IP addresses in many countries. Which term best describes this attack?",
+      "options": [
+        {"key": "A", "text": "DDoS", "rationale": "Correct: the requests come from many distributed sources at once."},
+        {"key": "B", "text": "DoS", "rationale": "A DoS comes from a single source; the logs show tens of thousands of sources."},
+        {"key": "C", "text": "Traffic spike", "rationale": "A traffic spike is only the symptom and can be legitimate; it does not name an attack."},
+        {"key": "D", "text": "Smurf attack", "rationale": "Smurf is a specific ICMP broadcast technique; nothing here points to ICMP echo replies from a broadcast network."}
+      ],
+      "answer": ["A"],
+      "explanation": "The number of sources is what separates the two: one source is a DoS, while many distributed sources make it a distributed denial of service (DDoS).",
+      "discriminator_tested": "DDoS uses many distributed sources; DoS comes from one."
+    },
+    {
+      "objectives": ["C01-02", "C01-03"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "An analyst finds that 300 home routers have been compromised and now wait for instructions from a server the attacker controls. Which term describes the 300 compromised routers as a group?",
+      "options": [
+        {"key": "A", "text": "Botnet", "rationale": "Correct: a botnet is the collection of compromised devices under attacker control."},
+        {"key": "B", "text": "Command and control (C2)", "rationale": "C2 is the server or channel that sends the orders, not the devices receiving them."},
+        {"key": "C", "text": "DDoS", "rationale": "A DDoS is an attack the routers might later launch; the routers are the means, not the attack."},
+        {"key": "D", "text": "Advanced persistent threat", "rationale": "An APT is a long-term targeted intrusion against a chosen organization, not a pool of hijacked devices."}
+      ],
+      "answer": ["A"],
+      "explanation": "A botnet is the army of compromised devices. The command and control server is the path that gives them orders, and a DDoS is one thing the botnet can be used for.",
+      "discriminator_tested": "Botnet = the compromised devices; C2 = the control path."
+    },
+    {
+      "objectives": ["C01-03"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "Firewall logs show several internal workstations each contacting the same unfamiliar external domain every 60 seconds with small encrypted messages, occasionally downloading new instructions. What is this traffic most likely to be?",
+      "options": [
+        {"key": "A", "text": "Command and control (C2) beaconing", "rationale": "Correct: compromised hosts regularly check in with an attacker server to receive orders."},
+        {"key": "B", "text": "A traffic spike", "rationale": "Small periodic messages are low volume; nothing describes a sudden surge."},
+        {"key": "C", "text": "DNS poisoning", "rationale": "DNS poisoning sends users to the wrong IP for a correct name; nothing shows forged DNS records."},
+        {"key": "D", "text": "Worm propagation", "rationale": "A worm spreads by reaching other vulnerable hosts; this traffic goes to one external server to collect instructions."}
+      ],
+      "answer": ["A"],
+      "explanation": "Regular check-ins from compromised hosts to an attacker-controlled server are the command and control channel. The hosts themselves would be members of a botnet.",
+      "discriminator_tested": "C2 is the control path to compromised devices, not the devices or the attack."
+    },
+    {
+      "objectives": ["C01-04"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A monitoring tool alerts that inbound traffic to the company website tripled within five minutes. Before any other information is gathered, which conclusion is justified?",
+      "options": [
+        {"key": "A", "text": "A traffic spike has occurred; its cause could be malicious or legitimate", "rationale": "Correct: the alert shows a symptom only, and the cause still has to be investigated."},
+        {"key": "B", "text": "The website is under a DDoS attack", "rationale": "This jumps to a malicious cause; a surge alone does not prove an attack."},
+        {"key": "C", "text": "The website is suffering a friendly DoS", "rationale": "This also assumes a cause (legitimate demand) without any evidence yet."},
+        {"key": "D", "text": "The website's visitors have been recruited into a botnet", "rationale": "Nothing in a volume alert says anything about compromised devices."}
+      ],
+      "answer": ["A"],
+      "explanation": "A traffic spike is a symptom, not a diagnosis. It can come from an attack or from legitimate demand, so it must be investigated before it is labelled.",
+      "discriminator_tested": "A traffic spike is only a symptom; the cause may be malicious or legitimate."
+    },
+    {
+      "objectives": ["C01-05"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "At exactly 02:00 UTC, five separate attacker groups begin hitting different parts of a company's network at the same moment, clearly following a shared plan. Which term puts the emphasis on this synchronization between sources?",
+      "options": [
+        {"key": "A", "text": "Coordinated attack", "rationale": "Correct: the defining feature is multiple actors acting together in sync."},
+        {"key": "B", "text": "Smurf attack", "rationale": "Smurf is a specific ICMP broadcast technique and says nothing about synchronized actors."},
+        {"key": "C", "text": "Insider threat", "rationale": "Insider threats come from people with legitimate access; these groups are outside attackers."},
+        {"key": "D", "text": "Friendly DoS", "rationale": "A friendly DoS has no attacker or intent; this activity is deliberate."}
+      ],
+      "answer": ["A"],
+      "explanation": "A coordinated attack is defined by multiple sources or actors acting together. It overlaps with DDoS, but the term stresses synchronization rather than the number of sources.",
+      "discriminator_tested": "Coordinated attack stresses synchronization among multiple actors."
+    },
+    {
+      "objectives": ["C01-06"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "A small charity's donation page goes offline minutes after a celebrity shares the link with millions of followers. Server logs show huge numbers of normal page requests from real browsers all over the world. What best describes the outage?",
+      "options": [
+        {"key": "A", "text": "Friendly (unintentional) DoS", "rationale": "Correct: legitimate demand overwhelmed the service and nobody intended harm."},
+        {"key": "B", "text": "DDoS attack", "rationale": "There are many sources, but a DDoS requires an attacker; intent is what is missing here."},
+        {"key": "C", "text": "Botnet activity", "rationale": "The requests come from real users' browsers, not from compromised devices under an attacker's control."},
+        {"key": "D", "text": "Permanent DoS", "rationale": "A permanent DoS corrupts firmware; this site will recover as soon as demand drops."}
+      ],
+      "answer": ["A"],
+      "explanation": "The many sources point toward DDoS, but no one meant to cause harm. Legitimate demand that overwhelms a service is a friendly or unintentional DoS.",
+      "discriminator_tested": "Intent: a friendly DoS has no attacker, even with many sources."
+    },
+    {
+      "objectives": ["C01-07"], "type": "single", "angle": "symptom-to-attack", "difficulty": 1,
+      "stem": "Every network device in a branch office goes offline at once. IDS logs show no unusual traffic beforehand, and a technician later finds the fiber cable outside the building has been deliberately cut. Which type of attack occurred?",
+      "options": [
+        {"key": "A", "text": "Physical attack", "rationale": "Correct: infrastructure was physically damaged, so no attack traffic was generated."},
+        {"key": "B", "text": "DDoS", "rationale": "A DDoS would show a flood of traffic before the outage; none was logged."},
+        {"key": "C", "text": "Permanent DoS", "rationale": "A permanent DoS corrupts device firmware; the devices here are undamaged."},
+        {"key": "D", "text": "SYN flood", "rationale": "A SYN flood needs a stream of TCP SYN packets; no such traffic was seen."}
+      ],
+      "answer": ["A"],
+      "explanation": "A physical attack hits availability by damaging, cutting, or powering off infrastructure, so it produces no attack traffic for network tools to detect.",
+      "discriminator_tested": "Physical attacks hit availability without generating network traffic."
+    },
+    {
+      "objectives": ["C01-08"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "After an attack, a company's edge router will not boot, even after repeated power cycles. The vendor reports that its firmware was overwritten with corrupt code and the device must be reflashed or replaced. Which attack does this describe?",
+      "options": [
+        {"key": "A", "text": "Permanent DoS", "rationale": "Correct: corrupted firmware leaves the device unusable until it is reflashed or replaced."},
+        {"key": "B", "text": "SYN flood", "rationale": "A SYN flood ends when the traffic stops and does not damage the device itself."},
+        {"key": "C", "text": "Rootkit", "rationale": "A rootkit hides to keep stealthy access, so the attacker wants a working device, not a dead one."},
+        {"key": "D", "text": "Physical attack", "rationale": "Nothing was physically damaged; the harm was done by overwriting firmware."}
+      ],
+      "answer": ["A"],
+      "explanation": "A permanent DoS (PDoS) corrupts firmware so the device cannot run. A reboot does not fix it, unlike floods that end when the traffic stops.",
+      "discriminator_tested": "A PDoS needs a reflash or replacement; a reboot won't fix it."
+    },
+    {
+      "objectives": ["C01-09"], "type": "multi", "angle": "symptom-to-attack", "difficulty": 3,
+      "stem": "An analyst suspects a Smurf attack against a server. Which two observations would support that conclusion? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "ICMP echo requests are being sent to a network broadcast address", "rationale": "Correct: sending echo requests to a broadcast address makes many hosts answer at once."},
+        {"key": "B", "text": "The echo requests carry the server's IP address as a spoofed source", "rationale": "Correct: the spoofed source makes every reply go to the victim."},
+        {"key": "C", "text": "The server's table of half-open TCP connections is full", "rationale": "That points to a SYN flood, which uses TCP, not ICMP."},
+        {"key": "D", "text": "Forged ARP replies map the gateway IP to an unknown MAC address", "rationale": "That indicates ARP spoofing on the local subnet."},
+        {"key": "E", "text": "Users typing the correct domain name reach the wrong IP address", "rationale": "That indicates DNS poisoning."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A Smurf attack sends ICMP echo requests to a broadcast address with the victim's spoofed source IP, so many hosts reply to the victim and flood it.",
+      "discriminator_tested": "Smurf = ICMP echo to a broadcast address with the victim's spoofed source."
+    },
+    {
+      "objectives": ["C01-10"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A web server stops accepting new connections. A packet capture shows thousands of TCP SYN packets arriving, the server answering each with a SYN-ACK, and no final ACK ever coming back. Which resource is the attacker exhausting?",
+      "options": [
+        {"key": "A", "text": "The server's table of half-open TCP connections", "rationale": "Correct: each unfinished handshake holds a slot until the table is full."},
+        {"key": "B", "text": "The server's link bandwidth, through ICMP replies from a broadcast network", "rationale": "That is how a Smurf attack works; the capture shows TCP handshakes, not ICMP."},
+        {"key": "C", "text": "The gateway's ARP cache, through forged replies", "rationale": "That describes ARP spoofing, which redirects traffic rather than blocking connections."},
+        {"key": "D", "text": "The resolver's cache, through false DNS records", "rationale": "That describes DNS poisoning, which misdirects users rather than exhausting a server."}
+      ],
+      "answer": ["A"],
+      "explanation": "In a SYN flood the attacker sends SYNs and never completes the three-way handshake, so the half-open connection table fills and legitimate connections are refused.",
+      "discriminator_tested": "A SYN flood fills the half-open connection table."
+    },
+    {
+      "objectives": ["C01-11"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "An attacker sends 60-byte DNS queries with the victim's spoofed source address to thousands of open resolvers, and each resolver sends a 3,000-byte response to the victim. Which feature makes this an amplified attack rather than only a reflective one?",
+      "options": [
+        {"key": "A", "text": "Each response is much larger than the request that triggered it", "rationale": "Correct: amplification means the response is bigger than the request."},
+        {"key": "B", "text": "Third-party servers send the traffic to the victim", "rationale": "That is reflection, which is true of both reflective and amplified attacks."},
+        {"key": "C", "text": "The source address in each query is spoofed", "rationale": "Spoofing is needed to reflect traffic at the victim but says nothing about size."},
+        {"key": "D", "text": "Many servers are involved at the same time", "rationale": "The number of servers makes it distributed; it does not define amplification."}
+      ],
+      "answer": ["A"],
+      "explanation": "Reflective attacks bounce spoofed requests off third-party servers toward the victim. An amplified attack adds a size difference: a small request triggers a much larger response.",
+      "discriminator_tested": "Reflective = a third party bounces it; amplified = the response is larger than the request."
+    },
+    {
+      "objectives": ["C01-12", "C01-15"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "On a hotel network, an attacker uses forged ARP replies so that a guest's traffic to the gateway passes through the attacker's laptop, then reads and alters the guest's unencrypted web session in real time. Which term describes the attacker's position and goal, regardless of how the traffic was redirected?",
+      "options": [
+        {"key": "A", "text": "On-path attack (formerly called man-in-the-middle)", "rationale": "Correct: the attacker sits between two parties to read or alter a live session."},
+        {"key": "B", "text": "ARP spoofing", "rationale": "ARP spoofing is the technique used to get into position, not the name for the position and goal."},
+        {"key": "C", "text": "DNS poisoning", "rationale": "DNS poisoning sends users to a wrong IP through false records; it does not describe intercepting a live session."},
+        {"key": "D", "text": "Shoulder surfing", "rationale": "Shoulder surfing is visual observation with no technical interception."}
+      ],
+      "answer": ["A"],
+      "explanation": "An on-path attacker sits between two parties in a live session, breaking confidentiality and integrity. ARP spoofing is one common way to get into that position on a local subnet.",
+      "discriminator_tested": "On-path = positioned between parties in a live session; ARP spoofing is one way to get there."
+    },
+    {
+      "objectives": ["C01-13"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "Several employees type their bank's correct web address and land on a convincing fake login page. Investigation shows the company DNS resolver's cache holds a false record for the bank's domain. Which attack occurred?",
+      "options": [
+        {"key": "A", "text": "DNS poisoning", "rationale": "Correct: a false record in the resolver cache sends the right name to the wrong IP."},
+        {"key": "B", "text": "Phishing", "rationale": "Phishing relies on a fraudulent message with a link; these users typed the correct address themselves."},
+        {"key": "C", "text": "ARP spoofing", "rationale": "ARP spoofing maps MAC addresses to IPs on the local subnet; it does not change domain name records."},
+        {"key": "D", "text": "Evil twin", "rationale": "An evil twin is a fake wireless network; the fault here is in the resolver cache."}
+      ],
+      "answer": ["A"],
+      "explanation": "DNS poisoning inserts false records into a resolver or cache, so users who enter the right name still reach the wrong IP address.",
+      "discriminator_tested": "DNS poisoning: right name typed, wrong IP reached."
+    },
+    {
+      "objectives": ["C01-14", "C01-35"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "An attacker on VLAN 1 sends frames carrying two 802.1Q tags, so the first switch strips the outer tag and forwards the frame into VLAN 20. Which change most directly counters this double-tagging form of VLAN hopping?",
+      "options": [
+        {"key": "A", "text": "Change the native VLAN to an unused VLAN ID", "rationale": "Correct: double tagging depends on the native VLAN, so moving it removes the path."},
+        {"key": "B", "text": "Enable DHCP snooping", "rationale": "DHCP snooping counters rogue DHCP servers, not VLAN tagging tricks."},
+        {"key": "C", "text": "Upgrade the switches' firmware", "rationale": "Firmware upgrades fix device code flaws; double tagging abuses the native VLAN configuration."},
+        {"key": "D", "text": "Block common passwords", "rationale": "Blocking common passwords counters dictionary attacks."}
+      ],
+      "answer": ["A"],
+      "explanation": "Double tagging exploits the native VLAN, whose tag is stripped on trunk links. Changing the native VLAN off the default to an unused ID closes this VLAN hopping path.",
+      "discriminator_tested": "Double tagging exploits the native VLAN."
+    },
+    {
+      "objectives": ["C01-15"], "type": "single", "angle": "which-is-not", "difficulty": 3,
+      "stem": "Which statement about ARP spoofing is NOT true?",
+      "options": [
+        {"key": "A", "text": "It can redirect traffic for hosts on remote networks across the internet", "rationale": "Correct choice because it is false: ARP works only within the local subnet."},
+        {"key": "B", "text": "It sends forged ARP replies linking the attacker's MAC address to another host's IP", "rationale": "True: this is how ARP spoofing works."},
+        {"key": "C", "text": "It is commonly used to set up an on-path attack", "rationale": "True: redirecting traffic through the attacker is a common goal."},
+        {"key": "D", "text": "It works only within the local subnet", "rationale": "True: ARP is not routed beyond the local segment."}
+      ],
+      "answer": ["A"],
+      "explanation": "ARP maps IP addresses to MAC addresses only on the local subnet, so ARP spoofing is limited to that segment, where it often enables an on-path attack.",
+      "discriminator_tested": "ARP spoofing is local-subnet only."
+    },
+    {
+      "objectives": ["C01-16", "C01-34"], "type": "multi", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "Users on one floor suddenly receive IP settings with an unknown default gateway and DNS server, while the official DHCP server shows no leases for them. Which two statements are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A rogue DHCP server is handing out the bad gateway and DNS settings", "rationale": "Correct: an unauthorized DHCP server is answering the users' requests."},
+        {"key": "B", "text": "DHCP snooping, with only the legitimate server's port trusted, would block these offers", "rationale": "Correct: the switch would drop DHCP offers arriving on untrusted ports."},
+        {"key": "C", "text": "Changing the native VLAN would block these offers", "rationale": "Changing the native VLAN counters double-tagging VLAN hopping, not DHCP."},
+        {"key": "D", "text": "This is a Smurf attack against the DHCP server", "rationale": "Smurf uses ICMP echo to a broadcast address; nothing here involves ICMP."},
+        {"key": "E", "text": "Patching the users' operating systems would stop the offers", "rationale": "The rogue server is not exploiting a software flaw on the users' machines."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A rogue DHCP server can hand out a malicious gateway or DNS server. DHCP snooping lets the switch accept offers only from trusted ports, which blocks it.",
+      "discriminator_tested": "Rogue DHCP is countered by DHCP snooping (trusted vs untrusted ports)."
+    },
+    {
+      "objectives": ["C01-17", "C01-02"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "Thousands of internet-connected cameras still using their factory login and outdated firmware are taken over and used to flood a game server. Which weakness was the root problem?",
+      "options": [
+        {"key": "A", "text": "IoT vulnerabilities such as default credentials and unpatched firmware", "rationale": "Correct: these weaknesses let the attacker take over the cameras in the first place."},
+        {"key": "B", "text": "A traffic spike on the game server", "rationale": "The traffic spike is the result seen by the victim, not the cause."},
+        {"key": "C", "text": "An insider threat at the camera manufacturer", "rationale": "Nothing suggests an insider; the problem is how the devices were left configured."},
+        {"key": "D", "text": "DNS poisoning of the camera vendor's domain", "rationale": "Nothing indicates false DNS records were involved."}
+      ],
+      "answer": ["A"],
+      "explanation": "IoT vulnerabilities, especially default credentials and unpatched firmware, let attackers recruit devices into botnets. The flood and traffic spike are the effect.",
+      "discriminator_tested": "IoT weaknesses (defaults, unpatched firmware) are the cause; botnet floods are the effect."
+    },
+    {
+      "objectives": ["C01-18", "C01-19"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "An employee plugs a personal wireless access point into the network jack at their desk so they can use a tablet. It broadcasts its own new SSID. Which term applies, and why?",
+      "options": [
+        {"key": "A", "text": "Rogue AP, because it is an unauthorized access point connected inside the wired network", "rationale": "Correct: it creates a backdoor into the network, even without malicious intent."},
+        {"key": "B", "text": "Evil twin, because it is an unauthorized wireless network", "rationale": "An evil twin imitates a legitimate SSID to trick users; this device uses its own name."},
+        {"key": "C", "text": "VLAN hopping, because wireless clients can reach another VLAN", "rationale": "VLAN hopping abuses switch tagging; nothing here involves tags or trunks."},
+        {"key": "D", "text": "On-path attack, because the device sits between users and the network", "rationale": "An on-path attacker deliberately intercepts sessions; no one is intercepting traffic here."}
+      ],
+      "answer": ["A"],
+      "explanation": "A rogue AP is any unauthorized access point plugged into the wired network, creating a backdoor. An evil twin instead imitates a legitimate SSID to fool users.",
+      "discriminator_tested": "A rogue AP sits inside your network; an evil twin imitates a legitimate SSID to target users."
+    },
+    {
+      "objectives": ["C01-19", "C01-18"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "At an airport, travelers connect to a network named exactly like the airport's free Wi-Fi. The access point is really a laptop run by an attacker, which captures the travelers' traffic. It is not connected to the airport's network. What is this?",
+      "options": [
+        {"key": "A", "text": "Evil twin", "rationale": "Correct: a fake AP imitating a legitimate SSID to lure users."},
+        {"key": "B", "text": "Rogue AP", "rationale": "A rogue AP is plugged into the organization's own wired network; this one is not."},
+        {"key": "C", "text": "VLAN hopping", "rationale": "VLAN hopping reaches another VLAN on a switched network; it is not wireless impersonation."},
+        {"key": "D", "text": "Smishing", "rationale": "Smishing is phishing by text message."}
+      ],
+      "answer": ["A"],
+      "explanation": "An evil twin imitates a legitimate SSID to lure users and targets the users themselves. A rogue AP is an unauthorized device inside the organization's network.",
+      "discriminator_tested": "An evil twin imitates a legitimate SSID and targets users."
+    },
+    {
+      "objectives": ["C01-20"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A clinic's file servers suddenly show every document renamed with a .locked extension and a note demanding cryptocurrency for a decryption key. Investigators find no evidence that any data left the network. Which malware is this?",
+      "options": [
+        {"key": "A", "text": "Ransomware", "rationale": "Correct: data is encrypted and held for payment."},
+        {"key": "B", "text": "Spyware", "rationale": "Spyware quietly collects data; this attack is overt extortion."},
+        {"key": "C", "text": "Rootkit", "rationale": "A rootkit is defined by hiding; this attacker announces itself."},
+        {"key": "D", "text": "Adware", "rationale": "Adware serves unwanted ads and does not encrypt files."}
+      ],
+      "answer": ["A"],
+      "explanation": "Ransomware encrypts data and demands payment for the key. The data is held hostage, not necessarily stolen, which fits the lack of exfiltration.",
+      "discriminator_tested": "Ransomware holds data for payment; it is not necessarily stolen."
+    },
+    {
+      "objectives": ["C01-21"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A user downloads a free PDF converter that works as advertised but also silently opens a backdoor. The malware never copies itself to other files or computers. Which classification fits best?",
+      "options": [
+        {"key": "A", "text": "Trojan", "rationale": "Correct: it is disguised as useful software, the user runs it, and it does not replicate."},
+        {"key": "B", "text": "Worm", "rationale": "A worm copies itself across networks with no user action."},
+        {"key": "C", "text": "Virus", "rationale": "A virus attaches to other files to spread; this one never copies itself."},
+        {"key": "D", "text": "Adware", "rationale": "Adware delivers ads; a hidden backdoor is a different goal."}
+      ],
+      "answer": ["A"],
+      "explanation": "A Trojan is disguised as legitimate software, needs the user to run it, and does not self-replicate, which separates it from viruses and worms.",
+      "discriminator_tested": "Trojan: disguised, user-run, no self-replication."
+    },
+    {
+      "objectives": ["C01-22", "C01-23"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two characteristics distinguish a worm from a virus? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "It spreads across networks without any user action", "rationale": "Correct: a worm propagates by itself, while a virus needs a user to run its host."},
+        {"key": "B", "text": "It does not need to attach to a host file", "rationale": "Correct: a worm is self-contained, while a virus lives inside a legitimate file."},
+        {"key": "C", "text": "It disguises itself as useful software the user installs", "rationale": "That describes a Trojan."},
+        {"key": "D", "text": "It encrypts files and demands payment", "rationale": "That describes ransomware."},
+        {"key": "E", "text": "It records every key the user presses", "rationale": "That describes a keylogger."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A worm self-replicates over networks with no user action and no host file. A virus needs both a host file and a user action to spread.",
+      "discriminator_tested": "A worm needs no user action and no host file."
+    },
+    {
+      "objectives": ["C01-23"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Which sequence correctly describes how a typical file-infecting virus spreads?",
+      "options": [
+        {"key": "A", "text": "It attaches to a legitimate program; a user runs that program; the virus code runs and infects other files", "rationale": "Correct: a virus needs a host file and a user action."},
+        {"key": "B", "text": "It scans the network for vulnerable hosts; it copies itself to them; no user action is needed", "rationale": "That is how a worm spreads."},
+        {"key": "C", "text": "A user installs software that looks useful; hidden code opens a backdoor; it never copies itself", "rationale": "That is a Trojan."},
+        {"key": "D", "text": "An attacker sends spoofed requests; third-party servers reply to the victim; the victim's link is flooded", "rationale": "That is a reflective attack, not malware spreading."}
+      ],
+      "answer": ["A"],
+      "explanation": "A virus travels inside a legitimate program and runs only when that program is executed. Needing a host file and a user action is what separates it from a worm.",
+      "discriminator_tested": "A virus needs a host file and a user action to spread."
+    },
+    {
+      "objectives": ["C01-24"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Software on a laptop quietly records the websites visited, files opened, and the device's location, then uploads this data to a remote server. The user sees no pop-ups or slowdowns. Which category fits best?",
+      "options": [
+        {"key": "A", "text": "Spyware", "rationale": "Correct: its goal is covert collection of user activity and data."},
+        {"key": "B", "text": "Adware", "rationale": "Adware is about delivering ads, which the user would see."},
+        {"key": "C", "text": "Keylogger", "rationale": "A keylogger captures keystrokes specifically; this software gathers much broader activity."},
+        {"key": "D", "text": "Ransomware", "rationale": "Ransomware is overt and encrypts data for payment."}
+      ],
+      "answer": ["A"],
+      "explanation": "Spyware secretly collects user activity and data. A keylogger is a narrower capture method for keystrokes, and adware is about serving ads.",
+      "discriminator_tested": "Spyware's goal is covert information gathering."
+    },
+    {
+      "objectives": ["C01-25"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "A user's banking password is stolen even though the bank's site uses HTTPS and the user never wrote it down. Forensics finds a small program that captured every key pressed and saved it to a hidden file. What specific tool was used?",
+      "options": [
+        {"key": "A", "text": "Keylogger", "rationale": "Correct: it recorded keystrokes on the device before encryption could protect them."},
+        {"key": "B", "text": "On-path attack", "rationale": "HTTPS protects data in transit; the capture happened on the endpoint itself."},
+        {"key": "C", "text": "Shoulder surfing", "rationale": "Shoulder surfing is a person watching; here a program did the capturing."},
+        {"key": "D", "text": "Dictionary attack", "rationale": "A dictionary attack guesses likely passwords; this password was captured, not guessed."}
+      ],
+      "answer": ["A"],
+      "explanation": "A keylogger records keystrokes on the device, capturing credentials before encryption protects them in transit. It is often delivered by a Trojan or spyware.",
+      "discriminator_tested": "A keylogger is a specific keystroke-capture method on the endpoint."
+    },
+    {
+      "objectives": ["C01-26"], "type": "single", "angle": "symptom-to-attack", "difficulty": 3,
+      "stem": "Antivirus scans report a server as clean, yet outbound connections to an attacker's server continue. When the disk is examined from a separate, trusted boot environment, hidden files and a modified kernel driver appear. What best explains why the scans missed it?",
+      "options": [
+        {"key": "A", "text": "A rootkit is hiding itself and other malware from the running operating system", "rationale": "Correct: concealment at kernel level fools tools running on the infected system."},
+        {"key": "B", "text": "Adware is running in the background", "rationale": "Adware shows ads and is not designed to hide at kernel level."},
+        {"key": "C", "text": "A worm is spreading to other servers", "rationale": "Worms are defined by how they spread, not by hiding from scans."},
+        {"key": "D", "text": "A traffic spike is masking the connections", "rationale": "A traffic spike is a symptom and cannot hide files from a scanner."}
+      ],
+      "answer": ["A"],
+      "explanation": "A rootkit embeds in the OS kernel or firmware to keep privileged, stealthy access. It hides itself and other malware, so tools on the infected system can be fooled.",
+      "discriminator_tested": "Rootkits are defined by concealment."
+    },
+    {
+      "objectives": ["C01-27", "C01-28"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "After installing a free game, a user's browser keeps opening unwanted shopping pop-ups and the PC runs slower. Nothing has been stolen or encrypted. What is the most likely cause?",
+      "options": [
+        {"key": "A", "text": "Adware bundled with the free game", "rationale": "Correct: installed software is serving unwanted ads and slowing the PC."},
+        {"key": "B", "text": "Malvertising on a legitimate website", "rationale": "Malvertising comes through ad networks on websites; here the cause is software installed on the PC."},
+        {"key": "C", "text": "Ransomware", "rationale": "Ransomware would encrypt files and demand payment."},
+        {"key": "D", "text": "Rootkit", "rationale": "A rootkit hides; constant pop-ups are the opposite of stealth."}
+      ],
+      "answer": ["A"],
+      "explanation": "Adware delivers unwanted ads and is often bundled with free software. It is mainly a nuisance and tracking problem and can slow performance.",
+      "discriminator_tested": "Adware is installed software serving ads; malvertising rides on ad networks."
+    },
+    {
+      "objectives": ["C01-28", "C01-27"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "Visitors to a major, well-maintained news site are redirected to an exploit page. The site's own servers are not compromised; the malicious code arrived in a banner supplied by a third-party ad network. What is this?",
+      "options": [
+        {"key": "A", "text": "Malvertising", "rationale": "Correct: a malicious ad delivered through an ad network on a legitimate site."},
+        {"key": "B", "text": "Adware", "rationale": "Adware is software installed on the victim's device; nothing was installed beforehand here."},
+        {"key": "C", "text": "DNS poisoning", "rationale": "The site's name resolved correctly; the redirect came from ad content."},
+        {"key": "D", "text": "Phishing", "rationale": "Phishing uses a fraudulent message; these users visited a legitimate site on their own."}
+      ],
+      "answer": ["A"],
+      "explanation": "Malvertising places malicious ads on legitimate sites through ad networks, so the site itself isn't compromised. Adware is software installed on the victim's device.",
+      "discriminator_tested": "Malvertising rides on ad networks; the host site isn't compromised."
+    },
+    {
+      "objectives": ["C01-29"], "type": "multi", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "An attacker is trying every possible combination of characters against a login page. Which two controls most directly defeat this brute force approach? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Lock accounts after a small number of failed attempts", "rationale": "Correct: the attacker can no longer make enough guesses."},
+        {"key": "B", "text": "Require longer passwords", "rationale": "Correct: each added character multiplies the number of combinations to try."},
+        {"key": "C", "text": "Block passwords that appear on common-password lists", "rationale": "This counters dictionary attacks; an exhaustive search tries every combination anyway."},
+        {"key": "D", "text": "Enable DHCP snooping", "rationale": "DHCP snooping counters rogue DHCP servers."},
+        {"key": "E", "text": "Change the native VLAN", "rationale": "Changing the native VLAN counters double-tagging VLAN hopping."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Brute force is exhaustive and slow. Lockouts stop it from making enough guesses, and longer passwords make the search space too large to finish.",
+      "discriminator_tested": "Brute force tries everything; lockouts and length defeat it."
+    },
+    {
+      "objectives": ["C01-30", "C01-33"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "Logs show an attacker trying 'password1', 'Summer2026', 'letmein', and 'qwerty' against many accounts, rather than every possible character combination. Which attack is this, and which control best counters it?",
+      "options": [
+        {"key": "A", "text": "Dictionary attack; block common passwords", "rationale": "Correct: the guesses come from a list of likely passwords."},
+        {"key": "B", "text": "Brute force attack; block common passwords", "rationale": "Brute force tries every combination; this attacker is using a short list."},
+        {"key": "C", "text": "Dictionary attack; change the native VLAN", "rationale": "The attack is named correctly, but the native VLAN has nothing to do with passwords."},
+        {"key": "D", "text": "Brute force attack; change default credentials", "rationale": "Both halves are wrong: this is list-based guessing, and the accounts are not using defaults."}
+      ],
+      "answer": ["A"],
+      "explanation": "A dictionary attack tries likely passwords from a precompiled list, not every combination. Blocking common passwords removes exactly the guesses it relies on.",
+      "discriminator_tested": "A dictionary attack guesses likely passwords from a list."
+    },
+    {
+      "objectives": ["C01-31"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which characteristic is NOT typical of an Advanced Persistent Threat (APT)?",
+      "options": [
+        {"key": "A", "text": "A short, noisy attack that ends within hours", "rationale": "Correct choice because it is not typical: APTs are long-term and stealthy."},
+        {"key": "B", "text": "A long dwell time inside the target network", "rationale": "Typical: persistence is the defining feature."},
+        {"key": "C", "text": "A specific, deliberately chosen target", "rationale": "Typical: APTs are targeted."},
+        {"key": "D", "text": "A well-resourced attacker, such as a nation-state group", "rationale": "Typical: APTs are often backed by significant resources."}
+      ],
+      "answer": ["A"],
+      "explanation": "An APT is a stealthy, long-term, targeted intrusion, often by a well-resourced group. It is defined by persistence and dwell time, the opposite of a brief, noisy attack.",
+      "discriminator_tested": "An APT is defined by persistence and dwell time."
+    },
+    {
+      "objectives": ["C01-32", "C01-17"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 1,
+      "stem": "Before installing new smart thermostats, an administrator replaces each vendor-supplied admin username and password with unique ones. Which threat does this most directly address?",
+      "options": [
+        {"key": "A", "text": "Attackers logging in with publicly documented default credentials", "rationale": "Correct: vendor logins are published and widely abused against IoT devices."},
+        {"key": "B", "text": "Double-tagging VLAN hopping", "rationale": "That is countered by changing the native VLAN."},
+        {"key": "C", "text": "Rogue DHCP servers", "rationale": "That is countered by DHCP snooping."},
+        {"key": "D", "text": "Malvertising", "rationale": "Malvertising arrives through ad networks on websites."}
+      ],
+      "answer": ["A"],
+      "explanation": "Default credentials are published in manuals and online. Changing default credentials before deployment blocks one of the most common ways IoT devices are taken over.",
+      "discriminator_tested": "Changing default credentials counters default-login exploitation."
+    },
+    {
+      "objectives": ["C01-33", "C01-30"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "An attacker runs a list of the 10,000 most popular passwords against a company's VPN portal. Which policy control most directly reduces the chance this succeeds?",
+      "options": [
+        {"key": "A", "text": "Reject any new password that appears on lists of common passwords", "rationale": "Correct: it removes exactly the guesses on the attacker's list."},
+        {"key": "B", "text": "Require users to change their passwords every 30 days", "rationale": "Frequent changes don't help if users keep choosing popular passwords."},
+        {"key": "C", "text": "Upgrade the VPN appliance's firmware", "rationale": "Firmware fixes device flaws; it does not change which passwords users choose."},
+        {"key": "D", "text": "Change the native VLAN on the VPN switch", "rationale": "That counters VLAN hopping, not password guessing."}
+      ],
+      "answer": ["A"],
+      "explanation": "Avoiding common passwords removes the exact guesses a dictionary list contains. Changing passwords often does not help if the new ones are also common.",
+      "discriminator_tested": "Blocking common passwords counters dictionary attacks."
+    },
+    {
+      "objectives": ["C01-34", "C01-16"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 2,
+      "stem": "A switch is configured so that only the port connected to the company DHCP server is trusted, and DHCP offers arriving on any other port are dropped. What is this feature, and what does it stop?",
+      "options": [
+        {"key": "A", "text": "DHCP snooping; it stops rogue DHCP servers", "rationale": "Correct: offers are accepted only from trusted ports."},
+        {"key": "B", "text": "DHCP snooping; it stops DNS poisoning of the resolver cache", "rationale": "The feature is named correctly, but it filters DHCP offers, not DNS records."},
+        {"key": "C", "text": "Changing the native VLAN; it stops rogue DHCP servers", "rationale": "The threat is correct, but changing the native VLAN is a different control."},
+        {"key": "D", "text": "Defense in depth; it stops VLAN hopping", "rationale": "Defense in depth is a layering strategy, not a switch feature, and VLAN hopping is unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "DHCP snooping makes the switch accept DHCP offers only from trusted ports, which blocks rogue DHCP servers handing out bad gateway or DNS settings.",
+      "discriminator_tested": "DHCP snooping uses trusted vs untrusted ports to counter rogue DHCP."
+    },
+    {
+      "objectives": ["C01-35", "C01-14"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 2,
+      "stem": "A network engineer moves the native VLAN on all trunk links from VLAN 1 to an unused VLAN 999. Which attack is this change mainly meant to stop?",
+      "options": [
+        {"key": "A", "text": "Double-tagging VLAN hopping", "rationale": "Correct: double tagging relies on the native VLAN tag being stripped."},
+        {"key": "B", "text": "ARP spoofing", "rationale": "ARP spoofing works inside a subnet regardless of the native VLAN."},
+        {"key": "C", "text": "SYN flood", "rationale": "A SYN flood targets a server's TCP connection table."},
+        {"key": "D", "text": "Evil twin", "rationale": "An evil twin is a wireless impersonation attack."}
+      ],
+      "answer": ["A"],
+      "explanation": "Double tagging relies on the native VLAN tag being stripped on trunk links. Changing the native VLAN to an unused ID removes that path.",
+      "discriminator_tested": "Changing the native VLAN counters double-tagging VLAN hopping."
+    },
+    {
+      "objectives": ["C01-36", "C01-37"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "A vendor releases a fix for a security flaw in the web browser installed on all company laptops. Which activity applies this fix?",
+      "options": [
+        {"key": "A", "text": "Patching and updating the browser software", "rationale": "Correct: patching fixes known vulnerabilities in operating systems and applications."},
+        {"key": "B", "text": "Upgrading the laptops' firmware", "rationale": "Firmware is code embedded in the hardware, not the browser."},
+        {"key": "C", "text": "Changing default credentials", "rationale": "That counters default-login abuse and does not fix a software flaw."},
+        {"key": "D", "text": "Enabling DHCP snooping", "rationale": "DHCP snooping is a switch feature against rogue DHCP."}
+      ],
+      "answer": ["A"],
+      "explanation": "Patching and updating fix known vulnerabilities in operating systems and applications. Firmware upgrades apply to code embedded in hardware.",
+      "discriminator_tested": "Patching = software (OS and apps); firmware = device-level code."
+    },
+    {
+      "objectives": ["C01-37", "C01-36"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A vulnerability is announced in the code embedded in one model of network switch, not in any operating system or application. The administrators already patch their servers weekly. What should they apply to fix this flaw?",
+      "options": [
+        {"key": "A", "text": "A firmware upgrade for the affected switches", "rationale": "Correct: the flaw is in device-level code embedded in the hardware."},
+        {"key": "B", "text": "The next weekly operating system patch for the servers", "rationale": "Server OS patches do not touch the switches' embedded code."},
+        {"key": "C", "text": "A new antivirus signature update", "rationale": "Signatures detect malware; they do not fix flawed device code."},
+        {"key": "D", "text": "A change to the native VLAN", "rationale": "That mitigates double-tagging VLAN hopping only."}
+      ],
+      "answer": ["A"],
+      "explanation": "Upgrading firmware updates the device-level code embedded in the hardware. It is a separate task from patching operating systems and applications.",
+      "discriminator_tested": "Firmware is embedded device code; contrast with OS and app patching."
+    },
+    {
+      "objectives": ["C01-38"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about defense in depth is NOT accurate?",
+      "options": [
+        {"key": "A", "text": "It relies on one very strong control, so other controls become unnecessary", "rationale": "Correct choice because it is inaccurate: defense in depth never relies on a single control."},
+        {"key": "B", "text": "It layers overlapping controls so one failure does not expose the asset", "rationale": "Accurate: this is the core idea."},
+        {"key": "C", "text": "It can combine physical, technical, and administrative controls", "rationale": "Accurate: layers can be of any control type."},
+        {"key": "D", "text": "It assumes any single control may eventually fail", "rationale": "Accurate: that assumption is why the layers exist."}
+      ],
+      "answer": ["A"],
+      "explanation": "Defense in depth uses layered, overlapping controls so that no single control is relied on. If one layer fails, the others still protect the asset.",
+      "discriminator_tested": "Defense in depth never relies on a single control."
+    },
+    {
+      "objectives": ["C01-39"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "Without using any malware or network exploit, an outsider gets into a secure building and obtains an employee's password purely by persuading and deceiving staff. Which umbrella category covers these techniques?",
+      "options": [
+        {"key": "A", "text": "Social engineering", "rationale": "Correct: the attacker manipulated people rather than systems."},
+        {"key": "B", "text": "Insider threat", "rationale": "Insider threats come from people with legitimate access; this attacker is an outsider."},
+        {"key": "C", "text": "Brute force", "rationale": "Brute force is technical guessing of every combination."},
+        {"key": "D", "text": "Physical attack", "rationale": "A physical attack damages or disables infrastructure; here people were deceived."}
+      ],
+      "answer": ["A"],
+      "explanation": "Social engineering manipulates people rather than systems. It is the umbrella over the phishing variants and physical-access tricks such as tailgating.",
+      "discriminator_tested": "Social engineering targets people, not systems."
+    },
+    {
+      "objectives": ["C01-40"], "type": "multi", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "Which two scenarios are examples of insider threats? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "An employee accidentally emails a customer database to the wrong external address", "rationale": "Correct: an insider with legitimate access caused harm, even without malicious intent."},
+        {"key": "B", "text": "A contractor with valid credentials copies design files before leaving for a competitor", "rationale": "Correct: a malicious insider abusing legitimate access."},
+        {"key": "C", "text": "An outside attacker sends phishing emails to staff", "rationale": "The attacker has no legitimate access, so this is an external threat."},
+        {"key": "D", "text": "An attacker sets up an evil twin in the building lobby", "rationale": "The attacker is an outsider imitating the network."},
+        {"key": "E", "text": "A botnet floods the company website", "rationale": "This is an external DDoS."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Insider threats come from people who already have legitimate access. The intent can be malicious or accidental.",
+      "discriminator_tested": "Insiders already have legitimate access; intent can be malicious or accidental."
+    },
+    {
+      "objectives": ["C01-41", "C01-44"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "The same email, 'Your mailbox is full; click here to keep your account', is sent to 2 million random addresses. It contains no personal details about any recipient. Which term fits best?",
+      "options": [
+        {"key": "A", "text": "Phishing", "rationale": "Correct: a broad, untargeted fraudulent email."},
+        {"key": "B", "text": "Spear phishing", "rationale": "Spear phishing is tailored to a specific person or group."},
+        {"key": "C", "text": "Whaling", "rationale": "Whaling targets executives."},
+        {"key": "D", "text": "Smishing", "rationale": "Smishing arrives by text message."}
+      ],
+      "answer": ["A"],
+      "explanation": "Phishing is broad and untargeted. Adding personal details makes it spear phishing, and aiming it at executives makes it whaling.",
+      "discriminator_tested": "Phishing is broad and untargeted."
+    },
+    {
+      "objectives": ["C01-42"], "type": "single", "angle": "symptom-to-attack", "difficulty": 1,
+      "stem": "An employee receives a phone call from someone claiming to be the bank's fraud department, who asks them to confirm the company card number and security code. Which attack is this?",
+      "options": [
+        {"key": "A", "text": "Vishing", "rationale": "Correct: phishing carried out by voice over the phone."},
+        {"key": "B", "text": "Smishing", "rationale": "Smishing uses text messages."},
+        {"key": "C", "text": "Email phishing", "rationale": "The medium here is a phone call, not email."},
+        {"key": "D", "text": "Shoulder surfing", "rationale": "Shoulder surfing is watching someone's screen or keypad."}
+      ],
+      "answer": ["A"],
+      "explanation": "Vishing is phishing by voice or phone. The medium is what separates it from smishing (text) and email phishing.",
+      "discriminator_tested": "Vishing medium = voice."
+    },
+    {
+      "objectives": ["C01-43"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "A text message says 'Your parcel is on hold; pay the $1.99 redelivery fee at this link.' Based on its delivery medium, which term describes this attack?",
+      "options": [
+        {"key": "A", "text": "Smishing", "rationale": "Correct: phishing delivered by SMS or text message."},
+        {"key": "B", "text": "Vishing", "rationale": "Vishing uses voice calls."},
+        {"key": "C", "text": "Whaling", "rationale": "Whaling targets executives; this message is generic."},
+        {"key": "D", "text": "Malvertising", "rationale": "Malvertising is delivered through ads on websites."}
+      ],
+      "answer": ["A"],
+      "explanation": "Smishing is phishing delivered by SMS or text message; the medium is the distinguishing feature.",
+      "discriminator_tested": "Smishing medium = text message."
+    },
+    {
+      "objectives": ["C01-44", "C01-45"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "A payroll clerk receives an email that uses their name, mentions their manager by name, and references a real project, asking them to open an attached 'updated timesheet'. The clerk is not an executive. Which term fits best?",
+      "options": [
+        {"key": "A", "text": "Spear phishing", "rationale": "Correct: the email is tailored to one person using personal details."},
+        {"key": "B", "text": "Whaling", "rationale": "Whaling targets executives or other high-value people; the clerk is not one."},
+        {"key": "C", "text": "Phishing", "rationale": "Plain phishing is broad and untargeted; this email is personalized."},
+        {"key": "D", "text": "Vishing", "rationale": "Vishing uses phone calls."}
+      ],
+      "answer": ["A"],
+      "explanation": "Spear phishing is tailored to a specific person or group using personal details. It becomes whaling only when the target is an executive or other high-value person.",
+      "discriminator_tested": "Spear phishing is targeted with personal detail; whaling targets executives."
+    },
+    {
+      "objectives": ["C01-45", "C01-44"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A highly personalized email impersonating the company's outside lawyer is sent only to the CEO and CFO, asking them to approve an urgent, confidential wire transfer. Which term most precisely describes this?",
+      "options": [
+        {"key": "A", "text": "Whaling", "rationale": "Correct: targeted phishing aimed at senior executives."},
+        {"key": "B", "text": "Spear phishing", "rationale": "Also targeted, but whaling is the more precise term when the targets are executives."},
+        {"key": "C", "text": "Phishing", "rationale": "Plain phishing is broad and untargeted."},
+        {"key": "D", "text": "Smishing", "rationale": "Smishing arrives by text message."}
+      ],
+      "answer": ["A"],
+      "explanation": "Whaling is spear phishing aimed at executives or other high-value targets. The seniority of the target is what differentiates it.",
+      "discriminator_tested": "Whaling = spear phishing aimed at executives."
+    },
+    {
+      "objectives": ["C01-46", "C01-47"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "Security video shows a stranger walking closely behind an employee through a badge-controlled door before it closes. The employee never looks back and later says they had no idea anyone followed. What is this?",
+      "options": [
+        {"key": "A", "text": "Tailgating", "rationale": "Correct: entry without the authorized person's knowledge or consent."},
+        {"key": "B", "text": "Piggybacking", "rationale": "Piggybacking requires the authorized person to know and allow it."},
+        {"key": "C", "text": "Shoulder surfing", "rationale": "Shoulder surfing is watching screens or keypads."},
+        {"key": "D", "text": "Insider threat", "rationale": "The stranger has no legitimate access, so they are not an insider."}
+      ],
+      "answer": ["A"],
+      "explanation": "Tailgating is following an authorized person through a secured entry without their knowledge or consent. If the employee had knowingly let the stranger in, it would be piggybacking.",
+      "discriminator_tested": "Tailgating: the authorized person does not know."
+    },
+    {
+      "objectives": ["C01-47", "C01-46"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "A delivery driver carrying boxes asks an employee to hold the secure door. The employee does so, letting the driver into a restricted area without a badge. What is this called?",
+      "options": [
+        {"key": "A", "text": "Piggybacking", "rationale": "Correct: the authorized person knowingly let the driver in."},
+        {"key": "B", "text": "Tailgating", "rationale": "Tailgating happens without the authorized person's knowledge; this employee held the door."},
+        {"key": "C", "text": "Vishing", "rationale": "Vishing is phishing by phone."},
+        {"key": "D", "text": "Shoulder surfing", "rationale": "Shoulder surfing is visual observation of screens or keypads."}
+      ],
+      "answer": ["A"],
+      "explanation": "Piggybacking is entering a secured area with an authorized person's knowledge or consent, such as when they hold the door. Without their knowledge, it would be tailgating.",
+      "discriminator_tested": "Piggybacking: the authorized person knowingly lets them in."
+    },
+    {
+      "objectives": ["C01-48"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Staff at a busy help desk type admin passwords in full view of visitors waiting in the queue. Which control most directly reduces shoulder surfing at this desk?",
+      "options": [
+        {"key": "A", "text": "Privacy screen filters, and positioning screens and keypads away from public view", "rationale": "Correct: blocking the line of sight stops visual observation."},
+        {"key": "B", "text": "Account lockout after failed login attempts", "rationale": "Lockouts stop brute force guessing, not someone watching a real login."},
+        {"key": "C", "text": "Blocking common passwords", "rationale": "Even an uncommon password can be read off a keyboard."},
+        {"key": "D", "text": "Enabling DHCP snooping", "rationale": "DHCP snooping is a switch feature against rogue DHCP."}
+      ],
+      "answer": ["A"],
+      "explanation": "Shoulder surfing is visual observation of screens or keypads, so the fix is physical: block the line of sight. Password rules don't stop someone simply watching.",
+      "discriminator_tested": "Shoulder surfing is visual observation with no technical exploit."
+    }
+  ]
+}

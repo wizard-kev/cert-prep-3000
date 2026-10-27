@@ -1,0 +1,325 @@
+{
+  "questions": [
+    {
+      "objectives": ["C04-01"], "type": "single", "angle": "interpret-config", "difficulty": 2,
+      "stem": "An auditor reviews the switch configuration below. Which finding is MOST important?",
+      "exhibit": "username netadmin privilege 15 secret 9 $9$h3YpQ0vXbN2kLs$Wq...\nusername backup privilege 1 password 0 Backup2026\n!\nline vty 0 4\n login local\n transport input ssh",
+      "options": [
+        {"key": "A", "text": "The backup account's password is stored in plain text", "rationale": "Correct: 'password 0' keeps it readable in the config; 'secret' would hash it.", "role": "best"},
+        {"key": "B", "text": "Accounts live on this one device, so managing them doesn't scale", "rationale": "A real limitation of local accounts, but not the security finding here.", "role": "partial"},
+        {"key": "C", "text": "SSH logins on the VTY lines are checked locally", "rationale": "True, and acceptable; that is what 'login local' does.", "role": "related"},
+        {"key": "D", "text": "The netadmin secret can be read back as plain text", "rationale": "Type 9 secrets are hashed.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Local authentication stores accounts on the device itself, created with 'username NAME privilege 15 secret PASS' and applied to lines with 'login local'. 'secret' is stored hashed; 'password' is not, and type 0 is plain text. Local accounts also don't scale, because each device holds its own.",
+      "discriminator_tested": "'secret' is hashed; 'password' is not; local accounts don't scale."
+    },
+    {
+      "objectives": ["C04-02", "C04-03", "C04-06"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "A user types a username, enters a password and a token code, is allowed into the finance share but not the HR share, and each file opened is logged. Which sequence names these four steps?",
+      "options": [
+        {"key": "A", "text": "Identification, authentication, authorization, accounting", "rationale": "Correct: claim, prove, permit, record.", "role": "best"},
+        {"key": "B", "text": "Authentication, identification, authorization, accounting", "rationale": "The identity is claimed before it can be proven.", "role": "related"},
+        {"key": "C", "text": "Identification, authorization, authentication, accounting", "rationale": "Permissions are decided only after identity is proven.", "role": "related"},
+        {"key": "D", "text": "Identification, authentication, accounting, authorization", "rationale": "Logging what was done comes after access is decided.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The iAAA model is identification (who are you?), authentication (prove it), authorization (what may you do?), and accounting (what did you do?).",
+      "discriminator_tested": "iAAA: who are you, prove it, what may you do, what did you do."
+    },
+    {
+      "objectives": ["C04-03", "C04-06", "C04-10"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "At a secure door, a user's badge, PIN, and fingerprint are checked, and the door then opens to the lobby but not to the lab. Which part of that process was authentication?",
+      "options": [
+        {"key": "A", "text": "Checking the badge, PIN, and fingerprint", "rationale": "Correct: verifying the claimed identity with factors.", "role": "best"},
+        {"key": "B", "text": "Deciding the lobby is allowed but the lab is not", "rationale": "That is authorization.", "role": "related"},
+        {"key": "C", "text": "Logging the time the user entered the lobby", "rationale": "That is accounting.", "role": "related"},
+        {"key": "D", "text": "Printing the user's name on the badge", "rationale": "Issuing a badge isn't verifying anyone.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Authentication verifies a claimed identity using one or more factors (something you know, have, or are). It proves identity but says nothing yet about permissions; that is authorization.",
+      "discriminator_tested": "Authentication proves identity; it says nothing about permissions."
+    },
+    {
+      "objectives": ["C04-04", "C04-03"], "type": "multi", "angle": "classify-factor", "difficulty": 2,
+      "stem": "Which two sign-in methods count as MFA? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A password plus a code from an authenticator app", "rationale": "Correct: something you know plus something you have.", "role": "best"},
+        {"key": "B", "text": "A smart card plus a PIN", "rationale": "Correct: something you have plus something you know.", "role": "best"},
+        {"key": "C", "text": "A password plus a security question", "rationale": "Both are things you know: one category.", "role": "related"},
+        {"key": "D", "text": "Two different passwords", "rationale": "Still a single category.", "role": "related"},
+        {"key": "E", "text": "A fingerprint plus a face scan", "rationale": "Both are things you are: one category.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "MFA requires two or more different factor categories: something you know, have, or are. Two passwords, a password plus a security question, or two biometrics all stay within one category.",
+      "discriminator_tested": "MFA needs different factor categories."
+    },
+    {
+      "objectives": ["C04-05", "C04-04"], "type": "single", "angle": "secure-replacement", "difficulty": 2,
+      "stem": "A bank's administrators receive their one-time sign-in codes by SMS. Which change BEST strengthens this second factor?",
+      "options": [
+        {"key": "A", "text": "A time-based code from an authenticator app or token", "rationale": "Correct: generated on the device, so it can't be intercepted in transit or redirected.", "role": "best"},
+        {"key": "B", "text": "Longer SMS codes that expire sooner", "rationale": "Slightly better, but SMS can still be intercepted or redirected.", "role": "partial"},
+        {"key": "C", "text": "A voice call that reads out the code", "rationale": "Voice codes can be redirected just like SMS.", "role": "related"},
+        {"key": "D", "text": "A second password entered after the first", "rationale": "Two passwords isn't MFA at all.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "MFA methods include email, SMS, voice calls, and time-based hardware or software tokens. Time-based tokens are generally stronger; SMS, voice, and email codes can be intercepted or redirected, for example by SIM swapping.",
+      "discriminator_tested": "Time-based tokens are stronger than SMS, voice, or email codes."
+    },
+    {
+      "objectives": ["C04-06", "C04-12"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "User jtan is logged in to a router but can't enter configuration mode. The AAA server's log is below. Which AAA function stopped the command?",
+      "exhibit": "10:14:02  user=jtan  cmd=\"show running-config\"   author=PASS\n10:14:20  user=jtan  cmd=\"configure terminal\"     author=FAIL\n10:14:20  user=jtan  session still active",
+      "options": [
+        {"key": "A", "text": "Authorization", "rationale": "Correct: the per-command check decided what jtan may do.", "role": "best"},
+        {"key": "B", "text": "Authentication", "rationale": "jtan's login already succeeded.", "role": "related"},
+        {"key": "C", "text": "Accounting", "rationale": "Accounting records commands; it doesn't block them.", "role": "related"},
+        {"key": "D", "text": "Identification", "rationale": "The user was already identified as jtan.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Authorization determines what an authenticated user may access or do, and it happens after authentication. jtan's login succeeded; the per-command check denied configuration mode.",
+      "discriminator_tested": "Authorization happens after authentication."
+    },
+    {
+      "objectives": ["C04-07", "C04-09"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "An HR-driven system creates accounts when people are hired, changes their access when they transfer, and disables everything when they leave, across 40 applications. What BEST describes this program?",
+      "options": [
+        {"key": "A", "text": "Identity and access management over the account lifecycle", "rationale": "Correct: managing identities and access from joiner to leaver.", "role": "best"},
+        {"key": "B", "text": "Centralized AAA through a RADIUS server", "rationale": "One mechanism IAM might use, not the program itself.", "role": "partial"},
+        {"key": "C", "text": "Role-based access control for each application", "rationale": "Roles may be part of it, but the lifecycle program is broader.", "role": "related"},
+        {"key": "D", "text": "Accounting of what users did in each application", "rationale": "Accounting records activity; it doesn't create or remove access.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Identity and Access Management (IAM) is the processes and tools that manage identities and their access across their lifecycle. It is the umbrella program; AAA is one mechanism inside it.",
+      "discriminator_tested": "IAM is the umbrella program; AAA is one mechanism inside it."
+    },
+    {
+      "objectives": ["C04-08"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A help-desk technician needs to reset users' passwords. Which access BEST follows least privilege?",
+      "options": [
+        {"key": "A", "text": "A delegated role scoped to that one task", "rationale": "Correct: exactly the access the job needs.", "role": "best"},
+        {"key": "B", "text": "Account operator rights over the whole directory", "rationale": "Would work, but grants far more than password resets.", "role": "partial"},
+        {"key": "C", "text": "Domain admin rights with full activity logging", "rationale": "Logging records misuse but doesn't limit the access.", "role": "related"},
+        {"key": "D", "text": "The admin's shared password for emergencies", "rationale": "Shared admin credentials violate least privilege and accountability.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Least privilege grants only the access needed to do the job. It limits the damage from mistakes, malware, and insiders; logging records misuse but doesn't limit it.",
+      "discriminator_tested": "Grant only the access needed to do the job."
+    },
+    {
+      "objectives": ["C04-09", "C04-08"], "type": "single", "angle": "interpret-config", "difficulty": 2,
+      "stem": "A hospital system manages access as shown below. User amorales moves from a nursing position to a physician position. What is the BEST change?",
+      "exhibit": "Role Nurse      -> read: patient-chart   write: vitals\nRole Physician  -> read: patient-chart   write: orders, prescriptions\nUser amorales   -> roles: Nurse\nUser bpatel     -> roles: Physician, Nurse",
+      "options": [
+        {"key": "A", "text": "Assign amorales the Physician role", "rationale": "Correct: access follows the role.", "role": "best"},
+        {"key": "B", "text": "Grant amorales write access to orders directly", "rationale": "Would work, but bypasses the role model and drifts out of sync.", "role": "partial"},
+        {"key": "C", "text": "Edit the Nurse role to include prescriptions", "rationale": "That changes access for every nurse.", "role": "related"},
+        {"key": "D", "text": "Create a second account for amorales as a physician", "rationale": "Duplicate accounts weaken accountability.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "In RBAC, permissions attach to roles and users get access through their role, not through per-individual assignment. Changing jobs means changing roles; editing a role changes everyone who holds it.",
+      "discriminator_tested": "RBAC is role-based, not per-individual."
+    },
+    {
+      "objectives": ["C04-10"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "After an outage, the team needs to know which administrator changed a router's routing table, and when. Which AAA function provides this?",
+      "options": [
+        {"key": "A", "text": "Accounting", "rationale": "Correct: the record of who did what and when.", "role": "best"},
+        {"key": "B", "text": "Authorization", "rationale": "Authorization decided whether the change was allowed; it doesn't record it.", "role": "related"},
+        {"key": "C", "text": "Authentication", "rationale": "Authentication proved who logged in, not what they changed.", "role": "related"},
+        {"key": "D", "text": "Identification", "rationale": "Identification is the claim of identity at login.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Accounting records who did what and when (logins, commands, session data). It is the after-the-fact audit trail that enables traceability.",
+      "discriminator_tested": "Accounting is the after-the-fact audit trail."
+    },
+    {
+      "objectives": ["C04-11", "C04-12"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "A company needs open-standard, centralized authentication for 2,000 users on 802.1X Wi-Fi and its VPN. Which AAA protocol BEST fits?",
+      "options": [
+        {"key": "A", "text": "RADIUS", "rationale": "Correct: the open standard for network access.", "role": "best"},
+        {"key": "B", "text": "TACACS+", "rationale": "Cisco-originated and typical for device administration, not user network access.", "role": "related"},
+        {"key": "C", "text": "Kerberos", "rationale": "A ticket system for domain logins, not 802.1X Wi-Fi authentication.", "role": "related"},
+        {"key": "D", "text": "Local accounts on each AP", "rationale": "Not centralized; doesn't scale to 2,000 users.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "RADIUS provides centralized AAA over UDP 1812 (authentication) and 1813 (accounting). It is an open standard that combines authentication and authorization, typical for network access: 802.1X, Wi-Fi, and VPN.",
+      "discriminator_tested": "RADIUS: open standard, typical for network access."
+    },
+    {
+      "objectives": ["C04-12", "C04-11"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A capture shows two AAA sessions, summarized below. The security team prefers the protocol in session B for administering switches. What BEST explains why?",
+      "exhibit": "Session A:  UDP 1812  Access-Request  User-Name=jtan  User-Password=<hidden>\n            NAS-IP-Address=10.1.1.2  (other attributes readable)\nSession B:  TCP 49    TACACS+ packet   body=<encrypted>",
+      "options": [
+        {"key": "A", "text": "It encrypts the whole payload and splits the three As", "rationale": "Correct: full encryption and separate authorization allow per-command control.", "role": "best"},
+        {"key": "B", "text": "It runs over TCP, so delivery is reliable", "rationale": "True, but reliability isn't the security reason.", "role": "partial"},
+        {"key": "C", "text": "It encrypts just the password, like RADIUS", "rationale": "That describes session A; session B hides the whole body.", "role": "related"},
+        {"key": "D", "text": "It is an open standard used for Wi-Fi access", "rationale": "That describes RADIUS.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "TACACS+ is Cisco-originated AAA over TCP 49 that encrypts the entire payload and separates authentication, authorization, and accounting, allowing per-command control, so it is typical for device administration. RADIUS encrypts only the password.",
+      "discriminator_tested": "TACACS+ encrypts the whole payload and separates the three As."
+    },
+    {
+      "objectives": ["C04-13", "C04-01"], "type": "single", "angle": "interpret-config", "difficulty": 3,
+      "stem": "A router is configured as shown below. The TACACS+ server is reachable but rejects an admin's password. What BEST describes what happens?",
+      "exhibit": "aaa new-model\ntacacs server TAC1\n address ipv4 10.1.9.20\n key 7 0822455D0A16\naaa authentication login VTY-LOGIN group tacacs+ local\n!\nline vty 0 4\n login authentication VTY-LOGIN",
+      "options": [
+        {"key": "A", "text": "Login fails; local is used when the server is down", "rationale": "Correct: a rejection ends the list; fallback is for an unreachable server.", "role": "best"},
+        {"key": "B", "text": "The admin's login attempt is denied", "rationale": "True, but it misses why the local accounts aren't tried.", "role": "partial"},
+        {"key": "C", "text": "The router retries with the local accounts", "rationale": "A rejection isn't an error, so the next method isn't tried.", "role": "related"},
+        {"key": "D", "text": "The router prompts for the enable password instead", "rationale": "Enable isn't in this method list.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Configuring iAAA means enabling AAA, defining the server, building method lists, and applying them to lines. Method-list order matters: fallback to local happens when the server is unreachable (an error), not when it rejects the credentials.",
+      "discriminator_tested": "Fallback to local happens when the server is unreachable, not when it rejects."
+    },
+    {
+      "objectives": ["C04-14", "C04-18"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "A laptop joins an 802.1X Wi-Fi network that uses RADIUS. Which sequence of messages is correct?",
+      "options": [
+        {"key": "A", "text": "User to AP, AP to RADIUS, RADIUS reply to AP", "rationale": "Correct: the AP is the RADIUS client.", "role": "best"},
+        {"key": "B", "text": "User to RADIUS, RADIUS to AP, AP reply to user", "rationale": "The laptop doesn't talk to RADIUS directly.", "role": "related"},
+        {"key": "C", "text": "AP to RADIUS, RADIUS to user, user reply to AP", "rationale": "RADIUS replies to the AP, not the user.", "role": "related"},
+        {"key": "D", "text": "User to RADIUS, RADIUS reply to user, then AP", "rationale": "The user's device isn't a RADIUS client.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "In the RADIUS login process, the user's credentials go to the access device, which sends an Access-Request to the RADIUS server and acts on the Access-Accept, Access-Reject, or Access-Challenge. The access device (switch or AP) is the RADIUS client, not the user's endpoint.",
+      "discriminator_tested": "The access device is the RADIUS client."
+    },
+    {
+      "objectives": ["C04-15"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which password approach BEST resists guessing?",
+      "options": [
+        {"key": "A", "text": "A random 20-character passphrase of words", "rationale": "Correct: length multiplies the search space.", "role": "best"},
+        {"key": "B", "text": "A 10-character password mixing four character types", "rationale": "Complexity helps, but length adds more strength.", "role": "partial"},
+        {"key": "C", "text": "An 8-character password changed monthly", "rationale": "Frequent changes don't make a short password hard to guess.", "role": "related"},
+        {"key": "D", "text": "A dictionary word with a number and symbol added", "rationale": "Predictable substitutions are in every cracking list.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Longer passwords with mixed character types resist guessing, and length adds more strength than complexity alone: each extra character multiplies the search space, while predictable substitutions add little.",
+      "discriminator_tested": "Length adds more strength than complexity alone."
+    },
+    {
+      "objectives": ["C04-16"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "An attacker deliberately enters wrong passwords against each executive's account. With a lockout policy of five attempts, what is the MOST likely effect?",
+      "options": [
+        {"key": "A", "text": "The executives are locked out, denying them service", "rationale": "Correct: the lockout itself becomes the attack.", "role": "best"},
+        {"key": "B", "text": "The attacker's guessing is stopped after five tries", "rationale": "True, but the attacker wasn't trying to guess.", "role": "partial"},
+        {"key": "C", "text": "The attacker learns the executives' passwords", "rationale": "Wrong guesses reveal nothing.", "role": "related"},
+        {"key": "D", "text": "The lockout policy is disabled automatically", "rationale": "Policies don't switch themselves off.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Password lockout locks an account after a set number of failed attempts. It counters online brute force but can itself be abused to lock out legitimate users.",
+      "discriminator_tested": "Lockout counters brute force but can be abused to lock out users."
+    },
+    {
+      "objectives": ["C04-17", "C04-18"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A user's PC on port Gi1/0/9 gets no network access. The switch shows the status below. What BEST explains it?",
+      "exhibit": "Interface:   Gi1/0/9\nStatus:      Unauthorized\nAllowed:     EAPOL only\nLast event:  EAP timeout (no supplicant response)",
+      "options": [
+        {"key": "A", "text": "The port passes only EAPOL until the PC authenticates", "rationale": "Correct: the PC never answered, so the port stays blocked.", "role": "best"},
+        {"key": "B", "text": "The port is blocking the PC's traffic", "rationale": "True, but it doesn't say why.", "role": "partial"},
+        {"key": "C", "text": "The switch port is administratively shut down", "rationale": "A shut port wouldn't show EAPOL activity.", "role": "related"},
+        {"key": "D", "text": "The PC was given a 169.254 address by the switch", "rationale": "Switches don't assign APIPA addresses.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "802.1X is port-based access control: a port passes only authentication traffic (EAPOL) until the device authenticates. Here the PC never answered, so the port stays unauthorized.",
+      "discriminator_tested": "The port stays blocked until authentication succeeds."
+    },
+    {
+      "objectives": ["C04-18", "C04-14"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "In an 802.1X deployment, which component decides whether the user is allowed on, and which enforces that decision at the port?",
+      "options": [
+        {"key": "A", "text": "The RADIUS server decides; the switch enforces", "rationale": "Correct: authentication server decides, authenticator enforces.", "role": "best"},
+        {"key": "B", "text": "The switch decides; the RADIUS server enforces", "rationale": "This is reversed.", "role": "related"},
+        {"key": "C", "text": "The supplicant decides; the switch enforces", "rationale": "The supplicant is the client asking for access.", "role": "related"},
+        {"key": "D", "text": "The switch decides and enforces; RADIUS logs", "rationale": "The decision comes from the authentication server.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "802.1X components are the supplicant (client), the authenticator (switch or WAP), and the authentication server (RADIUS). The authenticator enforces; the server decides.",
+      "discriminator_tested": "The authenticator enforces; the server decides."
+    },
+    {
+      "objectives": ["C04-19", "C04-21"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Which order BEST describes the NAC process for a device joining the network?",
+      "options": [
+        {"key": "A", "text": "Connect, identify and assess, apply policy access", "rationale": "Correct: policy can only act on what was learned.", "role": "best"},
+        {"key": "B", "text": "Connect, apply policy access, identify and assess", "rationale": "Access is set before anything is known about the device.", "role": "related"},
+        {"key": "C", "text": "Identify and assess, connect, apply policy access", "rationale": "The device must connect before it can be assessed.", "role": "related"},
+        {"key": "D", "text": "Apply policy access, connect, identify and assess", "rationale": "Policy can't apply to a device that hasn't connected.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "In the NAC process, a device connects, is identified and assessed, and then policy sets its access level: full, restricted, quarantine, or deny. The outcome need not be all-or-nothing.",
+      "discriminator_tested": "NAC outcome is policy-driven and need not be all-or-nothing."
+    },
+    {
+      "objectives": ["C04-20", "C04-21"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A NAC system shows the result below for a device that can't run an 802.1X client. Which NAC function produced it?",
+      "exhibit": "MAC 00:1b:a9:3e:7c:11     OUI: Brother Industries\nDHCP option 55: 1,3,6,15,44,47     hostname: BRN001BA93E7C11\nOpen ports: 515, 631, 9100\nResult: Printer (confidence 92%)  -> policy: PRINTERS VLAN",
+      "options": [
+        {"key": "A", "text": "Profiling", "rationale": "Correct: it worked out what the device is from observed attributes.", "role": "best"},
+        {"key": "B", "text": "Posture assessment", "rationale": "Posture checks health such as patches and antivirus, not device type.", "role": "related"},
+        {"key": "C", "text": "802.1X authentication", "rationale": "The device can't run a supplicant.", "role": "related"},
+        {"key": "D", "text": "Guest isolation", "rationale": "Isolation is a placement decision, not identification.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Profiling identifies what a device is (its type or class) from observed attributes such as MAC vendor, DHCP options, and open ports. It suits devices that can't run a supplicant, such as printers and IoT devices.",
+      "discriminator_tested": "Profiling identifies device type; suits devices without a supplicant."
+    },
+    {
+      "objectives": ["C04-21", "C04-20"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Profiling, posture assessment, and 802.1X authentication each answer a different question about a device. Which question does posture assessment answer?",
+      "options": [
+        {"key": "A", "text": "Is the device healthy and compliant?", "rationale": "Correct: patches, antivirus, configuration.", "role": "best"},
+        {"key": "B", "text": "What kind of device is it?", "rationale": "That is profiling.", "role": "related"},
+        {"key": "C", "text": "Who is the user or device?", "rationale": "That is authentication.", "role": "related"},
+        {"key": "D", "text": "Which VLAN did DHCP assign it?", "rationale": "DHCP doesn't assign VLANs.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Posture assessment checks a device's health and compliance (patches, antivirus, configuration). It answers health, while authentication answers identity and profiling answers type.",
+      "discriminator_tested": "Health vs identity vs type."
+    },
+    {
+      "objectives": ["C04-22", "C04-21", "C04-23"], "type": "multi", "angle": "choose-response", "difficulty": 2,
+      "stem": "A hospital will let staff use personal phones for email and the scheduling app. Which two controls BEST address the risk? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Posture checks before granting access", "rationale": "Correct: unmanaged devices must meet a health baseline.", "role": "best"},
+        {"key": "B", "text": "A segment that limits personal devices to approved apps", "rationale": "Correct: segmentation keeps them away from clinical systems.", "role": "best"},
+        {"key": "C", "text": "A captive portal that encrypts their Wi-Fi traffic", "rationale": "A portal is a gate, not encryption.", "role": "wrong"},
+        {"key": "D", "text": "Allowing personal devices on the clinical VLAN", "rationale": "The opposite of segmentation.", "role": "related"},
+        {"key": "E", "text": "Training staff on phishing", "rationale": "Useful, but it doesn't address unmanaged devices on the network.", "role": "related"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "BYOD means personally owned devices accessing organizational resources. Because they are unmanaged and varied, BYOD needs NAC, posture checks, and segmentation.",
+      "discriminator_tested": "BYOD is unmanaged and varied: needs NAC, posture, segmentation."
+    },
+    {
+      "objectives": ["C04-23", "C04-24"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A hotel offers Wi-Fi to conference attendees. Which design BEST meets the goal of guest network isolation?",
+      "options": [
+        {"key": "A", "text": "A separate segment with internet-only access", "rationale": "Correct: guests can't reach internal resources.", "role": "best"},
+        {"key": "B", "text": "The staff network with a separate password", "rationale": "A different password still puts guests on the staff network.", "role": "related"},
+        {"key": "C", "text": "A captive portal on the staff network", "rationale": "A portal gates entry but doesn't isolate guests.", "role": "related"},
+        {"key": "D", "text": "WPA3 on the staff network to stop snooping", "rationale": "Encryption doesn't separate guests from internal systems.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Guest network isolation places guests on a separate segment with internet-only access, isolated from internal resources.",
+      "discriminator_tested": "Guest isolation = separate segment, internet-only."
+    },
+    {
+      "objectives": ["C04-24", "C04-23"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A cafe's Wi-Fi shows a terms page before allowing internet access. A customer assumes the page means their traffic is now encrypted. What BEST describes the page?",
+      "options": [
+        {"key": "A", "text": "A gate for access, not encryption of traffic", "rationale": "Correct: it controls entry; the network may still be open.", "role": "best"},
+        {"key": "B", "text": "A login page that records who accepted the terms", "rationale": "Often true, but it doesn't address the encryption assumption.", "role": "partial"},
+        {"key": "C", "text": "A WPA3 handshake shown as a web page", "rationale": "Wi-Fi encryption happens before any web page.", "role": "related"},
+        {"key": "D", "text": "A VPN that starts when terms are accepted", "rationale": "Accepting terms doesn't start a VPN.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A captive portal intercepts a new user's first request and requires login or acceptance before granting access. It is a gate for guest and BYOD onboarding, not encryption of wireless traffic.",
+      "discriminator_tested": "Captive portal is a gate, not encryption."
+    }
+  ]
+}

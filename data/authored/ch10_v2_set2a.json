@@ -1,0 +1,321 @@
+{
+  "questions": [
+    {
+      "objectives": ["C10-01"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two are disaster prevention measures rather than recovery measures? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Raised floors in a flood-prone area", "rationale": "Correct: lowers the likelihood of flood damage.", "role": "best"},
+        {"key": "B", "text": "Replacing aging disks before they fail", "rationale": "Correct: lowers the likelihood of failure.", "role": "best"},
+        {"key": "C", "text": "Restoring servers at the DR site", "rationale": "Recovery: restores service afterward.", "role": "related"},
+        {"key": "D", "text": "Rebuilding a server from its image", "rationale": "Recovery.", "role": "related"},
+        {"key": "E", "text": "Buying a cyber insurance policy for losses", "rationale": "Risk transfer: it pays for losses but doesn't prevent them.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Disaster prevention and recovery: prevention lowers the likelihood of disruptive events; recovery restores service when they happen.",
+      "discriminator_tested": "Prevention lowers likelihood; recovery restores service."
+    },
+    {
+      "objectives": ["C10-02", "C10-37"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "A company's \"backup\" is RAID 5 plus hourly snapshots on the same NAS. The NAS controller fails and corrupts the array. What BEST describes the flaw?",
+      "options": [
+        {"key": "A", "text": "No separate copy of the data existed", "rationale": "Correct: redundancy and snapshots on one device aren't backups.", "role": "best"},
+        {"key": "B", "text": "RAID 5 survives one disk failure", "rationale": "True, but a controller failure isn't a disk failure.", "role": "partial"},
+        {"key": "C", "text": "Snapshots ran too rarely", "rationale": "They were lost with the array anyway.", "role": "related"},
+        {"key": "D", "text": "The NAS wasn't on a UPS", "rationale": "Nothing points to power.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Data loss comes from hardware failure, deletion, corruption, ransomware, or disaster. Backups are the primary defense, and they must be separate from the system they protect.",
+      "discriminator_tested": "Backups are the primary defense; redundancy isn't a backup."
+    },
+    {
+      "objectives": ["C10-03"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A user accidentally deletes one folder from a file server. Which backup type restores it with the least time and storage?",
+      "options": [
+        {"key": "A", "text": "A file-level backup", "rationale": "Correct: fast and small, and restores individual files.", "role": "best"},
+        {"key": "B", "text": "An image-based backup", "rationale": "Can do it, but it is larger and heavier to work with.", "role": "partial"},
+        {"key": "C", "text": "A RAID 1 mirror of the disk", "rationale": "The deletion was mirrored too.", "role": "related"},
+        {"key": "D", "text": "A router config backup", "rationale": "Holds device settings, not files.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "File-level backups copy selected files and folders. They are fast and small and restore individual files, but can't rebuild a whole system alone.",
+      "discriminator_tested": "File-level: fast, small, restores individual files."
+    },
+    {
+      "objectives": ["C10-04", "C10-03"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST describes the main trade-off of image-based backups compared with file-level ones?",
+      "options": [
+        {"key": "A", "text": "Full-system restore; larger size", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "They take longer to run each night", "rationale": "Often true, but it's a consequence of the size.", "role": "partial"},
+        {"key": "C", "text": "Faster restores of single files", "rationale": "File-level backups are better at that.", "role": "related"},
+        {"key": "D", "text": "They leave out user data files", "rationale": "An image captures data too.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Image-based backups capture the entire disk or system (OS, applications, settings, data). They enable a full-system (bare-metal) restore but are larger.",
+      "discriminator_tested": "Image: bare-metal restore; larger."
+    },
+    {
+      "objectives": ["C10-05", "C10-47"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "After a site-wide outage at an online retailer, which restore order BEST follows business criticality?",
+      "options": [
+        {"key": "A", "text": "Order processing, payroll, intranet blog", "rationale": "Correct: revenue first, the blog last.", "role": "best"},
+        {"key": "B", "text": "Intranet blog, order processing, payroll", "rationale": "The least critical system goes first.", "role": "related"},
+        {"key": "C", "text": "Payroll, intranet blog, order processing", "rationale": "Revenue comes last.", "role": "related"},
+        {"key": "D", "text": "Whichever servers boot the fastest", "rationale": "Order comes from criticality, not speed.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Critical applications are those essential to operations. Identifying them sets backup frequency and recovery order; priority comes from business criticality.",
+      "discriminator_tested": "Priority comes from business criticality."
+    },
+    {
+      "objectives": ["C10-06"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A router's flash fails, and it is replaced with the same model. What BEST lets the admin restore its routing and ACL setup?",
+      "options": [
+        {"key": "A", "text": "Its saved config file", "rationale": "Correct: device backups hold the configuration.", "role": "best"},
+        {"key": "B", "text": "The file server's nightly backup", "rationale": "Holds user data, not the router's config.", "role": "related"},
+        {"key": "C", "text": "An image of the admin's laptop", "rationale": "Unrelated to the router.", "role": "related"},
+        {"key": "D", "text": "The router's syslog archive", "rationale": "Records events, not settings.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Network device backup and restore saves device configurations (for example, copy running-config to a remote server) and restores them after a failure. It backs up configs, not user data.",
+      "discriminator_tested": "Backs up configs, not user data."
+    },
+    {
+      "objectives": ["C10-07", "C10-09"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "Using the details below, which statement BEST describes this outage?",
+      "exhibit": "Nightly full backup:  23:00   (last good: Tue 23:00)\nServer failure:       Wed 18:00\nRestore duration:     about 2 hours",
+      "options": [
+        {"key": "A", "text": "~19 hours of data lost; ~2-hour restore", "rationale": "Correct: data loss runs back to the last backup.", "role": "best"},
+        {"key": "B", "text": "~2 hours of data lost; ~19-hour restore", "rationale": "Reversed.", "role": "related"},
+        {"key": "C", "text": "Data since the last backup is lost", "rationale": "True, but it doesn't quantify loss or restore time.", "role": "partial"},
+        {"key": "D", "text": "No data lost, since a backup exists", "rationale": "Changes after the backup are lost.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Data restoration characteristics describe how fast and how current a restore is. RTO is the time to restore; RPO is the tolerable data loss, set by the age of the last backup.",
+      "discriminator_tested": "RPO is set by the age of the last backup."
+    },
+    {
+      "objectives": ["C10-08"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A company's sole backup is a USB drive left permanently plugged into the file server. What is the MAIN risk?",
+      "options": [
+        {"key": "A", "text": "Ransomware or fire takes both copies", "rationale": "Correct: it is online and onsite.", "role": "best"},
+        {"key": "B", "text": "The USB drive may wear out", "rationale": "Possible, but the bigger risk is shared fate.", "role": "partial"},
+        {"key": "C", "text": "USB is slower than tape", "rationale": "Speed isn't the main risk.", "role": "related"},
+        {"key": "D", "text": "USB drives hold too little data", "rationale": "Capacity isn't the issue here.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Backup media (disk or NAS, tape, cloud, removable media) trade off cost, speed, capacity, and durability. Offline or offsite media survive ransomware and site loss; an always-attached drive does neither.",
+      "discriminator_tested": "Offline or offsite media survive ransomware and site loss."
+    },
+    {
+      "objectives": ["C10-09"], "type": "single", "angle": "choose-tool", "difficulty": 3,
+      "stem": "Weeknight backups must be quick, yet a restore may need no more than two backup sets. Which scheme BEST fits?",
+      "options": [
+        {"key": "A", "text": "Weekly full, daily differentials", "rationale": "Correct: restore needs the full plus the latest differential.", "role": "best"},
+        {"key": "B", "text": "A full backup each night", "rationale": "One set to restore, but slow every night.", "role": "partial"},
+        {"key": "C", "text": "Weekly full plus daily incrementals", "rationale": "Restore needs the full plus every incremental.", "role": "related"},
+        {"key": "D", "text": "A monthly full and nothing else", "rationale": "Loses up to a month of data.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Backup methods: full (everything), incremental (changes since the last backup of any type), differential (changes since the last full). A differential restore needs the full plus the latest differential.",
+      "discriminator_tested": "Differential restore: full plus latest differential."
+    },
+    {
+      "objectives": ["C10-10", "C10-07"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two things does a periodic test restore verify? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "The data is complete and intact", "rationale": "Correct: integrity and completeness.", "role": "best"},
+        {"key": "B", "text": "The restore fits within the RTO", "rationale": "Correct: timing.", "role": "best"},
+        {"key": "C", "text": "The backup job logged a success status", "rationale": "A log says nothing about restorability.", "role": "related"},
+        {"key": "D", "text": "The backup files are encrypted", "rationale": "A separate control.", "role": "related"},
+        {"key": "E", "text": "Users' passwords are strong", "rationale": "Unrelated.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Backup testing means periodically restoring data to verify integrity, completeness, and timing. An untested backup is unproven.",
+      "discriminator_tested": "Test restores verify integrity, completeness, timing."
+    },
+    {
+      "objectives": ["C10-11"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A service restores online account access for anyone who answers the account's security questions. What is the MAIN risk?",
+      "options": [
+        {"key": "A", "text": "Answers are easy to find", "rationale": "Correct: birthplaces and pet names are often public.", "role": "best"},
+        {"key": "B", "text": "Users forget their answers", "rationale": "An inconvenience, not the security risk.", "role": "partial"},
+        {"key": "C", "text": "The passwords may be weak", "rationale": "The recovery bypasses the password.", "role": "related"},
+        {"key": "D", "text": "Resets take too long to process", "rationale": "Speed isn't the risk.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Online account recovery resets access through email, phone, recovery codes, or MFA. The recovery channel is itself an attack path; protect it.",
+      "discriminator_tested": "The recovery channel is an attack path."
+    },
+    {
+      "objectives": ["C10-12"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A standalone laptop has one local admin account and no recovery media. The admin password is lost. What is the MAIN problem?",
+      "options": [
+        {"key": "A", "text": "No second admin or central reset", "rationale": "Correct: local recovery depends on one of those or physical tools.", "role": "best"},
+        {"key": "B", "text": "Disk encryption may block offline tools", "rationale": "Only if it's encrypted; not stated.", "role": "related"},
+        {"key": "C", "text": "The domain help desk is slow", "rationale": "The laptop isn't in a domain.", "role": "related"},
+        {"key": "D", "text": "The account unlocks after an hour", "rationale": "Lockout timers don't fix a lost password.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Local account recovery is a reset by another local administrator or with recovery media or tools. It depends on a second admin account or physical access; there is no central reset.",
+      "discriminator_tested": "Local recovery: no central reset."
+    },
+    {
+      "objectives": ["C10-13"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A domain user is locked out at 2 a.m., and the help desk is closed until 8. What BEST lets the user recover now?",
+      "options": [
+        {"key": "A", "text": "A self-service password reset portal", "rationale": "Correct: possible for domain accounts.", "role": "best"},
+        {"key": "B", "text": "Waiting for the help desk to open", "rationale": "Works, but not now.", "role": "related"},
+        {"key": "C", "text": "A local admin on the PC", "rationale": "Can't change a directory account.", "role": "related"},
+        {"key": "D", "text": "Rebooting to clear the lockout", "rationale": "The lockout is held in the directory.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Domain account recovery is a reset or unlock by a domain administrator or help desk in the directory. It is managed centrally, and self-service reset is possible.",
+      "discriminator_tested": "Self-service reset is possible."
+    },
+    {
+      "objectives": ["C10-14", "C10-19"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What BEST distinguishes a battery backup from a generator?",
+      "options": [
+        {"key": "A", "text": "Instant power, for minutes", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "It protects against outages", "rationale": "Both do.", "role": "partial"},
+        {"key": "C", "text": "Long-running power from stored fuel", "rationale": "That is the generator.", "role": "related"},
+        {"key": "D", "text": "It diverts voltage spikes away", "rationale": "That is surge protection.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A battery backup provides short-term power during an outage. Its runtime is in minutes, not hours; a generator runs for hours but needs time to start.",
+      "discriminator_tested": "Battery: minutes, not hours."
+    },
+    {
+      "objectives": ["C10-15", "C10-21"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two does a UPS provide? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Battery power during an outage", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Conditioning of input power", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "Power through a days-long outage", "rationale": "That needs a generator.", "role": "related"},
+        {"key": "D", "text": "Remote outlet switching", "rationale": "A switched PDU feature.", "role": "related"},
+        {"key": "E", "text": "Smoke detection in the rack", "rationale": "Not a UPS function.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A UPS is battery-backed power that also conditions input power. It bridges to a graceful shutdown or generator start; it isn't long-term power.",
+      "discriminator_tested": "UPS: battery power plus conditioning; not long-term."
+    },
+    {
+      "objectives": ["C10-16"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A home office wants the cheapest UPS for one desktop PC and can accept a brief switchover gap. Which BEST fits?",
+      "options": [
+        {"key": "A", "text": "A standby UPS", "rationale": "Correct: lowest cost, brief gap.", "role": "best"},
+        {"key": "B", "text": "A line-interactive UPS", "rationale": "Works, at higher cost.", "role": "partial"},
+        {"key": "C", "text": "An online UPS", "rationale": "Highest cost.", "role": "related"},
+        {"key": "D", "text": "A surge protector", "rationale": "No battery.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A standby UPS passes utility power and switches to battery on failure. It has a brief switchover gap and offers the lowest cost and least protection.",
+      "discriminator_tested": "Standby: lowest cost, brief gap."
+    },
+    {
+      "objectives": ["C10-17", "C10-16"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes a line-interactive UPS from a standby UPS?",
+      "options": [
+        {"key": "A", "text": "It evens out sags without the battery", "rationale": "Correct: regulates voltage fluctuation.", "role": "best"},
+        {"key": "B", "text": "It usually costs a bit more", "rationale": "True, but not the function.", "role": "partial"},
+        {"key": "C", "text": "It has zero transfer time", "rationale": "That is an online UPS.", "role": "related"},
+        {"key": "D", "text": "It is started by a generator", "rationale": "A UPS bridges to a generator.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A line-interactive UPS regulates voltage sags and surges without using the battery, then switches to battery on an outage. It handles voltage fluctuation at mid-range cost.",
+      "discriminator_tested": "Line-interactive handles voltage fluctuation."
+    },
+    {
+      "objectives": ["C10-18"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "What is the MAIN trade-off of an online (double-conversion) UPS?",
+      "options": [
+        {"key": "A", "text": "Top protection, top cost", "rationale": "Correct: no transfer time, highest price.", "role": "best"},
+        {"key": "B", "text": "It runs warmer and uses more power", "rationale": "True, but secondary.", "role": "partial"},
+        {"key": "C", "text": "A brief gap when it switches", "rationale": "That is a standby UPS.", "role": "related"},
+        {"key": "D", "text": "It has no battery inside", "rationale": "It has one.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An online UPS uses double conversion: equipment always runs from the inverter. There is no transfer time, giving the best protection at the highest cost.",
+      "discriminator_tested": "Online: best protection, highest cost."
+    },
+    {
+      "objectives": ["C10-19"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "During an outage, a diesel generator fails to start because its fuel had degraded over two years. What was MOST clearly missing?",
+      "options": [
+        {"key": "A", "text": "Regular testing and fuel upkeep", "rationale": "Correct: generators need fuel and testing.", "role": "best"},
+        {"key": "B", "text": "A second generator on standby", "rationale": "Its fuel would have aged too.", "role": "related"},
+        {"key": "C", "text": "A UPS with a larger battery", "rationale": "Buys minutes, not hours.", "role": "related"},
+        {"key": "D", "text": "Surge protection on the feed", "rationale": "Unrelated to starting.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Power generators provide long-duration backup power (diesel or natural gas). They take time to start, so a UPS bridges the gap, and they need fuel and testing.",
+      "discriminator_tested": "Generators need fuel and testing."
+    },
+    {
+      "objectives": ["C10-20"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 1,
+      "stem": "An office plugs its server into a surge protector and believes it's now covered for outages. What BEST describes the problem?",
+      "options": [
+        {"key": "A", "text": "It has no battery to run on", "rationale": "Correct: it protects against spikes, not outages.", "role": "best"},
+        {"key": "B", "text": "It won't correct voltage sags", "rationale": "True, but the outage is the gap here.", "role": "partial"},
+        {"key": "C", "text": "It needs a PDU behind it", "rationale": "A PDU adds no backup either.", "role": "related"},
+        {"key": "D", "text": "It should be a rack-mount model", "rationale": "Form factor changes nothing.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Surge protection diverts excess voltage spikes away from equipment. It protects against spikes, not outages, and isn't a UPS.",
+      "discriminator_tested": "Spikes, not outages."
+    },
+    {
+      "objectives": ["C10-21", "C10-15"], "type": "single", "angle": "interpret-config", "difficulty": 2,
+      "stem": "A rack's power path is shown below. What BEST lets the rack ride through a short utility outage?",
+      "exhibit": "Rack R4 power path\nUtility feed A --> Switched PDU (24 outlets) --> 6 servers\nUtility feed A --> Metered PDU  (24 outlets) --> 2 switches",
+      "options": [
+        {"key": "A", "text": "A UPS feeding the PDUs", "rationale": "Correct: a PDU gains backup only when fed by a UPS.", "role": "best"},
+        {"key": "B", "text": "A generator on feed A", "rationale": "Helps with long outages, but leaves a gap while it starts.", "role": "partial"},
+        {"key": "C", "text": "A second switched PDU", "rationale": "More distribution, still no backup.", "role": "related"},
+        {"key": "D", "text": "Surge protection after the PDUs", "rationale": "Spikes, not outages.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A PDU distributes power to rack equipment; metered and switched versions add monitoring and remote outlet control. It is distribution, not backup, and gains backup only when fed by a UPS.",
+      "discriminator_tested": "PDU gains backup only when fed by a UPS."
+    },
+    {
+      "objectives": ["C10-22"], "type": "single", "angle": "assess-risk", "difficulty": 1,
+      "stem": "A server room's HVAC is sized for today's load, but 20 more servers are being installed next month. What is the MAIN risk?",
+      "options": [
+        {"key": "A", "text": "Overheating failures", "rationale": "Correct: more heat than the cooling can remove.", "role": "best"},
+        {"key": "B", "text": "Higher electricity bills", "rationale": "Likely, but not the continuity risk.", "role": "partial"},
+        {"key": "C", "text": "Humidity dropping too low", "rationale": "Not the main effect of extra load.", "role": "related"},
+        {"key": "D", "text": "Fire suppression triggering", "rationale": "Heat load rarely sets it off.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "HVAC controls temperature, airflow, and humidity. Overheating causes failures, so cooling capacity is a continuity control.",
+      "discriminator_tested": "Overheating causes failures."
+    },
+    {
+      "objectives": ["C10-23", "C10-22"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "A server room's relative humidity climbs to 85% for several days. What is the MOST likely consequence?",
+      "options": [
+        {"key": "A", "text": "Condensation and corrosion", "rationale": "Correct: too humid.", "role": "best"},
+        {"key": "B", "text": "Static discharge", "rationale": "That comes from air that is too dry.", "role": "related"},
+        {"key": "C", "text": "Higher cooling costs", "rationale": "Possible, but not the main hazard.", "role": "partial"},
+        {"key": "D", "text": "Faster disk wear from heat", "rationale": "Humidity, not temperature, is out of range.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "ASHRAE standards recommend temperature and humidity ranges for computing environments (about 18-27 C). Air that is too humid causes condensation and corrosion; too dry raises static risk.",
+      "discriminator_tested": "Too humid = condensation and corrosion."
+    },
+    {
+      "objectives": ["C10-24"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What should MOST guide the choice of a fire suppression system?",
+      "options": [
+        {"key": "A", "text": "What the space contains", "rationale": "Correct: match the system to the space.", "role": "best"},
+        {"key": "B", "text": "The system's upfront price", "rationale": "A factor, but secondary.", "role": "partial"},
+        {"key": "C", "text": "The building's construction age", "rationale": "Not the deciding factor.", "role": "related"},
+        {"key": "D", "text": "How many staff work there", "rationale": "Safety matters, but the contents drive the choice.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Fire suppression extinguishes fires while limiting damage to people and equipment. Match the system to the space: water-based versus clean agent.",
+      "discriminator_tested": "Match the system to the space."
+    }
+  ]
+}

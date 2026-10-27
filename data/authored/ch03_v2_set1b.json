@@ -1,0 +1,257 @@
+{
+  "questions": [
+    {
+      "objectives": ["C03-21", "C03-22"], "type": "single", "angle": "find-config-error", "difficulty": 2,
+      "stem": "A device is configured with address 192.168.10.255 and mask 255.255.255.0, and it can't communicate. What BEST explains the problem?",
+      "options": [
+        {"key": "A", "text": "It is the subnet's broadcast address", "rationale": "Correct: all host bits are 1, which marks the broadcast address.", "role": "best"},
+        {"key": "B", "text": "It is outside the usable range of the subnet", "rationale": "True, but it doesn't say why: .255 is the broadcast address.", "role": "partial"},
+        {"key": "C", "text": "It is the subnet's network address", "rationale": "The network address has all host bits 0: 192.168.10.0.", "role": "related"},
+        {"key": "D", "text": "Private addresses may not end in .255", "rationale": "In larger subnets, a private address ending in .255 can be a valid host.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "In IP terminology, an octet is 8 bits. In a subnet, the address with all host bits 0 is the network address and the one with all host bits 1 is the broadcast address; neither can be assigned to a host. In 192.168.10.0/24, .255 is the broadcast address.",
+      "discriminator_tested": "Host bits all 0 = network address; all 1 = broadcast."
+    },
+    {
+      "objectives": ["C03-22", "C03-24"], "type": "single", "angle": "classify-address", "difficulty": 2,
+      "stem": "A host has address 172.16.45.10 with mask 255.255.0.0. Which part of the address identifies the network?",
+      "options": [
+        {"key": "A", "text": "172.16", "rationale": "Correct: a /16 mask makes the first two octets the network portion.", "role": "best"},
+        {"key": "B", "text": "172.16.45", "rationale": "That would be the network portion with a /24 mask.", "role": "related"},
+        {"key": "C", "text": "45.10", "rationale": "That is the host portion.", "role": "related"},
+        {"key": "D", "text": "10", "rationale": "The last octet alone is only part of the host portion here.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An IPv4 address is 32 bits split into a network portion and a host portion. With mask 255.255.0.0 (/16), the first two octets (172.16) identify the network and the last two (45.10) identify the device.",
+      "discriminator_tested": "Network part identifies the network; host part identifies the device."
+    },
+    {
+      "objectives": ["C03-23", "C03-24"], "type": "multi", "angle": "classify-address", "difficulty": 2,
+      "stem": "Which two addresses fall in Class A and can be assigned to a host? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "10.4.2.1", "rationale": "Correct: first octet 10 is in 1-126.", "role": "best"},
+        {"key": "B", "text": "126.0.0.5", "rationale": "Correct: 126 is the top of the Class A range.", "role": "best"},
+        {"key": "C", "text": "127.0.0.1", "rationale": "127 is reserved for loopback.", "role": "related"},
+        {"key": "D", "text": "128.10.0.1", "rationale": "128 starts Class B.", "role": "related"},
+        {"key": "E", "text": "191.255.0.1", "rationale": "191 is the top of Class B.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Class A addresses have a first octet of 1-126 and a default mask of 255.0.0.0 (/8): few networks, very many hosts. 127 is reserved for loopback, and 128 starts Class B.",
+      "discriminator_tested": "Class A: first octet 1-126; 127 reserved for loopback."
+    },
+    {
+      "objectives": ["C03-24", "C03-25"], "type": "single", "angle": "classify-address", "difficulty": 1,
+      "stem": "A host uses address 150.40.7.9 with its classful default mask. What is that mask?",
+      "options": [
+        {"key": "A", "text": "255.255.0.0", "rationale": "Correct: 150 is Class B, so /16.", "role": "best"},
+        {"key": "B", "text": "255.0.0.0", "rationale": "That is the Class A default.", "role": "related"},
+        {"key": "C", "text": "255.255.255.0", "rationale": "That is the Class C default.", "role": "related"},
+        {"key": "D", "text": "255.255.255.255", "rationale": "That is a host mask, not a classful default.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Class B covers first octets 128-191 with a default mask of 255.255.0.0 (/16): medium-sized networks. 150 falls in that range.",
+      "discriminator_tested": "Class B: first octet 128-191, /16."
+    },
+    {
+      "objectives": ["C03-25", "C03-21"], "type": "single", "angle": "classify-address", "difficulty": 2,
+      "stem": "How many usable host addresses does a single classful network such as 203.0.113.0 provide?",
+      "options": [
+        {"key": "A", "text": "254", "rationale": "Correct: 256 addresses minus the network and broadcast addresses.", "role": "best"},
+        {"key": "B", "text": "256", "rationale": "That counts the network and broadcast addresses, which hosts can't use.", "role": "related"},
+        {"key": "C", "text": "65,534", "rationale": "That is a Class B network.", "role": "related"},
+        {"key": "D", "text": "16,777,214", "rationale": "That is a Class A network.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Class C covers first octets 192-223 with a default mask of 255.255.255.0 (/24): many networks with 254 hosts each, since the all-0s and all-1s host addresses are reserved.",
+      "discriminator_tested": "Class C: many networks, 254 hosts each."
+    },
+    {
+      "objectives": ["C03-26", "C03-31"], "type": "single", "angle": "classify-address", "difficulty": 2,
+      "stem": "A server streams market data to 230.10.20.30, and only hosts that subscribe receive it. Which address class and traffic type is this?",
+      "options": [
+        {"key": "A", "text": "Class D, used for multicast groups", "rationale": "Correct: 224-239 is reserved for multicast.", "role": "best"},
+        {"key": "B", "text": "Class C, used for broadcast to each host", "rationale": "230 isn't Class C, and only subscribers receive it.", "role": "related"},
+        {"key": "C", "text": "Class E, reserved for experimental use", "rationale": "Class E starts at 240.", "role": "related"},
+        {"key": "D", "text": "Class A, assigned to a single large host", "rationale": "Class A ends at 126.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Class D (first octet 224-239) is reserved for multicast. It has no network/host split and isn't assigned to single hosts; only group members receive the traffic.",
+      "discriminator_tested": "Class D = multicast; not assigned to single hosts."
+    },
+    {
+      "objectives": ["C03-27", "C03-13"], "type": "multi", "angle": "classify-address", "difficulty": 3,
+      "stem": "Which two addresses are private (RFC 1918) addresses? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "172.20.4.9", "rationale": "Correct: inside 172.16.0.0/12.", "role": "best"},
+        {"key": "B", "text": "192.168.200.1", "rationale": "Correct: inside 192.168.0.0/16.", "role": "best"},
+        {"key": "C", "text": "172.32.0.5", "rationale": "Just outside the block, which ends at 172.31.", "role": "related"},
+        {"key": "D", "text": "169.254.10.4", "rationale": "That is APIPA link-local, not RFC 1918.", "role": "related"},
+        {"key": "E", "text": "11.0.0.1", "rationale": "Only 10.x.x.x is private in that area.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "RFC 1918 private ranges are 10.0.0.0/8, 172.16.0.0/12 (172.16-172.31), and 192.168.0.0/16. They aren't routable on the internet and need NAT to reach it; 172.32 is outside the block, and 169.254 is APIPA.",
+      "discriminator_tested": "RFC 1918: 10/8, 172.16/12, 192.168/16."
+    },
+    {
+      "objectives": ["C03-28", "C03-20"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A capture shows the frame below leaving a laptop. Which devices receive it?",
+      "exhibit": "Ethernet II, Src: 3c:52:82:aa:10:7e, Dst: ff:ff:ff:ff:ff:ff\nAddress Resolution Protocol (request)\n    Who has 10.1.4.1? Tell 10.1.4.20",
+      "options": [
+        {"key": "A", "text": "Each device on the local segment, but not past the router", "rationale": "Correct: an all-Fs MAC is a Layer-2 broadcast confined to the segment.", "role": "best"},
+        {"key": "B", "text": "The device that owns 10.1.4.1, and no other", "rationale": "Only it replies, but every device on the segment receives the frame.", "role": "related"},
+        {"key": "C", "text": "Each device on each subnet the router connects", "rationale": "Routers don't forward Layer-2 broadcasts.", "role": "related"},
+        {"key": "D", "text": "Members of the multicast group for ARP", "rationale": "ARP requests are broadcast, not multicast.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A Layer-2 broadcast is a frame sent to MAC FF:FF:FF:FF:FF:FF. It reaches every device on the local segment and is not forwarded by routers.",
+      "discriminator_tested": "Layer-2 broadcast reaches the local segment; routers don't forward it."
+    },
+    {
+      "objectives": ["C03-29", "C03-28"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "What BEST distinguishes a Layer-3 broadcast to 255.255.255.255 from a Layer-2 broadcast?",
+      "options": [
+        {"key": "A", "text": "It is addressed at the IP layer rather than by MAC", "rationale": "Correct: the destination is an IP broadcast address.", "role": "best"},
+        {"key": "B", "text": "It is carried inside a Layer-2 broadcast frame", "rationale": "True on Ethernet, but that is how it travels, not what distinguishes it.", "role": "partial"},
+        {"key": "C", "text": "Routers forward it to other subnets", "rationale": "Routers don't forward the limited broadcast.", "role": "wrong"},
+        {"key": "D", "text": "It is delivered to a single host", "rationale": "A broadcast goes to every host on the segment.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A Layer-3 broadcast is a packet sent to an IP broadcast address such as 255.255.255.255; it is addressed at the IP layer, while a Layer-2 broadcast is addressed to MAC FF:FF:FF:FF:FF:FF. Routers do not forward the limited broadcast.",
+      "discriminator_tested": "Layer-3 broadcast is addressed at the IP layer."
+    },
+    {
+      "objectives": ["C03-30", "C03-31"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "A laptop at 10.1.4.20 downloads a file from a server at 10.1.9.5. What kind of traffic is this?",
+      "options": [
+        {"key": "A", "text": "Unicast", "rationale": "Correct: one sender to one receiver.", "role": "best"},
+        {"key": "B", "text": "Multicast", "rationale": "Multicast goes to a group of receivers.", "role": "related"},
+        {"key": "C", "text": "Broadcast", "rationale": "Broadcast goes to every host on the segment.", "role": "related"},
+        {"key": "D", "text": "Anycast", "rationale": "Anycast delivers to the nearest of several hosts sharing an address.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "IPv4 unicast is one sender to one receiver: one-to-one.",
+      "discriminator_tested": "Unicast is one-to-one."
+    },
+    {
+      "objectives": ["C03-31", "C03-30"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "A company streams the same live training video to 300 desks. Which delivery method uses the LEAST bandwidth while reaching just the desks that tuned in?",
+      "options": [
+        {"key": "A", "text": "Multicast to a group the desks join", "rationale": "Correct: one stream, delivered only to group members.", "role": "best"},
+        {"key": "B", "text": "Unicast streams, one per viewer", "rationale": "Works, but sends 300 copies of the same stream.", "role": "partial"},
+        {"key": "C", "text": "Broadcast to each host on the subnet", "rationale": "Reaches desks that didn't tune in.", "role": "related"},
+        {"key": "D", "text": "Anycast to the nearest desk", "rationale": "Anycast reaches one host, not a group.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "IPv4 multicast sends one stream to a group of interested receivers (224.0.0.0/4): one-to-many, only to group members.",
+      "discriminator_tested": "Multicast is one-to-many, only to group members."
+    },
+    {
+      "objectives": ["C03-32"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A manager says the office is safe from the internet because 'we use NAT'. What is the BEST response?",
+      "options": [
+        {"key": "A", "text": "NAT translates addresses; it isn't a firewall", "rationale": "Correct: filtering is a separate control.", "role": "best"},
+        {"key": "B", "text": "NAT hides internal addresses from outside view", "rationale": "True as a side effect, but hiding addresses isn't filtering.", "role": "partial"},
+        {"key": "C", "text": "NAT exists mainly to encrypt traffic leaving the office", "rationale": "NAT doesn't encrypt anything.", "role": "wrong"},
+        {"key": "D", "text": "NAT blocks outbound connections by default", "rationale": "NAT exists to let outbound connections work.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "NAT conserves public IPv4 addresses and connects private networks to the internet. It is address translation, not a firewall; filtering is a separate control.",
+      "discriminator_tested": "NAT is address translation, not a firewall."
+    },
+    {
+      "objectives": ["C03-33", "C03-35"], "type": "single", "angle": "nat-scenario", "difficulty": 2,
+      "stem": "A router's translation table looks like the output below. Which type of NAT is it performing?",
+      "exhibit": "Pro  Public addr:port     Private addr:port    Remote addr:port\ntcp  203.0.113.5:40121    10.1.4.20:51544      198.51.100.10:443\ntcp  203.0.113.5:40122    10.1.4.31:49210      192.0.2.50:443\ntcp  203.0.113.5:40123    10.1.4.77:53011      198.51.100.10:443",
+      "options": [
+        {"key": "A", "text": "PAT (NAT overload)", "rationale": "Correct: many inside hosts share one public address, told apart by port.", "role": "best"},
+        {"key": "B", "text": "Static NAT", "rationale": "Static NAT maps one inside address to one fixed public address.", "role": "related"},
+        {"key": "C", "text": "Dynamic NAT from a pool", "rationale": "Dynamic NAT gives each host its own pool address.", "role": "related"},
+        {"key": "D", "text": "Port forwarding to a server", "rationale": "These are outbound sessions from clients, not inbound forwarding.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Static NAT is a fixed one-to-one mapping, dynamic NAT maps one-to-one from a pool on demand, and PAT (overload) maps many inside hosts to one public address using ports. Three hosts sharing 203.0.113.5 is PAT, the most common type.",
+      "discriminator_tested": "PAT = many-to-one using ports."
+    },
+    {
+      "objectives": ["C03-34", "C03-35"], "type": "single", "angle": "nat-scenario", "difficulty": 3,
+      "stem": "Host 10.1.4.31 opens a web session to 192.0.2.50. The router rewrites the packet's source address to 203.0.113.5. In NAT terminology, what is 203.0.113.5?",
+      "options": [
+        {"key": "A", "text": "Inside global", "rationale": "Correct: the public address that represents the inside host outside.", "role": "best"},
+        {"key": "B", "text": "Inside local", "rationale": "Inside local is the private address, 10.1.4.31.", "role": "related"},
+        {"key": "C", "text": "Outside global", "rationale": "Outside global is the remote host's real address, 192.0.2.50.", "role": "related"},
+        {"key": "D", "text": "Outside local", "rationale": "Outside local is how the remote host appears from inside.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Inside local is the private address seen inside (10.1.4.31); inside global is the public address that represents the inside host to the outside (203.0.113.5). Outside global is the real address of the outside host (192.0.2.50).",
+      "discriminator_tested": "Inside local = private address; inside global = public address seen outside."
+    },
+    {
+      "objectives": ["C03-35", "C03-32"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 3,
+      "stem": "An unsolicited packet arrives from the internet at a PAT router's public address, on a port with no matching entry in the translation table. What BEST describes what happens?",
+      "options": [
+        {"key": "A", "text": "It is dropped, because there's no entry to reverse", "rationale": "Correct: translation needs a table entry to map the reply back.", "role": "best"},
+        {"key": "B", "text": "It is not delivered to any inside host", "rationale": "True, but it doesn't explain why.", "role": "partial"},
+        {"key": "C", "text": "It is broadcast to the inside hosts to find its owner", "rationale": "NAT never guesses; without an entry it has no destination.", "role": "related"},
+        {"key": "D", "text": "It is forwarded to the first host in the pool", "rationale": "There is no default destination for unmatched traffic.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "NAT rewrites the source address (and port, for PAT), records the mapping in a translation table, and reverses it for replies. The table is stateful: with no entry, return traffic has nowhere to go and is dropped.",
+      "discriminator_tested": "No translation table entry means traffic is dropped."
+    },
+    {
+      "objectives": ["C03-36", "C03-37"], "type": "single", "angle": "ipv6-shorten-or-type", "difficulty": 1,
+      "stem": "Which description of an IPv6 address is accurate?",
+      "options": [
+        {"key": "A", "text": "128 bits, as eight groups of four hex digits", "rationale": "Correct: eight 16-bit hexadecimal groups separated by colons.", "role": "best"},
+        {"key": "B", "text": "32 bits, as four decimal octets", "rationale": "That describes IPv4.", "role": "related"},
+        {"key": "C", "text": "64 bits, as four groups of hex digits", "rationale": "64 bits is half an IPv6 address.", "role": "related"},
+        {"key": "D", "text": "128 bits, as sixteen decimal octets", "rationale": "The size is right, but IPv6 is written in hexadecimal groups.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An IPv6 address is 128 bits, written as eight 16-bit hexadecimal groups separated by colons, compared with IPv4's 32 bits.",
+      "discriminator_tested": "IPv6 is 128 bits vs IPv4's 32."
+    },
+    {
+      "objectives": ["C03-37"], "type": "single", "angle": "ipv6-shorten-or-type", "difficulty": 3,
+      "stem": "Which is the MOST compressed valid form of 2001:0db8:0000:0000:0000:0001:0000:0abc?",
+      "options": [
+        {"key": "A", "text": "2001:db8::1:0:abc", "rationale": "Correct: leading zeros dropped and the longest zero run replaced by ::.", "role": "best"},
+        {"key": "B", "text": "2001:db8:0:0:0:1::abc", "rationale": "Valid, but it compresses the shorter zero run, so it isn't the most compressed.", "role": "partial"},
+        {"key": "C", "text": "2001:db8::1::abc", "rationale": "Using :: twice is ambiguous and invalid.", "role": "related"},
+        {"key": "D", "text": "2001:db8:1:abc", "rationale": "Zero groups can't simply be dropped without ::.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "To shorten an IPv6 address, drop leading zeros in each group and replace one run of all-zero groups with ::. The :: may appear only once per address, so using it twice is invalid.",
+      "discriminator_tested": ":: may appear only once per address."
+    },
+    {
+      "objectives": ["C03-38", "C03-39"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A PC shows the addresses below. Which statement about its two IPv6 addresses is BEST?",
+      "exhibit": "Ethernet adapter Ethernet:\n   IPv6 Address. . . . . . . . . . . : 2001:db8:4a:10::25\n   Link-local IPv6 Address . . . . . : fe80::8c1b:44ff:fe10:7e%12\n   IPv4 Address. . . . . . . . . . . : 10.1.4.20",
+      "options": [
+        {"key": "A", "text": "One is globally routable; the other works only on the local link", "rationale": "Correct: 2000::/3 is global unicast; FE80::/10 is link-local.", "role": "best"},
+        {"key": "B", "text": "Both are unicast addresses assigned to this interface", "rationale": "True, but it misses the key difference in scope.", "role": "partial"},
+        {"key": "C", "text": "The fe80 address is a multicast group the PC has joined", "rationale": "Multicast addresses start with FF.", "role": "related"},
+        {"key": "D", "text": "The 2001 address is a broadcast address for the subnet", "rationale": "IPv6 has no broadcast.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "IPv6 unicast types include global (2000::/3) and link-local (FE80::/10); multicast is FF00::/8, and there is anycast. IPv6 has no broadcast; multicast takes its role.",
+      "discriminator_tested": "No broadcast in IPv6; global vs link-local unicast."
+    },
+    {
+      "objectives": ["C03-39", "C03-38"], "type": "multi", "angle": "ipv6-shorten-or-type", "difficulty": 2,
+      "stem": "Which two IPv6 addresses are matched with the correct description? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "::1 is the loopback address", "rationale": "Correct: the IPv6 equivalent of 127.0.0.1.", "role": "best"},
+        {"key": "B", "text": "FF02::1 reaches all nodes on the link", "rationale": "Correct: the all-nodes multicast address.", "role": "best"},
+        {"key": "C", "text": ":: is the loopback address", "rationale": ":: is the unspecified address.", "role": "related"},
+        {"key": "D", "text": "FE80::1 is a global unicast address", "rationale": "FE80::/10 is link-local.", "role": "related"},
+        {"key": "E", "text": "::1 is the IPv6 broadcast address", "rationale": "IPv6 has no broadcast.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "::1 is loopback (IPv4's 127.0.0.1), :: is unspecified, FE80::/10 is link-local, and FF02::1 is the all-nodes multicast address.",
+      "discriminator_tested": "Loopback is ::1; :: is unspecified."
+    }
+  ]
+}

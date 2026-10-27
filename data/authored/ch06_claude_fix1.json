@@ -1,0 +1,17 @@
+{
+  "questions": [
+    {
+      "objectives": ["C06-19"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A clinic still runs medical-device software on Windows 10 PCs after Windows 10 reached end of support on October 14, 2025. The PCs are not enrolled in Microsoft's paid Extended Security Updates (ESU) program, and they have antivirus installed. What is the correct response?",
+      "options": [
+        {"key": "A", "text": "Upgrade, replace, or isolate the PCs, because they no longer receive security patches", "rationale": "Correct: without ESU, no further OS security patches arrive, so the PCs must be upgraded, replaced, or isolated."},
+        {"key": "B", "text": "Keep using them as they are; antivirus is enough", "rationale": "Antivirus can't fix the OS vulnerabilities that will no longer be patched."},
+        {"key": "C", "text": "Keep using them as long as Windows Update reports 'up to date'", "rationale": "Without ESU, no new security patches arrive, so 'up to date' gives no protection against newly found flaws."},
+        {"key": "D", "text": "Nothing changes; end of support only stops new features", "rationale": "End of support also stops security patches for devices not covered by ESU."}
+      ],
+      "answer": ["A"],
+      "explanation": "The OS life cycle runs release, mainstream support, extended support, then end of support. After end of support, no security patches arrive unless a paid Extended Security Updates program covers the device, so unpatchable systems must be upgraded, replaced, or isolated.",
+      "discriminator_tested": "After end of support (and outside paid ESU) there are no security patches; upgrade, replace, or isolate."
+    }
+  ]
+}

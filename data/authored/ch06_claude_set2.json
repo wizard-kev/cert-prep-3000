@@ -1,0 +1,362 @@
+{
+  "questions": [
+    {
+      "objectives": ["C06-01"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about Windows Defender Firewall is NOT true?",
+      "options": [
+        {"key": "A", "text": "It blocks all outbound traffic by default", "rationale": "Correct choice because it is false: outbound traffic is allowed by default."},
+        {"key": "B", "text": "It has separate Domain, Private, and Public profiles", "rationale": "True."},
+        {"key": "C", "text": "Inbound traffic is blocked unless a rule allows it", "rationale": "True."},
+        {"key": "D", "text": "The active profile depends on the network location", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Windows Defender Firewall is a built-in host-based firewall with Domain, Private, and Public profiles. Inbound is blocked unless allowed; outbound is allowed by default.",
+      "discriminator_tested": "Inbound blocked by default; outbound allowed by default."
+    },
+    {
+      "objectives": ["C06-02"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "Endpoint monitoring flags powershell.exe on an accounting PC downloading and running code from the internet at 3 a.m. No new program was installed. What technique does this most likely show?",
+      "options": [
+        {"key": "A", "text": "Living off the land: an attacker misusing a built-in scripting tool", "rationale": "Correct: legitimate built-in tools let attackers avoid installing anything new."},
+        {"key": "B", "text": "Adware bundled with a free program", "rationale": "No program was installed, and nothing involves ads."},
+        {"key": "C", "text": "A hardware fault in the network card", "rationale": "Hardware faults don't download and run code."},
+        {"key": "D", "text": "A failed firmware update", "rationale": "Firmware updates don't run code through PowerShell."}
+      ],
+      "answer": ["A"],
+      "explanation": "Scripting tools such as PowerShell, batch, VBScript, and Python automate admin tasks, and attackers abuse the same built-in tools, known as 'living off the land'.",
+      "discriminator_tested": "Attackers use the same scripting tools as admins."
+    },
+    {
+      "objectives": ["C06-03"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which practice is NOT a recommended Windows security consideration?",
+      "options": [
+        {"key": "A", "text": "Leaving unused services running in case they are needed later", "rationale": "Correct choice: every unused service adds attack surface."},
+        {"key": "B", "text": "Encrypting disks with BitLocker", "rationale": "Recommended."},
+        {"key": "C", "text": "Using a standard user account for daily work", "rationale": "Recommended."},
+        {"key": "D", "text": "Running antimalware", "rationale": "Recommended."}
+      ],
+      "answer": ["A"],
+      "explanation": "Windows hardening means daily use as a standard user, disabling unused accounts and services, running antimalware, and using BitLocker, to reduce the attack surface with layered controls.",
+      "discriminator_tested": "Hardening reduces attack surface."
+    },
+    {
+      "objectives": ["C06-04"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements about NTFS permissions are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Permissions from different groups are cumulative", "rationale": "Correct."},
+        {"key": "B", "text": "They apply to both local and network access", "rationale": "Correct: NTFS permissions are always checked."},
+        {"key": "C", "text": "They apply only to network access", "rationale": "That describes share permissions."},
+        {"key": "D", "text": "An Allow entry always overrides a Deny entry", "rationale": "Deny overrides Allow (and an explicit entry beats an inherited one)."},
+        {"key": "E", "text": "Read includes the right to take ownership", "rationale": "Take ownership is part of Full control."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "NTFS permissions apply to both local and network access, are cumulative across groups, and Deny overrides Allow. Full control adds change permissions and take ownership on top of Modify.",
+      "discriminator_tested": "NTFS: local and network, cumulative, Deny overrides Allow."
+    },
+    {
+      "objectives": ["C06-05", "C06-06"], "type": "single", "angle": "compute-permissions", "difficulty": 3,
+      "stem": "A folder's share permissions give Everyone Read. Its NTFS permissions give a user Modify. That user logs on at the server's own console and tries to edit a file in the folder. Is the edit allowed?",
+      "options": [
+        {"key": "A", "text": "Yes: locally only NTFS permissions apply, so the user has Modify", "rationale": "Correct: share permissions don't affect local access."},
+        {"key": "B", "text": "No: the share's Read permission restricts the user", "rationale": "Share permissions apply only over the network."},
+        {"key": "C", "text": "No: locally, neither set of permissions applies", "rationale": "NTFS still applies locally."},
+        {"key": "D", "text": "Only if the share permission is raised to Change", "rationale": "The share permission doesn't matter for local access."}
+      ],
+      "answer": ["A"],
+      "explanation": "For local permissions (a user at the machine itself), only NTFS permissions apply and share permissions are ignored. Over the network, the more restrictive of the two would win.",
+      "discriminator_tested": "Locally, only NTFS applies."
+    },
+    {
+      "objectives": ["C06-06", "C06-04"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements about share permissions are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "They apply only to access over the network", "rationale": "Correct."},
+        {"key": "B", "text": "Combined with NTFS permissions, the more restrictive of the two is the effective access", "rationale": "Correct."},
+        {"key": "C", "text": "They also apply to users logged on locally", "rationale": "Only NTFS applies locally."},
+        {"key": "D", "text": "They include Modify and List folder contents", "rationale": "Those are NTFS permissions; share permissions are Read, Change, and Full Control."},
+        {"key": "E", "text": "Full Control at the share overrides an NTFS Deny", "rationale": "The more restrictive layer still wins, so the NTFS Deny holds."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Share permissions (Read, Change, Full Control) apply only to network access. When combined with NTFS, the more restrictive of the two determines effective access.",
+      "discriminator_tested": "Share permissions: network only; the more restrictive of share and NTFS wins."
+    },
+    {
+      "objectives": ["C06-07"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 3,
+      "stem": "Under file permission inheritance logic, which order of precedence is correct for NTFS permission entries, from strongest to weakest?",
+      "options": [
+        {"key": "A", "text": "Explicit Deny, explicit Allow, inherited Deny, inherited Allow", "rationale": "Correct: explicit entries beat inherited ones, and Deny beats Allow at the same level."},
+        {"key": "B", "text": "Inherited Deny, explicit Allow, explicit Deny, inherited Allow", "rationale": "An explicit Allow beats an inherited Deny, and an explicit Deny beats both."},
+        {"key": "C", "text": "Explicit Allow, explicit Deny, inherited Allow, inherited Deny", "rationale": "At the same level, Deny comes before Allow."},
+        {"key": "D", "text": "Inherited Allow, inherited Deny, explicit Allow, explicit Deny", "rationale": "Explicit entries take precedence over inherited ones."}
+      ],
+      "answer": ["A"],
+      "explanation": "Child objects inherit permissions by default. Precedence is explicit Deny, then explicit Allow, then inherited Deny, then inherited Allow, so an explicit Allow can override an inherited Deny.",
+      "discriminator_tested": "Explicit Deny > explicit Allow > inherited Deny > inherited Allow."
+    },
+    {
+      "objectives": ["C06-08"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements about shared files and folders on Windows are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "They are published over SMB on TCP 445", "rationale": "Correct."},
+        {"key": "B", "text": "A share name ending in $ only hides it from browsing", "rationale": "Correct: it can still be reached by name."},
+        {"key": "C", "text": "A share name ending in $ stops anyone from connecting", "rationale": "Anyone who knows the name and has permission can connect."},
+        {"key": "D", "text": "Shares are accessed over Telnet on TCP 23", "rationale": "File sharing uses SMB on TCP 445."},
+        {"key": "E", "text": "Administrative shares such as C$ are encrypted by default", "rationale": "The $ hides the share; it doesn't encrypt it."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Shared folders are published over SMB (TCP 445). Hidden and administrative shares end in $ (such as C$ and ADMIN$), and the $ only hides a share from browsing; it doesn't secure it.",
+      "discriminator_tested": "SMB on TCP 445; $ hides but doesn't secure."
+    },
+    {
+      "objectives": ["C06-09"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 2,
+      "stem": "Which threat does User Account Control (UAC) most directly reduce?",
+      "options": [
+        {"key": "A", "text": "Malware silently gaining administrative rights when an administrator runs it", "rationale": "Correct: administrators run with a standard token until they approve an elevation."},
+        {"key": "B", "text": "Phishing emails reaching the inbox", "rationale": "UAC doesn't filter email."},
+        {"key": "C", "text": "A SYN flood against a web server", "rationale": "That is a network attack, unrelated to local elevation."},
+        {"key": "D", "text": "Physical theft of the laptop", "rationale": "Disk encryption addresses that."}
+      ],
+      "answer": ["A"],
+      "explanation": "UAC prompts before actions that need administrative rights. Because administrators run with a standard token until they elevate, malware can't silently gain admin rights.",
+      "discriminator_tested": "UAC stops malware from silently gaining admin rights."
+    },
+    {
+      "objectives": ["C06-10"], "type": "single", "angle": "choose-device", "difficulty": 1,
+      "stem": "A company with 2,000 Windows PCs wants to approve and schedule Windows Updates centrally, instead of letting each PC update on its own. What should it use?",
+      "options": [
+        {"key": "A", "text": "WSUS or Intune", "rationale": "Correct: both centralize control over Windows Update."},
+        {"key": "B", "text": "The Mac App Store", "rationale": "That distributes macOS apps."},
+        {"key": "C", "text": "apt", "rationale": "apt is a Linux package manager."},
+        {"key": "D", "text": "Event Viewer", "rationale": "Event Viewer reads logs; it doesn't manage updates."}
+      ],
+      "answer": ["A"],
+      "explanation": "Windows Update delivers security, quality, and feature updates, and WSUS or Intune centralize control: approving, scheduling, and reporting across many PCs.",
+      "discriminator_tested": "WSUS or Intune centralize Windows Updates."
+    },
+    {
+      "objectives": ["C06-11"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "On a Windows PC, which two items typically need their own patching process outside Windows Update? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A third-party web browser", "rationale": "Correct: third-party apps update themselves or through their vendor."},
+        {"key": "B", "text": "A third-party PDF reader", "rationale": "Correct."},
+        {"key": "C", "text": "The Windows kernel", "rationale": "The kernel is patched through Windows Update."},
+        {"key": "D", "text": "The built-in Windows Defender Firewall", "rationale": "Built-in Windows components are patched through Windows Update."},
+        {"key": "E", "text": "The monthly Windows cumulative security update", "rationale": "That is delivered by Windows Update."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Application patching is its own process: patching the OS does not patch most third-party applications, such as browsers, PDF readers, and runtimes.",
+      "discriminator_tested": "OS patches don't cover most third-party apps."
+    },
+    {
+      "objectives": ["C06-12"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about device drivers on Windows is NOT true?",
+      "options": [
+        {"key": "A", "text": "64-bit Windows loads unsigned kernel-mode drivers by default", "rationale": "Correct choice because it is false: 64-bit Windows requires signed kernel drivers."},
+        {"key": "B", "text": "Drivers run in kernel mode", "rationale": "True."},
+        {"key": "C", "text": "Rolling back a driver restores the previous version", "rationale": "True."},
+        {"key": "D", "text": "A driver is OS-side software that lets the OS talk to hardware", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Device drivers are OS-side software running in kernel mode. 64-bit Windows requires signed kernel drivers, and rollback restores the prior driver. Firmware, by contrast, is code stored on the device.",
+      "discriminator_tested": "64-bit Windows requires signed kernel drivers."
+    },
+    {
+      "objectives": ["C06-13"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "When a user opens an app downloaded from a website, macOS warns that it cannot be opened because the developer cannot be verified. Which feature produced this warning, and why?",
+      "options": [
+        {"key": "A", "text": "Gatekeeper, because the app isn't from an identified or notarized developer", "rationale": "Correct: Gatekeeper checks apps from outside the store."},
+        {"key": "B", "text": "The Mac App Store review, because Apple rejected the app", "rationale": "The app didn't come through the store at all."},
+        {"key": "C", "text": "The application firewall, because the app tried to use the network", "rationale": "The firewall controls network connections, not whether an app may open."},
+        {"key": "D", "text": "UAC, because the app needs administrator rights", "rationale": "UAC is a Windows feature."}
+      ],
+      "answer": ["A"],
+      "explanation": "The Mac App Store is Apple's reviewed, sandboxed source. Gatekeeper controls apps from outside the store, allowing identified or notarized developers and warning about the rest.",
+      "discriminator_tested": "Gatekeeper covers apps from outside the store."
+    },
+    {
+      "objectives": ["C06-14"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which two pairings of an operating system with its system updates tool are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Ubuntu: apt", "rationale": "Correct."},
+        {"key": "B", "text": "Fedora: dnf", "rationale": "Correct."},
+        {"key": "C", "text": "macOS: apt", "rationale": "macOS updates come from Apple's Software Update."},
+        {"key": "D", "text": "Red Hat: Windows Update", "rationale": "Red Hat uses dnf or yum."},
+        {"key": "E", "text": "Debian: the Mac App Store", "rationale": "Debian uses apt."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "System updates: macOS uses Software Update; Linux uses its package manager (apt on Debian and Ubuntu, dnf or yum on Red Hat and Fedora), which updates the OS and repo-installed apps together.",
+      "discriminator_tested": "apt = Debian/Ubuntu; dnf/yum = Red Hat/Fedora; macOS updates come from Apple."
+    },
+    {
+      "objectives": ["C06-15"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which step is NOT part of a sound patch management process?",
+      "options": [
+        {"key": "A", "text": "Deploying every patch straight to all production systems, without testing", "rationale": "Correct choice: patches are tested before production, with a rollback plan."},
+        {"key": "B", "text": "Keeping an inventory of systems and software", "rationale": "A real step: you can't patch what you don't know about."},
+        {"key": "C", "text": "Testing patches before broad deployment", "rationale": "A real step."},
+        {"key": "D", "text": "Documenting what was deployed and verified", "rationale": "A real step."}
+      ],
+      "answer": ["A"],
+      "explanation": "Patch management is an ongoing process: inventory, identify, evaluate and test, approve, deploy, verify, and document. It tests before production and keeps a rollback plan.",
+      "discriminator_tested": "Test before production; patching is a managed process."
+    },
+    {
+      "objectives": ["C06-16"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "An Ubuntu server should accept SSH (TCP 22) only from the admin subnet and refuse other inbound connections. Which firewall approach fits?",
+      "options": [
+        {"key": "A", "text": "Use ufw, a front-end to netfilter, to allow TCP 22 from the admin subnet and deny other inbound traffic", "rationale": "Correct: Linux firewall rules are port- and address-based."},
+        {"key": "B", "text": "Turn on the macOS application firewall", "rationale": "That is a macOS feature."},
+        {"key": "C", "text": "Switch Windows Defender Firewall to the Public profile", "rationale": "That is a Windows feature."},
+        {"key": "D", "text": "Run chmod 700 on the SSH program", "rationale": "File permissions don't filter network connections."}
+      ],
+      "answer": ["A"],
+      "explanation": "Linux firewalls use netfilter, managed through iptables/nftables or front-ends such as ufw and firewalld, with port- and address-based rules. macOS uses a per-application firewall.",
+      "discriminator_tested": "Linux firewall rules are port/address-based; ufw is a front-end."
+    },
+    {
+      "objectives": ["C06-17"], "type": "multi", "angle": "compute-permissions", "difficulty": 2,
+      "stem": "An administrator runs 'chmod 754 deploy.sh' on a Linux system. Which two statements about the resulting permissions are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "The owner can read, write, and execute", "rationale": "Correct: 7 = 4 + 2 + 1."},
+        {"key": "B", "text": "The group can read and execute", "rationale": "Correct: 5 = 4 + 1."},
+        {"key": "C", "text": "Others can read, write, and execute", "rationale": "Others get 4, which is read only."},
+        {"key": "D", "text": "The group can write", "rationale": "5 does not include write (2)."},
+        {"key": "E", "text": "Others have no access at all", "rationale": "Others get read (4)."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Linux/UNIX permissions use three digits for owner, group, and others, with read = 4, write = 2, and execute = 1. 754 means rwx for the owner, r-x for the group, and r-- for others.",
+      "discriminator_tested": "Three digits = owner, group, others; r=4, w=2, x=1."
+    },
+    {
+      "objectives": ["C06-18", "C06-12"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about driver and firmware updates is NOT true?",
+      "options": [
+        {"key": "A", "text": "Interrupting a firmware update is harmless, because the device simply retries at next boot", "rationale": "Correct choice because it is false: an interrupted firmware update can brick the device."},
+        {"key": "B", "text": "They fix bugs and vulnerabilities", "rationale": "True."},
+        {"key": "C", "text": "They should come from the vendor and be checked for integrity", "rationale": "True."},
+        {"key": "D", "text": "They include BIOS/UEFI, NIC, and storage firmware", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Driver and firmware updates fix bugs and vulnerabilities. Get them from the vendor and verify their integrity, because an interrupted or bad firmware update can brick the device.",
+      "discriminator_tested": "An interrupted firmware update can brick the device."
+    },
+    {
+      "objectives": ["C06-19"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 1,
+      "stem": "Which sequence correctly orders an operating system's life cycle?",
+      "options": [
+        {"key": "A", "text": "Release, mainstream support, extended support, end of support", "rationale": "Correct."},
+        {"key": "B", "text": "Release, end of support, mainstream support, extended support", "rationale": "End of support comes last."},
+        {"key": "C", "text": "Extended support, release, mainstream support, end of support", "rationale": "Extended support follows mainstream support."},
+        {"key": "D", "text": "Mainstream support, extended support, release, end of support", "rationale": "Release comes first."}
+      ],
+      "answer": ["A"],
+      "explanation": "The OS life cycle runs release, mainstream support, extended support, then end of support. After end of support there are no security patches unless a paid Extended Security Updates program covers the device; Windows 10, for example, ended support on October 14, 2025.",
+      "discriminator_tested": "After end of support (outside paid ESU) there are no security patches."
+    },
+    {
+      "objectives": ["C06-20"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two pairings of an Event Viewer log with what it records are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Security: logons and audited actions", "rationale": "Correct."},
+        {"key": "B", "text": "System: OS components and drivers", "rationale": "Correct."},
+        {"key": "C", "text": "Application: logon attempts", "rationale": "Logons are recorded in the Security log."},
+        {"key": "D", "text": "Security: driver load failures", "rationale": "Driver events are recorded in the System log."},
+        {"key": "E", "text": "System: errors from programs users installed", "rationale": "Program events are recorded in the Application log."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "In Event Viewer, the Security log holds logons and audited actions, the System log holds OS components and drivers, and the Application log holds programs. Levels are Critical, Error, Warning, and Information.",
+      "discriminator_tested": "Security = logons and audits; System = OS and drivers; Application = programs."
+    },
+    {
+      "objectives": ["C06-21"], "type": "single", "angle": "choose-device", "difficulty": 2,
+      "stem": "On a Linux server, which component records security-relevant actions, such as file access and privilege use, according to configured rules?",
+      "options": [
+        {"key": "A", "text": "auditd", "rationale": "Correct: it produces Linux audit logs."},
+        {"key": "B", "text": "ufw", "rationale": "ufw manages firewall rules."},
+        {"key": "C", "text": "apt", "rationale": "apt installs and updates packages."},
+        {"key": "D", "text": "chmod", "rationale": "chmod changes permissions; it doesn't record actions."}
+      ],
+      "answer": ["A"],
+      "explanation": "Audit logs record security-relevant actions (who, what, when, from where). They are enabled by audit policy on Windows or by auditd on Linux, and they must be protected from tampering.",
+      "discriminator_tested": "Audit logs come from audit policy on Windows and auditd on Linux."
+    },
+    {
+      "objectives": ["C06-22"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "Logs from branch firewalls cross an untrusted WAN to a central collector. Losing log messages or exposing their contents is unacceptable. Which transport fits?",
+      "options": [
+        {"key": "A", "text": "Syslog over TLS (TCP 6514)", "rationale": "Correct: TCP adds reliability, and TLS adds confidentiality."},
+        {"key": "B", "text": "Default syslog on UDP 514", "rationale": "UDP 514 is cleartext and unreliable."},
+        {"key": "C", "text": "SNMPv2c traps", "rationale": "Traps are alerts, not log streams, and v2c is cleartext."},
+        {"key": "D", "text": "TFTP", "rationale": "TFTP is unauthenticated file transfer."}
+      ],
+      "answer": ["A"],
+      "explanation": "Syslog by default uses UDP 514, which is cleartext and unreliable. Syslog over TCP adds reliability, and over TLS (6514) adds security.",
+      "discriminator_tested": "UDP 514 is cleartext and unreliable; TLS on 6514 adds security."
+    },
+    {
+      "objectives": ["C06-23", "C06-27"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "A company sends all device logs to a syslog collector. Management assumes it will be alerted automatically when a brute force attack shows up across the firewall, server, and VPN logs together. What is missing?",
+      "options": [
+        {"key": "A", "text": "A SIEM to correlate events across sources and raise alerts; a collector only stores the logs", "rationale": "Correct: storage is not analysis."},
+        {"key": "B", "text": "More disk space on the collector", "rationale": "Storage space doesn't create alerts."},
+        {"key": "C", "text": "Switching syslog to UDP 514", "rationale": "The transport doesn't add correlation."},
+        {"key": "D", "text": "Turning on Event Viewer on the routers", "rationale": "Event Viewer is a Windows log viewer and doesn't correlate."}
+      ],
+      "answer": ["A"],
+      "explanation": "A syslog collector is a central server that receives and keeps syslog from many devices. Correlating events across sources and alerting is the job of a SIEM.",
+      "discriminator_tested": "A collector stores logs; it doesn't correlate them."
+    },
+    {
+      "objectives": ["C06-24", "C06-25"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A router logs:\n\n%SEC-6-IPACCESSLOGP: list 101 denied tcp 10.1.1.5(51544) -> 10.2.2.2(23), 1 packet\n\nWhich statement about this syslog message is correct?",
+      "options": [
+        {"key": "A", "text": "SEC is the facility, 6 is the severity (Informational), and IPACCESSLOGP is the mnemonic", "rationale": "Correct: the format is %FACILITY-SEVERITY-MNEMONIC."},
+        {"key": "B", "text": "6 is the ACL number", "rationale": "The ACL number, 101, appears in the description."},
+        {"key": "C", "text": "SEC is the severity level", "rationale": "SEC is the facility; the severity is the number."},
+        {"key": "D", "text": "6 means Emergency", "rationale": "Emergency is 0; 6 is Informational."}
+      ],
+      "answer": ["A"],
+      "explanation": "Cisco syslog messages use the format %FACILITY-SEVERITY-MNEMONIC: description. The number in the middle is the severity level, here 6 (Informational).",
+      "discriminator_tested": "The number in the middle is the severity."
+    },
+    {
+      "objectives": ["C06-25"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which pairing of a logging severity level with its name is NOT correct?",
+      "options": [
+        {"key": "A", "text": "0: Debugging", "rationale": "Correct choice because it is wrong: 0 is Emergency, and Debugging is 7."},
+        {"key": "B", "text": "3: Error", "rationale": "Correct pairing."},
+        {"key": "C", "text": "4: Warning", "rationale": "Correct pairing."},
+        {"key": "D", "text": "6: Informational", "rationale": "Correct pairing."}
+      ],
+      "answer": ["A"],
+      "explanation": "Severity levels are 0 Emergency, 1 Alert, 2 Critical, 3 Error, 4 Warning, 5 Notification, 6 Informational, 7 Debugging. A lower number is more severe.",
+      "discriminator_tested": "Lower number = more severe; 0 is Emergency, 7 is Debugging."
+    },
+    {
+      "objectives": ["C06-26"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "Why does identifying anomalies in logs depend on having a baseline?",
+      "options": [
+        {"key": "A", "text": "Without knowing what normal activity looks like, you can't tell which events are unusual", "rationale": "Correct: an anomaly is a deviation from a known normal."},
+        {"key": "B", "text": "Baselines encrypt the logs", "rationale": "A baseline describes normal behavior; it doesn't encrypt anything."},
+        {"key": "C", "text": "Baselines delete old logs to save space", "rationale": "Retention is a separate setting."},
+        {"key": "D", "text": "Anomaly detection only matches known signatures", "rationale": "Matching known patterns is signature-based detection."}
+      ],
+      "answer": ["A"],
+      "explanation": "Identifying anomalies means comparing log activity with a baseline, for example off-hours logons, repeated failed logons, or new admin accounts. Without a baseline, unusual can't be told from normal.",
+      "discriminator_tested": "An anomaly needs a baseline."
+    },
+    {
+      "objectives": ["C06-27"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which of these is NOT a typical SIEM function?",
+      "options": [
+        {"key": "A", "text": "Blocking packets inline at the network edge", "rationale": "Correct choice: inline blocking is done by an IPS or firewall."},
+        {"key": "B", "text": "Aggregating logs from many sources", "rationale": "A SIEM function."},
+        {"key": "C", "text": "Correlating events across sources", "rationale": "A SIEM function: the key one."},
+        {"key": "D", "text": "Alerts and dashboards", "rationale": "A SIEM function."}
+      ],
+      "answer": ["A"],
+      "explanation": "A SIEM aggregates, normalizes, and correlates logs from many sources, with alerts, dashboards, and retention. It analyzes events; it doesn't sit inline blocking traffic.",
+      "discriminator_tested": "A SIEM correlates logs across sources."
+    }
+  ]
+}

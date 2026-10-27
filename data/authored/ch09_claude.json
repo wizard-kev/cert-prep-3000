@@ -1,0 +1,502 @@
+{
+  "questions": [
+    {
+      "objectives": ["C09-01"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two of these are vulnerabilities? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A web server running an outdated version with a known flaw", "rationale": "Correct: a software flaw that can be exploited."},
+        {"key": "B", "text": "A change process that lets anyone push firewall rules without review", "rationale": "Correct: a weak process is a weakness too."},
+        {"key": "C", "text": "A criminal group that targets retailers", "rationale": "That is a threat."},
+        {"key": "D", "text": "A port scan an attacker runs against the network", "rationale": "That is a reconnaissance technique, not a weakness."},
+        {"key": "E", "text": "The customer database", "rationale": "That is an asset."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Vulnerabilities are weaknesses that can be exploited: software flaws, misconfigurations, and weak processes. A vulnerability is the weakness itself.",
+      "discriminator_tested": "A vulnerability is the weakness itself."
+    },
+    {
+      "objectives": ["C09-02", "C09-03"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A company installs a patch whenever a vendor emails about one, but it never scans, keeps an inventory, or tests. A breach exploits an unpatched application that nobody knew was installed. What was the underlying gap?",
+      "options": [
+        {"key": "A", "text": "Vulnerability identification: you can't fix what you haven't found", "rationale": "Correct: without scanning or inventory, the app was invisible."},
+        {"key": "B", "text": "Vulnerability mitigation", "rationale": "Mitigation can't be applied to an unknown weakness."},
+        {"key": "C", "text": "Incident reporting", "rationale": "Reporting comes after the breach; the gap was before it."},
+        {"key": "D", "text": "Incident recovery", "rationale": "Recovery restores service; it doesn't find weaknesses."}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability identification discovers weaknesses through scans, testing, inventories, and threat intelligence. You can't fix what you haven't found.",
+      "discriminator_tested": "You can't fix what you haven't found."
+    },
+    {
+      "objectives": ["C09-03"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 1,
+      "stem": "Which sequence describes the vulnerability management cycle?",
+      "options": [
+        {"key": "A", "text": "Identify, prioritize, remediate or mitigate, verify, report, and then repeat", "rationale": "Correct: a continuous cycle."},
+        {"key": "B", "text": "Report, identify, verify, then stop", "rationale": "You can't report or verify before identifying, and the cycle doesn't stop."},
+        {"key": "C", "text": "Remediate, identify, prioritize, report", "rationale": "You can't remediate before identifying."},
+        {"key": "D", "text": "Scan once a year and file the results", "rationale": "That is a one-time scan, not a management cycle."}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability management is an ongoing cycle: identify, prioritize, remediate or mitigate, verify, and report. It is a continuous process, not a one-time scan.",
+      "discriminator_tested": "Vulnerability management is a continuous cycle."
+    },
+    {
+      "objectives": ["C09-04", "C09-03"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A critical flaw is found in an industrial controller, and no patch exists yet. The team moves the controller to an isolated VLAN with tight ACLs. Is this remediation or mitigation?",
+      "options": [
+        {"key": "A", "text": "Mitigation: it lowers the risk until a fix exists; remediation, such as patching, would remove the flaw", "rationale": "Correct."},
+        {"key": "B", "text": "Remediation: the flaw is now gone", "rationale": "The flaw is still there; it is just harder to reach."},
+        {"key": "C", "text": "Risk acceptance", "rationale": "The team acted to reduce the risk, rather than accepting it."},
+        {"key": "D", "text": "Risk transfer", "rationale": "Nothing was shifted to a third party."}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability mitigation reduces exposure when a full fix isn't immediately possible, through segmentation, ACLs, or disabling the service. Mitigation lowers risk; remediation removes the flaw.",
+      "discriminator_tested": "Mitigation lowers risk; remediation removes the flaw."
+    },
+    {
+      "objectives": ["C09-05", "C09-10"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "During an authorized engagement, which two of these activities are passive reconnaissance? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Reading the target's job postings to learn which software it runs", "rationale": "Correct: public information, with no contact with the target."},
+        {"key": "B", "text": "Searching public WHOIS and DNS records for the target's domain", "rationale": "Correct: public records, with no contact with the target's systems."},
+        {"key": "C", "text": "Running nmap against the target's servers", "rationale": "That touches the target directly, so it is active."},
+        {"key": "D", "text": "Calling the help desk while posing as an employee", "rationale": "That interacts with the target's people, so it is active."},
+        {"key": "E", "text": "Sending crafted packets to map the target's firewall rules", "rationale": "That touches the target, so it is active."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Active vs passive reconnaissance: passive gathers information without touching the target; active interacts with it directly. Active can be detected and logged; passive generally can't.",
+      "discriminator_tested": "Passive = no contact with the target; active can be detected."
+    },
+    {
+      "objectives": ["C09-06", "C09-07"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What separates port scanning from a vulnerability scan?",
+      "options": [
+        {"key": "A", "text": "A port scan finds open ports and running services; a vulnerability scan checks those services against known vulnerabilities", "rationale": "Correct."},
+        {"key": "B", "text": "A vulnerability scan only finds open ports; a port scan reports CVEs", "rationale": "This is reversed."},
+        {"key": "C", "text": "They are the same thing", "rationale": "A vulnerability scan goes beyond finding ports."},
+        {"key": "D", "text": "A port scan is passive and can't be detected", "rationale": "Port scanning is active."}
+      ],
+      "answer": ["A"],
+      "explanation": "Port scanning is active. It probes hosts for open ports and running services, but it finds only open ports, not known flaws.",
+      "discriminator_tested": "A port scan finds open ports only, not known flaws."
+    },
+    {
+      "objectives": ["C09-07"], "type": "single", "angle": "choose-tool", "difficulty": 3,
+      "stem": "An auditor needs to know which of 300 servers are missing patches for known CVEs and which have weak configurations. Which technique fits, and why might the auditor give it login credentials?",
+      "options": [
+        {"key": "A", "text": "A credentialed vulnerability scan; logging in lets it check installed versions and settings from the inside, so it finds more than a non-credentialed scan", "rationale": "Correct."},
+        {"key": "B", "text": "A port scan; credentials let it find more open ports", "rationale": "A port scan doesn't check for known flaws or settings."},
+        {"key": "C", "text": "OSINT; credentials let it read more social media", "rationale": "OSINT is public information, not server patch levels."},
+        {"key": "D", "text": "Packet sniffing; credentials decrypt the traffic", "rationale": "Sniffing shows traffic, not missing patches."}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability scanning runs automated checks of systems against known vulnerabilities, either credentialed or non-credentialed. It reports known weaknesses and goes beyond a port scan.",
+      "discriminator_tested": "Vulnerability scanning reports known weaknesses; credentials let it see more."
+    },
+    {
+      "objectives": ["C09-08"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "A capture taken from a switch's mirror (SPAN) port shows a user's FTP username and password in plain text. Which technique revealed this, and is it active or passive?",
+      "options": [
+        {"key": "A", "text": "Packet sniffing (network traffic analysis); passive while it is only listening", "rationale": "Correct."},
+        {"key": "B", "text": "Port scanning; active", "rationale": "A port scan probes for open ports; it doesn't show credentials."},
+        {"key": "C", "text": "OSINT; passive", "rationale": "OSINT uses public sources, not captured traffic."},
+        {"key": "D", "text": "A brute-force attack; active", "rationale": "Brute force guesses passwords; this password was captured."}
+      ],
+      "answer": ["A"],
+      "explanation": "Packet sniffing, or network traffic analysis, captures and examines traffic to reveal protocols, cleartext credentials, and anomalies. It is passive when it only listens.",
+      "discriminator_tested": "Sniffing reveals what crosses the network; passive when only listening."
+    },
+    {
+      "objectives": ["C09-09"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "During an authorized test, a tester runs brute-force attacks against a login portal. Why is this activity considered active and easy to detect?",
+      "options": [
+        {"key": "A", "text": "It sends many login attempts to the target, which fill the logs with failed logons and can trigger lockouts", "rationale": "Correct: it is noisy by nature."},
+        {"key": "B", "text": "It uses only public information", "rationale": "That describes OSINT."},
+        {"key": "C", "text": "It never touches the target's systems", "rationale": "Every guess hits the target's login service."},
+        {"key": "D", "text": "Its traffic is encrypted, so logging can't see it", "rationale": "Failed logons are logged by the target regardless."}
+      ],
+      "answer": ["A"],
+      "explanation": "Brute-force attacks try many credential combinations to test or break password strength. They are active and noisy, and lockouts counter them.",
+      "discriminator_tested": "Brute force is active and noisy; lockouts counter it."
+    },
+    {
+      "objectives": ["C09-10"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "Before an authorized test, a tester wants employee names, the company's email address format, and the technologies it uses, without sending a single packet to the company. Which approach fits?",
+      "options": [
+        {"key": "A", "text": "OSINT", "rationale": "Correct: public sources, with no direct contact."},
+        {"key": "B", "text": "Port scanning", "rationale": "Port scanning sends packets to the target."},
+        {"key": "C", "text": "Vulnerability scanning", "rationale": "Vulnerability scanning probes the target directly."},
+        {"key": "D", "text": "A brute-force attack", "rationale": "A brute-force attack hits the target's login service."}
+      ],
+      "answer": ["A"],
+      "explanation": "OSINT is information gathered from public sources such as websites, social media, public records, and job posts. It is passive, with no direct contact with the target.",
+      "discriminator_tested": "OSINT is passive, from public sources."
+    },
+    {
+      "objectives": ["C09-11", "C09-05"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "A tester first finds vpn.example.com, dev.example.com, and mail.example.com in public certificate-transparency logs. The tester then queries the company's own DNS servers directly for more records. Which statement is correct?",
+      "options": [
+        {"key": "A", "text": "Both are DNS enumeration; the public-records step is passive, and querying the target's DNS servers is active", "rationale": "Correct: the same goal, with different contact with the target."},
+        {"key": "B", "text": "Both steps are passive", "rationale": "Querying the target's own servers interacts with them."},
+        {"key": "C", "text": "Both steps are active", "rationale": "Reading public logs doesn't touch the target."},
+        {"key": "D", "text": "Neither is DNS enumeration, which requires a zone transfer", "rationale": "A zone transfer is only one way to enumerate DNS."}
+      ],
+      "answer": ["A"],
+      "explanation": "DNS enumeration discovers a domain's hostnames, subdomains, and records. It is passive when it uses public records and active when it queries the target's DNS servers.",
+      "discriminator_tested": "DNS enumeration is passive from public records and active against the target's DNS."
+    },
+    {
+      "objectives": ["C09-12", "C09-05"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "A tester calls the help desk, poses as a new employee, and learns the name of the VPN client and how password resets work. What type of reconnaissance is this?",
+      "options": [
+        {"key": "A", "text": "Social engineering: human-based and active", "rationale": "Correct: it manipulates people directly."},
+        {"key": "B", "text": "OSINT: passive", "rationale": "Calling the help desk is direct contact with the target."},
+        {"key": "C", "text": "Port scanning", "rationale": "No ports were probed."},
+        {"key": "D", "text": "Packet sniffing", "rationale": "No traffic was captured."}
+      ],
+      "answer": ["A"],
+      "explanation": "Social engineering as reconnaissance means manipulating people to reveal information. It is human-based and active.",
+      "discriminator_tested": "Social engineering reconnaissance is human-based and active."
+    },
+    {
+      "objectives": ["C09-13", "C09-14"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What separates testing from simply running an automated scan?",
+      "options": [
+        {"key": "A", "text": "Testing is systematic, authorized, and scoped, and it confirms what scans only suggest, such as whether a flagged flaw is real", "rationale": "Correct."},
+        {"key": "B", "text": "Testing doesn't need authorization", "rationale": "Authorization is required."},
+        {"key": "C", "text": "Scans confirm weaknesses; tests only suggest them", "rationale": "This is reversed."},
+        {"key": "D", "text": "They are exactly the same", "rationale": "Testing confirms and is scoped; a scan only suggests."}
+      ],
+      "answer": ["A"],
+      "explanation": "Testing is a set of systematic, authorized checks to find and confirm weaknesses. It is authorized and scoped, and it confirms what scans suggest.",
+      "discriminator_tested": "Testing is authorized and scoped, and confirms what scans suggest."
+    },
+    {
+      "objectives": ["C09-14"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A company schedules weekly automated vulnerability scans, but nobody reads the reports. A critical flaw that the scans flagged is exploited months later. What is the lesson about automation?",
+      "options": [
+        {"key": "A", "text": "Automation makes scanning fast and repeatable, but its results still need human review and prioritization", "rationale": "Correct: the scan found it; nobody acted on it."},
+        {"key": "B", "text": "Automated scans fix flaws by themselves", "rationale": "Scans only find flaws."},
+        {"key": "C", "text": "Scans should only ever be done by hand", "rationale": "Automation was useful; the failure was in follow-up."},
+        {"key": "D", "text": "Weekly scanning is too frequent", "rationale": "Frequency wasn't the problem."}
+      ],
+      "answer": ["A"],
+      "explanation": "Automation means scheduled, scripted, tool-driven scans and checks: fast, consistent, and repeatable at scale. The results still need human review and prioritization.",
+      "discriminator_tested": "Automated results still need human review and prioritization."
+    },
+    {
+      "objectives": ["C09-15"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What separates threat intelligence from vulnerability scan findings?",
+      "options": [
+        {"key": "A", "text": "Threat intelligence is external, actionable context about attackers, their tactics, and indicators; scan findings are weaknesses in your own systems", "rationale": "Correct: external context versus internal findings."},
+        {"key": "B", "text": "They are the same thing", "rationale": "One describes threats; the other describes your weaknesses."},
+        {"key": "C", "text": "Threat intelligence lists your own missing patches", "rationale": "That is what a scan reports."},
+        {"key": "D", "text": "Scan findings come from external intelligence feeds", "rationale": "Scan findings come from your own systems."}
+      ],
+      "answer": ["A"],
+      "explanation": "Threat intelligence is information about threats, actors, tactics, and indicators, used to anticipate and defend. It gives external, actionable context, whereas vulnerability findings are internal.",
+      "discriminator_tested": "Threat intelligence is external context; vulnerability findings are internal."
+    },
+    {
+      "objectives": ["C09-16"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "A finding reads: 'CVE-2025-12345, documented in the NVD, CVSS 9.8.' Using what you know about vulnerability databases, what does each part represent?",
+      "options": [
+        {"key": "A", "text": "CVE is the vulnerability's identifier; the NVD is the enriched database entry; CVSS 9.8 is the severity score", "rationale": "Correct."},
+        {"key": "B", "text": "CVE is the severity score; the NVD is the vendor's patch; CVSS is the identifier", "rationale": "The roles are mixed up."},
+        {"key": "C", "text": "The NVD is the vendor that wrote the patch", "rationale": "The NVD is a public vulnerability database."},
+        {"key": "D", "text": "CVSS is the name of the vulnerable product", "rationale": "CVSS is a scoring system."}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability databases are public catalogs of known vulnerabilities: CVE identifiers, the NVD, and CVSS severity scores. CVE is the identifier, the NVD is the enriched database, and CVSS is the severity score.",
+      "discriminator_tested": "CVE = identifier; NVD = enriched database; CVSS = severity score."
+    },
+    {
+      "objectives": ["C09-17", "C09-16"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A newly discovered flaw is being exploited in the wild today, but the vulnerability database shows no entry for it. Why not?",
+      "options": [
+        {"key": "A", "text": "Databases lag behind new discoveries and don't list unknown (zero-day) flaws", "rationale": "Correct: an entry appears only after the flaw is reported and catalogued."},
+        {"key": "B", "text": "The flaw isn't serious", "rationale": "Severity has nothing to do with whether it is listed yet."},
+        {"key": "C", "text": "The database deleted the entry", "rationale": "There was never an entry to delete."},
+        {"key": "D", "text": "Vulnerability databases list only hardware flaws", "rationale": "They list software flaws too."}
+      ],
+      "answer": ["A"],
+      "explanation": "Limitations of vulnerability databases: they lag behind new discoveries, their data can be incomplete or inconsistent, and their scores lack your environment's context. They don't list zero-day flaws.",
+      "discriminator_tested": "Vulnerability databases don't list zero-day flaws."
+    },
+    {
+      "objectives": ["C09-18"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which statement about assessment tools is accurate?",
+      "options": [
+        {"key": "A", "text": "They automate discovery (vulnerability scanners, port scanners, configuration auditors), but their output still needs analysis", "rationale": "Correct."},
+        {"key": "B", "text": "They fix every issue they find automatically", "rationale": "They discover issues; people decide and fix."},
+        {"key": "C", "text": "Their output needs no review", "rationale": "Output includes false positives and needs analysis."},
+        {"key": "D", "text": "Only attackers use them", "rationale": "Defenders rely on them too."}
+      ],
+      "answer": ["A"],
+      "explanation": "Assessment tools, such as vulnerability scanners, port scanners, and configuration auditors, automate discovery. Their output still needs analysis.",
+      "discriminator_tested": "Assessment tools automate discovery; output still needs analysis."
+    },
+    {
+      "objectives": ["C09-19", "C09-27"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "An assessment report lists 200 findings but says nothing about what to do about them or in what order. What is missing?",
+      "options": [
+        {"key": "A", "text": "Recommendations: specific, prioritized, actionable guidance", "rationale": "Correct: the actionable output of an assessment."},
+        {"key": "B", "text": "More findings", "rationale": "The problem is what to do, not how many findings."},
+        {"key": "C", "text": "More CVSS scores", "rationale": "Scores help ranking, but the report still lacks guidance."},
+        {"key": "D", "text": "A cover page", "rationale": "Formatting isn't the gap."}
+      ],
+      "answer": ["A"],
+      "explanation": "Recommendations are the specific, prioritized guidance that comes out of an assessment. They are its actionable output.",
+      "discriminator_tested": "Recommendations are the actionable output of an assessment."
+    },
+    {
+      "objectives": ["C09-20"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 1,
+      "stem": "A web server also runs FTP, Telnet, and a print service that nobody uses. Which action best reduces the surface area for attack?",
+      "options": [
+        {"key": "A", "text": "Disable the unused services and close their ports", "rationale": "Correct: fewer exposed components means fewer vulnerabilities."},
+        {"key": "B", "text": "Add more services for redundancy", "rationale": "That increases the attack surface."},
+        {"key": "C", "text": "Change the services' banners", "rationale": "The services would still be exposed."},
+        {"key": "D", "text": "Leave them running but monitor them", "rationale": "Monitoring doesn't remove the exposure."}
+      ],
+      "answer": ["A"],
+      "explanation": "To reduce the surface area for attack, disable unneeded services, ports, accounts, and software. Fewer exposed components means fewer vulnerabilities.",
+      "discriminator_tested": "Fewer exposed components means fewer vulnerabilities."
+    },
+    {
+      "objectives": ["C09-21"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "An administrator must enforce screen-lock timeouts and password rules centrally on 1,500 domain-joined Windows PCs. What should they use?",
+      "options": [
+        {"key": "A", "text": "Group Policy", "rationale": "Correct: central enforcement of Windows settings."},
+        {"key": "B", "text": "SELinux", "rationale": "SELinux is Linux mandatory access control."},
+        {"key": "C", "text": "Samba", "rationale": "Samba is SMB file sharing on Linux."},
+        {"key": "D", "text": "An RSS feed", "rationale": "RSS delivers news items."}
+      ],
+      "answer": ["A"],
+      "explanation": "Group Policy centrally manages and enforces settings on Windows computers and users. It is the tool for central enforcement of configuration and security settings.",
+      "discriminator_tested": "Group Policy centrally enforces Windows settings."
+    },
+    {
+      "objectives": ["C09-22", "C09-24"], "type": "single", "angle": "interpret-config", "difficulty": 3,
+      "stem": "Four policies set the screensaver timeout for the same PC: local policy 30 minutes, site GPO 20 minutes, domain GPO 15 minutes, OU GPO 10 minutes. None are enforced or blocked. Which value applies?",
+      "options": [
+        {"key": "A", "text": "10 minutes, because the OU GPO is applied last", "rationale": "Correct: local, then site, domain, and OU, with later ones overriding earlier ones."},
+        {"key": "B", "text": "30 minutes, because local policy always wins", "rationale": "Local policy is applied first, so later GPOs override it."},
+        {"key": "C", "text": "15 minutes, because the domain always wins", "rationale": "The OU GPO is applied after the domain GPO."},
+        {"key": "D", "text": "20 minutes, because the site GPO is closest to the network", "rationale": "The site GPO is applied before the domain and OU GPOs."}
+      ],
+      "answer": ["A"],
+      "explanation": "GPOs are bundles of settings linked to a site, domain, or OU. They apply in the order local, site, domain, then OU, and later ones override earlier ones.",
+      "discriminator_tested": "GPO order: local, site, domain, OU; later overrides earlier."
+    },
+    {
+      "objectives": ["C09-23", "C09-21"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A standalone kiosk PC that isn't joined to any domain needs USB storage disabled. Which kind of policy applies?",
+      "options": [
+        {"key": "A", "text": "Local group policy, whose scope is that single machine", "rationale": "Correct: with no domain, the PC's local policy is what applies."},
+        {"key": "B", "text": "Domain group policy", "rationale": "The PC isn't in a domain."},
+        {"key": "C", "text": "SELinux", "rationale": "SELinux is a Linux feature."},
+        {"key": "D", "text": "Samba", "rationale": "Samba is SMB file sharing."}
+      ],
+      "answer": ["A"],
+      "explanation": "Local group policy is the set of settings applied to a single computer. Its scope is one machine, and it works without a domain.",
+      "discriminator_tested": "Local group policy's scope is one machine."
+    },
+    {
+      "objectives": ["C09-24", "C09-23"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A domain-joined PC's local policy allows USB storage, but the domain group policy disables it. Which setting wins, and why?",
+      "options": [
+        {"key": "A", "text": "The domain policy: it is applied after the local policy and overrides it on conflict", "rationale": "Correct."},
+        {"key": "B", "text": "The local policy, because it is on the machine itself", "rationale": "Local policy is applied first and gets overridden."},
+        {"key": "C", "text": "Neither; the conflict disables both", "rationale": "Conflicts are resolved by order; nothing is disabled."},
+        {"key": "D", "text": "Whichever was edited most recently", "rationale": "Processing order decides, not edit time."}
+      ],
+      "answer": ["A"],
+      "explanation": "Domain group policy applies settings centrally to many computers and users through Active Directory. Its scope is many machines, and it overrides local settings on conflict.",
+      "discriminator_tested": "Domain policy overrides local on conflict."
+    },
+    {
+      "objectives": ["C09-25"], "type": "single", "angle": "interpret-config", "difficulty": 2,
+      "stem": "On a Linux server, 'getenforce' returns:\n\nPermissive\n\nA web server process tries to read a file that its SELinux policy doesn't allow. What happens?",
+      "options": [
+        {"key": "A", "text": "The access is allowed, but the violation is logged", "rationale": "Correct: permissive mode only logs."},
+        {"key": "B", "text": "The access is blocked and logged", "rationale": "That happens in enforcing mode."},
+        {"key": "C", "text": "The access is blocked silently", "rationale": "Permissive mode doesn't block."},
+        {"key": "D", "text": "Nothing is checked, because SELinux is fully off", "rationale": "That would be disabled mode; permissive still checks and logs."}
+      ],
+      "answer": ["A"],
+      "explanation": "SELinux mode can be enforcing, permissive, or disabled (check with getenforce; switch with setenforce). Enforcing blocks and logs violations; permissive only logs them.",
+      "discriminator_tested": "Enforcing blocks and logs; permissive only logs."
+    },
+    {
+      "objectives": ["C09-26", "C09-20"], "type": "multi", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which two actions harden a Linux server that runs Samba file shares? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Disable SMBv1", "rationale": "Correct: SMBv1 is old and insecure."},
+        {"key": "B", "text": "Require authentication, and limit each share to the users who need it", "rationale": "Correct."},
+        {"key": "C", "text": "Allow guest access to every share for convenience", "rationale": "That widens exposure."},
+        {"key": "D", "text": "Expose Samba directly to the internet", "rationale": "Exposed SMB is a major attack surface."},
+        {"key": "E", "text": "Stop patching Samba so the shares don't break", "rationale": "Unpatched Samba keeps known flaws open."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Samba is the Linux/Unix implementation of SMB file and print sharing. Exposed SMB is attack surface: disable it if unused, restrict shares, require authentication, disable SMBv1, and keep it patched.",
+      "discriminator_tested": "Harden Samba: restrict, authenticate, disable SMBv1, patch."
+    },
+    {
+      "objectives": ["C09-27"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "One assessment produces two security reports: one for the IT team and one for the board. How should they differ?",
+      "options": [
+        {"key": "A", "text": "The IT team gets the technical detail; the board gets an executive summary of risk and recommendations", "rationale": "Correct: tailor each report to its audience."},
+        {"key": "B", "text": "They should be identical", "rationale": "Each audience needs a different level of detail."},
+        {"key": "C", "text": "The board gets the raw scanner output", "rationale": "Executives need a summary of risk."},
+        {"key": "D", "text": "The IT team gets only a one-page summary", "rationale": "Technical staff need the detail to fix things."}
+      ],
+      "answer": ["A"],
+      "explanation": "Security reports summarize assessment findings, vulnerabilities, and recommendations. Tailor them to the audience: technical detail for IT, an executive summary for leadership.",
+      "discriminator_tested": "Tailor reports to the audience."
+    },
+    {
+      "objectives": ["C09-28"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A blog post in the cybersecurity news claims a 'catastrophic' flaw in the company's VPN product. What should the team do before acting on it?",
+      "options": [
+        {"key": "A", "text": "Check the claim against credible sources, such as the vendor's advisory or a CVE/NVD entry", "rationale": "Correct: verify credibility before acting."},
+        {"key": "B", "text": "Shut down the VPN immediately", "rationale": "Acting on an unverified report could cause needless outages."},
+        {"key": "C", "text": "Ignore all security news", "rationale": "News builds awareness of emerging threats; it should be verified, not ignored."},
+        {"key": "D", "text": "Post the claim on social media to warn others", "rationale": "Spreading an unverified claim is unhelpful."}
+      ],
+      "answer": ["A"],
+      "explanation": "Cybersecurity news sources report emerging threats and vulnerabilities. They build awareness, but their credibility should be verified before acting.",
+      "discriminator_tested": "Cybersecurity news builds awareness; verify credibility."
+    },
+    {
+      "objectives": ["C09-29", "C09-15"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What do subscription-based sources of threat intelligence typically offer over free sources, and what is the trade-off?",
+      "options": [
+        {"key": "A", "text": "Curated, timely, and often deeper information; they cost money", "rationale": "Correct."},
+        {"key": "B", "text": "They are always free", "rationale": "Subscriptions are paid."},
+        {"key": "C", "text": "They are less timely than free sources", "rationale": "Timeliness is one of their selling points."},
+        {"key": "D", "text": "They offer no curation", "rationale": "Curation is one of their main benefits."}
+      ],
+      "answer": ["A"],
+      "explanation": "Subscription-based sources are paid or subscribed threat-intelligence feeds and advisories. They are curated, timely, and often deeper than free sources, but they cost money.",
+      "discriminator_tested": "Subscription sources are curated and timely, but cost money."
+    },
+    {
+      "objectives": ["C09-30"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "An analyst wants new advisories from 15 vendor websites delivered automatically, without visiting each site every day. What fits?",
+      "options": [
+        {"key": "A", "text": "Subscribing to each site's RSS feed", "rationale": "Correct: new items arrive automatically."},
+        {"key": "B", "text": "Turning on SELinux", "rationale": "SELinux is access control."},
+        {"key": "C", "text": "Running a port scan", "rationale": "A port scan probes hosts."},
+        {"key": "D", "text": "Keeping a chain of custody", "rationale": "Chain of custody tracks evidence."}
+      ],
+      "answer": ["A"],
+      "explanation": "An RSS feed delivers new items from chosen sites automatically, pulling updates to you without visiting each site.",
+      "discriminator_tested": "RSS pulls updates to you automatically."
+    },
+    {
+      "objectives": ["C09-31", "C09-38"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Why is documentation central to security operations?",
+      "options": [
+        {"key": "A", "text": "It makes actions repeatable and auditable", "rationale": "Correct."},
+        {"key": "B", "text": "It replaces staff training", "rationale": "Documentation supports training but doesn't replace it."},
+        {"key": "C", "text": "It matters only to lawyers", "rationale": "Operations staff, auditors, and responders all rely on it."},
+        {"key": "D", "text": "It slows response down and should be skipped", "rationale": "Good documentation speeds response."}
+      ],
+      "answer": ["A"],
+      "explanation": "Documentation is the written record of processes, changes, and events. It makes actions repeatable and auditable.",
+      "discriminator_tested": "Documentation makes actions repeatable and auditable."
+    },
+    {
+      "objectives": ["C09-32", "C09-31"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "During an incident, responders follow a network diagram that still shows a firewall removed a year ago, and they waste an hour. What failed?",
+      "options": [
+        {"key": "A", "text": "Updating documentation: outdated documents mislead responders", "rationale": "Correct."},
+        {"key": "B", "text": "Chain of custody", "rationale": "That concerns evidence handling, not network diagrams."},
+        {"key": "C", "text": "The RSS feed", "rationale": "RSS delivers news; it doesn't maintain internal diagrams."},
+        {"key": "D", "text": "CVSS scoring", "rationale": "Scoring has nothing to do with a stale diagram."}
+      ],
+      "answer": ["A"],
+      "explanation": "Updating documentation means keeping documents current as systems, processes, and lessons change. Outdated documentation misleads responders.",
+      "discriminator_tested": "Outdated documentation misleads responders."
+    },
+    {
+      "objectives": ["C09-33"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "An incident record says only: 'Malware found on some servers; cleaned it up.' What is missing from this security incident documentation?",
+      "options": [
+        {"key": "A", "text": "A factual, time-stamped timeline, the affected systems, the actions taken, and who did what", "rationale": "Correct."},
+        {"key": "B", "text": "A CVSS score", "rationale": "A score doesn't record what happened."},
+        {"key": "C", "text": "A list of the team's RSS feeds", "rationale": "Unrelated to the incident record."},
+        {"key": "D", "text": "The vendor's marketing material", "rationale": "Unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "Security incident documentation is a record of the incident: the timeline, affected systems, actions taken, and who did what. It is a factual, time-stamped account.",
+      "discriminator_tested": "Incident documentation is a factual, time-stamped account."
+    },
+    {
+      "objectives": ["C09-34"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "An investigator images a laptop's drive. The drive then sits on an unlocked desk overnight, with no log entry, before going to the lab. What is the problem?",
+      "options": [
+        {"key": "A", "text": "A gap in the chain of custody: there is no record of who handled the evidence, when, and how, which undermines its integrity and admissibility", "rationale": "Correct."},
+        {"key": "B", "text": "The drive has no CVSS score", "rationale": "Scores don't apply to evidence handling."},
+        {"key": "C", "text": "The laptop wasn't patched", "rationale": "Patching doesn't affect evidence handling."},
+        {"key": "D", "text": "The drive wasn't wiped", "rationale": "Wiping would destroy the evidence."}
+      ],
+      "answer": ["A"],
+      "explanation": "Chain of custody is the documented trail of who handled evidence, when, and how. A gap undermines the integrity and admissibility of the evidence.",
+      "discriminator_tested": "A chain-of-custody gap undermines integrity and admissibility."
+    },
+    {
+      "objectives": ["C09-35"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A breach exposes personal data of the company's customers in the EU. Besides fixing its systems, what must the team do about reporting incidents?",
+      "options": [
+        {"key": "A", "text": "Report through the defined path (management, security, legal, and regulators and customers as required), meeting any mandated deadlines such as GDPR's", "rationale": "Correct: the reporting path and timing are set by policy and regulation."},
+        {"key": "B", "text": "Keep quiet until the incident is fully understood, however long that takes", "rationale": "Regulations may set firm notification deadlines."},
+        {"key": "C", "text": "Post the full details publicly first", "rationale": "Disclosure follows the defined path, not a public post."},
+        {"key": "D", "text": "Tell only the IT team", "rationale": "Management, legal, and possibly regulators must be informed."}
+      ],
+      "answer": ["A"],
+      "explanation": "Reporting incidents means notifying the right parties (management, security team, legal, regulators, customers) according to policy. Follow the defined reporting path; some timing is mandated by regulation.",
+      "discriminator_tested": "Follow the defined reporting path; some timing is mandated."
+    },
+    {
+      "objectives": ["C09-36", "C09-37"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "When does incident recovery happen, and what does it involve?",
+      "options": [
+        {"key": "A", "text": "After containment: restoring systems to normal operation using clean backups, rebuilds, and validation", "rationale": "Correct."},
+        {"key": "B", "text": "Before containment, while the attacker is still active", "rationale": "Restoring then risks reinfection."},
+        {"key": "C", "text": "During reconnaissance", "rationale": "Reconnaissance has nothing to do with recovery."},
+        {"key": "D", "text": "Instead of documentation", "rationale": "Recovery is documented too."}
+      ],
+      "answer": ["A"],
+      "explanation": "Incident recovery restores affected systems to normal operation (clean backups, rebuild, validate). It is the return to service after containment.",
+      "discriminator_tested": "Recovery = return to service after containment."
+    },
+    {
+      "objectives": ["C09-37"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What is the aim of reviewing the incident after recovery?",
+      "options": [
+        {"key": "A", "text": "To find the root cause and improve controls, without assigning blame", "rationale": "Correct."},
+        {"key": "B", "text": "To find someone to blame", "rationale": "The review aims at improvement, not blame."},
+        {"key": "C", "text": "To close the ticket and move on", "rationale": "Skipping the review wastes the lessons learned."},
+        {"key": "D", "text": "To restore the affected systems", "rationale": "That is recovery, which happens before the review."}
+      ],
+      "answer": ["A"],
+      "explanation": "Reviewing the incident is a post-incident review to find the root cause and improve controls. It happens after recovery and aims at improvement, not blame.",
+      "discriminator_tested": "The review comes after recovery and aims at improvement, not blame."
+    },
+    {
+      "objectives": ["C09-38", "C09-33"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two are documentation best practices? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Document as you go, with accurate timestamps", "rationale": "Correct."},
+        {"key": "B", "text": "Use version control and store documents securely, because they can contain sensitive details", "rationale": "Correct."},
+        {"key": "C", "text": "Write everything from memory a month later", "rationale": "Memory fades and records become inaccurate."},
+        {"key": "D", "text": "Keep incident notes on a public wiki", "rationale": "Incident documents can contain sensitive details."},
+        {"key": "E", "text": "Let each responder use a different format", "rationale": "Consistency is a best practice."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Documentation best practices: clear, accurate, timely, consistent, version-controlled, and securely stored. Document as you go, and protect the documents because they can contain sensitive details.",
+      "discriminator_tested": "Document as you go; protect documents with sensitive details."
+    }
+  ]
+}

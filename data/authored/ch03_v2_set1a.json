@@ -1,0 +1,277 @@
+{
+  "questions": [
+    {
+      "objectives": ["C03-01", "C03-02"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An analyst captures the stream below on a switch's SPAN port. What is the MOST important finding?",
+      "exhibit": "Follow TCP Stream (tcp.port == 23)\nRouter1 login: admin\nPassword: Cisc0!2026\nRouter1> enable\nPassword: En@ble-77\nRouter1#",
+      "options": [
+        {"key": "A", "text": "Device credentials are crossing the network in cleartext", "rationale": "Correct: Telnet sends logins readably to anyone who can capture them.", "role": "best"},
+        {"key": "B", "text": "Someone logged in to Router1 with admin rights", "rationale": "True, but routine; the exposure of the passwords is the finding.", "role": "partial"},
+        {"key": "C", "text": "The router's passwords are too short to be secure", "rationale": "Length is irrelevant when the password is visible on the wire.", "role": "related"},
+        {"key": "D", "text": "The session is encrypted, but the capture decoded it", "rationale": "TCP 23 sessions are not encrypted at all.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Telnet provides remote command-line access over TCP 23 in cleartext, so credentials are exposed to anyone who can capture the traffic. SSH is the secure replacement.",
+      "discriminator_tested": "Telnet is cleartext, so credentials are exposed."
+    },
+    {
+      "objectives": ["C03-02", "C03-01"], "type": "single", "angle": "secure-replacement", "difficulty": 2,
+      "stem": "A network team manages 200 switches from the command line over Telnet. Which change BEST protects administrators' credentials?",
+      "options": [
+        {"key": "A", "text": "Enable SSH on the switches and disable Telnet", "rationale": "Correct: encrypted remote access replaces the cleartext protocol.", "role": "best"},
+        {"key": "B", "text": "Use longer, more complex Telnet passwords", "rationale": "A complex password is still sent in cleartext.", "role": "partial"},
+        {"key": "C", "text": "Move management to SNMPv2c with a new community", "rationale": "SNMPv2c also sends its community string in cleartext.", "role": "related"},
+        {"key": "D", "text": "Restrict Telnet to the management VLAN", "rationale": "Reduces exposure, but anyone on that VLAN can still read the logins.", "role": "partial"}
+      ],
+      "answer": ["A"],
+      "explanation": "SSH provides encrypted remote access over TCP 22; it is the secure replacement for Telnet.",
+      "discriminator_tested": "SSH is the secure replacement for Telnet."
+    },
+    {
+      "objectives": ["C03-03", "C03-04"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A capture between a backup server and a file server shows the packets below. Which statement BEST describes the risk?",
+      "exhibit": "No.  Source       Destination  Proto     Info\n1    10.1.4.20    10.1.9.5     FTP       Request: USER backup\n2    10.1.9.5     10.1.4.20    FTP       Response: 331 Password required\n3    10.1.4.20    10.1.9.5     FTP       Request: PASS Backup#77\n4    10.1.9.5     10.1.4.20    FTP       Response: 230 Login successful\n5    10.1.9.5     10.1.4.20    FTP-DATA  payroll_2026-10.csv (48 KB)",
+      "options": [
+        {"key": "A", "text": "Both the login and the file travel in cleartext", "rationale": "Correct: FTP exposes credentials and data alike.", "role": "best"},
+        {"key": "B", "text": "The backup account's password is visible in packet 3", "rationale": "True, but the payroll file's contents are exposed as well.", "role": "partial"},
+        {"key": "C", "text": "TFTP is sending the payroll file without a login", "rationale": "A login occurred; this is FTP, not TFTP.", "role": "related"},
+        {"key": "D", "text": "The file transfer is unreliable because it uses UDP", "rationale": "FTP runs over TCP.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "FTP transfers files over TCP 20/21 with credentials and data in cleartext; it is reliable (TCP) but not confidential. SFTP is the encrypted alternative.",
+      "discriminator_tested": "FTP: credentials and data in cleartext."
+    },
+    {
+      "objectives": ["C03-04", "C03-05"], "type": "single", "angle": "identify-from-port", "difficulty": 2,
+      "stem": "A vendor asks to exchange files by 'secure FTP' and gives a server address with port 22. Which protocol are they using?",
+      "options": [
+        {"key": "A", "text": "SFTP, which runs file transfer inside SSH", "rationale": "Correct: port 22 is SSH, which SFTP tunnels through.", "role": "best"},
+        {"key": "B", "text": "FTP over port 22 with a password", "rationale": "FTP uses 20/21 and is cleartext.", "role": "wrong"},
+        {"key": "C", "text": "TFTP, which transfers files without logging in", "rationale": "TFTP uses UDP 69 and has no authentication.", "role": "related"},
+        {"key": "D", "text": "FTPS, which adds TLS to FTP", "rationale": "Also called secure FTP, but it uses FTP's ports, not 22.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "SFTP is file transfer tunneled through SSH (TCP 22): encrypted, and not the same as FTP or TFTP. FTPS, which adds TLS to FTP, uses different ports.",
+      "discriminator_tested": "SFTP runs over SSH on TCP 22."
+    },
+    {
+      "objectives": ["C03-05", "C03-15"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A switch reboots and the capture below appears on the network. What BEST describes what the switch is doing?",
+      "exhibit": "10.1.1.2.49152 > 10.1.9.10.69: UDP, length 27  RRQ \"switch-07.cfg\" octet\n10.1.9.10.53712 > 10.1.1.2.49152: UDP, length 516  DATA block 1\n10.1.1.2.49152 > 10.1.9.10.53712: UDP, length 4  ACK block 1",
+      "options": [
+        {"key": "A", "text": "Fetching its config by TFTP, unauthenticated", "rationale": "Correct: a read request to UDP 69 with no login.", "role": "best"},
+        {"key": "B", "text": "Downloading a file from a server using UDP transport", "rationale": "True, but it doesn't identify the protocol or its lack of authentication.", "role": "partial"},
+        {"key": "C", "text": "Uploading its configuration over SFTP as a backup", "rationale": "SFTP runs over TCP 22, and this is a read request.", "role": "related"},
+        {"key": "D", "text": "Sending an SNMP trap to report a config change", "rationale": "Traps go to UDP 162, not 69.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "TFTP is simple file transfer over UDP 69 with no authentication, used for configuration, firmware, and boot files. The read request (RRQ) for switch-07.cfg on port 69 gives it away.",
+      "discriminator_tested": "TFTP: UDP 69, no authentication, config/boot files."
+    },
+    {
+      "objectives": ["C03-06"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A capture on the management network shows the packets below. Which change BEST addresses the weakness it reveals?",
+      "exhibit": "No.  Source      Destination  Proto  Info\n1    10.1.9.30   10.1.1.2     SNMP   get-request   community=public  sysUpTime.0\n2    10.1.1.2    10.1.9.30    SNMP   get-response  community=public  sysUpTime.0 = 8 days\n3    10.1.1.2    10.1.9.30    SNMP   trap          community=public  linkDown ifIndex=7",
+      "options": [
+        {"key": "A", "text": "Move to SNMPv3 with authentication and encryption", "rationale": "Correct: v3 replaces cleartext community strings.", "role": "best"},
+        {"key": "B", "text": "Change the community string from 'public' to a long one", "rationale": "Better than a default, but v1/v2c still send it in cleartext.", "role": "partial"},
+        {"key": "C", "text": "Block UDP 162 on the firewall so the traps stop", "rationale": "Traps are useful alerts; blocking them doesn't fix the weak authentication.", "role": "related"},
+        {"key": "D", "text": "Switch SNMP to TCP port 23 for reliability", "rationale": "Port 23 is Telnet, and SNMP doesn't move ports for reliability.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "SNMP monitors and manages network devices over UDP 161, with traps on UDP 162. v1 and v2c use community strings sent in cleartext; v3 adds authentication and encryption.",
+      "discriminator_tested": "SNMPv3 adds authentication and encryption; v1/v2c use community strings."
+    },
+    {
+      "objectives": ["C03-07", "C03-08"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A proxy log shows the request below when a user signs in to an internal web application. What BEST describes the problem?",
+      "exhibit": "10.1.4.55 -> 203.0.113.80:80  POST /login  Content-Type: application/x-www-form-urlencoded\n  body: user=jlee&pass=Winter!26",
+      "options": [
+        {"key": "A", "text": "The login is sent unencrypted over HTTP", "rationale": "Correct: TCP 80 carries the form in cleartext.", "role": "best"},
+        {"key": "B", "text": "The password is in the request body", "rationale": "That is normal; the problem is that the body travels in cleartext.", "role": "partial"},
+        {"key": "C", "text": "The site should use port 8080 instead", "rationale": "Another port is still plain HTTP.", "role": "related"},
+        {"key": "D", "text": "POST requests are encrypted by default", "rationale": "They aren't; only TLS encrypts the request.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "HTTP carries web traffic over TCP 80 in cleartext, so anything submitted, passwords included, can be read in transit. HTTPS (HTTP over TLS on 443) fixes this.",
+      "discriminator_tested": "HTTP is cleartext."
+    },
+    {
+      "objectives": ["C03-08", "C03-07"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two protections does HTTPS add over HTTP? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Encryption of data in transit", "rationale": "Correct: TLS encrypts the session.", "role": "best"},
+        {"key": "B", "text": "Authentication of the server via its certificate", "rationale": "Correct: the certificate proves the server's identity.", "role": "best"},
+        {"key": "C", "text": "Faster page loading over UDP", "rationale": "HTTPS runs over TCP 443 and adds overhead.", "role": "wrong"},
+        {"key": "D", "text": "Protection against phishing sites", "rationale": "Phishing sites use HTTPS too; it proves the domain, not honesty.", "role": "related"},
+        {"key": "E", "text": "Blocking of malware downloads", "rationale": "HTTPS will deliver malware just as securely.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "HTTPS is HTTP protected by TLS over TCP 443: it is encrypted and authenticated. A padlock doesn't make a site trustworthy, though; phishing sites use HTTPS too.",
+      "discriminator_tested": "HTTPS = HTTP + TLS: encrypted and authenticated."
+    },
+    {
+      "objectives": ["C03-09"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "During an investigation, the firewall, web server, and domain controller logs show the same attack events several minutes apart and in an impossible order. What is the MOST likely root cause?",
+      "options": [
+        {"key": "A", "text": "The devices' clocks aren't synchronized by NTP", "rationale": "Correct: drifting clocks scramble the timeline.", "role": "best"},
+        {"key": "B", "text": "The logs were exported in different time zones", "rationale": "Possible, but that gives whole-hour offsets, not minutes of drift.", "role": "partial"},
+        {"key": "C", "text": "The SIEM is dropping events under heavy load", "rationale": "Dropped events would be missing, not reordered.", "role": "related"},
+        {"key": "D", "text": "The attacker deleted some log entries", "rationale": "Deletion removes events; it doesn't shift their times.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "NTP synchronizes clocks over UDP 123. Consistent time matters for logs and certificates: without it, events from different devices can't be put in a reliable order.",
+      "discriminator_tested": "Consistent time matters for logs and certificates."
+    },
+    {
+      "objectives": ["C03-10"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A workstation sends the request below to the internal DNS server. What BEST explains why it is notable?",
+      "exhibit": "10.1.4.77:51870 -> 10.1.9.53:53  TCP  AXFR corp.example.com\n10.1.9.53:53 -> 10.1.4.77:51870  TCP  (412 records: hosts, mail, VPN gateways, servers)",
+      "options": [
+        {"key": "A", "text": "It pulled the whole zone, a map of internal hosts", "rationale": "Correct: a zone transfer to a workstation is reconnaissance.", "role": "best"},
+        {"key": "B", "text": "It is DNS traffic using TCP instead of UDP", "rationale": "True, but TCP is normal for large responses; the content is what matters.", "role": "partial"},
+        {"key": "C", "text": "It inserted false records into the DNS cache", "rationale": "Nothing was written; records were read out.", "role": "related"},
+        {"key": "D", "text": "It is a normal name lookup for one host", "rationale": "A normal lookup returns one answer, not 412 records.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DNS resolves names to IP addresses on port 53, using UDP for normal queries and TCP for large responses and zone transfers. A workstation requesting a zone transfer is reconnaissance: it maps every host in the zone.",
+      "discriminator_tested": "DNS: UDP for queries, TCP for zone transfers."
+    },
+    {
+      "objectives": ["C03-11", "C03-13"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A laptop joins the network and the exchange below follows. What BEST describes what the final message gives the laptop?",
+      "exhibit": "0.0.0.0:68     -> 255.255.255.255:67  DHCP Discover\n10.1.4.1:67    -> 255.255.255.255:68  DHCP Offer    10.1.4.120\n0.0.0.0:68     -> 255.255.255.255:67  DHCP Request  10.1.4.120\n10.1.4.1:67    -> 255.255.255.255:68  DHCP ACK      mask /24, router 10.1.4.1, DNS 10.1.9.53, lease 8h",
+      "options": [
+        {"key": "A", "text": "Its address, mask, gateway, and DNS server", "rationale": "Correct: the full IP configuration, leased dynamically.", "role": "best"},
+        {"key": "B", "text": "An IP address for the network", "rationale": "True, but it also delivers the mask, gateway, and DNS server.", "role": "partial"},
+        {"key": "C", "text": "The gateway's MAC address for forwarding frames", "rationale": "MAC addresses come from ARP.", "role": "related"},
+        {"key": "D", "text": "A certificate for 802.1X login", "rationale": "DHCP doesn't issue certificates.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DHCP automatically assigns IP configuration over UDP 67 (server) and 68 (client): dynamic assignment of address, mask, gateway, and DNS server.",
+      "discriminator_tested": "DHCP assigns address, mask, gateway, and DNS dynamically."
+    },
+    {
+      "objectives": ["C03-12", "C03-11"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes DHCP from its predecessor, BootP?",
+      "options": [
+        {"key": "A", "text": "DHCP leases addresses from a pool", "rationale": "Correct: dynamic assignment; BootP mapped each MAC to a fixed IP.", "role": "best"},
+        {"key": "B", "text": "DHCP is newer and more widely supported", "rationale": "True, but that isn't the functional difference.", "role": "partial"},
+        {"key": "C", "text": "DHCP uses UDP while BootP uses TCP", "rationale": "Both use UDP 67/68.", "role": "related"},
+        {"key": "D", "text": "BootP assigns 169.254 addresses by itself", "rationale": "Self-assigned 169.254 addresses come from APIPA.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "BootP is the older predecessor of DHCP, using UDP 67/68 with a static MAC-to-IP mapping. DHCP adds dynamic assignment from a pool.",
+      "discriminator_tested": "BootP = static MAC-to-IP; DHCP adds dynamic assignment."
+    },
+    {
+      "objectives": ["C03-13", "C03-27"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A user can't reach anything beyond their own desk segment. Their PC shows the output below. What does this MOST likely indicate?",
+      "exhibit": "Ethernet adapter Ethernet:\n   DHCP Enabled. . . . . . . . . . . : Yes\n   Autoconfiguration IPv4 Address. . : 169.254.73.18\n   Subnet Mask . . . . . . . . . . . : 255.255.0.0\n   Default Gateway . . . . . . . . . :",
+      "options": [
+        {"key": "A", "text": "The PC got no reply from a DHCP server", "rationale": "Correct: a 169.254 address is self-assigned after DHCP fails.", "role": "best"},
+        {"key": "B", "text": "The PC has no default gateway configured", "rationale": "True, but that is a consequence of the DHCP failure.", "role": "partial"},
+        {"key": "C", "text": "The PC was given a private RFC 1918 address", "rationale": "169.254.0.0/16 is link-local, not an RFC 1918 range.", "role": "related"},
+        {"key": "D", "text": "The PC's static IP conflicts with another host", "rationale": "DHCP is enabled; this address was self-assigned.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "APIPA self-assigns a 169.254.0.0/16 address when no DHCP server answers. It signals a DHCP failure: the address is link-local only, with no gateway.",
+      "discriminator_tested": "APIPA signals a DHCP failure; link-local only."
+    },
+    {
+      "objectives": ["C03-14", "C03-15"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A capture shows the first three packets between a laptop and a web server below. What do they show?",
+      "exhibit": "10.1.4.20.51022 > 10.1.9.5.443: Flags [S],  seq 1000\n10.1.9.5.443 > 10.1.4.20.51022: Flags [S.], seq 7000, ack 1001\n10.1.4.20.51022 > 10.1.9.5.443: Flags [.],  ack 7001",
+      "options": [
+        {"key": "A", "text": "TCP setting up a connection before any data flows", "rationale": "Correct: SYN, SYN-ACK, ACK is the three-way handshake.", "role": "best"},
+        {"key": "B", "text": "Two hosts exchanging sequence numbers", "rationale": "True, but that is part of what the handshake does, not what it is.", "role": "partial"},
+        {"key": "C", "text": "A SYN flood filling the server's table", "rationale": "The handshake completes; a flood leaves it half-open.", "role": "related"},
+        {"key": "D", "text": "UDP datagrams sent by the client without any acknowledgment", "rationale": "The flags and acknowledgments are TCP.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "TCP is connection-oriented and reliable: the three-way handshake (SYN, SYN-ACK, ACK) sets up the connection, and sequencing and acknowledgments keep delivery reliable and ordered.",
+      "discriminator_tested": "TCP: handshake, sequencing, acknowledgments."
+    },
+    {
+      "objectives": ["C03-15", "C03-14"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A monitoring tool sends status messages over UDP and never learns whether any of them arrived. Which property of UDP BEST explains this?",
+      "options": [
+        {"key": "A", "text": "It is connectionless, with no delivery guarantee", "rationale": "Correct: best-effort, with no acknowledgments.", "role": "best"},
+        {"key": "B", "text": "It keeps per-packet overhead low", "rationale": "True, but low overhead doesn't explain the missing confirmation.", "role": "partial"},
+        {"key": "C", "text": "It requires a three-way handshake first", "rationale": "That is TCP.", "role": "related"},
+        {"key": "D", "text": "It is blocked by most firewalls", "rationale": "UDP is routinely allowed; this isn't why.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "UDP is connectionless, best-effort delivery: low overhead, but no delivery guarantee, so the sender never learns whether a message arrived unless the application checks.",
+      "discriminator_tested": "UDP: no delivery guarantee."
+    },
+    {
+      "objectives": ["C03-16"], "type": "multi", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "Which two applications are BEST suited to UDP? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Live voice calls", "rationale": "Correct: late audio is useless, so speed beats retransmission.", "role": "best"},
+        {"key": "B", "text": "Video conferencing", "rationale": "Correct: real-time media favours low delay.", "role": "best"},
+        {"key": "C", "text": "Downloading a software update", "rationale": "Every byte must arrive intact: TCP.", "role": "related"},
+        {"key": "D", "text": "Sending email", "rationale": "Email needs reliable delivery: TCP.", "role": "related"},
+        {"key": "E", "text": "Loading a banking web page", "rationale": "Web traffic needs accuracy: TCP.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "TCP is used where accuracy matters (web, email, file transfer); UDP where speed and low overhead matter more than retransmission (voice, video, DNS queries).",
+      "discriminator_tested": "Reliability vs speed/overhead trade-off."
+    },
+    {
+      "objectives": ["C03-17"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "The output below comes from a user's workstation. Which connection shows the workstation acting as a server?",
+      "exhibit": "Proto  Local Address       Foreign Address       State\nTCP    10.1.4.20:51544     198.51.100.10:443     ESTABLISHED\nTCP    10.1.4.20:51547     198.51.100.10:443     ESTABLISHED\nTCP    10.1.4.20:3389      10.1.9.40:60211       ESTABLISHED",
+      "options": [
+        {"key": "A", "text": "The one with local port 3389", "rationale": "Correct: it is listening on RDP's port, and the remote side uses an ephemeral port.", "role": "best"},
+        {"key": "B", "text": "The one with local port 51544", "rationale": "An ephemeral local port means the workstation is the client.", "role": "related"},
+        {"key": "C", "text": "The one with local port 51547", "rationale": "Also an ephemeral client port to a web server.", "role": "related"},
+        {"key": "D", "text": "It has no server role; it is a workstation", "rationale": "Any host can serve; the ports show it is.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Port numbers identify the service: well-known 0-1023, registered 1024-49151, dynamic 49152-65535. Clients use ephemeral source ports and servers listen on well-known or registered ports, so local port 3389 (RDP) means this PC is serving a session.",
+      "discriminator_tested": "Clients use ephemeral source ports; servers listen on known ports."
+    },
+    {
+      "objectives": ["C03-18", "C03-14"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "During a web download, a congested router drops one packet. Which protocol notices the loss and has the data resent?",
+      "options": [
+        {"key": "A", "text": "TCP, since IP doesn't guarantee delivery", "rationale": "Correct: TCP's acknowledgments detect the gap and trigger a resend.", "role": "best"},
+        {"key": "B", "text": "IP, which retransmits lost packets", "rationale": "IP is best-effort; it doesn't retransmit.", "role": "related"},
+        {"key": "C", "text": "ICMP, which resends dropped data", "rationale": "ICMP reports problems; it doesn't carry or resend data.", "role": "related"},
+        {"key": "D", "text": "ARP, which re-resolves the next hop", "rationale": "ARP maps addresses; it has nothing to do with lost data.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "IP provides logical addressing and routing of packets. It is connectionless and best-effort and carries no delivery guarantee; reliability comes from TCP above it.",
+      "discriminator_tested": "IP is best-effort; reliability comes from TCP."
+    },
+    {
+      "objectives": ["C03-19"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An admin runs the command below. Which protocol messages produce the hop-by-hop replies?",
+      "exhibit": "C:\\> tracert 203.0.113.80\n  1     1 ms     1 ms     1 ms   10.1.4.1\n  2     9 ms     8 ms     9 ms   198.51.100.1\n  3     *        *        *      Request timed out.\n  4    31 ms    30 ms    31 ms   203.0.113.80",
+      "options": [
+        {"key": "A", "text": "ICMP time-exceeded and echo messages", "rationale": "Correct: each router returns time exceeded; the target sends an echo reply.", "role": "best"},
+        {"key": "B", "text": "TCP SYN and SYN-ACK packets to each hop", "rationale": "Windows tracert uses ICMP, not TCP handshakes.", "role": "related"},
+        {"key": "C", "text": "ARP requests to each router", "rationale": "ARP works only on the local segment.", "role": "related"},
+        {"key": "D", "text": "DNS queries for each hop's name", "rationale": "Name lookups are optional and don't produce the hops.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "ICMP carries error reporting and diagnostics such as ping and traceroute: control messages, not application data. Each hop returns an ICMP time-exceeded message; hop 3 simply doesn't answer.",
+      "discriminator_tested": "ICMP = control messages for diagnostics."
+    },
+    {
+      "objectives": ["C03-20", "C03-10"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "Host 10.1.4.20 must send a packet to 10.1.4.77 on the same subnet but knows only its IP address. Which protocol does it use first, and what does it learn?",
+      "options": [
+        {"key": "A", "text": "ARP, to get its MAC address", "rationale": "Correct: frames on the local segment need the destination MAC.", "role": "best"},
+        {"key": "B", "text": "ARP, to confirm the host is online", "rationale": "A reply does show it is up, but the purpose is the MAC address.", "role": "partial"},
+        {"key": "C", "text": "DNS, to learn the host's name", "rationale": "It already has the IP; DNS maps names to IPs.", "role": "related"},
+        {"key": "D", "text": "DHCP, to learn which IP to use", "rationale": "DHCP configures the sender's own address.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "ARP resolves an IPv4 address to a MAC address on the local segment. It works only within the local subnet.",
+      "discriminator_tested": "ARP maps IPv4 to MAC on the local segment."
+    }
+  ]
+}

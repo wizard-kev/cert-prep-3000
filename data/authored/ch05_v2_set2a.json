@@ -1,0 +1,253 @@
+{
+  "questions": [
+    {
+      "objectives": ["C05-01", "C05-34"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "ACL 15 contains a single entry, 'access-list 15 deny host 10.1.4.66', and is applied inbound on the LAN interface. What BEST describes what happens to traffic from 10.1.4.20?",
+      "options": [
+        {"key": "A", "text": "Dropped by the implicit deny", "rationale": "Correct: nothing permits it, so the hidden final deny matches.", "role": "best"},
+        {"key": "B", "text": "Dropped, since it isn't permitted", "rationale": "True, but it doesn't name the rule that drops it.", "role": "partial"},
+        {"key": "C", "text": "Permitted, since the ACL targets one host", "rationale": "An ACL with no permit blocks everything, not just that host.", "role": "related"},
+        {"key": "D", "text": "Permitted, since no entry matches it", "rationale": "Unmatched traffic hits the implicit deny.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "ACLs are processed top-down, first match wins, and an implicit deny follows the last entry. An ACL that only denies, with no permit, blocks all traffic.",
+      "discriminator_tested": "Implicit deny at the end."
+    },
+    {
+      "objectives": ["C05-02", "C05-29"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which of these entries could appear in a standard ACL?",
+      "options": [
+        {"key": "A", "text": "access-list 5 deny 10.1.4.0 0.0.0.255", "rationale": "Correct: a standard number with a source and wildcard.", "role": "best"},
+        {"key": "B", "text": "access-list 5 deny tcp any any eq 23", "rationale": "Standard ACLs can't specify a protocol or port.", "role": "related"},
+        {"key": "C", "text": "access-list 105 deny 10.1.4.0 0.0.0.255", "rationale": "105 is an extended number, which needs a protocol.", "role": "related"},
+        {"key": "D", "text": "access-list 5 deny any host 10.1.9.5", "rationale": "Standard ACLs can't specify a destination.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Standard ACLs filter on source IP address only and are numbered 1-99 and 1300-1999. Because they are source-only, they are placed close to the destination.",
+      "discriminator_tested": "Standard ACLs filter on source only."
+    },
+    {
+      "objectives": ["C05-03"], "type": "single", "angle": "interpret-config", "difficulty": 3,
+      "stem": "An ACL entry reads 'access-list 20 permit 10.1.8.0 0.0.1.255'. Which address range does it match?",
+      "options": [
+        {"key": "A", "text": "10.1.8.0 through 10.1.9.255", "rationale": "Correct: the 1 in the third octet frees one bit, covering 8 and 9.", "role": "best"},
+        {"key": "B", "text": "10.1.8.0 through 10.1.8.255", "rationale": "That would be wildcard 0.0.0.255.", "role": "related"},
+        {"key": "C", "text": "10.1.8.0 through 10.1.10.255", "rationale": "A wildcard frees whole bits; 8 to 10 isn't a single block.", "role": "related"},
+        {"key": "D", "text": "10.1.8.0 through 10.1.255.255", "rationale": "That would need 0.0.255.255 and a different base.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A wildcard mask is an inverse mask: 0 means the bit must match and 1 means it is ignored. 0.0.1.255 is the inverse of 255.255.254.0 (/23), so it matches 10.1.8.0 to 10.1.9.255.",
+      "discriminator_tested": "Wildcard: 0 = must match, 1 = ignored."
+    },
+    {
+      "objectives": ["C05-04", "C05-02"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST describes what an extended ACL can filter on that a standard ACL can't?",
+      "options": [
+        {"key": "A", "text": "Destination, protocol, and port numbers", "rationale": "Correct: standard ACLs see only the source.", "role": "best"},
+        {"key": "B", "text": "More specific traffic types", "rationale": "True, but vague; it doesn't name the fields.", "role": "partial"},
+        {"key": "C", "text": "The source IP address", "rationale": "Both types filter on the source.", "role": "related"},
+        {"key": "D", "text": "Application content such as URLs", "rationale": "ACLs don't inspect content; an NGFW or proxy does.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Extended ACLs filter on source, destination, protocol, and ports (100-199, 2000-2699). Being more granular, they are placed close to the source.",
+      "discriminator_tested": "Extended ACLs add destination, protocol, and ports."
+    },
+    {
+      "objectives": ["C05-05", "C05-01"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two capabilities does a stateful firewall add beyond a router ACL? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Tracking the state of each session", "rationale": "Correct: session awareness.", "role": "best"},
+        {"key": "B", "text": "Admitting return traffic automatically", "rationale": "Correct: replies to tracked sessions are allowed.", "role": "best"},
+        {"key": "C", "text": "Filtering by source and destination port", "rationale": "Extended ACLs already do that.", "role": "related"},
+        {"key": "D", "text": "Filtering by source IP address", "rationale": "Every ACL type can do that.", "role": "related"},
+        {"key": "E", "text": "Encrypting traffic between sites", "rationale": "That is a VPN function.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Firewalls enforce policy between networks and add session awareness beyond ACL filtering. ACLs are stateless filters; stateful firewalls track sessions.",
+      "discriminator_tested": "ACLs are stateless; stateful firewalls track sessions."
+    },
+    {
+      "objectives": ["C05-06", "C05-11", "C05-28"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which mechanism provides confidentiality for data?",
+      "options": [
+        {"key": "A", "text": "Encryption with AES", "rationale": "Correct: only key holders can read the ciphertext.", "role": "best"},
+        {"key": "B", "text": "A SHA-256 hash", "rationale": "A hash verifies integrity; it doesn't hide data.", "role": "related"},
+        {"key": "C", "text": "A digital certificate", "rationale": "A certificate binds a public key to an identity.", "role": "related"},
+        {"key": "D", "text": "A wildcard mask", "rationale": "A wildcard mask matches addresses in an ACL.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Encryption converts plaintext to ciphertext with an algorithm and a key. It provides confidentiality, not integrity or authentication on its own.",
+      "discriminator_tested": "Encryption provides confidentiality."
+    },
+    {
+      "objectives": ["C05-07", "C05-10"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which algorithm uses the same key to encrypt and to decrypt?",
+      "options": [
+        {"key": "A", "text": "AES", "rationale": "Correct: a symmetric cipher.", "role": "best"},
+        {"key": "B", "text": "RSA", "rationale": "RSA is asymmetric: a public and a private key.", "role": "related"},
+        {"key": "C", "text": "SHA-256", "rationale": "A hash has no decryption key at all.", "role": "related"},
+        {"key": "D", "text": "Diffie-Hellman", "rationale": "A key-exchange method, not a cipher.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Symmetric key encryption uses the same key to encrypt and decrypt. It is fast and suited to bulk data; key distribution is the challenge.",
+      "discriminator_tested": "Symmetric = same key encrypts and decrypts."
+    },
+    {
+      "objectives": ["C05-08", "C05-10"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes DES from AES?",
+      "options": [
+        {"key": "A", "text": "It has a 56-bit key; obsolete", "rationale": "Correct: short enough to brute-force.", "role": "best"},
+        {"key": "B", "text": "DES is an older algorithm than AES", "rationale": "True, but age alone isn't the problem.", "role": "partial"},
+        {"key": "C", "text": "DES is a hash, while AES is a cipher", "rationale": "Both are symmetric ciphers.", "role": "related"},
+        {"key": "D", "text": "DES uses a public and private key pair", "rationale": "DES is symmetric.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DES uses a 56-bit key and 64-bit blocks; it is obsolete and insecure. AES uses 128-, 192-, or 256-bit keys and is the current standard.",
+      "discriminator_tested": "DES: 56-bit key, obsolete."
+    },
+    {
+      "objectives": ["C05-09", "C05-10"], "type": "single", "angle": "secure-replacement", "difficulty": 1,
+      "stem": "An old VPN still encrypts with 3DES. Which replacement is BEST?",
+      "options": [
+        {"key": "A", "text": "AES-256", "rationale": "Correct: the current standard.", "role": "best"},
+        {"key": "B", "text": "Single DES", "rationale": "Weaker than what it replaces.", "role": "related"},
+        {"key": "C", "text": "MD5 hashing", "rationale": "A hash can't replace a cipher.", "role": "wrong"},
+        {"key": "D", "text": "SHA-1", "rationale": "A deprecated hash, not a cipher.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "3DES applies DES three times; it is a deprecated, slow stopgap replaced by AES.",
+      "discriminator_tested": "3DES is replaced by AES."
+    },
+    {
+      "objectives": ["C05-10", "C05-08"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which key lengths does AES support?",
+      "options": [
+        {"key": "A", "text": "128, 192, or 256 bits", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "56 bits, like DES", "rationale": "That is DES.", "role": "related"},
+        {"key": "C", "text": "1024 to 4096 bits", "rationale": "Those are typical RSA key sizes.", "role": "related"},
+        {"key": "D", "text": "Any length up to 64 bits", "rationale": "AES keys are fixed sizes, all longer than 64 bits.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "AES supports 128-, 192-, or 256-bit keys and is the current standard symmetric cipher.",
+      "discriminator_tested": "AES: 128/192/256-bit keys; current standard."
+    },
+    {
+      "objectives": ["C05-11", "C05-06"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes hashing from encryption?",
+      "options": [
+        {"key": "A", "text": "One-way; can't be reversed", "rationale": "Correct: there is no key to decrypt a digest.", "role": "best"},
+        {"key": "B", "text": "A hash output is always the same length", "rationale": "True of hashes, but not the core distinction.", "role": "partial"},
+        {"key": "C", "text": "A hash uses a key; encryption doesn't", "rationale": "This is reversed.", "role": "related"},
+        {"key": "D", "text": "A hash protects confidentiality", "rationale": "Hashes verify integrity.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Hashes are one-way functions producing a fixed-length digest. They verify integrity; because they aren't reversible, they aren't encryption.",
+      "discriminator_tested": "Hash is one-way; not reversible, so not encryption."
+    },
+    {
+      "objectives": ["C05-12", "C05-13"], "type": "single", "angle": "secure-replacement", "difficulty": 1,
+      "stem": "A legacy script verifies backup files with MD5. Which change is BEST?",
+      "options": [
+        {"key": "A", "text": "Switch to SHA-256", "rationale": "Correct: a current, collision-resistant hash.", "role": "best"},
+        {"key": "B", "text": "Switch to SHA-1", "rationale": "Also deprecated.", "role": "related"},
+        {"key": "C", "text": "Encrypt backups with DES", "rationale": "Encryption isn't a hash, and DES is obsolete.", "role": "wrong"},
+        {"key": "D", "text": "Run MD5 twice on each file", "rationale": "Repeating a broken hash doesn't fix it.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "MD5 produces a 128-bit digest and is broken by collisions, so avoid it for security use. SHA-256 or longer is preferred.",
+      "discriminator_tested": "MD5 is broken; avoid for security use."
+    },
+    {
+      "objectives": ["C05-13", "C05-12"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two hash algorithms are acceptable for new security uses? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "SHA-256", "rationale": "Correct: SHA-2 family.", "role": "best"},
+        {"key": "B", "text": "SHA-3", "rationale": "Correct: the newest SHA family.", "role": "best"},
+        {"key": "C", "text": "SHA-1", "rationale": "Deprecated.", "role": "related"},
+        {"key": "D", "text": "MD5", "rationale": "Broken by collisions.", "role": "related"},
+        {"key": "E", "text": "Triple DES", "rationale": "A cipher, and a deprecated one.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "The SHA family includes SHA-1, SHA-2, and SHA-3. SHA-1 is deprecated; SHA-256 or longer, or SHA-3, is preferred.",
+      "discriminator_tested": "SHA-1 deprecated; SHA-256+ preferred."
+    },
+    {
+      "objectives": ["C05-14", "C05-16"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Compared with leased lines between offices, what is the MAIN benefit of a site-to-site VPN?",
+      "options": [
+        {"key": "A", "text": "Lower cost, using the internet with encryption", "rationale": "Correct: cheaper than leased lines, secured by the tunnel.", "role": "best"},
+        {"key": "B", "text": "Encryption of traffic between the offices", "rationale": "Valuable, but leased lines are already private; cost is the main draw.", "role": "partial"},
+        {"key": "C", "text": "Faster performance than a private circuit", "rationale": "Internet paths are usually less predictable.", "role": "related"},
+        {"key": "D", "text": "No need for routers at either site", "rationale": "Each site still needs a VPN-capable device.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A VPN is an encrypted tunnel across an untrusted network such as the internet, for remote access or site-to-site. It is cheaper than leased lines.",
+      "discriminator_tested": "VPNs are cheaper than leased lines."
+    },
+    {
+      "objectives": ["C05-15", "C05-16"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which of these is an enterprise VPN?",
+      "options": [
+        {"key": "A", "text": "A company's own IPsec tunnels over the internet", "rationale": "Correct: built and controlled by the organization.", "role": "best"},
+        {"key": "B", "text": "A carrier's MPLS service between sites", "rationale": "That is provider-managed.", "role": "related"},
+        {"key": "C", "text": "A carrier-managed private line", "rationale": "That is a leased circuit, not an enterprise VPN.", "role": "related"},
+        {"key": "D", "text": "A public hotspot with a captive portal", "rationale": "That is guest access, not a VPN.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Enterprise VPNs are built and managed by the organization (IPsec, SSL VPN) over the internet, so the security is customer-controlled.",
+      "discriminator_tested": "Enterprise VPN = customer-controlled."
+    },
+    {
+      "objectives": ["C05-16", "C05-15"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which statement BEST describes a provider-managed VPN?",
+      "options": [
+        {"key": "A", "text": "The carrier runs it and isolates each customer's traffic", "rationale": "Correct: provider-operated, with traffic separation.", "role": "best"},
+        {"key": "B", "text": "It connects a company's sites over shared infrastructure", "rationale": "True of most VPNs, so it doesn't distinguish this kind.", "role": "partial"},
+        {"key": "C", "text": "The company configures its own IPsec tunnels", "rationale": "That is an enterprise VPN.", "role": "related"},
+        {"key": "D", "text": "It encrypts traffic with ESP by default", "rationale": "Provider VPNs aren't necessarily encrypted.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A provider-managed VPN is operated by the service provider (for example, MPLS-based). The provider isolates customer traffic, which is not necessarily encrypted.",
+      "discriminator_tested": "Provider isolates traffic; not necessarily encrypted."
+    },
+    {
+      "objectives": ["C05-17", "C05-19"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST explains why IPsec is described as a framework rather than a single protocol?",
+      "options": [
+        {"key": "A", "text": "IKE plus AH and/or ESP", "rationale": "Correct: several protocols work together.", "role": "best"},
+        {"key": "B", "text": "It offers several security services", "rationale": "True, but it's the combination of protocols that makes it a framework.", "role": "partial"},
+        {"key": "C", "text": "It runs on Cisco routers alone", "rationale": "IPsec is an open standard on many platforms.", "role": "wrong"},
+        {"key": "D", "text": "It replaces TCP and UDP", "rationale": "IPsec protects IP; TCP and UDP still run inside.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "IPsec is a suite securing IP traffic with confidentiality, integrity, authentication, and anti-replay. It is a framework (IKE plus AH/ESP), not a single protocol.",
+      "discriminator_tested": "IPsec = IKE plus AH/ESP."
+    },
+    {
+      "objectives": ["C05-18", "C05-20"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Which order matches how a Cisco IOS site-to-site IPsec tunnel comes up?",
+      "options": [
+        {"key": "A", "text": "IKE phase 1, then phase 2 SAs, then data flows", "rationale": "Correct: management channel, data SAs, traffic.", "role": "best"},
+        {"key": "B", "text": "Phase 2 SAs, then IKE phase 1, then data flows", "rationale": "Phase 2 is negotiated inside phase 1.", "role": "related"},
+        {"key": "C", "text": "Data flows, then IKE phase 1, then phase 2", "rationale": "Traffic can't be protected before the SAs exist.", "role": "related"},
+        {"key": "D", "text": "IKE phase 1 and data flow together, then phase 2", "rationale": "Data needs the phase 2 SAs first.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Cisco IOS IPsec uses an IKE policy, a transform set, and a crypto map or profile. IKE phase 1 builds the secure management channel; phase 2 builds the data SAs; then protected traffic flows.",
+      "discriminator_tested": "Phase 1 = management channel; phase 2 = data SAs."
+    },
+    {
+      "objectives": ["C05-19", "C05-20"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "An auditor finds two sites protecting their traffic with IPsec AH alone. What is the BEST concern?",
+      "options": [
+        {"key": "A", "text": "Authenticated, but not encrypted", "rationale": "Correct: AH provides no confidentiality.", "role": "best"},
+        {"key": "B", "text": "AH is less common than ESP", "rationale": "True, but popularity isn't the security issue.", "role": "partial"},
+        {"key": "C", "text": "AH is blocked by firewalls by default", "rationale": "Not the security concern, and not a universal default.", "role": "related"},
+        {"key": "D", "text": "AH uses weak DES encryption", "rationale": "AH doesn't encrypt at all.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "AH (protocol 51) provides integrity and authentication; ESP (protocol 50) adds encryption. AH does not encrypt; ESP is the one that does.",
+      "discriminator_tested": "AH does not encrypt."
+    }
+  ]
+}

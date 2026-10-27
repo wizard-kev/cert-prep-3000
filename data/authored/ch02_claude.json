@@ -1,0 +1,580 @@
+{
+  "questions": [
+    {
+      "objectives": ["C02-01"], "type": "single", "angle": "symptom-to-attack", "difficulty": 1,
+      "stem": "An attacker on the same Wi-Fi network captures and reads a manager's unencrypted emails, without changing them or blocking delivery. Which part of the CIA triad is violated?",
+      "options": [
+        {"key": "A", "text": "Confidentiality", "rationale": "Correct: information was disclosed to someone not authorized to see it."},
+        {"key": "B", "text": "Integrity", "rationale": "Integrity is violated by unauthorized changes; nothing was altered."},
+        {"key": "C", "text": "Availability", "rationale": "Availability is violated by outages; the emails were still delivered."},
+        {"key": "D", "text": "Authentication", "rationale": "Authentication is part of AAA, not one of the three CIA properties."}
+      ],
+      "answer": ["A"],
+      "explanation": "Classify by which CIA triad property is broken: eavesdropping breaks confidentiality, tampering breaks integrity, and outages break availability.",
+      "discriminator_tested": "Eavesdropping = confidentiality; tampering = integrity; outage = availability."
+    },
+    {
+      "objectives": ["C02-02", "C02-03"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A help desk technician with valid administrator rights accidentally deletes a shared department folder while cleaning up old files. How should this be classified?",
+      "options": [
+        {"key": "A", "text": "An internal threat", "rationale": "Correct: the person already had legitimate access, and accidental harm still counts."},
+        {"key": "B", "text": "An external threat", "rationale": "External threats originate outside the organization and must get past the perimeter first."},
+        {"key": "C", "text": "Not a threat, because it was unintentional", "rationale": "Internal threats include accidental harm, not only malicious acts."},
+        {"key": "D", "text": "A honeypot alert", "rationale": "A honeypot is a decoy system; nothing here involves one."}
+      ],
+      "answer": ["A"],
+      "explanation": "Internal threats come from people or systems inside the organization who already have legitimate access. Their actions may be malicious or accidental.",
+      "discriminator_tested": "Internal threats already have legitimate access; intent can be malicious or accidental."
+    },
+    {
+      "objectives": ["C02-03", "C02-02"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which feature most clearly distinguishes an external threat from an internal threat?",
+      "options": [
+        {"key": "A", "text": "It originates outside the organization and must first get past the perimeter", "rationale": "Correct: an external attacker starts with no legitimate access."},
+        {"key": "B", "text": "It always uses malware", "rationale": "External attackers may use phishing, scanning, or stolen passwords instead."},
+        {"key": "C", "text": "It comes from an employee or contractor", "rationale": "That describes an internal threat."},
+        {"key": "D", "text": "It can only affect availability", "rationale": "External threats can target confidentiality, integrity, or availability."}
+      ],
+      "answer": ["A"],
+      "explanation": "External threats originate outside the organization, so they have to get past the perimeter. Internal threats already have legitimate access.",
+      "discriminator_tested": "External threats must get past the perimeter; internal threats are already inside."
+    },
+    {
+      "objectives": ["C02-04"], "type": "single", "angle": "choose-device", "difficulty": 1,
+      "stem": "A university wants to check every device's identity against policy at the moment it tries to join the campus network, and to keep out devices that don't meet the policy. Which technology fits?",
+      "options": [
+        {"key": "A", "text": "Network access control (NAC)", "rationale": "Correct: NAC is the gatekeeper that decides at connection time who and what may join."},
+        {"key": "B", "text": "A honeypot", "rationale": "A honeypot is a decoy for detecting attackers, not a gatekeeper for devices."},
+        {"key": "C", "text": "An IDS", "rationale": "An IDS watches traffic and alerts; it does not decide who may connect."},
+        {"key": "D", "text": "A proxy server", "rationale": "A proxy makes web requests for clients; it does not admit devices to the network."}
+      ],
+      "answer": ["A"],
+      "explanation": "Network access control decides whether a device or user may join the network based on identity and policy, enforcing that policy at connection time.",
+      "discriminator_tested": "NAC is the connection-time gatekeeper that enforces policy."
+    },
+    {
+      "objectives": ["C02-05", "C02-04"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "When a laptop connects to the corporate network, the NAC system finds that its antivirus definitions are three months old. It places the laptop in a remediation VLAN until the definitions are updated. Which NAC function made this decision?",
+      "options": [
+        {"key": "A", "text": "Posture assessment", "rationale": "Correct: it checked the device's health and handled the non-compliant result."},
+        {"key": "B", "text": "Guest network", "rationale": "A guest network is a separate segment for visitors, not a health check."},
+        {"key": "C", "text": "Signature-based detection", "rationale": "That is an IDS/IPS method for spotting known attacks in traffic."},
+        {"key": "D", "text": "Honeypot", "rationale": "A honeypot is a decoy system for detecting attackers."}
+      ],
+      "answer": ["A"],
+      "explanation": "Posture assessment checks a device's health and compliance (patches, antivirus, configuration). Non-compliant devices are denied, quarantined, or sent for remediation.",
+      "discriminator_tested": "Posture assessment checks device health; non-compliant devices are denied, quarantined, or remediated."
+    },
+    {
+      "objectives": ["C02-06", "C02-19"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "A company lobby offers Wi-Fi to visitors. Which design best keeps visitors away from the internal file servers?",
+      "options": [
+        {"key": "A", "text": "A separate guest network, isolated from internal resources, with internet-only access", "rationale": "Correct: segmentation keeps visitor traffic away from internal systems."},
+        {"key": "B", "text": "The same network as employees, with a different SSID name", "rationale": "A different name on the same network segment does not isolate anything."},
+        {"key": "C", "text": "The employee network with its SSID hidden", "rationale": "Hiding the SSID is not a security control, and visitors would still be on the internal network."},
+        {"key": "D", "text": "A visitor network secured with WEP", "rationale": "WEP is broken, and encryption alone does not isolate visitors from internal servers."}
+      ],
+      "answer": ["A"],
+      "explanation": "A guest network is a separate, restricted segment for visitors, isolated from internal resources and typically limited to internet access.",
+      "discriminator_tested": "A guest network is isolated from internal resources."
+    },
+    {
+      "objectives": ["C02-07", "C02-05"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A hospital lets visiting doctors connect their own laptops after a posture check. Hospital policy says no hospital software may remain on those laptops afterward. Which agent type fits?",
+      "options": [
+        {"key": "A", "text": "A nonpersistent agent", "rationale": "Correct: it runs for the assessment and is then removed."},
+        {"key": "B", "text": "A persistent agent", "rationale": "A persistent agent stays installed on the endpoint, which the policy forbids."},
+        {"key": "C", "text": "A persistent agent set to run only at login", "rationale": "It would still be permanently installed."},
+        {"key": "D", "text": "No agent and no posture check", "rationale": "The policy requires a posture check before access."}
+      ],
+      "answer": ["A"],
+      "explanation": "Persistent agents are permanently installed; nonpersistent agents are temporary and removed after the assessment, which suits guests and BYOD devices.",
+      "discriminator_tested": "Persistent = permanently installed; nonpersistent = temporary, suits guests and BYOD."
+    },
+    {
+      "objectives": ["C02-08"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "A server named 'payroll-backup' holds no real data, and no employee is supposed to use it. Logs show an internal workstation repeatedly trying to log in to it. What is the server, and why do the login attempts matter?",
+      "options": [
+        {"key": "A", "text": "A honeypot; no one has a legitimate reason to touch it, so any interaction is suspicious", "rationale": "Correct: the decoy has no legitimate use, so the workstation is likely compromised or misused."},
+        {"key": "B", "text": "A honeypot; it automatically blocks the attacker's traffic", "rationale": "A honeypot detects and studies attackers; it is not an inline blocking device."},
+        {"key": "C", "text": "An IPS; it sits inline to stop the attacker", "rationale": "An IPS inspects real traffic inline; this server is a decoy."},
+        {"key": "D", "text": "A proxy server; it is filtering the workstation's requests", "rationale": "A proxy forwards client requests; it is not a decoy target."}
+      ],
+      "answer": ["A"],
+      "explanation": "A honeypot is a decoy that lures attackers so they can be detected and studied. Because it has no legitimate use, any interaction with it is a warning sign.",
+      "discriminator_tested": "A honeypot has no legitimate use, so any interaction is suspicious."
+    },
+    {
+      "objectives": ["C02-09"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "A runner's earbuds, smartwatch, and phone talk to each other over Bluetooth within a couple of meters. Which wireless network type is this?",
+      "options": [
+        {"key": "A", "text": "WPAN", "rationale": "Correct: a personal area network covering one person's devices at very short range."},
+        {"key": "B", "text": "WLAN", "rationale": "A WLAN is Wi-Fi across a building or campus."},
+        {"key": "C", "text": "WMAN", "rationale": "A WMAN spans a city."},
+        {"key": "D", "text": "WWAN", "rationale": "A WWAN is carrier-provided coverage over large regions."}
+      ],
+      "answer": ["A"],
+      "explanation": "A WPAN is a wireless personal area network with very short range, such as Bluetooth. It is the smallest scale: one person's devices.",
+      "discriminator_tested": "WPAN is the smallest scale: one person's devices at very short range."
+    },
+    {
+      "objectives": ["C02-10", "C02-12"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which of these is NOT a WLAN?",
+      "options": [
+        {"key": "A", "text": "A mobile carrier's cellular data service covering an entire country", "rationale": "Correct choice: carrier coverage over large regions is a WWAN."},
+        {"key": "B", "text": "Wi-Fi throughout a three-floor office building", "rationale": "This is a WLAN: Wi-Fi within a building."},
+        {"key": "C", "text": "A home Wi-Fi network", "rationale": "This is a WLAN."},
+        {"key": "D", "text": "Wi-Fi covering several buildings on one campus", "rationale": "This is still a WLAN: wireless local networking across a campus."}
+      ],
+      "answer": ["A"],
+      "explanation": "A WLAN is a wireless local area network: Wi-Fi within a building or campus. Carrier-provided cellular coverage over large regions is a WWAN.",
+      "discriminator_tested": "WLAN = building or campus Wi-Fi; WWAN = carrier coverage over large regions."
+    },
+    {
+      "objectives": ["C02-11"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A city deploys a wireless network that links its libraries, parks, and offices across town. Which network type is this, and how does its scale compare with the others?",
+      "options": [
+        {"key": "A", "text": "WMAN; larger than a WLAN but smaller than a WWAN", "rationale": "Correct: city-wide coverage sits between local and wide-area scale."},
+        {"key": "B", "text": "WWAN; the smallest of the wireless network types", "rationale": "A WWAN is the largest type, and a city network is not carrier-wide."},
+        {"key": "C", "text": "WLAN; it covers a single building", "rationale": "This network spans a whole city, not one building or campus."},
+        {"key": "D", "text": "WPAN; it connects one person's devices", "rationale": "A WPAN covers only a few meters."}
+      ],
+      "answer": ["A"],
+      "explanation": "A WMAN (wireless metropolitan area network) spans a city or large area, between a WLAN and a WWAN in scale.",
+      "discriminator_tested": "WMAN is city scale, between WLAN and WWAN."
+    },
+    {
+      "objectives": ["C02-12"], "type": "single", "angle": "symptom-to-attack", "difficulty": 1,
+      "stem": "A field technician's laptop connects from job sites across the region through a cellular modem on a mobile carrier's network. Which wireless network type is this?",
+      "options": [
+        {"key": "A", "text": "WWAN", "rationale": "Correct: carrier-provided coverage over large regions."},
+        {"key": "B", "text": "WMAN", "rationale": "A WMAN covers a city; carrier cellular service across regions is wider."},
+        {"key": "C", "text": "WLAN", "rationale": "A WLAN is Wi-Fi within a building or campus."},
+        {"key": "D", "text": "WPAN", "rationale": "A WPAN covers a few meters around one person."}
+      ],
+      "answer": ["A"],
+      "explanation": "A WWAN is a wireless wide area network with cellular-style coverage over large regions. It is the largest scale and is provided by a carrier.",
+      "discriminator_tested": "WWAN is the largest scale and carrier-provided."
+    },
+    {
+      "objectives": ["C02-13", "C02-14"], "type": "single", "angle": "choose-device", "difficulty": 1,
+      "stem": "A small office's laptops all have working wireless adapters, but there is no way for them to reach the wired file server and router. Which device is missing?",
+      "options": [
+        {"key": "A", "text": "A wireless access point", "rationale": "Correct: it connects wireless clients to the wired network."},
+        {"key": "B", "text": "A wireless network access card", "rationale": "The laptops already have client-side adapters."},
+        {"key": "C", "text": "A honeypot", "rationale": "A honeypot is a decoy; it does not provide connectivity."},
+        {"key": "D", "text": "An IDS", "rationale": "An IDS monitors traffic; it does not connect wireless clients."}
+      ],
+      "answer": ["A"],
+      "explanation": "A wireless access point (WAP) is the infrastructure-side device that bridges wireless clients to the wired network. The client-side adapters alone cannot reach wired resources.",
+      "discriminator_tested": "The WAP is the infrastructure-side bridge between wireless and wired."
+    },
+    {
+      "objectives": ["C02-14", "C02-13"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which statement correctly separates a wireless network access card from a wireless access point?",
+      "options": [
+        {"key": "A", "text": "The card is client-side hardware in the device; the access point is infrastructure that connects clients to the wired network", "rationale": "Correct: client side versus infrastructure side."},
+        {"key": "B", "text": "The card connects clients to the wired network; the access point sits inside each laptop", "rationale": "This reverses the two roles."},
+        {"key": "C", "text": "Both are infrastructure devices mounted on the ceiling", "rationale": "The card is installed in the client device."},
+        {"key": "D", "text": "The card broadcasts the SSID for everyone else to join", "rationale": "Access points broadcast SSIDs; client cards join them."}
+      ],
+      "answer": ["A"],
+      "explanation": "A wireless network access card is the client-side adapter that lets a device connect. The wireless access point is the infrastructure-side device that bridges to the wired network.",
+      "discriminator_tested": "The access card is client-side; the WAP is infrastructure-side."
+    },
+    {
+      "objectives": ["C02-15"], "type": "single", "angle": "choose-device", "difficulty": 2,
+      "stem": "A warehouse must be linked to an office building 800 m away with a point-to-point wireless link. Which antenna setup fits best?",
+      "options": [
+        {"key": "A", "text": "Directional antennas at both ends, aimed at each other", "rationale": "Correct: a focused beam gives the longer reach a point-to-point link needs."},
+        {"key": "B", "text": "Omnidirectional antennas at both ends", "rationale": "Omnidirectional antennas spread signal in all directions, trading reach for wide coverage."},
+        {"key": "C", "text": "An omnidirectional antenna at one end only", "rationale": "Spreading the signal everywhere wastes it on a single distant target."},
+        {"key": "D", "text": "Any antennas, as long as both ends use channel 6", "rationale": "The channel does not solve the range problem; the antenna pattern does."}
+      ],
+      "answer": ["A"],
+      "explanation": "Wireless antennae come in two main patterns: omnidirectional (all directions, wider coverage) and directional (a focused beam with longer reach). Point-to-point links use directional antennas.",
+      "discriminator_tested": "Omnidirectional = wide coverage; directional = focused beam with longer reach."
+    },
+    {
+      "objectives": ["C02-16", "C02-18"], "type": "single", "angle": "symptom-to-attack", "difficulty": 1,
+      "stem": "Two laptops in a field with no access point anywhere connect directly to each other over Wi-Fi to share files. What kind of wireless network is this?",
+      "options": [
+        {"key": "A", "text": "Independent BSS (ad hoc)", "rationale": "Correct: devices connect peer-to-peer with no AP."},
+        {"key": "B", "text": "Infrastructure BSS", "rationale": "An infrastructure BSS needs an access point, and there is none."},
+        {"key": "C", "text": "Extended service set", "rationale": "An ESS links several APs; there are no APs here."},
+        {"key": "D", "text": "WWAN", "rationale": "A WWAN is carrier-provided wide-area coverage."}
+      ],
+      "answer": ["A"],
+      "explanation": "An independent BSS, or ad hoc network, has no access point: devices connect directly peer-to-peer. That is what separates it from an infrastructure BSS.",
+      "discriminator_tested": "IBSS (ad hoc) has no AP; it is peer-to-peer."
+    },
+    {
+      "objectives": ["C02-17", "C02-20"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "One access point and the 15 laptops associated with it make up which wireless building block?",
+      "options": [
+        {"key": "A", "text": "A basic service set (BSS)", "rationale": "Correct: one AP plus its associated clients."},
+        {"key": "B", "text": "An extended service set (ESS)", "rationale": "An ESS links two or more BSSs; there is only one AP here."},
+        {"key": "C", "text": "An independent BSS", "rationale": "An independent BSS has no AP."},
+        {"key": "D", "text": "A WMAN", "rationale": "A WMAN covers a whole city."}
+      ],
+      "answer": ["A"],
+      "explanation": "A basic service set is one access point plus its associated clients, the area covered by a single AP. It is the basic building block of wireless networks.",
+      "discriminator_tested": "BSS = single AP coverage area."
+    },
+    {
+      "objectives": ["C02-18", "C02-16"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "In an infrastructure BSS, how does traffic travel between two wireless laptops in the same room?",
+      "options": [
+        {"key": "A", "text": "Through the access point", "rationale": "Correct: clients in an infrastructure BSS communicate via the AP."},
+        {"key": "B", "text": "Directly from one laptop to the other", "rationale": "Direct peer-to-peer traffic is how an ad hoc (independent) BSS works."},
+        {"key": "C", "text": "Through the mobile carrier's network", "rationale": "Carrier networks are WWANs, not part of a BSS."},
+        {"key": "D", "text": "Through a honeypot", "rationale": "A honeypot is a decoy, not a forwarding device."}
+      ],
+      "answer": ["A"],
+      "explanation": "In an infrastructure BSS, clients communicate through the access point. In an ad hoc (independent) BSS, they talk directly to each other.",
+      "discriminator_tested": "Infrastructure BSS: traffic flows via the AP; ad hoc: peer-to-peer."
+    },
+    {
+      "objectives": ["C02-19"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A manager proposes 'securing' the office Wi-Fi by hiding the SSID instead of setting up WPA3. What is wrong with this plan?",
+      "options": [
+        {"key": "A", "text": "The SSID is only the network's name, not a security control; a hidden SSID can still be discovered, and the traffic still needs encryption", "rationale": "Correct: hiding the name protects nothing."},
+        {"key": "B", "text": "Nothing; hiding the SSID encrypts the traffic", "rationale": "Hiding the SSID does not encrypt anything."},
+        {"key": "C", "text": "An SSID cannot be changed after the network is set up", "rationale": "SSIDs can be changed, and that has nothing to do with security."},
+        {"key": "D", "text": "Hiding the SSID disables WPA3 permanently", "rationale": "The two settings are independent."}
+      ],
+      "answer": ["A"],
+      "explanation": "The service set ID is just the name that identifies a wireless network. It is not a security control; authentication and encryption, such as WPA3, are.",
+      "discriminator_tested": "The SSID is a network name, not a security control."
+    },
+    {
+      "objectives": ["C02-20", "C02-17"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "During a video call, a user walks from one end of a large office to the other. The laptop moves between three access points without any manual reconnecting. All three APs use the same SSID and are linked by the wired network. What makes this possible?",
+      "options": [
+        {"key": "A", "text": "An extended service set (ESS)", "rationale": "Correct: several BSSs under one SSID, joined by a wired distribution system, allow roaming."},
+        {"key": "B", "text": "An independent BSS", "rationale": "An independent BSS has no APs at all."},
+        {"key": "C", "text": "A single basic service set", "rationale": "A single BSS has only one AP."},
+        {"key": "D", "text": "A WPAN", "rationale": "A WPAN covers only a few meters around one person."}
+      ],
+      "answer": ["A"],
+      "explanation": "An extended service set links two or more BSSs through a wired distribution system under one SSID, which lets clients roam between access points.",
+      "discriminator_tested": "ESS = multiple BSSs under one SSID, enabling roaming."
+    },
+    {
+      "objectives": ["C02-21", "C02-25"], "type": "single", "angle": "choose-band-or-standard", "difficulty": 2,
+      "stem": "Three access points in adjacent rooms of a US office use the 2.4 GHz band. Which channel plan avoids overlap between them?",
+      "options": [
+        {"key": "A", "text": "Channels 1, 6, and 11", "rationale": "Correct: these are the only three nonoverlapping channels in the US 2.4 GHz band."},
+        {"key": "B", "text": "Channels 1, 2, and 3", "rationale": "Adjacent channels overlap heavily."},
+        {"key": "C", "text": "Channel 6 on all three", "rationale": "Putting all three on one channel causes co-channel interference."},
+        {"key": "D", "text": "Channels 1, 4, and 8", "rationale": "Channels this close together still overlap."}
+      ],
+      "answer": ["A"],
+      "explanation": "The 2.4 GHz band has only three nonoverlapping channels in the US: 1, 6, and 11. With so few channels, crowding is common.",
+      "discriminator_tested": "2.4 GHz has only three nonoverlapping channels: 1, 6, 11."
+    },
+    {
+      "objectives": ["C02-22", "C02-23"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about 802.11ac is NOT true?",
+      "options": [
+        {"key": "A", "text": "It operates in both the 2.4 GHz and 5 GHz bands", "rationale": "Correct choice because it is false: 802.11ac uses 5 GHz only."},
+        {"key": "B", "text": "It operates in the 5 GHz band", "rationale": "True: 5 GHz is its only band."},
+        {"key": "C", "text": "Its band offers many more nonoverlapping channels than 2.4 GHz", "rationale": "True: 5 GHz has far more channels."},
+        {"key": "D", "text": "Its band is usually less crowded than 2.4 GHz", "rationale": "True: more channels mean less crowding."}
+      ],
+      "answer": ["A"],
+      "explanation": "802.11ac operates in the 5 GHz band only, which offers many more nonoverlapping channels and less crowding. 802.11n is the standard that spans both bands.",
+      "discriminator_tested": "802.11ac is 5 GHz only."
+    },
+    {
+      "objectives": ["C02-23", "C02-22"], "type": "single", "angle": "choose-band-or-standard", "difficulty": 2,
+      "stem": "A site has older clients that support only 2.4 GHz and newer clients that prefer 5 GHz. Which of these standards can operate in either band?",
+      "options": [
+        {"key": "A", "text": "802.11n", "rationale": "Correct: 802.11n is dual-band."},
+        {"key": "B", "text": "802.11ac", "rationale": "802.11ac operates in 5 GHz only."},
+        {"key": "C", "text": "802.11g", "rationale": "802.11g operates in 2.4 GHz only."},
+        {"key": "D", "text": "802.11a", "rationale": "802.11a operates in 5 GHz only."}
+      ],
+      "answer": ["A"],
+      "explanation": "802.11n can operate in either the 2.4 GHz or the 5 GHz band, which makes it the standard that spans both. 802.11ac is 5 GHz only.",
+      "discriminator_tested": "802.11n spans both bands."
+    },
+    {
+      "objectives": ["C02-24"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "A stadium is upgrading its Wi-Fi for tens of thousands of phones. Why is Wi-Fi 6 (802.11ax) a better fit than simply buying faster 802.11ac access points?",
+      "options": [
+        {"key": "A", "text": "802.11ax is designed for efficiency in dense environments, for example using OFDMA to serve many clients at once", "rationale": "Correct: its gains are capacity and efficiency, not only raw speed."},
+        {"key": "B", "text": "802.11ax is the first standard to use the 5 GHz band", "rationale": "Earlier standards such as 802.11a, n, and ac already used 5 GHz."},
+        {"key": "C", "text": "802.11ax removes the need for wireless encryption", "rationale": "Encryption is still required; Wi-Fi 6 doesn't change that."},
+        {"key": "D", "text": "802.11ax uses only the 2.4 GHz band for its longer range", "rationale": "Wi-Fi 6 is not limited to 2.4 GHz, and range is not its main benefit."}
+      ],
+      "answer": ["A"],
+      "explanation": "Wi-Fi 6 (802.11ax) focuses on efficiency in dense environments, using techniques such as OFDMA. Its gains are capacity and efficiency, not just raw speed.",
+      "discriminator_tested": "Wi-Fi 6 gains are efficiency and capacity in dense environments."
+    },
+    {
+      "objectives": ["C02-25", "C02-26"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "Every day around lunchtime, Wi-Fi in the break room slows down badly for devices on 2.4 GHz, while devices on 5 GHz are unaffected. What is the most likely cause?",
+      "options": [
+        {"key": "A", "text": "Interference from the microwave ovens, which operate near 2.4 GHz", "rationale": "Correct: non-Wi-Fi sources such as microwaves interfere with the 2.4 GHz band."},
+        {"key": "B", "text": "A failure of the 5 GHz radio", "rationale": "The 5 GHz devices are the ones still working normally."},
+        {"key": "C", "text": "The SSID being broadcast", "rationale": "Broadcasting a network name does not slow the network."},
+        {"key": "D", "text": "WPA3 encryption overhead", "rationale": "Encryption would affect both bands all day, not just 2.4 GHz at lunch."}
+      ],
+      "answer": ["A"],
+      "explanation": "Interference degrades signals. It comes from overlapping channels and from non-Wi-Fi sources such as microwaves and Bluetooth, and the 2.4 GHz band is more exposed to it.",
+      "discriminator_tested": "Non-Wi-Fi sources such as microwaves mainly interfere with 2.4 GHz."
+    },
+    {
+      "objectives": ["C02-26"], "type": "single", "angle": "choose-band-or-standard", "difficulty": 2,
+      "stem": "A warehouse needs coverage across a large floor full of tall shelving, and its handheld scanners send only small amounts of data. A design studio needs very fast file transfers within one open room. Which bands fit best?",
+      "options": [
+        {"key": "A", "text": "Warehouse: 2.4 GHz; studio: 5 GHz", "rationale": "Correct: range and penetration for the warehouse, speed for the studio."},
+        {"key": "B", "text": "Warehouse: 5 GHz; studio: 2.4 GHz", "rationale": "This reverses the range-versus-speed trade-off."},
+        {"key": "C", "text": "2.4 GHz for both", "rationale": "The studio would lose the speed it needs."},
+        {"key": "D", "text": "5 GHz for both", "rationale": "The warehouse would lose range and penetration through the shelving."}
+      ],
+      "answer": ["A"],
+      "explanation": "Comparing range and speed: 2.4 GHz reaches farther and penetrates obstacles better but is slower; 5 GHz is faster but has shorter range.",
+      "discriminator_tested": "2.4 GHz = range and penetration; 5 GHz = speed."
+    },
+    {
+      "objectives": ["C02-27"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements correctly separate authentication from encryption on a wireless network? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Authentication verifies who is connecting", "rationale": "Correct: it establishes identity."},
+        {"key": "B", "text": "Encryption protects the confidentiality of data in transit", "rationale": "Correct: it keeps the traffic unreadable to others."},
+        {"key": "C", "text": "Encryption verifies each user's identity", "rationale": "Verifying identity is authentication's job."},
+        {"key": "D", "text": "Authentication scrambles the data so eavesdroppers cannot read it", "rationale": "Scrambling data is encryption."},
+        {"key": "E", "text": "They are the same function under different names", "rationale": "They are separate functions, and a network can have one without the other."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Authentication verifies who connects; encryption protects the data. They are separate functions, so a network needs both.",
+      "discriminator_tested": "Authentication = identity; encryption = confidentiality of traffic."
+    },
+    {
+      "objectives": ["C02-28"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "An old barcode scanner supports only WEP for wireless security. What should the network team do?",
+      "options": [
+        {"key": "A", "text": "Replace or upgrade the scanner; WEP is broken and should not be used", "rationale": "Correct: no WEP configuration is acceptable."},
+        {"key": "B", "text": "Use WEP with the longest key available", "rationale": "WEP's design flaws make it crackable regardless of key length."},
+        {"key": "C", "text": "Use WEP and hide the SSID", "rationale": "Hiding the SSID is not a security control, and WEP stays broken."},
+        {"key": "D", "text": "Use WEP, because barcode data is low value", "rationale": "A WEP network gives attackers a way in to everything else on that network."}
+      ],
+      "answer": ["A"],
+      "explanation": "WEP, the original wireless security, uses RC4 with a short initialization vector. It is broken and obsolete, so it is never acceptable.",
+      "discriminator_tested": "WEP is broken and never acceptable."
+    },
+    {
+      "objectives": ["C02-29", "C02-28"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Why was WPA, using TKIP, introduced?",
+      "options": [
+        {"key": "A", "text": "As a stopgap to replace WEP on existing hardware until WPA2 was ready", "rationale": "Correct: WPA was an interim fix that ran on legacy devices."},
+        {"key": "B", "text": "As the AES-based successor to WPA2", "rationale": "WPA came before WPA2, and it uses TKIP rather than AES-CCMP."},
+        {"key": "C", "text": "To add the SAE handshake", "rationale": "SAE belongs to WPA3."},
+        {"key": "D", "text": "To replace WPA3 on older routers", "rationale": "WPA predates WPA3 by many years."}
+      ],
+      "answer": ["A"],
+      "explanation": "WPA was an interim replacement for WEP. It used TKIP so it could run on legacy hardware, and it was superseded by WPA2.",
+      "discriminator_tested": "WPA was a stopgap on legacy hardware, superseded by WPA2."
+    },
+    {
+      "objectives": ["C02-30", "C02-32"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about WPA2 is NOT true?",
+      "options": [
+        {"key": "A", "text": "Its main encryption is TKIP with RC4", "rationale": "Correct choice because it is false: WPA2 uses AES-CCMP."},
+        {"key": "B", "text": "It uses AES-CCMP", "rationale": "True: AES replaced TKIP and RC4."},
+        {"key": "C", "text": "WPA2-Personal uses a shared passphrase", "rationale": "True: everyone uses the same key."},
+        {"key": "D", "text": "It implements the IEEE 802.11i standard", "rationale": "True: WPA2 is the certification of 802.11i."}
+      ],
+      "answer": ["A"],
+      "explanation": "WPA2 uses AES-CCMP and long served as the standard. AES replaced the TKIP and RC4 used by WPA and WEP.",
+      "discriminator_tested": "WPA2 uses AES-CCMP, not TKIP or RC4."
+    },
+    {
+      "objectives": ["C02-31", "C02-30"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "A company with 400 employees wants each person to log in to Wi-Fi with their own credentials, so that one person's access can be revoked when they leave without changing anyone else's. Which option fits?",
+      "options": [
+        {"key": "A", "text": "WPA2-Enterprise, with 802.1X authentication against a RADIUS server", "rationale": "Correct: individual credentials per user."},
+        {"key": "B", "text": "WPA2-Personal", "rationale": "Personal mode uses one shared passphrase, so revoking one person means changing it for everyone."},
+        {"key": "C", "text": "WEP", "rationale": "WEP is broken and has no per-user logins."},
+        {"key": "D", "text": "An open network with a hidden SSID", "rationale": "There is no authentication or encryption at all."}
+      ],
+      "answer": ["A"],
+      "explanation": "WPA2-Enterprise adds 802.1X authentication against a RADIUS server, giving each user individual credentials instead of one shared key.",
+      "discriminator_tested": "WPA2-Enterprise = per-user credentials via 802.1X and RADIUS."
+    },
+    {
+      "objectives": ["C02-32", "C02-30"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What is the relationship between IEEE 802.11i and WPA2?",
+      "options": [
+        {"key": "A", "text": "802.11i is the IEEE wireless security standard; WPA2 is the Wi-Fi Alliance certification that implements it", "rationale": "Correct: standard versus certification."},
+        {"key": "B", "text": "WPA2 is the IEEE standard; 802.11i is a vendor brand name", "rationale": "This reverses the two."},
+        {"key": "C", "text": "802.11i is a 5 GHz speed standard unrelated to security", "rationale": "802.11i is specifically about wireless security."},
+        {"key": "D", "text": "They are unrelated", "rationale": "WPA2 implements 802.11i."}
+      ],
+      "answer": ["A"],
+      "explanation": "802.11i is the IEEE standard for wireless security. WPA2 is the Wi-Fi Alliance certification of that standard.",
+      "discriminator_tested": "802.11i is the standard; WPA2 is its certification."
+    },
+    {
+      "objectives": ["C02-33", "C02-34"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two improvements does WPA3 bring over WPA2? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "It replaces the WPA2-Personal PSK handshake with SAE", "rationale": "Correct: SAE is WPA3's stronger handshake."},
+        {"key": "B", "text": "It resists offline password-guessing attacks on a captured handshake", "rationale": "Correct: this is the main practical benefit of SAE."},
+        {"key": "C", "text": "It removes the need for any password", "rationale": "WPA3 still uses passphrases or 802.1X credentials."},
+        {"key": "D", "text": "It goes back to TKIP for compatibility", "rationale": "TKIP is a legacy WPA cipher."},
+        {"key": "E", "text": "It works only in the 2.4 GHz band", "rationale": "WPA3 is a security protocol, not tied to one band."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "WPA3 is the current generation. It replaces the PSK handshake with SAE, which resists offline password guessing.",
+      "discriminator_tested": "WPA3 replaces the PSK handshake and resists offline guessing."
+    },
+    {
+      "objectives": ["C02-34", "C02-30"], "type": "single", "angle": "symptom-to-attack", "difficulty": 3,
+      "stem": "An attacker captures the Wi-Fi handshake from two different home networks and tries to guess each passphrase offline. The attack succeeds against one router but gets nowhere against the other. What is the resistant router most likely using?",
+      "options": [
+        {"key": "A", "text": "WPA3-Personal with SAE", "rationale": "Correct: SAE resists offline guessing against a captured handshake."},
+        {"key": "B", "text": "WPA2-Personal", "rationale": "A captured WPA2-Personal handshake can be attacked offline."},
+        {"key": "C", "text": "WEP", "rationale": "WEP is even weaker."},
+        {"key": "D", "text": "WPA with TKIP", "rationale": "WPA is a legacy stopgap and is not resistant."}
+      ],
+      "answer": ["A"],
+      "explanation": "WPA3-Personal uses SAE (Simultaneous Authentication of Equals) instead of WPA2's PSK handshake. Captured handshakes can't be used for offline password guessing.",
+      "discriminator_tested": "WPA3-Personal uses SAE instead of the PSK handshake."
+    },
+    {
+      "objectives": ["C02-35", "C02-34"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "A defense contractor wants per-user Wi-Fi authentication and the strongest available cryptographic suite for highly sensitive data. Which option fits?",
+      "options": [
+        {"key": "A", "text": "WPA3-Enterprise with 802.1X/RADIUS and its 192-bit mode", "rationale": "Correct: per-user authentication plus the high-security suite."},
+        {"key": "B", "text": "WPA3-Personal", "rationale": "Personal mode uses a shared passphrase, not per-user credentials."},
+        {"key": "C", "text": "WPA2-Personal", "rationale": "It uses a shared passphrase and an older handshake."},
+        {"key": "D", "text": "WPA with TKIP", "rationale": "It is a legacy stopgap."}
+      ],
+      "answer": ["A"],
+      "explanation": "WPA3-Enterprise combines 802.1X/RADIUS per-user authentication with stronger cryptography, including an optional 192-bit mode for high-security environments.",
+      "discriminator_tested": "WPA3-Enterprise = per-user authentication; 192-bit mode for high security."
+    },
+    {
+      "objectives": ["C02-36"], "type": "single", "angle": "choose-device", "difficulty": 1,
+      "stem": "A company wants only HTTPS from the internet to reach its web server, with everything else blocked at the network boundary. Which device enforces this rule set?",
+      "options": [
+        {"key": "A", "text": "A firewall", "rationale": "Correct: it permits or denies traffic between networks based on rules."},
+        {"key": "B", "text": "An IDS", "rationale": "An IDS detects and alerts; it does not enforce a permit/deny policy."},
+        {"key": "C", "text": "A honeypot", "rationale": "A honeypot is a decoy for detecting attackers."},
+        {"key": "D", "text": "A wireless access point", "rationale": "An access point connects wireless clients; it is not a boundary policy device."}
+      ],
+      "answer": ["A"],
+      "explanation": "A firewall permits or denies traffic between networks according to rules, enforcing policy at the boundary.",
+      "discriminator_tested": "A firewall enforces boundary policy."
+    },
+    {
+      "objectives": ["C02-37", "C02-38"], "type": "single", "angle": "symptom-to-attack", "difficulty": 3,
+      "stem": "After a router filter is set up to allow outbound web requests, the replies from web servers are dropped unless a separate inbound rule is written for them. What kind of filtering is this?",
+      "options": [
+        {"key": "A", "text": "Stateless packet filtering", "rationale": "Correct: with no memory of sessions, the replies need their own rule."},
+        {"key": "B", "text": "Stateful filtering", "rationale": "A stateful firewall would automatically allow replies to established sessions."},
+        {"key": "C", "text": "A next-generation firewall", "rationale": "An NGFW is stateful and also application-aware."},
+        {"key": "D", "text": "An IPS", "rationale": "An IPS blocks malicious traffic; it does not explain missing return rules."}
+      ],
+      "answer": ["A"],
+      "explanation": "A stateless (packet-filtering) firewall judges each packet alone by IP, port, and protocol. It has no memory of sessions, so return traffic needs its own matching rule.",
+      "discriminator_tested": "Stateless filtering has no session memory; every packet needs a matching rule."
+    },
+    {
+      "objectives": ["C02-38", "C02-37"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What is the key advantage of a stateful firewall over a stateless one?",
+      "options": [
+        {"key": "A", "text": "It tracks connection state, so replies to established sessions are allowed automatically", "rationale": "Correct: it remembers sessions."},
+        {"key": "B", "text": "It identifies applications regardless of the port they use", "rationale": "Application awareness is an NGFW feature."},
+        {"key": "C", "text": "It runs on a single host to protect that host", "rationale": "That describes a host-based firewall."},
+        {"key": "D", "text": "It needs an explicit rule for every packet in both directions", "rationale": "That is the limitation of a stateless firewall."}
+      ],
+      "answer": ["A"],
+      "explanation": "A stateful firewall tracks connection state and allows return traffic for established sessions. A stateless firewall has no such memory.",
+      "discriminator_tested": "A stateful firewall remembers sessions; a stateless one does not."
+    },
+    {
+      "objectives": ["C02-39", "C02-38"], "type": "single", "angle": "choose-device", "difficulty": 3,
+      "stem": "A company wants to allow normal web browsing on TCP 443 but block a specific file-sharing application that also tunnels over TCP 443. Which device can do this?",
+      "options": [
+        {"key": "A", "text": "A next-generation firewall with application awareness", "rationale": "Correct: it identifies applications, not just ports."},
+        {"key": "B", "text": "A stateless packet filter", "rationale": "It sees only IPs, ports, and protocols, so both look identical on 443."},
+        {"key": "C", "text": "A stateful firewall", "rationale": "It tracks sessions but cannot tell applications apart on the same port."},
+        {"key": "D", "text": "A honeypot", "rationale": "A honeypot is a decoy and does not filter traffic."}
+      ],
+      "answer": ["A"],
+      "explanation": "A next-generation firewall adds application awareness, deep packet inspection, and integrated IPS. It sees applications, not just ports.",
+      "discriminator_tested": "An NGFW sees applications, not just ports."
+    },
+    {
+      "objectives": ["C02-40"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements about host-based and network-based firewalls are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A host-based firewall protects only the device it runs on", "rationale": "Correct: it is installed on one endpoint."},
+        {"key": "B", "text": "A network-based firewall sits at a network boundary and protects a whole segment", "rationale": "Correct: it filters everything crossing that boundary."},
+        {"key": "C", "text": "A host-based firewall protects the entire LAN", "rationale": "It protects only its own host."},
+        {"key": "D", "text": "A network-based firewall must be installed on every laptop", "rationale": "Software installed on each laptop is a host-based firewall."},
+        {"key": "E", "text": "Host-based firewalls cannot filter by port", "rationale": "Host-based firewalls commonly filter by port and application."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A host-based firewall runs on one endpoint and protects that device. A network-based firewall sits at a network boundary and protects a whole segment.",
+      "discriminator_tested": "Host-based protects one device; network-based protects a segment."
+    },
+    {
+      "objectives": ["C02-41", "C02-42"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "A sensor receives a copy of traffic from a switch's mirror port. It detects an attack and sends an alert, but the attack traffic still reaches the target server. Which device is this?",
+      "options": [
+        {"key": "A", "text": "IDS", "rationale": "Correct: it watches a passive copy and alerts without blocking."},
+        {"key": "B", "text": "IPS", "rationale": "An IPS sits inline and would have blocked the traffic."},
+        {"key": "C", "text": "Next-generation firewall", "rationale": "An NGFW is inline and enforces policy."},
+        {"key": "D", "text": "Proxy server", "rationale": "A proxy forwards client requests; it doesn't watch a mirror port."}
+      ],
+      "answer": ["A"],
+      "explanation": "An IDS monitors traffic, typically a passive copy, and alerts on suspicious activity. It detects and alerts only; it does not block.",
+      "discriminator_tested": "An IDS detects and alerts only; it does not block."
+    },
+    {
+      "objectives": ["C02-42", "C02-41"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 3,
+      "stem": "A new security appliance is installed between the internet router and the core switch so that all traffic passes through it. When the appliance crashes, the whole office loses internet access. Why did its failure cut off traffic?",
+      "options": [
+        {"key": "A", "text": "It is an IPS placed inline, so all traffic must pass through it", "rationale": "Correct: inline placement means a failure can disrupt traffic."},
+        {"key": "B", "text": "It is an IDS receiving a mirrored copy", "rationale": "A passive IDS failing would not interrupt the real traffic."},
+        {"key": "C", "text": "It is a honeypot", "rationale": "A honeypot is a decoy off to the side, not in the traffic path."},
+        {"key": "D", "text": "It is a host-based firewall", "rationale": "A host-based firewall runs on one endpoint, not between the router and core switch."}
+      ],
+      "answer": ["A"],
+      "explanation": "An IPS sits inline and blocks detected malicious traffic. Because everything passes through it, a failure can disrupt traffic, unlike a passive IDS.",
+      "discriminator_tested": "An IPS is inline, so its failure can disrupt traffic."
+    },
+    {
+      "objectives": ["C02-43"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements about intrusion detection methods are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Signature-based detection matches known attack patterns and can miss new attacks", "rationale": "Correct: it only knows what it has a pattern for."},
+        {"key": "B", "text": "Anomaly-based detection flags deviations from a baseline and tends to raise more false positives", "rationale": "Correct: unusual but harmless activity also gets flagged."},
+        {"key": "C", "text": "Signature-based detection is best at catching brand-new attacks", "rationale": "New attacks have no signature yet."},
+        {"key": "D", "text": "Anomaly-based detection needs no baseline", "rationale": "It needs a baseline of normal behavior to compare against."},
+        {"key": "E", "text": "Both methods work only on wireless networks", "rationale": "Both are used on wired and wireless networks."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Signature-based detection matches known patterns, so it misses novel attacks. Anomaly-based detection flags deviations from a baseline, which catches novel attacks but raises more false positives.",
+      "discriminator_tested": "Signature misses novel attacks; anomaly catches them but raises more false positives."
+    },
+    {
+      "objectives": ["C02-44"], "type": "single", "angle": "choose-device", "difficulty": 1,
+      "stem": "A school wants every student's web request to go through an intermediary that makes the request on the student's behalf and blocks gambling sites. Which device fits?",
+      "options": [
+        {"key": "A", "text": "A proxy server with a web filter", "rationale": "Correct: it acts for clients at the application level and filters content."},
+        {"key": "B", "text": "A stateless packet-filtering firewall", "rationale": "It filters by IP, port, and protocol, not by site content."},
+        {"key": "C", "text": "An IDS", "rationale": "An IDS alerts; it does not make requests for clients."},
+        {"key": "D", "text": "A wireless access point", "rationale": "An access point connects clients; it doesn't filter web content."}
+      ],
+      "answer": ["A"],
+      "explanation": "A proxy server, or web filter, is an intermediary that makes requests for clients and can filter content. It works at the application level on their behalf.",
+      "discriminator_tested": "A proxy works at the application level on behalf of clients."
+    }
+  ]
+}

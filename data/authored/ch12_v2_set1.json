@@ -1,0 +1,137 @@
+{
+  "questions": [
+    {
+      "objectives": ["C12-01", "C12-09"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "After a breach, an admin wipes and reimages the compromised server within the hour to restore service. Later, management asks how the attacker got in, and nobody can say. What BEST describes the mistake?",
+      "options": [
+        {"key": "A", "text": "Evidence wasn't preserved first", "rationale": "Correct: forensic response investigates with evidence intact.", "role": "best"},
+        {"key": "B", "text": "Service was restored too slowly", "rationale": "It was restored quickly; that was the problem.", "role": "wrong"},
+        {"key": "C", "text": "No backup was available", "rationale": "The server was rebuilt; backups weren't the gap.", "role": "related"},
+        {"key": "D", "text": "The server should have been patched", "rationale": "Perhaps, but no one can now tell how it was breached.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Forensic incident response uses forensic techniques during incident response to learn what happened, how far it spread, and why, while preserving evidence. It is investigation with evidence integrity, not only restoring service.",
+      "discriminator_tested": "Investigation with evidence integrity, not only restoring service."
+    },
+    {
+      "objectives": ["C12-02", "C12-06"], "type": "single", "angle": "assess-risk", "difficulty": 3,
+      "stem": "Malware from an intrusion contains comments in a foreign language and contacts servers previously tied to a known group. What BEST explains why attribution should still be treated as uncertain?",
+      "options": [
+        {"key": "A", "text": "Clues can be spoofed or planted", "rationale": "Correct: false flags are common.", "role": "best"},
+        {"key": "B", "text": "Language clues prove the origin", "rationale": "That would make it certain, which it isn't.", "role": "related"},
+        {"key": "C", "text": "Attribution needs a confession", "rationale": "Evidence, not confession, is the basis.", "role": "wrong"},
+        {"key": "D", "text": "Servers can be shared by several groups", "rationale": "True, and one case of the broader problem.", "role": "partial"}
+      ],
+      "answer": ["A"],
+      "explanation": "Attack attribution identifies who is behind an attack from evidence such as TTPs, infrastructure, malware, and timing. It identifies the actor, and it is uncertain because evidence can be spoofed or planted.",
+      "discriminator_tested": "Attribution is uncertain: evidence can be spoofed or planted."
+    },
+    {
+      "objectives": ["C12-03"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Which sequence follows the Lockheed Martin Cyber Kill Chain?",
+      "options": [
+        {"key": "A", "text": "Weaponization, delivery, exploitation, installation", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Delivery, weaponization, installation, exploitation", "rationale": "Delivery comes after weaponization.", "role": "related"},
+        {"key": "C", "text": "Weaponization, exploitation, delivery, installation", "rationale": "Delivery comes before exploitation.", "role": "related"},
+        {"key": "D", "text": "Installation, delivery, exploitation, weaponization", "rationale": "Nearly reversed.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The Lockheed Martin Cyber Kill Chain has seven stages: reconnaissance, weaponization, delivery, exploitation, installation, command and control, actions on objectives. It is an ordered, linear model; stopping any stage disrupts the attack.",
+      "discriminator_tested": "Ordered, linear model of an intrusion."
+    },
+    {
+      "objectives": ["C12-04", "C12-03"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes the MITRE ATT&CK matrix from the Cyber Kill Chain?",
+      "options": [
+        {"key": "A", "text": "A non-linear matrix of techniques", "rationale": "Correct: tactics as columns, techniques beneath.", "role": "best"},
+        {"key": "B", "text": "It describes attacker behavior", "rationale": "Both do.", "role": "partial"},
+        {"key": "C", "text": "Seven ordered intrusion stages", "rationale": "That is the Kill Chain.", "role": "related"},
+        {"key": "D", "text": "Four vertices for one event", "rationale": "That is the Diamond Model.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "The MITRE ATT&CK matrix is a knowledge base of real-world adversary tactics and techniques. It isn't linear: tactics (why) are columns with techniques (how) beneath them, and it is used to map detection coverage.",
+      "discriminator_tested": "Not linear; tactics as columns, techniques beneath."
+    },
+    {
+      "objectives": ["C12-05", "C12-04"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two are features of the Diamond Model? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Infrastructure", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Capability", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "Weaponization", "rationale": "A Kill Chain stage.", "role": "related"},
+        {"key": "D", "text": "Persistence", "rationale": "An ATT&CK tactic.", "role": "related"},
+        {"key": "E", "text": "Mitigation", "rationale": "A defensive action.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "The Diamond Model describes an intrusion event through four features: adversary, capability, infrastructure, victim. Analysts pivot between the four connected vertices.",
+      "discriminator_tested": "Adversary, capability, infrastructure, victim."
+    },
+    {
+      "objectives": ["C12-06"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two are TTPs rather than IoCs? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Phishing with macro documents", "rationale": "Correct: a technique.", "role": "best"},
+        {"key": "B", "text": "Dumping credentials from memory", "rationale": "Correct: a technique.", "role": "best"},
+        {"key": "C", "text": "The C2 server's IP, 198.51.100.23", "rationale": "An IoC.", "role": "related"},
+        {"key": "D", "text": "A malware file's SHA-256 hash value", "rationale": "An IoC.", "role": "related"},
+        {"key": "E", "text": "A firewall's model number", "rationale": "Neither.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "TTPs are tactics (goals), techniques (methods), and procedures (specific implementations) that describe attacker behavior. They are harder for attackers to change than IoCs such as IPs or hashes.",
+      "discriminator_tested": "TTPs are behavior; IoCs are artifacts."
+    },
+    {
+      "objectives": ["C12-07", "C12-09"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "A responder arrives at a compromised server that is still running. Which evidence should be collected FIRST?",
+      "options": [
+        {"key": "A", "text": "RAM contents", "rationale": "Correct: volatile data first.", "role": "best"},
+        {"key": "B", "text": "A full disk image", "rationale": "Disk persists; memory doesn't.", "role": "related"},
+        {"key": "C", "text": "Archived backup tapes", "rationale": "Stable and offline; no rush.", "role": "related"},
+        {"key": "D", "text": "Printed policy documents", "rationale": "Not evidence of the intrusion.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Artifacts and sources of evidence include logs, memory, disk images, network captures, registry data, browser history, email, device and cloud data, and metadata. Collect volatile data first: memory and running state before disk.",
+      "discriminator_tested": "Order of volatility: memory before disk."
+    },
+    {
+      "objectives": ["C12-08", "C12-10"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST describes how evidence handling relates to chain of custody?",
+      "options": [
+        {"key": "A", "text": "Custody is one part of handling", "rationale": "Correct: handling is the umbrella.", "role": "best"},
+        {"key": "B", "text": "They're unrelated processes", "rationale": "One contains the other.", "role": "wrong"},
+        {"key": "C", "text": "Handling is part of custody", "rationale": "Reversed.", "role": "related"},
+        {"key": "D", "text": "Both mean making forensic copies", "rationale": "That is preservation.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Evidence handling covers collecting, labeling, storing, transferring, and controlling access to evidence, with documentation at every step. It is the umbrella for preservation and chain of custody.",
+      "discriminator_tested": "Handling is the umbrella."
+    },
+    {
+      "objectives": ["C12-09", "C12-08"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A lab's notes for a seized disk are shown below. What is the MOST serious preservation error?",
+      "exhibit": "10:02  Seized laptop LT-0457 disk (sealed bag #5521)\n10:20  Connected disk directly to analysis workstation\n10:25  Browsed user folders; copied suspicious files\n11:40  Created image file lt0457.dd",
+      "options": [
+        {"key": "A", "text": "The original was examined directly", "rationale": "Correct: work from a write-blocked copy.", "role": "best"},
+        {"key": "B", "text": "The image came after browsing", "rationale": "True, and part of the same error.", "role": "partial"},
+        {"key": "C", "text": "Seizure happened too quickly", "rationale": "Speed of seizure isn't the problem.", "role": "related"},
+        {"key": "D", "text": "Timestamps are missing", "rationale": "Every step has one.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Preserving digital evidence means making bit-for-bit forensic copies, working from the copy, using write blockers, and verifying integrity with hashes. Never examine the original; matching hashes show the copy is unchanged.",
+      "discriminator_tested": "Never examine the original."
+    },
+    {
+      "objectives": ["C12-10"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "An evidence drive sits on an analyst's desk overnight, unlogged, before it reaches the lab. What is the MAIN impact?",
+      "options": [
+        {"key": "A", "text": "Admissibility is weakened", "rationale": "Correct: a custody gap undermines integrity.", "role": "best"},
+        {"key": "B", "text": "The drive's hash may change", "rationale": "Only if altered; the gap means nobody can show it wasn't.", "role": "related"},
+        {"key": "C", "text": "The drive must be reimaged", "rationale": "Reimaging doesn't close the gap.", "role": "related"},
+        {"key": "D", "text": "No impact if the bag is sealed", "rationale": "The gap is still undocumented.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Chain of custody is the documented record of who handled evidence, when, where, and why. A gap undermines the integrity and admissibility of the evidence.",
+      "discriminator_tested": "A gap undermines integrity and admissibility."
+    }
+  ]
+}

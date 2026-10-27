@@ -1,0 +1,256 @@
+{
+  "questions": [
+    {
+      "objectives": ["C09-20"], "type": "multi", "angle": "interpret-output", "difficulty": 2,
+      "stem": "The server below hosts a public HTTPS site with a local database and is administered over SSH. Which two services should be disabled? (Choose two.)",
+      "exhibit": "$ ss -tlnp\nState   Local Address:Port   Process\nLISTEN  0.0.0.0:22           sshd\nLISTEN  0.0.0.0:443          nginx\nLISTEN  127.0.0.1:3306       mysqld\nLISTEN  0.0.0.0:23           in.telnetd\nLISTEN  0.0.0.0:631          cupsd",
+      "options": [
+        {"key": "A", "text": "telnetd on port 23", "rationale": "Correct: unneeded, and it sends logins in cleartext.", "role": "best"},
+        {"key": "B", "text": "cupsd on port 631", "rationale": "Correct: a print service the web server doesn't need.", "role": "best"},
+        {"key": "C", "text": "sshd on port 22", "rationale": "Needed for administration.", "role": "related"},
+        {"key": "D", "text": "nginx on port 443", "rationale": "Needed: it serves the site.", "role": "related"},
+        {"key": "E", "text": "mysqld on 127.0.0.1:3306", "rationale": "Needed by the site, and bound to localhost.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Reducing the surface area for attack means disabling unneeded services, ports, accounts, and software. Fewer exposed components means fewer vulnerabilities; keep what the server's role needs.",
+      "discriminator_tested": "Fewer exposed components, fewer vulnerabilities."
+    },
+    {
+      "objectives": ["C09-21", "C09-24"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A technician changes a domain PC's screen-lock timeout in its local settings. By the next morning, the old value is back. What BEST explains this?",
+      "options": [
+        {"key": "A", "text": "Group Policy reapplied it", "rationale": "Correct: central settings are re-enforced on a schedule.", "role": "best"},
+        {"key": "B", "text": "The local policy file is corrupt", "rationale": "Nothing suggests corruption; the value reverts to a set one.", "role": "related"},
+        {"key": "C", "text": "The user's profile was reset", "rationale": "Would affect more than one setting.", "role": "related"},
+        {"key": "D", "text": "Windows restores defaults nightly", "rationale": "It doesn't; the value came from policy.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Group Policy centrally manages and enforces settings on Windows computers and users. Domain settings are refreshed periodically and override local changes.",
+      "discriminator_tested": "Group Policy = central enforcement."
+    },
+    {
+      "objectives": ["C09-22"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 1,
+      "stem": "In what order is Group Policy applied to a computer, from first to last?",
+      "options": [
+        {"key": "A", "text": "Local, site, domain, OU", "rationale": "Correct: the OU is applied last, so it wins conflicts.", "role": "best"},
+        {"key": "B", "text": "OU, domain, site, local", "rationale": "The reverse order.", "role": "related"},
+        {"key": "C", "text": "Domain, site, OU, local", "rationale": "Local is applied first, not last.", "role": "related"},
+        {"key": "D", "text": "Site, local, domain, OU", "rationale": "Local comes before site.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "GPOs are bundles of settings linked to a site, domain, or OU. They apply in the order local, site, domain, OU, and later ones override earlier ones.",
+      "discriminator_tested": "Applied local, site, domain, OU; later overrides earlier."
+    },
+    {
+      "objectives": ["C09-23", "C09-24"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A kiosk PC that isn't joined to any domain must block USB storage devices. What BEST fits?",
+      "options": [
+        {"key": "A", "text": "Its local group policy", "rationale": "Correct: one machine, no domain.", "role": "best"},
+        {"key": "B", "text": "A domain GPO", "rationale": "The PC isn't in a domain.", "role": "related"},
+        {"key": "C", "text": "A GPO linked to an OU", "rationale": "OUs exist in a domain.", "role": "related"},
+        {"key": "D", "text": "An SELinux policy", "rationale": "SELinux is for Linux.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Local group policy applies settings to a single computer; its scope is one machine, which suits a PC outside any domain.",
+      "discriminator_tested": "Local policy scope is one machine."
+    },
+    {
+      "objectives": ["C09-24", "C09-22"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "An admin plans to try out a new setting by adding it to the Default Domain Policy. What is the MAIN risk?",
+      "options": [
+        {"key": "A", "text": "It hits each PC in the domain", "rationale": "Correct: domain policy reaches many machines at once.", "role": "best"},
+        {"key": "B", "text": "Some PCs apply it after a delay", "rationale": "True, but it's not the main risk.", "role": "partial"},
+        {"key": "C", "text": "It applies to the admin's PC", "rationale": "That is local policy's scope.", "role": "related"},
+        {"key": "D", "text": "Domain PCs ignore it", "rationale": "They apply it, and it overrides local settings.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Domain group policy applies settings centrally to many computers and users through Active Directory. Its scope is many machines, and it overrides local settings, so test on a limited OU first.",
+      "discriminator_tested": "Domain policy scope is many machines."
+    },
+    {
+      "objectives": ["C09-25"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "Before enforcing a new SELinux policy, a team wants a week of logs showing what it would block, without breaking the app. Which approach is BEST?",
+      "options": [
+        {"key": "A", "text": "Permissive mode first", "rationale": "Correct: logs violations without blocking, then switch to enforcing.", "role": "best"},
+        {"key": "B", "text": "Enforcing mode from day one", "rationale": "Blocks immediately, which may break the app.", "role": "related"},
+        {"key": "C", "text": "Disable SELinux for the week", "rationale": "Disabled produces no logs.", "role": "related"},
+        {"key": "D", "text": "Enforcing with auditing off", "rationale": "Still blocks, and hides what it blocked.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "SELinux provides mandatory access control on Linux in three modes: enforcing, permissive, and disabled (getenforce, setenforce). Enforcing blocks and logs violations; permissive only logs.",
+      "discriminator_tested": "Enforcing blocks and logs; permissive only logs."
+    },
+    {
+      "objectives": ["C09-26", "C09-20"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A Linux server came with Samba installed and running, but it shares no files with anyone. What is the BEST action?",
+      "options": [
+        {"key": "A", "text": "Disable or uninstall the service", "rationale": "Correct: unused SMB is attack surface.", "role": "best"},
+        {"key": "B", "text": "Require passwords on its shares", "rationale": "Good for a share in use, but this one isn't needed.", "role": "partial"},
+        {"key": "C", "text": "Move SMB to another port", "rationale": "Obscurity, not reduction.", "role": "related"},
+        {"key": "D", "text": "Turn on SMBv1 for older clients", "rationale": "Adds a known-weak protocol.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Samba is the Linux/Unix implementation of SMB file and print sharing. Exposed SMB is attack surface: disable it if unused, restrict shares, require authentication, disable SMBv1, and keep it patched.",
+      "discriminator_tested": "Disable Samba if unused."
+    },
+    {
+      "objectives": ["C09-27"], "type": "single", "angle": "find-missing-element", "difficulty": 1,
+      "stem": "The CEO receives a 40-page document of scanner output, port lists, and CVSS vectors. What is MOST clearly missing?",
+      "options": [
+        {"key": "A", "text": "An executive summary", "rationale": "Correct: the CEO needs risk and decisions, not raw detail.", "role": "best"},
+        {"key": "B", "text": "A table of contents", "rationale": "Helps navigation, but the content is still wrong for the reader.", "role": "partial"},
+        {"key": "C", "text": "More technical detail", "rationale": "The opposite of what this reader needs.", "role": "related"},
+        {"key": "D", "text": "The raw packet captures", "rationale": "More raw data.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Security reports summarize assessment findings, vulnerabilities, and recommendations. Tailor them to the audience: technical detail for engineers, an executive summary for leadership.",
+      "discriminator_tested": "Tailor to the audience."
+    },
+    {
+      "objectives": ["C09-28", "C09-16"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "A cybersecurity blog reports a new flaw in the company's VPN product. Which two steps BEST verify the report before acting? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Check the vendor's security advisory", "rationale": "Correct: the vendor is an authoritative source.", "role": "best"},
+        {"key": "B", "text": "Look it up in NVD", "rationale": "Correct: a vetted public database.", "role": "best"},
+        {"key": "C", "text": "Count how many sites repeat it", "rationale": "Repetition isn't confirmation.", "role": "related"},
+        {"key": "D", "text": "Ask on a public forum", "rationale": "Unvetted answers.", "role": "related"},
+        {"key": "E", "text": "Patch everything right away", "rationale": "Acts before verifying.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Cybersecurity news sources report emerging threats and vulnerabilities. They build awareness, but verify their credibility against authoritative sources such as vendor advisories and vulnerability databases.",
+      "discriminator_tested": "News builds awareness; verify credibility."
+    },
+    {
+      "objectives": ["C09-29", "C09-28"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A bank's security team wants vetted, timely alerts on threats aimed at banks, with analyst context. Which source BEST fits?",
+      "options": [
+        {"key": "A", "text": "A paid sector intel feed", "rationale": "Correct: curated, timely, and deeper, at a cost.", "role": "best"},
+        {"key": "B", "text": "Free cybersecurity news sites", "rationale": "Builds awareness, but less curated or specific.", "role": "partial"},
+        {"key": "C", "text": "An RSS reader for vendor blogs", "rationale": "A delivery method, not vetted analysis.", "role": "related"},
+        {"key": "D", "text": "The bank's own vulnerability scans", "rationale": "Internal findings, not threat alerts.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Subscription-based sources are paid or subscribed threat-intelligence feeds and advisories. They are curated, timely, and often deeper than free sources, but they cost money.",
+      "discriminator_tested": "Curated and timely; costs money."
+    },
+    {
+      "objectives": ["C09-30", "C09-29"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes an RSS feed from a paid threat-intelligence subscription?",
+      "options": [
+        {"key": "A", "text": "It collects posts from sites you pick", "rationale": "Correct: a delivery method for chosen sites.", "role": "best"},
+        {"key": "B", "text": "It usually costs nothing to use", "rationale": "Often true, but not what it is.", "role": "partial"},
+        {"key": "C", "text": "It offers analyst-vetted content", "rationale": "That describes a paid subscription.", "role": "related"},
+        {"key": "D", "text": "It scans your own hosts for new flaws", "rationale": "That is a vulnerability scanner.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An RSS feed delivers new items from chosen sites automatically. It pulls updates to you without visiting each site; it doesn't vet or analyse them.",
+      "discriminator_tested": "RSS pulls updates to you."
+    },
+    {
+      "objectives": ["C09-31", "C09-32"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "An engineer fixes recurring outages from memory and writes nothing down. What is the MAIN risk once the engineer leaves?",
+      "options": [
+        {"key": "A", "text": "Fixes become hard to repeat or audit", "rationale": "Correct: no record, no repeatability.", "role": "best"},
+        {"key": "B", "text": "Other staff will need training", "rationale": "True, but there's nothing to train them from.", "role": "partial"},
+        {"key": "C", "text": "The runbooks will go out of date", "rationale": "There are no runbooks.", "role": "related"},
+        {"key": "D", "text": "System logs will stop being kept", "rationale": "Logging doesn't depend on the engineer.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Documentation is a written record of processes, changes, and events. It makes actions repeatable and auditable, independent of any one person.",
+      "discriminator_tested": "Makes actions repeatable and auditable."
+    },
+    {
+      "objectives": ["C09-32"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A team replaces its core firewall. When is the BEST time to bring the network diagram up to date?",
+      "options": [
+        {"key": "A", "text": "As part of the change itself", "rationale": "Correct: keeps documents current.", "role": "best"},
+        {"key": "B", "text": "At the next annual review", "rationale": "Better than nothing, but wrong for most of a year.", "role": "partial"},
+        {"key": "C", "text": "When an incident shows it's wrong", "rationale": "By then it has misled responders.", "role": "related"},
+        {"key": "D", "text": "When auditors request it", "rationale": "Documentation serves operations, not audits alone.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Updating documentation means keeping documents current as systems, processes, and lessons change. Outdated documentation misleads responders.",
+      "discriminator_tested": "Outdated documentation misleads responders."
+    },
+    {
+      "objectives": ["C09-33", "C09-38"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two belong in a security incident record? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Times of each action taken", "rationale": "Correct: a time-stamped account.", "role": "best"},
+        {"key": "B", "text": "Affected systems and who acted", "rationale": "Correct: factual detail.", "role": "best"},
+        {"key": "C", "text": "Guesses about the attacker's identity", "rationale": "Speculation isn't fact; label it or leave it out.", "role": "related"},
+        {"key": "D", "text": "The full security policy text", "rationale": "Reference it; don't copy it.", "role": "related"},
+        {"key": "E", "text": "Staff opinions on who's to blame", "rationale": "Opinion, not fact.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Security incident documentation records the timeline, affected systems, actions taken, and who did what. It is a factual, time-stamped account.",
+      "discriminator_tested": "Factual, time-stamped account."
+    },
+    {
+      "objectives": ["C09-34"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A responder passes a seized drive to a courier for the forensic lab. What BEST preserves the chain of custody?",
+      "options": [
+        {"key": "A", "text": "Sign and time the handoff", "rationale": "Correct: every transfer is documented.", "role": "best"},
+        {"key": "B", "text": "Seal the drive in an evidence bag", "rationale": "Good practice, but the transfer itself still needs recording.", "role": "partial"},
+        {"key": "C", "text": "Hash the drive before it leaves", "rationale": "Proves integrity, but not who handled it.", "role": "related"},
+        {"key": "D", "text": "Email the lab that it's on the way", "rationale": "Not a custody record.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Chain of custody is the documented trail of who handled evidence, when, and how. A gap undermines the integrity and admissibility of the evidence.",
+      "discriminator_tested": "Every handoff is documented."
+    },
+    {
+      "objectives": ["C09-35"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A technician finds signs of a breach on a server and investigates alone for two days before telling anyone. What BEST describes the main problem?",
+      "options": [
+        {"key": "A", "text": "The reporting path was skipped", "rationale": "Correct: incidents go to the defined parties promptly.", "role": "best"},
+        {"key": "B", "text": "The investigation took too long", "rationale": "A symptom; the issue is that nobody was told.", "role": "partial"},
+        {"key": "C", "text": "The server wasn't imaged first", "rationale": "Possibly true, but not the main problem.", "role": "related"},
+        {"key": "D", "text": "The server should have been restored", "rationale": "Restoring would destroy evidence.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Reporting incidents means notifying the right parties (management, security, legal, regulators, customers) per policy. Follow the defined reporting path; some timing is mandated by regulation.",
+      "discriminator_tested": "Follow the defined reporting path."
+    },
+    {
+      "objectives": ["C09-36", "C09-37"], "type": "single", "angle": "choose-response", "difficulty": 3,
+      "stem": "Malware was found on a web server, and the attacker's access has been cut off. Which recovery approach is BEST?",
+      "options": [
+        {"key": "A", "text": "Rebuild from a known-good image and validate", "rationale": "Correct: removes hidden persistence.", "role": "best"},
+        {"key": "B", "text": "Remove the malware and reboot", "rationale": "May leave persistence behind.", "role": "partial"},
+        {"key": "C", "text": "Hold the post-incident review first", "rationale": "Review comes after recovery.", "role": "related"},
+        {"key": "D", "text": "Restore the newest backup unchecked", "rationale": "It may be infected too.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Incident recovery restores affected systems to normal operation: clean backups, rebuild, validate. It returns systems to service after containment.",
+      "discriminator_tested": "Rebuild from clean sources and validate."
+    },
+    {
+      "objectives": ["C09-37"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "Read the post-incident review below. What is the MOST significant problem with it?",
+      "exhibit": "Post-incident review  IR-0931\nRoot cause:  A. Patel clicked a phishing link\nAction:      A. Patel given a written warning\nStatus:      Closed",
+      "options": [
+        {"key": "A", "text": "It assigns blame, not fixes", "rationale": "Correct: no control was improved.", "role": "best"},
+        {"key": "B", "text": "It names the employee involved", "rationale": "A symptom of the blame focus.", "role": "partial"},
+        {"key": "C", "text": "It should come before recovery", "rationale": "Reviews happen after recovery.", "role": "related"},
+        {"key": "D", "text": "It found the cause too quickly", "rationale": "Speed isn't the issue.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Reviewing the incident is a post-incident review to find the root cause and improve controls, such as email filtering or reporting buttons. It happens after recovery and aims at improvement, not blame.",
+      "discriminator_tested": "Improvement, not blame."
+    },
+    {
+      "objectives": ["C09-38", "C09-33"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "Incident notes are written as events happen, then saved in a shared folder that all 2,000 employees can read. What is the MOST important change?",
+      "options": [
+        {"key": "A", "text": "Restrict access to the team", "rationale": "Correct: incident records hold sensitive details.", "role": "best"},
+        {"key": "B", "text": "Add version control", "rationale": "Helpful, but the exposure is the bigger issue.", "role": "partial"},
+        {"key": "C", "text": "Write them after the incident", "rationale": "Loses accuracy; as-you-go is right.", "role": "related"},
+        {"key": "D", "text": "Print and shred the files", "rationale": "Destroys the record.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Documentation best practices: clear, accurate, timely, consistent, version-controlled, and securely stored. Document as you go, and protect the documents because they can contain sensitive details.",
+      "discriminator_tested": "Protect the documents; they hold sensitive details."
+    }
+  ]
+}

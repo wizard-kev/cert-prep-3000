@@ -1,0 +1,320 @@
+{
+  "questions": [
+    {
+      "objectives": ["C01-25", "C01-24"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "A small USB adapter is found between a keyboard and the reception PC. The receptionist's email and VPN passwords were later used from abroad, but a full scan finds no suspicious software on the PC. Which threat BEST explains the stolen passwords?",
+      "options": [
+        {"key": "A", "text": "A hardware keylogger capturing keystrokes", "rationale": "Correct: an inline device records every key typed, invisible to software scans.", "role": "best"},
+        {"key": "B", "text": "Spyware quietly collecting user activity", "rationale": "Spyware is software, and the scan found none.", "role": "related"},
+        {"key": "C", "text": "Shoulder surfing at the reception desk", "rationale": "Possible in principle, but it ignores the device found on the keyboard cable.", "role": "related"},
+        {"key": "D", "text": "A Trojan installed from a fake download", "rationale": "A Trojan is software; the scan found nothing installed.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A keylogger records keystrokes to capture credentials and other input. It is a specific capture method, often delivered by spyware or a Trojan, and it can also be a small hardware device that no software scan sees.",
+      "discriminator_tested": "Keylogger = a specific keystroke-capture method."
+    },
+    {
+      "objectives": ["C01-26"], "type": "single", "angle": "symptom-to-attack", "difficulty": 3,
+      "stem": "Antivirus on a server reports nothing, yet network monitoring shows the server talking to an unknown host. A scan from a clean boot USB finds modified kernel drivers that hide certain processes and files from the running operating system. What BEST describes this malware?",
+      "options": [
+        {"key": "A", "text": "A rootkit concealing itself and other malware", "rationale": "Correct: defined by kernel-level concealment.", "role": "best"},
+        {"key": "B", "text": "Malware with privileged access to the server", "rationale": "True, but privilege alone doesn't capture its defining trait: hiding.", "role": "partial"},
+        {"key": "C", "text": "Spyware sending data to an outside host", "rationale": "The traffic might carry data, but the kernel-level hiding is the key finding.", "role": "related"},
+        {"key": "D", "text": "A worm spreading through the server's drivers", "rationale": "Nothing shows self-replication to other systems.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A rootkit hides deep in the OS, kernel, or firmware to keep privileged, stealthy access. It is defined by concealment: it hides itself and other malware, which is why a scan from a clean boot finds what the infected OS hides.",
+      "discriminator_tested": "Rootkit is defined by concealment."
+    },
+    {
+      "objectives": ["C01-27", "C01-28"], "type": "single", "angle": "symptom-to-attack", "difficulty": 1,
+      "stem": "After a user installs a free video player, the browser's home page changes, new toolbars appear, and pop-up offers show on most sites, slowing the PC down. Nothing is encrypted and no data theft is found. Which category fits BEST?",
+      "options": [
+        {"key": "A", "text": "Adware", "rationale": "Correct: unwanted ads bundled with free software.", "role": "best"},
+        {"key": "B", "text": "Malvertising", "rationale": "Malvertising rides on ad networks on legitimate sites; this came with installed software.", "role": "related"},
+        {"key": "C", "text": "Spyware", "rationale": "No covert data collection was found; the symptoms are ads.", "role": "related"},
+        {"key": "D", "text": "Ransomware", "rationale": "Nothing is encrypted or held for payment.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Adware delivers unwanted ads, often bundled with free software. Its focus is nuisance and tracking and it may degrade performance; malvertising instead rides on ad networks serving legitimate sites.",
+      "discriminator_tested": "Adware = nuisance ads bundled with software."
+    },
+    {
+      "objectives": ["C01-28", "C01-27"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "Visitors to a reputable news site are redirected to an exploit page. The site's own servers and code are clean; the redirect comes from a banner served by a third-party ad network. Which term BEST describes this attack?",
+      "options": [
+        {"key": "A", "text": "Malvertising", "rationale": "Correct: the attack rides on the ad network, not the site.", "role": "best"},
+        {"key": "B", "text": "Drive-by download", "rationale": "The exploit page may deliver one, but the defining route here is the ad network.", "role": "partial"},
+        {"key": "C", "text": "Adware", "rationale": "Adware is unwanted ad software on the user's own machine.", "role": "related"},
+        {"key": "D", "text": "DNS poisoning", "rationale": "The site name resolved correctly; the ad itself redirected users.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Malvertising places malicious ads on legitimate sites to redirect visitors or deliver malware. The attack rides on ad networks; the site itself isn't compromised.",
+      "discriminator_tested": "Malvertising rides on ad networks; the site isn't compromised."
+    },
+    {
+      "objectives": ["C01-29", "C01-30"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A honeypot that records attempted passwords logs the entries below. Which description BEST fits these attempts?",
+      "exhibit": "10:02:11  user=admin  password=aaaa  result=fail\n10:02:11  user=admin  password=aaab  result=fail\n10:02:11  user=admin  password=aaac  result=fail\n10:02:12  user=admin  password=aaad  result=fail\n...       (11,880 attempts in 40 minutes, all from 198.51.100.7)",
+      "options": [
+        {"key": "A", "text": "Brute force, trying combinations in order", "rationale": "Correct: aaaa, aaab, aaac is an exhaustive sequence.", "role": "best"},
+        {"key": "B", "text": "A password attack against the admin account", "rationale": "True, but it doesn't say which kind of attack the pattern reveals.", "role": "partial"},
+        {"key": "C", "text": "A dictionary attack using a list of likely words", "rationale": "A dictionary attack tries likely passwords, not sequential strings.", "role": "related"},
+        {"key": "D", "text": "A denial of service against the SSH service", "rationale": "The goal is to find the password, not to exhaust the service.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Brute force tries every possible combination: exhaustive and slow. The sequence aaaa, aaab, aaac is not a list of likely passwords as a dictionary attack uses. Lockouts and long passwords defeat it.",
+      "discriminator_tested": "Brute force is exhaustive; dictionary guesses likely passwords."
+    },
+    {
+      "objectives": ["C01-30", "C01-33"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "An attacker copies a password-hash file and runs a tool that hashes 'password1', 'Summer2024!', 'qwerty', and 14 million other entries from a leaked-password list, comparing each to the stolen hashes. Which statement BEST describes this attack?",
+      "options": [
+        {"key": "A", "text": "It tries likely passwords, not each combination", "rationale": "Correct: a dictionary attack works from a precompiled list.", "role": "best"},
+        {"key": "B", "text": "It is an offline password attack against stolen hashes", "rationale": "True, but that doesn't separate it from an offline brute-force attack.", "role": "partial"},
+        {"key": "C", "text": "It works through each possible character combination in turn", "rationale": "That is brute force; a list of 14 million leaked passwords is not exhaustive.", "role": "related"},
+        {"key": "D", "text": "It replays captured sessions to skip the password check", "rationale": "Session replay doesn't involve guessing passwords at all.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A dictionary attack tries words from a precompiled list: it guesses likely passwords, not all of them. Blocking common passwords counters it; brute force is the exhaustive version.",
+      "discriminator_tested": "Dictionary attack guesses likely passwords, not all of them."
+    },
+    {
+      "objectives": ["C01-31", "C01-44"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Investigators find that intruders entered a defense contractor 14 months ago through a tailored email, then quietly moved between systems and copied engineering files in small amounts each week. Which term BEST describes this threat?",
+      "options": [
+        {"key": "A", "text": "An advanced persistent threat", "rationale": "Correct: stealthy, targeted, and long-term.", "role": "best"},
+        {"key": "B", "text": "A spear-phishing campaign", "rationale": "True of how they got in, but it describes only the entry, not the 14-month intrusion.", "role": "partial"},
+        {"key": "C", "text": "An insider threat", "rationale": "The intruders came from outside; no one with legitimate access caused it.", "role": "related"},
+        {"key": "D", "text": "A coordinated attack", "rationale": "Coordination between actors isn't the defining trait; persistence is.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An advanced persistent threat (APT) is a stealthy, long-term, targeted intrusion, often well-resourced. It is defined by persistence and dwell time; spear phishing was only the way in.",
+      "discriminator_tested": "APT is defined by persistence and dwell time."
+    },
+    {
+      "objectives": ["C01-32", "C01-17"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 2,
+      "stem": "A company requires that each network device's vendor login be replaced before the device is connected. Which threat does this control MOST directly address?",
+      "options": [
+        {"key": "A", "text": "Attackers logging in with published factory passwords", "rationale": "Correct: vendor logins are documented and widely known.", "role": "best"},
+        {"key": "B", "text": "Unauthorized access to the network devices in general", "rationale": "True in a broad sense, but not the specific threat this control targets.", "role": "partial"},
+        {"key": "C", "text": "Attackers guessing weak passwords that staff chose", "rationale": "That risk is addressed by blocking common passwords.", "role": "related"},
+        {"key": "D", "text": "Attackers exploiting unpatched firmware on devices", "rationale": "Firmware flaws are fixed by upgrading firmware, not by changing logins.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Changing default credentials replaces vendor logins before deployment. It counters default-login exploitation, the main way IoT botnets recruit devices; avoiding common passwords counters dictionary attacks instead.",
+      "discriminator_tested": "Changing default credentials counters default-login exploitation."
+    },
+    {
+      "objectives": ["C01-33", "C01-30"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "A password audit shows many staff use passwords like 'Welcome1' and 'Spring2025!'. They meet the length and complexity rules. Which control BEST addresses the specific risk these passwords create?",
+      "options": [
+        {"key": "A", "text": "Rejecting passwords that appear on known-breached lists", "rationale": "Correct: it stops exactly the passwords guess lists try first.", "role": "best"},
+        {"key": "B", "text": "Raising the minimum password length to 16 characters", "rationale": "Helps against brute force, but 'Welcome1Welcome1' would still pass.", "role": "partial"},
+        {"key": "C", "text": "Locking accounts after five failed sign-in attempts", "rationale": "Slows online guessing but does nothing about offline cracking of predictable passwords.", "role": "related"},
+        {"key": "D", "text": "Forcing users to change their passwords each month", "rationale": "Frequent changes push people toward patterns like 'Spring2025!'.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Avoiding common passwords means blocking easily guessed passwords. It counters dictionary attacks, which try likely passwords first; 'Welcome1' meets complexity rules but sits near the top of guess lists.",
+      "discriminator_tested": "Blocking common passwords counters dictionary attacks."
+    },
+    {
+      "objectives": ["C01-34", "C01-16"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which switch configuration BEST prevents a device plugged into a user port from handing out IP settings to other clients?",
+      "options": [
+        {"key": "A", "text": "Trust DHCP offers only from the uplink", "rationale": "Correct: DHCP snooping ignores offers arriving on untrusted ports.", "role": "best"},
+        {"key": "B", "text": "Shut down unused switch ports across the building", "rationale": "Reduces exposure, but a device on any in-use port could still answer.", "role": "partial"},
+        {"key": "C", "text": "Move the native VLAN off the default VLAN", "rationale": "That counters double-tagging VLAN hopping.", "role": "related"},
+        {"key": "D", "text": "Enable port security with one learned MAC", "rationale": "The rogue server can be that one MAC address.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DHCP snooping is a switch feature that accepts DHCP offers only from trusted ports. It counters rogue DHCP: user ports are untrusted, so a server plugged into one is ignored.",
+      "discriminator_tested": "DHCP snooping trusts offers only from trusted ports."
+    },
+    {
+      "objectives": ["C01-35", "C01-14"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "A switch audit finds that each trunk uses VLAN 1 as its native VLAN, and user access ports are also in VLAN 1. Which change BEST closes the double-tagging path between VLANs?",
+      "options": [
+        {"key": "A", "text": "Set the trunks' native VLAN to an unused VLAN ID", "rationale": "Correct: an unused native VLAN means no user port can match it.", "role": "best"},
+        {"key": "B", "text": "Move the user access ports into a different VLAN", "rationale": "Also breaks the precondition today, but the next port left in VLAN 1 reopens the path.", "role": "partial"},
+        {"key": "C", "text": "Turn off trunk negotiation on the user ports", "rationale": "That counters switch spoofing, the other VLAN-hopping method.", "role": "related"},
+        {"key": "D", "text": "Enable DHCP snooping on the access switches", "rationale": "DHCP snooping counters rogue DHCP, not VLAN hopping.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Changing the native VLAN moves it off the default. Double tagging only works when the attacker's access VLAN matches the trunk's native VLAN, so an unused native VLAN removes the path; disabling negotiation counters switch spoofing instead.",
+      "discriminator_tested": "Changing the native VLAN counters double tagging."
+    },
+    {
+      "objectives": ["C01-36", "C01-37"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "A vendor releases a fix for a remotely exploitable flaw in the web server application that runs on the company's Linux servers. Which activity applies this fix?",
+      "options": [
+        {"key": "A", "text": "Patching and updating the installed software", "rationale": "Correct: the flaw is in an application.", "role": "best"},
+        {"key": "B", "text": "Upgrading the firmware on the server hardware", "rationale": "Firmware is device-level code; the flaw is in application software.", "role": "related"},
+        {"key": "C", "text": "Changing the servers' default administrator logins", "rationale": "Good hardening, but it doesn't remove a code flaw.", "role": "related"},
+        {"key": "D", "text": "Restarting the servers to clear the running code", "rationale": "A restart reloads the same flawed code.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Patching and updating fixes known vulnerabilities in software such as an operating system or application. Upgrading firmware updates device-level code embedded in hardware.",
+      "discriminator_tested": "Patching = software; firmware = device-level code."
+    },
+    {
+      "objectives": ["C01-37", "C01-36"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A vulnerability is found in the UEFI code that starts the company's laptops before the operating system loads. Windows Update offers no fix; the laptop maker publishes one. What kind of update is needed?",
+      "options": [
+        {"key": "A", "text": "A firmware upgrade", "rationale": "Correct: UEFI is code embedded in the hardware.", "role": "best"},
+        {"key": "B", "text": "An operating system patch", "rationale": "The flaw runs before the OS loads, which is why Windows Update can't fix it.", "role": "related"},
+        {"key": "C", "text": "An application update", "rationale": "No application is involved.", "role": "related"},
+        {"key": "D", "text": "A configuration reset", "rationale": "Resetting settings leaves the flawed code in place.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Upgrading firmware updates device-level code embedded in hardware, such as UEFI, which runs before the OS. OS and application patching fix software instead.",
+      "discriminator_tested": "Firmware is embedded in hardware; contrast with OS/app patching."
+    },
+    {
+      "objectives": ["C01-38"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A phishing email gets past the email filter, but endpoint protection blocks the attachment. Had it run, the user's standard account and the network's segmentation would still have limited it. Which principle does this BEST illustrate?",
+      "options": [
+        {"key": "A", "text": "Defense in depth", "rationale": "Correct: several overlapping layers, none relied on alone.", "role": "best"},
+        {"key": "B", "text": "Least privilege", "rationale": "One of the layers involved, but the scenario shows the layering itself.", "role": "partial"},
+        {"key": "C", "text": "Separation of duties", "rationale": "Splitting tasks between people isn't shown here.", "role": "related"},
+        {"key": "D", "text": "Security through obscurity", "rationale": "Nothing relies on hiding how the system works.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Defense in depth uses layered, overlapping controls so that no single control is relied on. Each layer here caught or limited what the one before it missed.",
+      "discriminator_tested": "Defense in depth: no single control is relied on."
+    },
+    {
+      "objectives": ["C01-39", "C01-42", "C01-47"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "A security awareness course will cover social engineering. Which two incidents is it designed to help prevent? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A caller posing as IT gets a user to read out a code", "rationale": "Correct: a person was manipulated by phone.", "role": "best"},
+        {"key": "B", "text": "A fake courier talks his way into the server room", "rationale": "Correct: a person was manipulated in person.", "role": "best"},
+        {"key": "C", "text": "A worm exploits an unpatched SMB service overnight", "rationale": "A technical exploit; patching addresses it.", "role": "related"},
+        {"key": "D", "text": "A brute-force tool cracks a weak VPN password", "rationale": "A technical attack on a password, not on a person.", "role": "related"},
+        {"key": "E", "text": "A failed disk takes the file server offline", "rationale": "A hardware fault, not an attack on people.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Social engineering manipulates people rather than systems. It is the umbrella for phishing variants and physical-access tricks such as impersonation and piggybacking.",
+      "discriminator_tested": "Social engineering manipulates people rather than systems."
+    },
+    {
+      "objectives": ["C01-40", "C01-06"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "A database administrator accidentally runs a cleanup script against production instead of test and deletes six months of orders. There was no malicious intent. How is this incident BEST classified?",
+      "options": [
+        {"key": "A", "text": "An accidental insider threat", "rationale": "Correct: harm from someone with legitimate access, without intent.", "role": "best"},
+        {"key": "B", "text": "A configuration error", "rationale": "Describes the mistake, but not the threat category it belongs to.", "role": "partial"},
+        {"key": "C", "text": "A friendly denial of service", "rationale": "Data was destroyed, not just made temporarily unavailable.", "role": "related"},
+        {"key": "D", "text": "A ransomware attack", "rationale": "Nothing was encrypted or held for payment.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Insider threats are harm from someone with legitimate access, malicious or accidental. The administrator was already inside the perimeter; intent can be either.",
+      "discriminator_tested": "Insider threat intent can be malicious or accidental."
+    },
+    {
+      "objectives": ["C01-41", "C01-44"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Thousands of a delivery company's customers receive the same email saying a parcel is held, with a link to pay a $1.99 redelivery fee on a look-alike site. The message uses no names or personal details. Which term BEST fits?",
+      "options": [
+        {"key": "A", "text": "Phishing", "rationale": "Correct: broad and untargeted.", "role": "best"},
+        {"key": "B", "text": "Spear phishing", "rationale": "Spear phishing uses personal detail for a chosen target.", "role": "related"},
+        {"key": "C", "text": "Smishing", "rationale": "The medium is email, not SMS.", "role": "related"},
+        {"key": "D", "text": "Whaling", "rationale": "Whaling targets executives.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Phishing uses fraudulent messages, typically email, to steal data or credentials. It is broad and untargeted; spear phishing uses personal detail for a chosen target.",
+      "discriminator_tested": "Phishing is broad and untargeted."
+    },
+    {
+      "objectives": ["C01-42", "C01-41"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "An employee gets a call from someone claiming to be the bank's fraud team. The caller reads out the last four digits of the company card and asks the employee to confirm the full number and security code. Which term BEST describes this?",
+      "options": [
+        {"key": "A", "text": "Vishing", "rationale": "Correct: phishing carried out by voice.", "role": "best"},
+        {"key": "B", "text": "Phishing", "rationale": "Technically it is a form of phishing, but the voice medium has a more precise name.", "role": "partial"},
+        {"key": "C", "text": "Smishing", "rationale": "Smishing uses text messages.", "role": "related"},
+        {"key": "D", "text": "Whaling", "rationale": "Whaling targets executives; nothing says this employee is one.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vishing is phishing by voice or phone: the medium is voice. It is a form of phishing, but the medium is what names it.",
+      "discriminator_tested": "Vishing: medium = voice."
+    },
+    {
+      "objectives": ["C01-43", "C01-41"], "type": "single", "angle": "interpret-output", "difficulty": 1,
+      "stem": "Several staff receive the message below on their company phones. Which term BEST describes it?",
+      "exhibit": "From: +1 (555) 014-2287\nUSPS: Your package is on hold due to an incomplete address.\nUpdate within 24h: https://usps-redeliver.example.top/track",
+      "options": [
+        {"key": "A", "text": "Smishing", "rationale": "Correct: phishing delivered by text message.", "role": "best"},
+        {"key": "B", "text": "Phishing", "rationale": "Technically true, but the SMS medium has a more precise name.", "role": "partial"},
+        {"key": "C", "text": "Vishing", "rationale": "Vishing uses voice calls.", "role": "related"},
+        {"key": "D", "text": "Spear phishing", "rationale": "The message has no personal detail; it is untargeted.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Smishing is phishing by SMS or text message: the medium is the text. It is a kind of phishing, so 'phishing' is true but less precise.",
+      "discriminator_tested": "Smishing: medium = text message."
+    },
+    {
+      "objectives": ["C01-44", "C01-45"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "An email to a payroll clerk mentions the clerk's manager by name, a real supplier the company uses, and the company's actual invoice number format, then asks for a change to the supplier's bank details. Which term BEST fits?",
+      "options": [
+        {"key": "A", "text": "Spear phishing", "rationale": "Correct: tailored to a specific person with real detail.", "role": "best"},
+        {"key": "B", "text": "Phishing", "rationale": "True in general, but the tailoring makes a more precise term fit.", "role": "partial"},
+        {"key": "C", "text": "Whaling", "rationale": "Whaling targets executives; a payroll clerk isn't one.", "role": "related"},
+        {"key": "D", "text": "Smishing", "rationale": "The medium is email, not SMS.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Spear phishing is phishing tailored to a specific person or group, using personal detail. Whaling is spear phishing aimed at executives or other high-value targets.",
+      "discriminator_tested": "Spear phishing is targeted and uses personal detail."
+    },
+    {
+      "objectives": ["C01-45", "C01-44"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "An email addressed to the CEO by name refers to a board meeting the CEO attended last week and asks the CEO to approve an urgent acquisition payment before the end of the day. Which term BEST fits?",
+      "options": [
+        {"key": "A", "text": "Whaling", "rationale": "Correct: targeted phishing aimed at a top executive.", "role": "best"},
+        {"key": "B", "text": "Spear phishing", "rationale": "Technically true, since it is targeted, but the executive target has a more precise name.", "role": "partial"},
+        {"key": "C", "text": "Vishing", "rationale": "The medium is email, not voice.", "role": "related"},
+        {"key": "D", "text": "Smishing", "rationale": "The medium is email, not text messages.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Whaling is spear phishing aimed at executives or other high-value targets. Target seniority is what separates it from ordinary spear phishing.",
+      "discriminator_tested": "Whaling: target seniority is the differentiator."
+    },
+    {
+      "objectives": ["C01-46", "C01-47"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Security footage shows a contractor walking through a badge-controlled door a step behind an employee. The employee is on a phone call and never looks back, and the contractor didn't badge. What BEST describes the breach?",
+      "options": [
+        {"key": "A", "text": "Tailgating", "rationale": "Correct: the employee didn't know.", "role": "best"},
+        {"key": "B", "text": "Piggybacking", "rationale": "Piggybacking needs the employee's knowledge or consent.", "role": "related"},
+        {"key": "C", "text": "Social engineering", "rationale": "The umbrella category; true, but a more precise term fits.", "role": "partial"},
+        {"key": "D", "text": "Shoulder surfing", "rationale": "Shoulder surfing is watching screens or keypads, not entering.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Tailgating is an unauthorized person following an authorized person through a secured entry without their knowledge or consent: the victim is unknowing. Piggybacking involves consent.",
+      "discriminator_tested": "Tailgating: the authorized person is unaware."
+    },
+    {
+      "objectives": ["C01-47", "C01-46"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "An employee badges into the data center and holds the door for a delivery driver carrying a heavy box, saying 'go ahead, I've got it.' The driver has no badge. What BEST describes this entry?",
+      "options": [
+        {"key": "A", "text": "Piggybacking", "rationale": "Correct: the employee knowingly let the driver in.", "role": "best"},
+        {"key": "B", "text": "Tailgating", "rationale": "Tailgating happens without the employee's knowledge.", "role": "related"},
+        {"key": "C", "text": "Social engineering", "rationale": "The umbrella category; true, but not the precise term.", "role": "partial"},
+        {"key": "D", "text": "Shoulder surfing", "rationale": "Shoulder surfing is visual observation, not entry.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Piggybacking is an unauthorized person entering with an authorized person's knowledge or consent, such as when someone holds the door. Tailgating is the same entry without the authorized person knowing.",
+      "discriminator_tested": "Piggybacking: knowing, willing insider."
+    },
+    {
+      "objectives": ["C01-48"], "type": "multi", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which two controls MOST directly reduce the risk of someone reading a PIN or password as it is entered? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Privacy filters on laptop screens", "rationale": "Correct: they block the view from the side.", "role": "best"},
+        {"key": "B", "text": "Shielded keypads at building entrances", "rationale": "Correct: they hide the entry from onlookers.", "role": "best"},
+        {"key": "C", "text": "Passwords at least 14 characters long", "rationale": "Length resists guessing, not someone watching it typed.", "role": "related"},
+        {"key": "D", "text": "Account lockout after failed attempts", "rationale": "Lockout stops guessing; an observer types the right password first time.", "role": "related"},
+        {"key": "E", "text": "Encrypting traffic on the office Wi-Fi", "rationale": "Encryption protects data in transit, not a screen or keypad in view.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Shoulder surfing is observing screens or keypads to capture information. It is visual observation with no technical exploit, so the controls that work are those that block the view.",
+      "discriminator_tested": "Shoulder surfing is visual observation; block the view."
+    }
+  ]
+}

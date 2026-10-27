@@ -1,0 +1,243 @@
+{
+  "questions": [
+    {
+      "objectives": ["C05-20"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes IPsec tunnel mode from transport mode?",
+      "options": [
+        {"key": "A", "text": "Tunnel wraps the whole original packet", "rationale": "Correct: a new outer header is added; transport mode protects the payload only.", "role": "best"},
+        {"key": "B", "text": "Tunnel mode is used between sites", "rationale": "Its typical use, but not what makes it different.", "role": "partial"},
+        {"key": "C", "text": "Transport mode encrypts more of the packet", "rationale": "This is reversed.", "role": "related"},
+        {"key": "D", "text": "Tunnel mode uses AH; transport uses ESP", "rationale": "Either protocol can run in either mode.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "ESP uses symmetric ciphers, with keys negotiated via IKE using Diffie-Hellman. Tunnel mode encapsulates the whole original packet (site-to-site); transport mode protects the payload only.",
+      "discriminator_tested": "Tunnel = whole packet; transport = payload only."
+    },
+    {
+      "objectives": ["C05-21", "C05-22"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "Two labs must exchange multicast routing updates across a router path that forwards unicast traffic alone, and encryption isn't required. Which tunnel BEST fits?",
+      "options": [
+        {"key": "A", "text": "A plain GRE tunnel", "rationale": "Correct: GRE carries multicast inside unicast; nothing more is needed.", "role": "best"},
+        {"key": "B", "text": "GRE over IPsec", "rationale": "Would work, but adds encryption overhead nobody asked for.", "role": "partial"},
+        {"key": "C", "text": "An IPsec crypto map", "rationale": "A policy-based crypto map doesn't carry multicast.", "role": "related"},
+        {"key": "D", "text": "A remote-access SSL VPN", "rationale": "User VPNs don't connect lab routers.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "GRE (IP protocol 47) is encapsulation that can carry many protocols, including multicast and routing protocols. It is flexible but provides no encryption.",
+      "discriminator_tested": "GRE carries multicast and routing protocols; no encryption."
+    },
+    {
+      "objectives": ["C05-22", "C05-21"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "In a GRE over IPsec design, which part provides which function?",
+      "options": [
+        {"key": "A", "text": "GRE carries multicast; IPsec encrypts", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "IPsec carries multicast; GRE encrypts", "rationale": "This is reversed.", "role": "related"},
+        {"key": "C", "text": "Both encrypt, for double protection", "rationale": "GRE doesn't encrypt.", "role": "wrong"},
+        {"key": "D", "text": "GRE authenticates; IPsec routes", "rationale": "Neither describes what each part actually does.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "GRE over IPsec protects a GRE tunnel with IPsec: GRE adds multiprotocol and multicast support, and IPsec adds encryption.",
+      "discriminator_tested": "GRE adds multicast; IPsec adds encryption."
+    },
+    {
+      "objectives": ["C05-23", "C05-21"], "type": "multi", "angle": "classify-element", "difficulty": 3,
+      "stem": "Cisco DMVPN is built from several technologies. Which two of these does it use? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "mGRE", "rationale": "Correct: multipoint GRE lets one interface reach many spokes.", "role": "best"},
+        {"key": "B", "text": "NHRP", "rationale": "Correct: spokes use it to find each other's addresses.", "role": "best"},
+        {"key": "C", "text": "TACACS+", "rationale": "An AAA protocol, not part of DMVPN.", "role": "related"},
+        {"key": "D", "text": "Static NAT", "rationale": "Not a DMVPN component.", "role": "related"},
+        {"key": "E", "text": "802.1X", "rationale": "Port access control, unrelated to DMVPN.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Cisco DMVPN is a hub-and-spoke VPN with dynamic spoke-to-spoke tunnels, built from mGRE, NHRP, and IPsec. It scales without configuring a full mesh.",
+      "discriminator_tested": "DMVPN = mGRE, NHRP, IPsec."
+    },
+    {
+      "objectives": ["C05-24", "C05-18"], "type": "single", "angle": "interpret-config", "difficulty": 3,
+      "stem": "What BEST describes what the configuration below creates?",
+      "exhibit": "interface Tunnel10\n ip address 172.31.0.1 255.255.255.252\n tunnel source g0/0\n tunnel destination 203.0.113.2\n tunnel mode ipsec ipv4\n tunnel protection ipsec profile SITE-B",
+      "options": [
+        {"key": "A", "text": "A route-based IPsec VTI, with no GRE header", "rationale": "Correct: 'tunnel mode ipsec ipv4' makes a VTI.", "role": "best"},
+        {"key": "B", "text": "An encrypted tunnel to 203.0.113.2", "rationale": "True, but it doesn't say what kind of tunnel.", "role": "partial"},
+        {"key": "C", "text": "A GRE tunnel protected by IPsec", "rationale": "GRE over IPsec would use 'tunnel mode gre'.", "role": "related"},
+        {"key": "D", "text": "A DMVPN spoke with dynamic tunnels", "rationale": "DMVPN uses mGRE and NHRP.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A Cisco IPsec VTI is an IPsec tunnel presented as a routable virtual interface: route-based, with no GRE header. Crypto maps are policy-based.",
+      "discriminator_tested": "VTI: route-based, no GRE header."
+    },
+    {
+      "objectives": ["C05-25", "C05-26"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which statement BEST describes PKI?",
+      "options": [
+        {"key": "A", "text": "The whole key trust system", "rationale": "Correct: CAs, certificates, policies, and processes together.", "role": "best"},
+        {"key": "B", "text": "A server that issues certificates", "rationale": "That is a CA, one component.", "role": "related"},
+        {"key": "C", "text": "A single certificate used for a website", "rationale": "A certificate is one product of PKI.", "role": "related"},
+        {"key": "D", "text": "A symmetric key shared among users", "rationale": "PKI is built on public/private key pairs.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Public key infrastructure (PKI) is the framework of CAs, certificates, policies, and processes that bind public keys to identities. It is the whole trust system, not one component.",
+      "discriminator_tested": "PKI is the whole trust system."
+    },
+    {
+      "objectives": ["C05-26", "C05-28"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A browser shows the certificate path below. What BEST explains why it trusts portal.example.com's certificate?",
+      "exhibit": "Certificate path\n  Example Root CA          (in the trusted root store)\n    Example Issuing CA\n      portal.example.com",
+      "options": [
+        {"key": "A", "text": "It chains to a root CA the browser already trusts", "rationale": "Correct: each certificate is signed by the one above it, up to a trusted root.", "role": "best"},
+        {"key": "B", "text": "It was issued by Example Issuing CA", "rationale": "True, but that CA is trusted only because the root signed it.", "role": "partial"},
+        {"key": "C", "text": "The website sent its private key for checking", "rationale": "Private keys are never sent.", "role": "related"},
+        {"key": "D", "text": "Certificates on HTTPS sites are trusted automatically", "rationale": "Untrusted chains trigger warnings.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Certificate authorities are trusted entities that issue, sign, and revoke certificates. The root CA is the trust anchor, signing with its own private key.",
+      "discriminator_tested": "The CA is the trust anchor."
+    },
+    {
+      "objectives": ["C05-27", "C05-28"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes a certificate template from a certificate?",
+      "options": [
+        {"key": "A", "text": "It's the blueprint; certificates are issued from it", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Templates are stored on the CA", "rationale": "True, but it doesn't explain the difference.", "role": "partial"},
+        {"key": "C", "text": "A template holds a private key; a certificate doesn't", "rationale": "Templates hold settings, not keys.", "role": "related"},
+        {"key": "D", "text": "They are the same document in different formats", "rationale": "A template is settings; a certificate is a signed document.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A certificate template holds the predefined settings (key usage, validity, key size, subject fields) a CA applies when issuing certificates. It is the blueprint for issuance, not a certificate itself.",
+      "discriminator_tested": "Template = blueprint for issuance."
+    },
+    {
+      "objectives": ["C05-28", "C05-26"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two checks does a client make when validating a server's certificate? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "That a trusted CA's signature is valid", "rationale": "Correct: the signature proves who issued it.", "role": "best"},
+        {"key": "B", "text": "That the current date is within its validity", "rationale": "Correct: expired or not-yet-valid certificates fail.", "role": "best"},
+        {"key": "C", "text": "That the certificate includes the private key", "rationale": "Certificates never contain the private key.", "role": "related"},
+        {"key": "D", "text": "That the server's password is correct", "rationale": "Certificates don't involve passwords.", "role": "related"},
+        {"key": "E", "text": "That the certificate is under 1 KB", "rationale": "Size isn't a validation check.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Certificates are signed X.509 documents binding a public key to an identity. They are validated by the CA's signature, the validity dates, and revocation status, and they never hold the private key.",
+      "discriminator_tested": "Validated by CA signature, dates, and revocation status."
+    },
+    {
+      "objectives": ["C05-29", "C05-03"], "type": "single", "angle": "find-config-error", "difficulty": 2,
+      "stem": "The entry 'access-list 10 permit 192.168.1.0 255.255.255.0' was meant to permit the 192.168.1.0/24 network. What BEST describes the problem?",
+      "options": [
+        {"key": "A", "text": "Subnet mask used, not wildcard", "rationale": "Correct: the wildcard should be 0.0.0.255.", "role": "best"},
+        {"key": "B", "text": "It won't match the intended hosts", "rationale": "True, but it doesn't say why.", "role": "partial"},
+        {"key": "C", "text": "A standard ACL needs the 'tcp' keyword", "rationale": "Standard ACLs take no protocol.", "role": "related"},
+        {"key": "D", "text": "ACL 10 is reserved for extended ACLs", "rationale": "1-99 are standard numbers.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Standard ACL commands take a number, an action, and a source plus wildcard. A subnet mask used in place of a wildcard matches the wrong bits.",
+      "discriminator_tested": "Standard ACL: number, action, source plus wildcard."
+    },
+    {
+      "objectives": ["C05-30", "C05-35"], "type": "single", "angle": "interpret-config", "difficulty": 3,
+      "stem": "Which traffic does the entry 'access-list 110 permit tcp host 10.1.4.20 10.1.9.0 0.0.0.255 eq 22' permit?",
+      "options": [
+        {"key": "A", "text": "SSH, 10.1.4.20 to 10.1.9.0/24", "rationale": "Correct: source host, destination subnet, TCP 22.", "role": "best"},
+        {"key": "B", "text": "SSH from 10.1.9.0/24 to host 10.1.4.20", "rationale": "Source comes before destination; this is reversed.", "role": "related"},
+        {"key": "C", "text": "Any traffic from 10.1.4.20 to 10.1.9.0/24", "rationale": "The port limits it to TCP 22.", "role": "related"},
+        {"key": "D", "text": "Telnet from 10.1.4.20 to 10.1.9.0/24", "rationale": "Telnet is TCP 23.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Extended ACL commands follow the order action, protocol, source, destination, then port.",
+      "discriminator_tested": "Order: action, protocol, source, destination, port."
+    },
+    {
+      "objectives": ["C05-31"], "type": "single", "angle": "complete-config", "difficulty": 3,
+      "stem": "Which command sequence creates a named extended ACL that permits HTTPS from anywhere?",
+      "options": [
+        {"key": "A", "text": "ip access-list extended WEB-IN, then permit tcp any any eq 443", "rationale": "Correct: the type keyword, then entries without 'access-list'.", "role": "best"},
+        {"key": "B", "text": "ip access-list WEB-IN, then permit tcp any any eq 443", "rationale": "The 'extended' keyword is required.", "role": "related"},
+        {"key": "C", "text": "ip access-list extended WEB-IN, then access-list permit tcp any any eq 443", "rationale": "Named ACL entries omit 'access-list'.", "role": "related"},
+        {"key": "D", "text": "access-list WEB-IN permit tcp any any eq 443", "rationale": "Names are used with 'ip access-list', not this syntax.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Named ACLs start with 'ip access-list extended NAME' (or 'standard'), then take entries such as 'permit tcp any any eq 443' in ACL config mode. Entries omit the 'access-list' keyword.",
+      "discriminator_tested": "Named ACLs need the type keyword; entries omit 'access-list'."
+    },
+    {
+      "objectives": ["C05-32", "C05-33"], "type": "single", "angle": "complete-config", "difficulty": 2,
+      "stem": "ACL 110 must filter traffic arriving at the router from the user LAN on interface g0/1. Which command applies it correctly?",
+      "options": [
+        {"key": "A", "text": "ip access-group 110 in, under interface g0/1", "rationale": "Correct: 'in' is traffic entering the router on g0/1.", "role": "best"},
+        {"key": "B", "text": "ip access-group 110 out, under interface g0/1", "rationale": "'out' filters traffic leaving toward the users.", "role": "related"},
+        {"key": "C", "text": "access-class 110 in, under line vty 0 4", "rationale": "That limits management sessions, not traffic.", "role": "related"},
+        {"key": "D", "text": "ip access-group 110 in, in global config", "rationale": "access-group is an interface command.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An ACL is applied with 'interface g0/1' then 'ip access-group 110 in' (or out). Direction is relative to the router, there is one ACL per protocol, interface, and direction, and an unapplied ACL filters nothing.",
+      "discriminator_tested": "Direction is relative to the router."
+    },
+    {
+      "objectives": ["C05-33", "C05-32"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes 'access-class' from 'ip access-group'?",
+      "options": [
+        {"key": "A", "text": "It limits sessions to the device", "rationale": "Correct: it controls who can log in to the router itself.", "role": "best"},
+        {"key": "B", "text": "access-class is applied under line configuration", "rationale": "True, but where it is typed isn't what it does.", "role": "partial"},
+        {"key": "C", "text": "access-class filters traffic passing through", "rationale": "That is ip access-group.", "role": "related"},
+        {"key": "D", "text": "access-class requires a named ACL", "rationale": "Numbered ACLs work too.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Applying an ACL to VTY lines uses 'access-class 10 in'. access-class limits management sessions to the device; ip access-group filters traffic through an interface.",
+      "discriminator_tested": "access-class = sessions to the device; access-group = traffic through."
+    },
+    {
+      "objectives": ["C05-34", "C05-01"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 3,
+      "stem": "An engineer adds 'access-list 110 deny tcp any any eq 23' to numbered ACL 110, which ends with 'permit ip any any'. Telnet still works. What BEST explains why?",
+      "options": [
+        {"key": "A", "text": "The new entry was appended after the permit-all", "rationale": "Correct: new numbered entries go to the end, below the broad permit.", "role": "best"},
+        {"key": "B", "text": "The permit matches Telnet first", "rationale": "True, but it doesn't say why the deny sits below it.", "role": "partial"},
+        {"key": "C", "text": "Numbered ACLs ignore entries added later", "rationale": "They accept them, at the end.", "role": "related"},
+        {"key": "D", "text": "Telnet uses UDP 23, so it doesn't match", "rationale": "Telnet is TCP 23.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "New numbered entries append to the end; sequence numbers allow inserting entries. A broad entry above a specific one shadows it.",
+      "discriminator_tested": "New entries append to the end; a broad entry shadows a later specific one."
+    },
+    {
+      "objectives": ["C05-35", "C05-30"], "type": "single", "angle": "complete-config", "difficulty": 2,
+      "stem": "Which entry body matches both SSH and Telnet in one line?",
+      "options": [
+        {"key": "A", "text": "tcp any any range 22 23", "rationale": "Correct: 'range' with tcp covers both ports.", "role": "best"},
+        {"key": "B", "text": "ip any any range 22 23", "rationale": "'ip' can't take ports.", "role": "related"},
+        {"key": "C", "text": "udp any any range 22 23", "rationale": "SSH and Telnet use TCP.", "role": "related"},
+        {"key": "D", "text": "tcp any any gt 23", "rationale": "Matches ports above 23, missing both.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Port and protocol keywords: protocols tcp, udp, icmp, ip; operators eq, neq, gt, lt, range. Ports require tcp or udp; 'ip' can't take ports.",
+      "discriminator_tested": "Ports require tcp or udp; range for spans."
+    },
+    {
+      "objectives": ["C05-36", "C05-32"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "Interface g0/1 connects to the server LAN where 10.1.9.10 lives. Users' Telnet sessions to 10.1.9.10 still succeed, and the output below shows entry 10 with 0 matches. What is the MOST likely explanation?",
+      "exhibit": "R1# show access-lists 110\nExtended IP access list 110\n    10 deny tcp any host 10.1.9.10 eq 23 (0 matches)\n    20 permit ip any any (15233 matches)\nR1# show ip interface g0/1 | include access list\n  Outgoing access list is not set\n  Inbound  access list is 110",
+      "options": [
+        {"key": "A", "text": "It's applied in the wrong direction", "rationale": "Correct: requests to the server leave g0/1 outbound; inbound sees only replies.", "role": "best"},
+        {"key": "B", "text": "Entry 10 isn't matching any packets", "rationale": "True, but that's the symptom, not the cause.", "role": "partial"},
+        {"key": "C", "text": "The permit entry overrides the deny", "rationale": "The deny is first; order isn't the problem.", "role": "related"},
+        {"key": "D", "text": "The ACL isn't applied to any interface", "rationale": "The output shows it applied inbound on g0/1.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "When verifying ACLs, 'show access-lists' shows what the ACL says and its hits, and 'show ip interface' shows where it is applied. Zero hits on a deny that should match points to placement or direction.",
+      "discriminator_tested": "show access-lists = contents and hits; show ip interface = where applied."
+    },
+    {
+      "objectives": ["C05-37"], "type": "single", "angle": "complete-config", "difficulty": 2,
+      "stem": "Which command adds a note to ACL 110 explaining why an entry exists?",
+      "options": [
+        {"key": "A", "text": "access-list 110 remark Block Telnet", "rationale": "Correct: 'remark' documents the ACL in the configuration.", "role": "best"},
+        {"key": "B", "text": "access-list 110 description Block Telnet", "rationale": "'description' is an interface command.", "role": "related"},
+        {"key": "C", "text": "! Block Telnet", "rationale": "A '!' comment isn't saved in the configuration.", "role": "related"},
+        {"key": "D", "text": "no access-list 110", "rationale": "That deletes the whole ACL.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "'remark' documents an entry. 'no ip access-group 110 in' removes only the application, while 'no access-list 110' deletes the whole ACL.",
+      "discriminator_tested": "remark documents; removing the application vs deleting the ACL."
+    }
+  ]
+}

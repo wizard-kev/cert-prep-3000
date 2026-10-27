@@ -1,0 +1,362 @@
+{
+  "questions": [
+    {
+      "objectives": ["C06-01"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A laptop moves from the office domain network to a hotel's Wi-Fi. What BEST describes what changes in Windows Defender Firewall?",
+      "options": [
+        {"key": "A", "text": "It uses the Public profile", "rationale": "Correct: the active profile follows the network location.", "role": "best"},
+        {"key": "B", "text": "Inbound traffic is blocked unless allowed", "rationale": "True on every profile, so it isn't what changes.", "role": "partial"},
+        {"key": "C", "text": "It keeps the Domain profile's rules", "rationale": "The Domain profile applies only on the domain network.", "role": "related"},
+        {"key": "D", "text": "Outbound traffic becomes blocked by default", "rationale": "Outbound is allowed by default on every profile.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Windows Defender Firewall has separate Domain, Private, and Public profiles. Inbound is blocked unless a rule allows it, outbound is allowed by default, and the active profile depends on network location.",
+      "discriminator_tested": "The active profile depends on network location."
+    },
+    {
+      "objectives": ["C06-02"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two are reasons attackers favour built-in scripting tools such as PowerShell? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "They are already installed and trusted", "rationale": "Correct: nothing new has to be brought onto the system.", "role": "best"},
+        {"key": "B", "text": "Their activity blends in with normal admin work", "rationale": "Correct: 'living off the land' is harder to spot.", "role": "best"},
+        {"key": "C", "text": "Windows has no way to log them", "rationale": "PowerShell logging exists; it just has to be enabled.", "role": "related"},
+        {"key": "D", "text": "They require no user account to run", "rationale": "Scripts run under an account like anything else.", "role": "related"},
+        {"key": "E", "text": "Execution policy blocks defenders from using them", "rationale": "Execution policy isn't a security boundary for anyone.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Scripting automates admin tasks with PowerShell, batch, VBScript, or Python, the same tools attackers use ('living off the land'). PowerShell's execution policy is a safety setting, not a security boundary.",
+      "discriminator_tested": "Attackers use the same built-in tools: living off the land."
+    },
+    {
+      "objectives": ["C06-03", "C06-09"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A new laptop image is being prepared. Which single change BEST limits the damage if a user opens malware?",
+      "options": [
+        {"key": "A", "text": "Daily work under a standard, non-admin account", "rationale": "Correct: malware inherits the user's limited rights.", "role": "best"},
+        {"key": "B", "text": "BitLocker encryption on the system drive", "rationale": "Protects data on a lost laptop, not against running malware.", "role": "partial"},
+        {"key": "C", "text": "A hidden C$ share for administrators", "rationale": "Hiding a share doesn't limit malware.", "role": "related"},
+        {"key": "D", "text": "Turning off Windows Update to avoid reboots", "rationale": "That increases risk.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Windows security considerations reduce attack surface with layered controls: daily use as a standard user, disabling unused accounts and services, antimalware, and disk encryption.",
+      "discriminator_tested": "Standard-user daily use limits damage."
+    },
+    {
+      "objectives": ["C06-04", "C06-06"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which statement BEST describes how NTFS permissions from a user's several groups combine?",
+      "options": [
+        {"key": "A", "text": "Additive, but Deny overrides", "rationale": "Correct: cumulative, with Deny overriding Allow.", "role": "best"},
+        {"key": "B", "text": "They add up across the user's groups", "rationale": "True, but it leaves out that Deny overrides Allow.", "role": "partial"},
+        {"key": "C", "text": "The most restrictive group permission wins", "rationale": "That rule applies when combining share and NTFS permissions.", "role": "related"},
+        {"key": "D", "text": "The group listed first in the ACL wins", "rationale": "Order of listing doesn't decide NTFS access.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "NTFS permissions apply to both local and network access, are cumulative across groups, and Deny overrides Allow. Full control adds change permissions and take ownership over Modify.",
+      "discriminator_tested": "Cumulative across groups; Deny overrides Allow."
+    },
+    {
+      "objectives": ["C06-05", "C06-06"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST explains why share permissions have no effect on a user working at the file server's own keyboard?",
+      "options": [
+        {"key": "A", "text": "Share permissions apply to network access alone", "rationale": "Correct: locally, only NTFS applies.", "role": "best"},
+        {"key": "B", "text": "The user isn't connecting through the share", "rationale": "True, but it doesn't state the rule behind it.", "role": "partial"},
+        {"key": "C", "text": "Local users are treated as administrators", "rationale": "Local users keep their normal rights.", "role": "related"},
+        {"key": "D", "text": "NTFS is disabled for local sessions", "rationale": "NTFS is exactly what applies locally.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Local permissions cover a user logged on at the machine itself. Only NTFS permissions apply locally; share permissions are ignored.",
+      "discriminator_tested": "Only NTFS applies locally."
+    },
+    {
+      "objectives": ["C06-06", "C06-04"], "type": "single", "angle": "choose-response", "difficulty": 3,
+      "stem": "To simplify management, admins set every share's permission to Full Control for authenticated users and control access with NTFS. What BEST describes the effect for users connecting over the network?",
+      "options": [
+        {"key": "A", "text": "NTFS permissions alone decide their access", "rationale": "Correct: the share no longer restricts, so the more restrictive layer is NTFS.", "role": "best"},
+        {"key": "B", "text": "Network access is simpler to troubleshoot", "rationale": "A benefit, but not the effect on access.", "role": "partial"},
+        {"key": "C", "text": "Everyone gets Full Control over the network", "rationale": "NTFS still restricts; the most restrictive applies.", "role": "related"},
+        {"key": "D", "text": "Local users lose their NTFS permissions", "rationale": "Share settings don't affect local access.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Share permissions apply only to network access, and combined with NTFS the more restrictive is the effective access. With shares at Full Control, NTFS decides.",
+      "discriminator_tested": "Network: most restrictive of share and NTFS."
+    },
+    {
+      "objectives": ["C06-07"], "type": "single", "angle": "compute-permissions", "difficulty": 3,
+      "stem": "A file in D:\\HR has an explicit permission granting HR Modify. It is copied to D:\\Public, where Everyone has inherited Read. What permissions does the copy have?",
+      "options": [
+        {"key": "A", "text": "Public's permissions; copies inherit", "rationale": "Correct: a copy is a new file that takes the destination's permissions.", "role": "best"},
+        {"key": "B", "text": "HR: Modify, carried with the file", "rationale": "That happens on a move within the same volume, not a copy.", "role": "related"},
+        {"key": "C", "text": "Both sets combined", "rationale": "Permissions aren't merged.", "role": "wrong"},
+        {"key": "D", "text": "No permissions until an admin sets them", "rationale": "New files always inherit from the destination.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Child files inherit the parent's permissions by default. A copy takes the destination's permissions; a move within the same volume keeps its permissions; a move to another volume takes the destination's.",
+      "discriminator_tested": "Copy takes the destination's permissions."
+    },
+    {
+      "objectives": ["C06-08"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An auditor reviews the output below from a file server. Which statement is BEST?",
+      "exhibit": "C:\\> net share\nShare name   Resource        Remark\nC$           C:\\             Default share\nADMIN$       C:\\Windows      Remote Admin\nIPC$                         Remote IPC\nProjects     D:\\Projects\nPayroll$     D:\\Payroll",
+      "options": [
+        {"key": "A", "text": "Payroll$ is hidden, not secured", "rationale": "Correct: the $ keeps it out of browse lists only.", "role": "best"},
+        {"key": "B", "text": "Several folders are shared over SMB", "rationale": "True, but it misses the security point.", "role": "partial"},
+        {"key": "C", "text": "C$ and ADMIN$ should be deleted at once", "rationale": "Administrative shares are defaults; the risk lies in their permissions.", "role": "related"},
+        {"key": "D", "text": "Payroll$ is encrypted because of the $", "rationale": "The $ has nothing to do with encryption.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Shared folders are published over SMB (TCP 445); hidden and administrative shares end in $ (C$, ADMIN$). The $ only hides a share from browsing; it does not secure it.",
+      "discriminator_tested": "$ only hides a share."
+    },
+    {
+      "objectives": ["C06-09"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 2,
+      "stem": "Which threat does UAC MOST directly reduce?",
+      "options": [
+        {"key": "A", "text": "Malware silently gaining admin rights", "rationale": "Correct: elevation needs an explicit prompt.", "role": "best"},
+        {"key": "B", "text": "Users running programs they downloaded", "rationale": "Programs that don't need admin rights run without a prompt.", "role": "related"},
+        {"key": "C", "text": "Attackers guessing account passwords", "rationale": "Lockout and strong passwords address that.", "role": "related"},
+        {"key": "D", "text": "Network worms spreading over SMB", "rationale": "Patching and firewalls address that.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "UAC prompts before actions that need administrative rights. Admins run with a standard token until they elevate, so malware can't silently gain admin rights.",
+      "discriminator_tested": "UAC stops malware from silently gaining admin."
+    },
+    {
+      "objectives": ["C06-10", "C06-15"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A company with 800 PCs wants to approve, schedule, and report on Windows updates centrally. Which option BEST fits?",
+      "options": [
+        {"key": "A", "text": "WSUS or Intune", "rationale": "Correct: centralized control of Windows Update.", "role": "best"},
+        {"key": "B", "text": "Windows Update on each PC", "rationale": "Works, but gives no central approval or reporting.", "role": "partial"},
+        {"key": "C", "text": "The apt package manager", "rationale": "apt is for Debian and Ubuntu Linux.", "role": "related"},
+        {"key": "D", "text": "Group Policy firewall rules", "rationale": "Firewall rules don't manage updates.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Windows Update delivers OS security, quality, and feature updates; WSUS or Intune centralize control.",
+      "discriminator_tested": "WSUS/Intune centralize Windows Update control."
+    },
+    {
+      "objectives": ["C06-11", "C06-15"], "type": "multi", "angle": "choose-response", "difficulty": 2,
+      "stem": "Which two measures BEST close the gap where third-party applications go unpatched? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A tool that updates non-Microsoft software", "rationale": "Correct: apps need their own update process.", "role": "best"},
+        {"key": "B", "text": "An inventory of installed applications", "rationale": "Correct: you can't patch what you don't know is installed.", "role": "best"},
+        {"key": "C", "text": "Running Windows Update nightly instead of monthly", "rationale": "Windows Update doesn't patch most third-party apps.", "role": "related"},
+        {"key": "D", "text": "Upgrading the PCs' firmware", "rationale": "Firmware isn't where application flaws live.", "role": "related"},
+        {"key": "E", "text": "Removing users' local admin rights", "rationale": "Good hardening, but it doesn't patch anything.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Application patching: third-party applications need their own update process, because patching the OS doesn't patch most third-party apps such as browsers, PDF readers, and runtimes.",
+      "discriminator_tested": "Third-party apps need their own update process."
+    },
+    {
+      "objectives": ["C06-12", "C06-18"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "After a graphics driver update, a PC shows a blank screen at the login prompt. What is the BEST first step?",
+      "options": [
+        {"key": "A", "text": "Boot to safe mode and roll back the driver", "rationale": "Correct: rollback restores the prior driver.", "role": "best"},
+        {"key": "B", "text": "Reinstall Windows from scratch", "rationale": "Drastic when a rollback is available.", "role": "related"},
+        {"key": "C", "text": "Flash the GPU's firmware", "rationale": "The change was to the driver, not the firmware.", "role": "related"},
+        {"key": "D", "text": "Disable UAC so the driver can load", "rationale": "UAC isn't why the driver failed.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A device driver lets the OS communicate with hardware and runs in kernel mode. Rollback restores the prior driver; firmware is separate code on the device itself.",
+      "discriminator_tested": "Rollback restores the prior driver."
+    },
+    {
+      "objectives": ["C06-13"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which source of macOS apps is reviewed by Apple and delivers sandboxed apps?",
+      "options": [
+        {"key": "A", "text": "The Mac App Store", "rationale": "Correct: the curated source.", "role": "best"},
+        {"key": "B", "text": "A notarized download", "rationale": "Notarization is an automated malware scan, not a review or sandbox.", "role": "related"},
+        {"key": "C", "text": "Homebrew packages", "rationale": "A third-party package manager.", "role": "related"},
+        {"key": "D", "text": "A disk image from email", "rationale": "No review at all.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The Mac App Store is Apple-reviewed, sandboxed app distribution. Gatekeeper controls apps from outside the store.",
+      "discriminator_tested": "App Store = curated; Gatekeeper = outside the store."
+    },
+    {
+      "objectives": ["C06-14"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "Which command updates installed packages on a Red Hat Enterprise Linux server?",
+      "options": [
+        {"key": "A", "text": "sudo dnf upgrade", "rationale": "Correct: dnf (or yum) on Red Hat systems.", "role": "best"},
+        {"key": "B", "text": "sudo apt upgrade", "rationale": "apt is for Debian and Ubuntu.", "role": "related"},
+        {"key": "C", "text": "softwareupdate -i -a", "rationale": "That is macOS.", "role": "related"},
+        {"key": "D", "text": "wuauclt /detectnow", "rationale": "That is a legacy Windows Update client command.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "On Linux, package managers update the OS and repo apps together: apt on Debian/Ubuntu, and dnf/yum on Red Hat and Fedora. macOS updates come from Apple.",
+      "discriminator_tested": "apt on Debian/Ubuntu; dnf/yum on Red Hat/Fedora."
+    },
+    {
+      "objectives": ["C06-15"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "A team pushed a patch to its 300 servers on the day it was released, and a third of them crashed. Which patch management step was skipped?",
+      "options": [
+        {"key": "A", "text": "Testing before deployment", "rationale": "Correct: test before production, with a rollback plan.", "role": "best"},
+        {"key": "B", "text": "Documenting the change", "rationale": "Missing documentation didn't cause the crashes.", "role": "related"},
+        {"key": "C", "text": "Inventory of the servers", "rationale": "They knew which servers to patch.", "role": "related"},
+        {"key": "D", "text": "Checking the vendor's release date", "rationale": "The date isn't a step that prevents crashes.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Patch management is an ongoing process: inventory, identify, evaluate and test, approve, deploy, verify, and document. It is a managed process, not a single update: test before production.",
+      "discriminator_tested": "Test before production."
+    },
+    {
+      "objectives": ["C06-16", "C06-01"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes the macOS application firewall from ufw on Linux?",
+      "options": [
+        {"key": "A", "text": "macOS rules are per app; ufw's are port-based", "rationale": "Correct: per-application vs port/address rules.", "role": "best"},
+        {"key": "B", "text": "The macOS firewall is off by default", "rationale": "True, but not the difference in how rules work.", "role": "partial"},
+        {"key": "C", "text": "ufw is a separate firewall from netfilter", "rationale": "ufw is a front-end to netfilter.", "role": "related"},
+        {"key": "D", "text": "macOS has no firewall; ufw is Linux-specific", "rationale": "macOS has a built-in application firewall.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The macOS application firewall is off by default and sets rules per application (with pf underneath). Linux netfilter is managed via iptables/nftables or front-ends such as ufw and firewalld, using port and address rules.",
+      "discriminator_tested": "macOS rules per application; Linux rules port/address-based."
+    },
+    {
+      "objectives": ["C06-17"], "type": "single", "angle": "complete-config", "difficulty": 2,
+      "stem": "Which command gives a script's owner full access, its group read and execute, and others read alone?",
+      "options": [
+        {"key": "A", "text": "chmod 754 report.sh", "rationale": "Correct: 7 = rwx, 5 = r-x, 4 = r--.", "role": "best"},
+        {"key": "B", "text": "chmod 745 report.sh", "rationale": "Group and others are swapped.", "role": "related"},
+        {"key": "C", "text": "chmod 457 report.sh", "rationale": "Owner would have read alone, others everything.", "role": "related"},
+        {"key": "D", "text": "chown 754 report.sh", "rationale": "chown changes ownership, not permissions.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Linux permissions are read (4), write (2), and execute (1) for owner, group, and others, set with chmod; the three digits are owner, group, others. chown changes ownership.",
+      "discriminator_tested": "Three digits = owner, group, others."
+    },
+    {
+      "objectives": ["C06-18"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A NIC vendor releases a firmware fix for a remote-code-execution flaw. What is the BEST way to apply it?",
+      "options": [
+        {"key": "A", "text": "Vendor download, verified hash, stable power", "rationale": "Correct: right source, integrity check, and no interruption.", "role": "best"},
+        {"key": "B", "text": "Install it as soon as possible", "rationale": "Urgent, but not at the cost of skipping verification.", "role": "partial"},
+        {"key": "C", "text": "Wait for Windows Update to deliver it", "rationale": "Device firmware often doesn't come through Windows Update.", "role": "related"},
+        {"key": "D", "text": "Use a copy from a forum mirror for speed", "rationale": "Unverified sources may be tampered with.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Driver and firmware updates fix bugs and vulnerabilities in device firmware. Obtain them from the vendor and verify integrity; interrupting a firmware update can brick the device.",
+      "discriminator_tested": "Obtain from the vendor and verify integrity."
+    },
+    {
+      "objectives": ["C06-19"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which phase of the OS life cycle means the vendor no longer issues security patches?",
+      "options": [
+        {"key": "A", "text": "End of support", "rationale": "Correct: no further security patches.", "role": "best"},
+        {"key": "B", "text": "Extended support", "rationale": "Security patches continue during extended support.", "role": "related"},
+        {"key": "C", "text": "Mainstream support", "rationale": "Full patching and new features.", "role": "related"},
+        {"key": "D", "text": "General availability", "rationale": "That is the release.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The OS life cycle runs release, mainstream support, extended support, then end of support (end of life). After end of support there are no security patches.",
+      "discriminator_tested": "After end of support, no security patches."
+    },
+    {
+      "objectives": ["C06-20", "C06-26"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two events would an analyst find in the Windows Security log? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "4625 failed logon for jlee", "rationale": "Correct: logons are audited in the Security log.", "role": "best"},
+        {"key": "B", "text": "1102 audit log cleared", "rationale": "Correct: recorded in the Security log.", "role": "best"},
+        {"key": "C", "text": "A disk driver timeout", "rationale": "Drivers log to the System log.", "role": "related"},
+        {"key": "D", "text": "An Excel crash report", "rationale": "Programs log to the Application log.", "role": "related"},
+        {"key": "E", "text": "A router's %LINK-3-UPDOWN message", "rationale": "Routers send syslog; it isn't a Windows log.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Event Viewer's Security log holds logons and audited actions, such as 4624 logon, 4625 failed logon, and 1102 log cleared. System covers OS components and drivers; Application covers programs.",
+      "discriminator_tested": "Security = logons and audited actions."
+    },
+    {
+      "objectives": ["C06-21", "C06-23"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "An administrator with full rights could delete a server's audit log to hide their actions. Which control BEST protects the audit trail?",
+      "options": [
+        {"key": "A", "text": "Forward logs off the server", "rationale": "Correct: a copy the admin can't alter survives deletion.", "role": "best"},
+        {"key": "B", "text": "Enable more detailed audit policy settings", "rationale": "Records more, but the admin can still delete it.", "role": "partial"},
+        {"key": "C", "text": "Rotate the log file more often", "rationale": "Rotation doesn't stop deletion.", "role": "related"},
+        {"key": "D", "text": "Encrypt the server's disk with BitLocker", "rationale": "The admin can read and delete files on the encrypted disk.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Audit logs record who did what, when, and from where; they are an accountability trail and must be protected from tampering, for example by sending copies to a system the admin doesn't control.",
+      "discriminator_tested": "Audit logs must be protected from tampering."
+    },
+    {
+      "objectives": ["C06-22"], "type": "single", "angle": "secure-replacement", "difficulty": 2,
+      "stem": "Which change BEST secures syslog traffic crossing an untrusted network?",
+      "options": [
+        {"key": "A", "text": "Syslog over TLS on TCP 6514", "rationale": "Correct: encrypted and reliable.", "role": "best"},
+        {"key": "B", "text": "Syslog over TCP 514", "rationale": "More reliable, but still cleartext.", "role": "partial"},
+        {"key": "C", "text": "Syslog over UDP 162", "rationale": "That is the SNMP trap port, and still cleartext.", "role": "related"},
+        {"key": "D", "text": "Raise the logging level to 7", "rationale": "More messages, no more protection.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Syslog defaults to UDP 514, which is cleartext and unreliable. TCP adds reliability; TLS (port 6514) adds security.",
+      "discriminator_tested": "TLS 6514 adds security."
+    },
+    {
+      "objectives": ["C06-23"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "Logs from 50 devices reach the syslog collector, but their timestamps disagree by several minutes, making the timeline unreliable. What is MOST likely missing?",
+      "options": [
+        {"key": "A", "text": "NTP for consistent time", "rationale": "Correct: a central collector needs synchronized clocks.", "role": "best"},
+        {"key": "B", "text": "A SIEM to correlate the events", "rationale": "A SIEM needs consistent time too; it can't fix bad clocks.", "role": "partial"},
+        {"key": "C", "text": "Syslog over TLS", "rationale": "Encryption doesn't fix timestamps.", "role": "related"},
+        {"key": "D", "text": "A higher logging level on each device", "rationale": "More messages, same wrong clocks.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A syslog collector is a central server receiving syslog from many devices. Its copy survives a compromised device, but building a timeline requires consistent time (NTP).",
+      "discriminator_tested": "A central collector requires consistent time (NTP)."
+    },
+    {
+      "objectives": ["C06-24"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "In the message below, which part is the facility?",
+      "exhibit": "%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/2, changed state to up",
+      "options": [
+        {"key": "A", "text": "LINEPROTO", "rationale": "Correct: the facility comes first.", "role": "best"},
+        {"key": "B", "text": "5", "rationale": "That is the severity.", "role": "related"},
+        {"key": "C", "text": "UPDOWN", "rationale": "That is the mnemonic.", "role": "related"},
+        {"key": "D", "text": "Gi0/2", "rationale": "That is part of the description.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Cisco syslog messages use the format %FACILITY-SEVERITY-MNEMONIC: description. The number in the middle is the severity level.",
+      "discriminator_tested": "%FACILITY-SEVERITY-MNEMONIC."
+    },
+    {
+      "objectives": ["C06-25", "C06-24"], "type": "multi", "angle": "classify-element", "difficulty": 3,
+      "stem": "A router is configured with 'logging trap 3'. Which two of these messages are sent to the syslog server? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "%SYS-2-MALLOCFAIL", "rationale": "Correct: level 2 is more severe than 3.", "role": "best"},
+        {"key": "B", "text": "%LINK-3-UPDOWN", "rationale": "Correct: level 3 itself is included.", "role": "best"},
+        {"key": "C", "text": "%LINEPROTO-5-UPDOWN", "rationale": "Level 5 is less severe than 3.", "role": "related"},
+        {"key": "D", "text": "%SYS-6-LOGGINGHOST_STARTSTOP", "rationale": "Level 6 is informational.", "role": "related"},
+        {"key": "E", "text": "%SYS-4-CONFIG_RESOLVE", "rationale": "Level 4 is less severe than 3.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Logging levels run 0 Emergency to 7 Debugging. A lower number is more severe, and setting level N logs N and everything more severe (0 to N).",
+      "discriminator_tested": "Level N logs 0 to N."
+    },
+    {
+      "objectives": ["C06-26", "C06-27"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST explains why anomaly detection in logs needs a baseline?",
+      "options": [
+        {"key": "A", "text": "Unusual can only be judged against normal", "rationale": "Correct: without a baseline, nothing stands out.", "role": "best"},
+        {"key": "B", "text": "Baselines reduce the number of alerts", "rationale": "Often a result, but not why one is needed.", "role": "partial"},
+        {"key": "C", "text": "Baselines list known attack signatures", "rationale": "Signatures are a different detection method.", "role": "related"},
+        {"key": "D", "text": "Baselines encrypt the logs for storage", "rationale": "Baselines describe normal activity; they don't encrypt.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Identifying anomalies means comparing log activity to a baseline: off-hours logons, repeated failures, new admin accounts, unusual traffic. An anomaly needs a baseline.",
+      "discriminator_tested": "Anomaly needs a baseline."
+    },
+    {
+      "objectives": ["C06-27", "C06-26"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A security tool raises the alert below. Which capability BEST explains how it was produced?",
+      "exhibit": "Rule: Brute force followed by success        Severity: High\n  10:02-10:06  firewall  812 denied RDP attempts   src=198.51.100.77\n  10:07        dc01      4624 logon success        user=svc-scan  src=198.51.100.77",
+      "options": [
+        {"key": "A", "text": "Correlating events from separate sources", "rationale": "Correct: firewall and domain controller events were linked.", "role": "best"},
+        {"key": "B", "text": "Collecting logs from the firewall and server", "rationale": "Collection is needed, but linking the events made the alert.", "role": "partial"},
+        {"key": "C", "text": "A single device's log level being raised", "rationale": "The alert spans two devices.", "role": "related"},
+        {"key": "D", "text": "Encrypting logs in transit to the server", "rationale": "Encryption doesn't detect anything.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A SIEM aggregates, normalizes, and correlates logs from many sources, raising alerts. A syslog collector stores logs; a SIEM analyzes them.",
+      "discriminator_tested": "SIEM correlates across sources."
+    }
+  ]
+}

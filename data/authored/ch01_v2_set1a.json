@@ -1,0 +1,324 @@
+{
+  "questions": [
+    {
+      "objectives": ["C01-01"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "An online store becomes unreachable. Logs show modest HTTP request rates from about 40,000 source addresses in 90 countries, and blocking the ten busiest addresses changes nothing. Which description BEST fits this event?",
+      "options": [
+        {"key": "A", "text": "A distributed denial of service from many hosts at once", "rationale": "Correct: many distributed sources exhausting one resource.", "role": "best"},
+        {"key": "B", "text": "A denial of service attack against the web storefront", "rationale": "True as far as it goes, but it misses what defines this event: thousands of distributed sources.", "role": "partial"},
+        {"key": "C", "text": "A traffic spike caused by a successful sales promotion", "rationale": "A legitimate surge wouldn't come from 40,000 addresses that blocking can't touch; it describes a symptom, not this cause.", "role": "related"},
+        {"key": "D", "text": "An on-path attack intercepting customer checkout sessions", "rationale": "Interception attacks confidentiality and integrity; the store being unreachable is an availability problem.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A DoS exhausts a resource so legitimate users can't be served. When the traffic comes from many distributed sources it is a DDoS, which is why blocking a handful of addresses barely helps.",
+      "discriminator_tested": "DDoS = many distributed sources; DoS = one source."
+    },
+    {
+      "objectives": ["C01-02", "C01-03"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Investigators find 3,000 home routers and cameras running the same malware. Each sits idle until instructed, then joins the others in flooding whatever target it is given. Which term describes the collection of compromised devices itself?",
+      "options": [
+        {"key": "A", "text": "A botnet: the pool of hijacked devices the attacker directs", "rationale": "Correct: the botnet is the army of compromised devices.", "role": "best"},
+        {"key": "B", "text": "A C2 channel: the servers that send the devices their orders", "rationale": "C2 is the control path, not the devices being controlled.", "role": "related"},
+        {"key": "C", "text": "A coordinated attack: many sources acting in sync on a target", "rationale": "That names what the devices do together, not the devices themselves.", "role": "related"},
+        {"key": "D", "text": "A worm outbreak: malware copying itself to new hosts unaided", "rationale": "Describes how malware might spread, not the controlled collection of devices.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A botnet is a network of compromised devices under attacker control: the army, the means rather than the attack. Command and control (C2) is the channel that issues the orders.",
+      "discriminator_tested": "Botnet = the devices; C2 = the control path."
+    },
+    {
+      "objectives": ["C01-03", "C01-02"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "An analyst reviews proxy logs for one workstation and sees the entries below. What do these entries MOST likely show?",
+      "exhibit": "time      src          dst                    bytes_out  bytes_in\n09:00:02  10.1.4.27    cdn-upd8.example.net   312        96\n09:01:02  10.1.4.27    cdn-upd8.example.net   308        96\n09:02:01  10.1.4.27    cdn-upd8.example.net   315        96\n09:03:02  10.1.4.27    cdn-upd8.example.net   311        1840\n09:04:02  10.1.4.27    cdn-upd8.example.net   9420       96",
+      "options": [
+        {"key": "A", "text": "Malware checking in with a command and control server", "rationale": "Correct: a steady one-minute beacon, a larger reply carrying instructions, then a big upload of the result.", "role": "best"},
+        {"key": "B", "text": "The workstation joining a flood against that server", "rationale": "One request a minute is far too little traffic to be a flood.", "role": "related"},
+        {"key": "C", "text": "Software polling an update server on a fixed schedule", "rationale": "A plausible first thought, but a legitimate updater wouldn't upload 9 KB to an unfamiliar look-alike domain right after a large reply.", "role": "wrong"},
+        {"key": "D", "text": "Forged ARP replies redirecting the host's web traffic", "rationale": "ARP spoofing happens on the local subnet and wouldn't show as regular requests to one external domain.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Command and control (C2) is the channel used to issue commands to compromised devices. Regular small check-ins (beaconing), a reply carrying instructions, then a larger upload are classic C2 behaviour. The botnet is the devices; C2 is the control path.",
+      "discriminator_tested": "Periodic beaconing to one external host is the C2 control path."
+    },
+    {
+      "objectives": ["C01-04", "C01-06"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "Monitoring shows inbound traffic to the company website jumped to eight times its normal level at 9:00 a.m. Nothing else is known yet. What is the BEST conclusion at this point?",
+      "options": [
+        {"key": "A", "text": "A symptom to investigate before naming a cause", "rationale": "Correct: a surge is only a symptom until the cause is known.", "role": "best"},
+        {"key": "B", "text": "It is unusual, so it should be logged for later trend reports", "rationale": "Logging it is reasonable, but it doesn't answer what the surge means right now.", "role": "partial"},
+        {"key": "C", "text": "It is a DDoS attack, so the ISP should be called immediately", "rationale": "Jumps to a cause; the surge could just as well be legitimate demand.", "role": "related"},
+        {"key": "D", "text": "It is harmless, because the volume is coming from customers", "rationale": "Nothing yet shows who is sending the traffic; that is an assumption.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A traffic spike is a sudden surge in volume. It is a symptom only: the cause may be malicious, such as a DDoS, or legitimate, such as a promotion or viral demand, so it is investigated before it is labelled.",
+      "discriminator_tested": "A traffic spike is a symptom; its cause may be malicious or legitimate."
+    },
+    {
+      "objectives": ["C01-05", "C01-01"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "Threat intelligence reports that five unrelated criminal groups agreed on a date and launched their own campaigns against the same bank within the same ten minutes, each with different tools. Which term BEST captures what made this event distinctive?",
+      "options": [
+        {"key": "A", "text": "A coordinated attack, synchronized across several actors", "rationale": "Correct: the defining feature is that separate actors acted together.", "role": "best"},
+        {"key": "B", "text": "A distributed attack, since it came from many separate sources", "rationale": "True, but many sources alone doesn't capture the deliberate synchronization.", "role": "partial"},
+        {"key": "C", "text": "A botnet, since many machines took part in the campaigns", "rationale": "A botnet is a set of controlled devices; five independent groups with their own tools isn't one.", "role": "related"},
+        {"key": "D", "text": "An advanced persistent threat with long-term stealthy access", "rationale": "APTs are defined by long dwell time; this was a ten-minute burst.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A coordinated attack is multiple sources or actors acting together. It overlaps with DDoS, but its emphasis is the synchronization between the actors.",
+      "discriminator_tested": "Coordinated attack = emphasis on synchronization between actors."
+    },
+    {
+      "objectives": ["C01-06", "C01-04"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A news site goes down for an hour after a celebrity links to one of its articles. Logs show ordinary browsers from many countries, all requesting that article. What BEST describes the outage?",
+      "options": [
+        {"key": "A", "text": "An unintentional DoS with no attacker behind it", "rationale": "Correct: real readers, no malicious intent.", "role": "best"},
+        {"key": "B", "text": "A traffic spike that exceeded the site's capacity", "rationale": "Accurate as a description of the symptom, but it doesn't classify the outage.", "role": "partial"},
+        {"key": "C", "text": "A DDoS attack launched from a botnet of browsers", "rationale": "Many sources, but no attacker and no intent: the differentiator is missing.", "role": "related"},
+        {"key": "D", "text": "A permanent DoS that corrupted the server firmware", "rationale": "The site came back on its own after an hour; nothing was bricked.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A friendly or unintentional DoS is an outage with no malicious intent, such as viral demand, a misconfiguration, or a runaway process. The surge is the symptom; intent is what separates it from a DDoS.",
+      "discriminator_tested": "No attacker: intent is what separates a friendly DoS from a DDoS."
+    },
+    {
+      "objectives": ["C01-07"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two events would take services offline without generating any malicious network traffic? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "An intruder cuts the fiber cable outside the building", "rationale": "Correct: a physical attack on infrastructure.", "role": "best"},
+        {"key": "B", "text": "Someone turns off the server room's power", "rationale": "Correct: powering off infrastructure is a physical attack.", "role": "best"},
+        {"key": "C", "text": "A botnet floods the web server with HTTP requests", "rationale": "A DDoS is carried by malicious traffic.", "role": "related"},
+        {"key": "D", "text": "A worm spreads between servers and crashes services", "rationale": "A worm moves over the network.", "role": "related"},
+        {"key": "E", "text": "Spoofed ICMP replies overload the core router CPU", "rationale": "That is malicious ICMP traffic.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A physical attack damages, cuts, or powers off infrastructure. It hits availability with no network traffic at all, so network monitoring may show nothing but silence.",
+      "discriminator_tested": "Physical attacks hit availability with no network traffic."
+    },
+    {
+      "objectives": ["C01-08", "C01-37"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "After an attack, three branch routers no longer boot. Power-cycling them and reloading the saved configuration both fail, and the vendor says the boot code itself is damaged and must be reflashed. Which attack fits?",
+      "options": [
+        {"key": "A", "text": "A permanent DoS against the devices' firmware", "rationale": "Correct: corrupted firmware needs a reflash or replacement.", "role": "best"},
+        {"key": "B", "text": "A SYN flood exhausting the connection state", "rationale": "A flood ends when the traffic stops; a reboot would clear it.", "role": "related"},
+        {"key": "C", "text": "Ransomware encrypting the saved configuration", "rationale": "The configuration reloaded but the boot code is what failed.", "role": "related"},
+        {"key": "D", "text": "A friendly DoS from a configuration mistake", "rationale": "There was an attack, and configuration errors don't damage boot code.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A permanent DoS corrupts device firmware so the device is unusable. A reboot won't fix it; it needs a reflash or replacement, unlike floods, which end when the traffic stops.",
+      "discriminator_tested": "Permanent DoS needs reflash or replacement; a reboot won't fix it."
+    },
+    {
+      "objectives": ["C01-09", "C01-11"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A capture on a partner's network segment shows the traffic below. The host at 203.0.113.50 says it never sent any pings and is being overwhelmed. Which attack name BEST fits?",
+      "exhibit": "No.  Source           Destination       Protocol  Info\n1    203.0.113.50     198.51.100.255    ICMP      Echo (ping) request\n2    198.51.100.12    203.0.113.50      ICMP      Echo (ping) reply\n3    198.51.100.13    203.0.113.50      ICMP      Echo (ping) reply\n4    198.51.100.14    203.0.113.50      ICMP      Echo (ping) reply\n5    198.51.100.15    203.0.113.50      ICMP      Echo (ping) reply\n...  (hundreds more replies per second)",
+      "options": [
+        {"key": "A", "text": "Smurf attack", "rationale": "Correct: echo requests to a broadcast address with the victim's spoofed source, so every host replies to the victim.", "role": "best"},
+        {"key": "B", "text": "Reflection attack", "rationale": "Technically true, since the segment's hosts bounce the traffic, but the broadcast echo pattern has a more specific name.", "role": "partial"},
+        {"key": "C", "text": "SYN flood", "rationale": "A SYN flood uses TCP handshakes, not ICMP echo.", "role": "related"},
+        {"key": "D", "text": "ARP spoofing", "rationale": "ARP spoofing forges MAC-to-IP mappings; it doesn't flood with ICMP.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A smurf attack sends ICMP echo requests to a broadcast address with the victim's spoofed source IP, so every host on that segment replies to the victim. It is a kind of reflection attack, but the broadcast echo pattern is what names it.",
+      "discriminator_tested": "Smurf: ICMP echo to a broadcast address with the victim's spoofed source."
+    },
+    {
+      "objectives": ["C01-10", "C01-01"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "Users can't open new connections to a web server, although sessions that were already open keep working. The admin runs netstat. Which explanation BEST fits the output?",
+      "exhibit": "Proto  Local Address    Foreign Address       State\nTCP    10.0.0.5:443     198.18.44.10:51022    SYN_RECEIVED\nTCP    10.0.0.5:443     198.18.97.3:40211     SYN_RECEIVED\nTCP    10.0.0.5:443     198.19.2.77:61873     SYN_RECEIVED\nTCP    10.0.0.5:443     198.18.150.9:33090    SYN_RECEIVED\n... 4,812 more in SYN_RECEIVED; 37 ESTABLISHED",
+      "options": [
+        {"key": "A", "text": "Half-open handshakes are filling the connection table", "rationale": "Correct: thousands of SYN_RECEIVED entries that never complete leave no room for new clients.", "role": "best"},
+        {"key": "B", "text": "A denial of service is exhausting the server's resources", "rationale": "True, but it doesn't identify the mechanism the output shows.", "role": "partial"},
+        {"key": "C", "text": "A flood of ICMP echo replies is saturating the link", "rationale": "The output shows TCP state, not ICMP; a saturated link would hurt existing sessions too.", "role": "related"},
+        {"key": "D", "text": "The site's TLS certificate has expired for new visitors", "rationale": "An expired certificate produces browser warnings, not half-open TCP entries.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A SYN flood sends TCP SYNs and never completes the handshake, so half-open (SYN_RECEIVED) entries fill the connection table and new clients are refused. 'Denial of service' is true but doesn't identify the mechanism.",
+      "discriminator_tested": "SYN flood fills the half-open connection table."
+    },
+    {
+      "objectives": ["C01-11", "C01-13"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 3,
+      "stem": "Attackers send 60-byte DNS queries carrying the victim's spoofed address to thousands of open resolvers, and each resolver sends a 3,000-byte answer to the victim. Which statement BEST explains why this technique is so effective?",
+      "options": [
+        {"key": "A", "text": "Third parties reflect it, and each reply dwarfs its request", "rationale": "Correct: reflection plus amplification, here about 50 times.", "role": "best"},
+        {"key": "B", "text": "The attackers hide their own addresses behind spoofed source IPs", "rationale": "True, but hiding the source doesn't explain the overwhelming volume.", "role": "partial"},
+        {"key": "C", "text": "The resolvers' caches are poisoned and send users to the wrong IP", "rationale": "Cache poisoning misdirects users; nothing here alters resolver records.", "role": "related"},
+        {"key": "D", "text": "The victim's half-open connection table fills with DNS sessions", "rationale": "DNS answers over UDP don't create half-open TCP entries.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "In reflective and amplified attacks, spoofed requests go to third-party servers that send their responses to the victim (reflective), and each response is much larger than the request (amplified).",
+      "discriminator_tested": "Reflective = a third party bounces it; amplified = response larger than request."
+    },
+    {
+      "objectives": ["C01-12", "C01-19"], "type": "single", "angle": "symptom-to-attack", "difficulty": 3,
+      "stem": "On hotel Wi-Fi, a traveler's banking session suddenly shows a certificate warning, which the traveler clicks through. Later the bank reports that a transfer amount was changed in transit. What BEST explains both events?",
+      "options": [
+        {"key": "A", "text": "Someone between the traveler and the bank altered traffic", "rationale": "Correct: an on-path attacker presented its own certificate and changed the live session.", "role": "best"},
+        {"key": "B", "text": "Someone read the traveler's traffic on the shared wireless network", "rationale": "Eavesdropping breaks confidentiality but can't change the transfer amount.", "role": "partial"},
+        {"key": "C", "text": "A keylogger on the laptop captured the traveler's banking password", "rationale": "Stolen keystrokes explain neither the certificate warning nor the altered transfer.", "role": "related"},
+        {"key": "D", "text": "The bank's server was overloaded and corrupted the transfer data", "rationale": "Overload causes failures, not certificate warnings or targeted changes.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An on-path attack (formerly called man-in-the-middle, MitM) places the attacker between two parties to read or alter a live session. The altered transfer shows integrity was broken, not only confidentiality.",
+      "discriminator_tested": "On-path breaks confidentiality and integrity of a live session."
+    },
+    {
+      "objectives": ["C01-13", "C01-15"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "Several users type the correct address of the company intranet, but their browsers land on a look-alike login page hosted at an unfamiliar IP address. Users who connect by IP address instead of by name are fine. Which attack BEST fits?",
+      "options": [
+        {"key": "A", "text": "DNS cache poisoning", "rationale": "Correct: the right name resolves to the wrong IP; connecting by IP bypasses the bad record.", "role": "best"},
+        {"key": "B", "text": "ARP spoofing", "rationale": "ARP spoofing would affect traffic by IP as well, and only on the local subnet.", "role": "related"},
+        {"key": "C", "text": "Evil twin access point", "rationale": "Users on wired and wireless links alike reached the wrong IP by name only.", "role": "related"},
+        {"key": "D", "text": "Phishing email", "rationale": "The users typed the correct address themselves; no fraudulent link was involved.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DNS poisoning inserts false records into a resolver or cache: the user enters the right name and reaches the wrong IP. Connecting by IP address bypasses DNS, which is why those users were unaffected.",
+      "discriminator_tested": "User enters the right name, reaches the wrong IP."
+    },
+    {
+      "objectives": ["C01-14", "C01-35"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "An IDS flags the frame below arriving on a user's switch port. What is the sender MOST likely attempting?",
+      "exhibit": "Ethernet II   src 00:1a:2b:3c:4d:5e\n  802.1Q tag  VLAN 1    (outer)\n  802.1Q tag  VLAN 30   (inner)\n  IPv4        10.30.0.15 -> 10.30.0.20\nIngress port: Gi0/7 (access port, VLAN 1)\nUplink trunk native VLAN: 1",
+      "options": [
+        {"key": "A", "text": "Reaching VLAN 30 by double tagging through the native VLAN", "rationale": "Correct: the switch strips the outer native-VLAN tag and forwards the frame carrying the inner VLAN 30 tag.", "role": "best"},
+        {"key": "B", "text": "Becoming a trunk by negotiating with the switch as a switch", "rationale": "Switch spoofing is the other VLAN-hopping method, but this frame shows stacked tags, not trunk negotiation.", "role": "related"},
+        {"key": "C", "text": "Mapping its MAC to another host's IP with forged replies", "rationale": "That is ARP spoofing; nothing in the frame is an ARP reply.", "role": "related"},
+        {"key": "D", "text": "Flooding the switch's MAC table so frames go out each port", "rationale": "MAC flooding sends many source addresses, not one double-tagged frame.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "VLAN hopping reaches a VLAN you aren't assigned to, by switch spoofing or double tagging. Double tagging exploits the native VLAN: the first switch removes the outer tag matching the native VLAN and forwards the frame with the inner tag.",
+      "discriminator_tested": "Double tagging exploits the native VLAN."
+    },
+    {
+      "objectives": ["C01-15", "C01-12"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "The security team says another host is reading a user's traffic. On the user's PC, 10.20.1.1 is the default gateway and 10.20.1.37 is a colleague's laptop. Given the output, what is the MOST likely explanation?",
+      "exhibit": "C:\\> arp -a\nInterface: 10.20.1.44\n  Internet Address    Physical Address     Type\n  10.20.1.1           8c-16-45-aa-01-02    dynamic\n  10.20.1.37          8c-16-45-aa-01-02    dynamic\n  10.20.1.50          3c-52-82-11-9e-40    dynamic",
+      "options": [
+        {"key": "A", "text": "Forged replies tied the gateway's IP to the laptop's MAC", "rationale": "Correct: two IPs share one MAC because the laptop answered for the gateway.", "role": "best"},
+        {"key": "B", "text": "Traffic for the gateway is being relayed through the laptop", "rationale": "That is the result (an on-path position), not the mechanism the output reveals.", "role": "partial"},
+        {"key": "C", "text": "False DNS records point the gateway's name at the laptop", "rationale": "The table maps IPs to MACs; DNS plays no part in it.", "role": "related"},
+        {"key": "D", "text": "The gateway and laptop share one network card by design", "rationale": "Two different hosts can't legitimately share a physical address.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "ARP spoofing sends forged ARP replies so the attacker's MAC maps to another host's IP, here the gateway. It works only on the local subnet and commonly enables an on-path attack.",
+      "discriminator_tested": "ARP spoofing is local-subnet only and commonly enables on-path."
+    },
+    {
+      "objectives": ["C01-16", "C01-34"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "New laptops on the third floor receive addresses with a default gateway of 10.9.9.9, which isn't the company router, and their web traffic is being captured. Older machines that kept their existing leases are fine. What is the MOST likely cause?",
+      "options": [
+        {"key": "A", "text": "An unauthorized server handing out settings on that floor", "rationale": "Correct: a rogue DHCP server answers new lease requests with its own gateway.", "role": "best"},
+        {"key": "B", "text": "The laptops are sending traffic to an attacker's gateway", "rationale": "That is the consequence, not the cause of the bad settings.", "role": "partial"},
+        {"key": "C", "text": "A forged ARP reply is redirecting the router's IP address", "rationale": "ARP spoofing wouldn't change the gateway address the laptops were given.", "role": "related"},
+        {"key": "D", "text": "The router's DHCP pool ran out of addresses for new devices", "rationale": "An empty pool gives no address at all, not a different gateway.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A rogue DHCP server is an unauthorized DHCP server that hands out a bad gateway or DNS server. Only clients requesting new leases are affected. DHCP snooping counters it by accepting offers only from trusted ports.",
+      "discriminator_tested": "Rogue DHCP hands out a bad gateway/DNS; countered by DHCP snooping."
+    },
+    {
+      "objectives": ["C01-17", "C01-02"], "type": "multi", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A company plans to add 200 smart cameras to its network. Which two weaknesses MOST often turn devices like these into botnet recruits? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Vendor default logins left unchanged after install", "rationale": "Correct: malware simply logs in with the factory credentials.", "role": "best"},
+        {"key": "B", "text": "Firmware that goes unpatched for years", "rationale": "Correct: known flaws stay exploitable at scale.", "role": "best"},
+        {"key": "C", "text": "Video streams sent without any encryption", "rationale": "A real IoT weakness, but it exposes the video rather than handing over control of the device.", "role": "partial"},
+        {"key": "D", "text": "Cameras placed on their own isolated VLAN", "rationale": "Isolation is a mitigation, not a weakness.", "role": "related"},
+        {"key": "E", "text": "Power drawn over Ethernet instead of mains", "rationale": "PoE has no bearing on compromise.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "IoT vulnerabilities include default credentials, unpatched firmware, and weak or no encryption. Default logins and unpatched firmware let malware take over devices at scale, which makes IoT a frequent source of botnet recruits.",
+      "discriminator_tested": "Default credentials and unpatched firmware make IoT botnet recruits."
+    },
+    {
+      "objectives": ["C01-18", "C01-19"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "A wireless scan finds an access point broadcasting 'Lab-Test' that is cabled into a conference-room wall jack. No one in IT installed it, and it has no password. Which threat does this device BEST represent?",
+      "options": [
+        {"key": "A", "text": "A rogue AP: an unauthorized backdoor into the wired LAN", "rationale": "Correct: it sits inside the network and bypasses the perimeter.", "role": "best"},
+        {"key": "B", "text": "An evil twin: a fake copy of the company's own network", "rationale": "An evil twin imitates a legitimate SSID to lure users; 'Lab-Test' imitates nothing.", "role": "related"},
+        {"key": "C", "text": "An open hotspot that lets nearby users browse the web", "rationale": "True of the device, but it misses the real risk: access to the internal network.", "role": "partial"},
+        {"key": "D", "text": "A permanent DoS: a device that disrupts the wireless band", "rationale": "Nothing suggests interference or bricked devices.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A rogue AP is an unauthorized access point plugged into the wired network. It sits inside your network as a backdoor; an evil twin imitates a legitimate SSID and targets users instead.",
+      "discriminator_tested": "Rogue AP sits inside the network; evil twin targets users."
+    },
+    {
+      "objectives": ["C01-19", "C01-18"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "At an airport, staff laptops list two networks named 'CorpGuest'. The stronger one isn't the company's, and anyone who joins it sees a sign-in page asking for corporate credentials. What is this?",
+      "options": [
+        {"key": "A", "text": "An evil twin posing as the real guest network", "rationale": "Correct: an attacker AP imitating a legitimate SSID to capture credentials.", "role": "best"},
+        {"key": "B", "text": "A rogue AP connected to the company's own LAN", "rationale": "A rogue AP is plugged into your network; this one is the attacker's, at an airport.", "role": "related"},
+        {"key": "C", "text": "A DNS poisoning attack on the guest resolver", "rationale": "The fake page comes from joining the wrong network, not from bad DNS records.", "role": "related"},
+        {"key": "D", "text": "A smishing message sent to travelling staff", "rationale": "No text message is involved.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An evil twin is an attacker AP imitating a legitimate SSID. It targets users, often to capture credentials; a rogue AP is an unauthorized device inside your own network.",
+      "discriminator_tested": "Evil twin imitates an SSID to target users."
+    },
+    {
+      "objectives": ["C01-20"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Files on a shared drive suddenly have a new extension and can't be opened, and a text file in each folder demands cryptocurrency for a key. Which response is the BEST first step?",
+      "options": [
+        {"key": "A", "text": "Disconnect the affected systems from the network", "rationale": "Correct: containment stops the encryption spreading.", "role": "best"},
+        {"key": "B", "text": "Restore the encrypted files from the latest backup", "rationale": "Needed, but restoring first lets the still-running malware encrypt the restored files.", "role": "partial"},
+        {"key": "C", "text": "Run a full antivirus scan on the file server", "rationale": "Useful later; scanning while connected doesn't stop the spread.", "role": "related"},
+        {"key": "D", "text": "Pay the demand so the business can resume quickly", "rationale": "Paying doesn't stop the spread or guarantee a working key.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Ransomware encrypts data and demands payment for the key: extortion for access. Containing it first stops the encryption from spreading; restoring from backup comes after the ransomware is removed.",
+      "discriminator_tested": "Ransomware holds data for payment; contain before restoring."
+    },
+    {
+      "objectives": ["C01-21", "C01-22"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "An employee installs a free PDF converter from a download site. It converts files as promised, but it also opens a hidden remote-access connection. It has not spread to any other machine. Which malware type BEST fits?",
+      "options": [
+        {"key": "A", "text": "Trojan", "rationale": "Correct: disguised as useful software, run by the user, and not self-replicating.", "role": "best"},
+        {"key": "B", "text": "Worm", "rationale": "A worm spreads by itself; this stayed on one machine.", "role": "related"},
+        {"key": "C", "text": "Virus", "rationale": "A virus attaches to existing files; this was a standalone program the user installed.", "role": "related"},
+        {"key": "D", "text": "Adware", "rationale": "Adware pushes ads; this opened remote access.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A Trojan is malicious code disguised as legitimate software. The user must run it, and it doesn't self-replicate, which is why it stayed on one machine.",
+      "discriminator_tested": "Trojan: user runs it; it does not self-replicate."
+    },
+    {
+      "objectives": ["C01-22", "C01-23"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "Within an hour of one unpatched server being infected, 400 other servers on the same network are infected. No one opened a file or clicked anything, and no existing programs were modified. Which malware type is this?",
+      "options": [
+        {"key": "A", "text": "Worm", "rationale": "Correct: self-replicating over the network, no user action, no host file.", "role": "best"},
+        {"key": "B", "text": "Virus", "rationale": "A virus needs a host file and user action to spread.", "role": "related"},
+        {"key": "C", "text": "Trojan", "rationale": "A Trojan doesn't self-replicate.", "role": "related"},
+        {"key": "D", "text": "Rootkit", "rationale": "A rootkit hides access; it isn't a spreading mechanism.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A worm is self-replicating malware that spreads over networks with no user action and no host file. A virus needs a host and user action to spread.",
+      "discriminator_tested": "Worm spreads with no user action and no host file."
+    },
+    {
+      "objectives": ["C01-23", "C01-22"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Malware is found inside several spreadsheets on a shared drive. Which two characteristics would confirm it is a virus rather than a worm? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "It is attached to legitimate files rather than standing alone", "rationale": "Correct: a virus needs a host file.", "role": "best"},
+        {"key": "B", "text": "It needs someone to open an infected file", "rationale": "Correct: a virus needs user action.", "role": "best"},
+        {"key": "C", "text": "It copies itself across the network with no one involved", "rationale": "That describes a worm.", "role": "related"},
+        {"key": "D", "text": "It posed as a useful program so the user would install it", "rationale": "That describes a Trojan.", "role": "related"},
+        {"key": "E", "text": "It hides in the kernel to conceal itself and other malware", "rationale": "That describes a rootkit.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A virus is malicious code that attaches to a legitimate file or program; it needs a host and user action to spread. A worm self-replicates over the network without either.",
+      "discriminator_tested": "Virus needs a host file and user action to spread."
+    },
+    {
+      "objectives": ["C01-24", "C01-25"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "A user's laptop shows no pop-ups or slowdowns, but the security team finds software silently sending browsing history, screenshots, and the contact list to an outside server every night. Which category BEST describes it?",
+      "options": [
+        {"key": "A", "text": "Spyware", "rationale": "Correct: covert collection of activity and data.", "role": "best"},
+        {"key": "B", "text": "Adware", "rationale": "Adware delivers ads; there are none here.", "role": "related"},
+        {"key": "C", "text": "Keylogger", "rationale": "A keylogger captures keystrokes, one narrow method; this gathers far more.", "role": "related"},
+        {"key": "D", "text": "Ransomware", "rationale": "Nothing is encrypted or held for payment.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Spyware secretly collects user activity and data; its goal is covert information gathering. Adware focuses on ads, and a keylogger is one specific capture method that spyware may use.",
+      "discriminator_tested": "Spyware's goal is covert information gathering."
+    }
+  ]
+}

@@ -1,0 +1,410 @@
+{
+  "questions": [
+    {
+      "objectives": ["C08-01", "C08-12"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A manager announces: 'When this year's risk management project ends, we will have eliminated our cyber risk.' What is wrong with this statement?",
+      "options": [
+        {"key": "A", "text": "Risk management reduces risk to an acceptable level in a continuous cycle; it doesn't eliminate risk, and it never 'ends'", "rationale": "Correct: some residual risk always remains, and threats keep changing."},
+        {"key": "B", "text": "Nothing; a well-run project removes all risk", "rationale": "No set of controls removes all risk."},
+        {"key": "C", "text": "Risk management applies only to financial risk", "rationale": "It covers cyber, operational, and other risks too."},
+        {"key": "D", "text": "Risk can be eliminated, but only by buying insurance", "rationale": "Insurance transfers the financial impact; it doesn't eliminate the risk."}
+      ],
+      "answer": ["A"],
+      "explanation": "Risk management is the ongoing process of identifying, assessing, and reducing risk to an acceptable level. It manages risk rather than eliminating it, as a continuous cycle.",
+      "discriminator_tested": "Risk management reduces risk continuously; it doesn't eliminate it."
+    },
+    {
+      "objectives": ["C08-02"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which statement best describes when risk exists, according to the elements of risk?",
+      "options": [
+        {"key": "A", "text": "When a threat can exploit a vulnerability to harm an asset", "rationale": "Correct: all three elements are needed."},
+        {"key": "B", "text": "Whenever the organization owns any asset", "rationale": "An asset alone, with no weakness or threat, doesn't create risk."},
+        {"key": "C", "text": "Only after an attack has happened", "rationale": "Risk is about potential harm, before anything happens."},
+        {"key": "D", "text": "Only when a vulnerability has been published in the news", "rationale": "Unpublished weaknesses still carry risk."}
+      ],
+      "answer": ["A"],
+      "explanation": "Risk exists when a threat can exploit a vulnerability to harm an asset. Remove any element (no asset, no weakness, or no threat) and the risk changes or disappears.",
+      "discriminator_tested": "Risk = threat + vulnerability + asset."
+    },
+    {
+      "objectives": ["C08-03", "C08-02"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two of these are vulnerabilities? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A security camera still using its default admin password", "rationale": "Correct: a weakness that can be exploited."},
+        {"key": "B", "text": "Staff who were never trained to spot phishing", "rationale": "Correct: untrained users are a weakness."},
+        {"key": "C", "text": "A ransomware gang", "rationale": "That is a threat, the source of harm."},
+        {"key": "D", "text": "The customer database", "rationale": "That is an asset, what is being protected."},
+        {"key": "E", "text": "A phishing kit sold on criminal forums", "rationale": "That is an exploit or tool, the method of attack."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Vulnerabilities are weaknesses that can be exploited, such as unpatched software, default credentials, misconfiguration, and untrained users. The threat is the who or what; the exploit is the how.",
+      "discriminator_tested": "A vulnerability is the weakness; a threat is the who; an exploit is the how."
+    },
+    {
+      "objectives": ["C08-04", "C08-02"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "A factory sits in a flood zone. Its server room is in the basement, it has no backup site, and its ERP system holds every customer order. Which of these items is the threat?",
+      "options": [
+        {"key": "A", "text": "Flooding", "rationale": "Correct: a potential source of harm, here a natural disaster."},
+        {"key": "B", "text": "The basement location of the server room", "rationale": "That is a vulnerability: a weakness the flood could exploit."},
+        {"key": "C", "text": "The lack of a backup site", "rationale": "That is another vulnerability."},
+        {"key": "D", "text": "The ERP system and its order data", "rationale": "That is the asset being protected."}
+      ],
+      "answer": ["A"],
+      "explanation": "Threats are potential sources of harm: attackers, malware, insiders, and natural disasters. A threat exists independently and becomes a risk when it is paired with a vulnerability.",
+      "discriminator_tested": "A threat is the source of harm and exists independently."
+    },
+    {
+      "objectives": ["C08-05"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "An attacker crafts a malicious PDF that triggers a buffer overflow in the outdated PDF reader on the finance team's PCs and installs a backdoor. Which item is the exploit?",
+      "options": [
+        {"key": "A", "text": "The malicious PDF crafted to trigger the overflow", "rationale": "Correct: the method or code that takes advantage of the weakness."},
+        {"key": "B", "text": "The outdated PDF reader", "rationale": "That is the vulnerability."},
+        {"key": "C", "text": "The attacker", "rationale": "That is the threat."},
+        {"key": "D", "text": "The finance PCs and their data", "rationale": "Those are the assets."}
+      ],
+      "answer": ["A"],
+      "explanation": "Exploits are the methods, tools, or code that take advantage of a vulnerability. They are the how, which turns a vulnerability into a compromise.",
+      "discriminator_tested": "The exploit is the how."
+    },
+    {
+      "objectives": ["C08-06", "C08-08"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Why does an asset's value matter in risk management?",
+      "options": [
+        {"key": "A", "text": "It drives the impact of a loss, which affects the risk level and priority", "rationale": "Correct: losing a high-value asset hurts more."},
+        {"key": "B", "text": "It sets how likely an attack is", "rationale": "Value mainly drives impact, not likelihood."},
+        {"key": "C", "text": "High-value assets have no threats", "rationale": "Valuable assets often attract more threats."},
+        {"key": "D", "text": "Only physical items count as assets", "rationale": "Data, people, and reputation are assets too."}
+      ],
+      "answer": ["A"],
+      "explanation": "Assets are anything of value to the organization: data, systems, people, and reputation. They are what is being protected, and their value drives the impact of a loss.",
+      "discriminator_tested": "Asset value drives the impact of loss."
+    },
+    {
+      "objectives": ["C08-07"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "One team rates a risk as 'high likelihood, medium impact'. Another estimates the same risk at 'USD 250,000 expected loss per year'. Which risk analysis methods are these?",
+      "options": [
+        {"key": "A", "text": "The first is qualitative; the second is quantitative", "rationale": "Correct: rating labels versus measured, money-based values."},
+        {"key": "B", "text": "The first is quantitative; the second is qualitative", "rationale": "This is reversed."},
+        {"key": "C", "text": "Both are quantitative", "rationale": "The labels in the first are qualitative."},
+        {"key": "D", "text": "Both are qualitative", "rationale": "A dollar figure is quantitative."}
+      ],
+      "answer": ["A"],
+      "explanation": "Risk analysis evaluates the likelihood and impact of identified risks, either qualitatively (low, medium, or high ratings) or quantitatively (numbers or currency).",
+      "discriminator_tested": "Qualitative = labels; quantitative = measured values."
+    },
+    {
+      "objectives": ["C08-08", "C08-09"], "type": "single", "angle": "assess-risk", "difficulty": 3,
+      "stem": "A threat would be devastating if it happened (very high impact), but it is extremely unlikely. What risk level might it receive, and why?",
+      "options": [
+        {"key": "A", "text": "It may still rate low or medium, because the risk level combines likelihood with impact", "rationale": "Correct: very low likelihood pulls the level down."},
+        {"key": "B", "text": "It must rate critical, because impact alone sets the level", "rationale": "The level combines both factors."},
+        {"key": "C", "text": "It has zero risk, because it is unlikely", "rationale": "Unlikely isn't impossible."},
+        {"key": "D", "text": "It can't be rated until it actually happens", "rationale": "Risk is rated before anything happens."}
+      ],
+      "answer": ["A"],
+      "explanation": "Risk levels (low, medium, high, critical) are derived from likelihood and impact together. A severe threat with low likelihood may still rate low.",
+      "discriminator_tested": "Risk levels combine likelihood and impact."
+    },
+    {
+      "objectives": ["C08-09", "C08-10"], "type": "single", "angle": "assess-risk", "difficulty": 1,
+      "stem": "On a risk matrix: Risk A has low likelihood and high impact. Risk B has high likelihood and high impact. Risk C has low likelihood and low impact. Which risk lands in the highest-risk cell?",
+      "options": [
+        {"key": "A", "text": "Risk B", "rationale": "Correct: it is high on both axes."},
+        {"key": "B", "text": "Risk A", "rationale": "High impact, but low likelihood places it lower."},
+        {"key": "C", "text": "Risk C", "rationale": "Low on both axes is the lowest cell."},
+        {"key": "D", "text": "All three land in the same cell", "rationale": "Their positions on the two axes differ."}
+      ],
+      "answer": ["A"],
+      "explanation": "A risk matrix is a grid plotting likelihood against impact to assign a risk level. The highest-risk cell is high on both axes.",
+      "discriminator_tested": "A risk matrix has two axes: likelihood and impact."
+    },
+    {
+      "objectives": ["C08-10"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A team has two findings: a critical-risk flaw in the customer database that will take weeks to fix, and a low-risk cosmetic issue on an internal wiki that takes five minutes. Which should get priority, and why?",
+      "options": [
+        {"key": "A", "text": "The critical database flaw, because risk prioritization is based on risk level and asset value, not on how easy the fix is", "rationale": "Correct."},
+        {"key": "B", "text": "The wiki issue, because quick wins come first", "rationale": "Ease of fixing isn't the basis for priority."},
+        {"key": "C", "text": "Both equally, because each is a finding", "rationale": "Their risk levels are very different."},
+        {"key": "D", "text": "Whichever was reported first", "rationale": "Arrival order isn't risk-based."}
+      ],
+      "answer": ["A"],
+      "explanation": "Risk prioritization ranks risks so the highest-priority ones are addressed first, based on risk level and asset value, not on what is easiest to fix.",
+      "discriminator_tested": "Prioritize by risk level and asset value, not ease."
+    },
+    {
+      "objectives": ["C08-11"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "A company labels payroll records 'Restricted' and press releases 'Public'. What is the main purpose of these data classifications?",
+      "options": [
+        {"key": "A", "text": "To set how each kind of data must be handled and protected, based on its sensitivity", "rationale": "Correct: classification drives the controls."},
+        {"key": "B", "text": "To sort files by size", "rationale": "Classification is about sensitivity, not size."},
+        {"key": "C", "text": "Only to decide backup schedules", "rationale": "It governs handling and protection broadly, not just backups."},
+        {"key": "D", "text": "To follow labels that are identical in every organization", "rationale": "Labels vary by organization."}
+      ],
+      "answer": ["A"],
+      "explanation": "Data classifications label data by sensitivity (for example public, internal, confidential, restricted) to set handling and protection. Classification drives the controls, and the labels vary by organization.",
+      "discriminator_tested": "Classification by sensitivity drives the controls."
+    },
+    {
+      "objectives": ["C08-12"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "After MFA is deployed for VPN access, a small chance of account compromise remains. What is this leftover risk called, and what does it show about risk mitigation?",
+      "options": [
+        {"key": "A", "text": "Residual risk; mitigation reduces risk but doesn't remove all of it", "rationale": "Correct."},
+        {"key": "B", "text": "Zero risk; MFA removes the risk entirely", "rationale": "Some risk always remains."},
+        {"key": "C", "text": "Transferred risk; MFA moved it to the vendor", "rationale": "Transfer means shifting the financial impact, for example through insurance."},
+        {"key": "D", "text": "Accepted risk, recorded automatically when MFA was turned on", "rationale": "Acceptance is a deliberate, documented decision, not automatic."}
+      ],
+      "answer": ["A"],
+      "explanation": "Risk mitigation means implementing controls that reduce the likelihood or impact of a risk. It reduces risk, and some residual risk remains.",
+      "discriminator_tested": "Mitigation reduces risk; residual risk remains."
+    },
+    {
+      "objectives": ["C08-13"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A company buys cyber insurance to cover the costs of a data breach. Which strategic response is this, and what does it actually change?",
+      "options": [
+        {"key": "A", "text": "Transfer: it shifts the financial impact to the insurer, but the risk itself remains", "rationale": "Correct: a breach can still happen; the insurer pays part of the cost."},
+        {"key": "B", "text": "Avoid: it stops the risky activity", "rationale": "The company keeps doing business as before."},
+        {"key": "C", "text": "Accept: it lives with the risk and does nothing", "rationale": "Buying insurance is an active choice to transfer."},
+        {"key": "D", "text": "Mitigate: it reduces the likelihood of a breach", "rationale": "Insurance doesn't make a breach less likely."}
+      ],
+      "answer": ["A"],
+      "explanation": "A strategic response chooses how to handle a risk: mitigate, transfer (for example insurance), avoid (stop the activity), or accept. Transfer shifts the financial impact, not the risk itself.",
+      "discriminator_tested": "Transfer shifts the financial impact, not the risk."
+    },
+    {
+      "objectives": ["C08-14", "C08-15"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "A risk action plan lists the top five risks and the fix chosen for each, but says nothing about who will do each fix or by when. What is missing?",
+      "options": [
+        {"key": "A", "text": "Owners and a timeline, along with the resources needed", "rationale": "Correct: an action plan says who does what, by when."},
+        {"key": "B", "text": "A risk matrix", "rationale": "The risks are already ranked; the gap is accountability and timing."},
+        {"key": "C", "text": "Asset tags", "rationale": "Tags identify devices; they don't assign work."},
+        {"key": "D", "text": "An insurance policy", "rationale": "Insurance is one possible response, not a plan element."}
+      ],
+      "answer": ["A"],
+      "explanation": "An action plan documents the steps, owners, resources, and timeline for addressing prioritized risks. It specifies who does what, and by when.",
+      "discriminator_tested": "An action plan specifies who does what, by when."
+    },
+    {
+      "objectives": ["C08-15"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A firewall rule that fixed a high risk was deployed in March. In September, an audit finds the rule was later removed and the risk was back, and nobody had noticed. Which part of the process failed?",
+      "options": [
+        {"key": "A", "text": "Implementation and tracking: monitoring the control's effectiveness and the residual risk after deployment", "rationale": "Correct: deploying the fix wasn't the end of the work."},
+        {"key": "B", "text": "Risk analysis", "rationale": "The risk was correctly found and rated in the first place."},
+        {"key": "C", "text": "Data classification", "rationale": "Labeling data wouldn't have caught a removed rule."},
+        {"key": "D", "text": "Asset identification", "rationale": "The asset was known."}
+      ],
+      "answer": ["A"],
+      "explanation": "Implementation and tracking means carrying out the plan and monitoring progress, effectiveness, and residual risk. The work continues after deployment: verify, monitor, and reassess.",
+      "discriminator_tested": "Work continues after deployment: verify, monitor, reassess."
+    },
+    {
+      "objectives": ["C08-16", "C08-17", "C08-18"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which two of these are types of security assessments? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Vulnerability assessment", "rationale": "Correct."},
+        {"key": "B", "text": "Penetration testing", "rationale": "Correct."},
+        {"key": "C", "text": "A change board meeting", "rationale": "That is change approval, not an assessment of security posture."},
+        {"key": "D", "text": "Buying cyber insurance", "rationale": "That is a risk-transfer decision."},
+        {"key": "E", "text": "Putting a 'Confidential' label on a file", "rationale": "That is data classification."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Security assessments are structured evaluations of security posture. The umbrella covers vulnerability assessments, penetration testing, and posture assessments.",
+      "discriminator_tested": "Security assessments: vulnerability, penetration, and posture."
+    },
+    {
+      "objectives": ["C08-17"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A company wants a severity-ranked list of known weaknesses across 2,000 hosts, without exploiting anything. Which assessment fits?",
+      "options": [
+        {"key": "A", "text": "A vulnerability assessment", "rationale": "Correct: it finds, classifies, and reports weaknesses, typically with scanners."},
+        {"key": "B", "text": "Penetration testing", "rationale": "A pen test actively exploits weaknesses."},
+        {"key": "C", "text": "A posture assessment of one laptop", "rationale": "That checks one device against policy."},
+        {"key": "D", "text": "User acceptance testing", "rationale": "That confirms a change works for its users."}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability assessments identify, classify, and report weaknesses, typically with scanners. They find and list weaknesses but don't exploit them.",
+      "discriminator_tested": "A vulnerability assessment finds and lists; it doesn't exploit."
+    },
+    {
+      "objectives": ["C08-18", "C08-17"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What separates penetration testing from a vulnerability assessment?",
+      "options": [
+        {"key": "A", "text": "A penetration test actively exploits weaknesses, with authorization and within an agreed scope, to show real impact; a vulnerability assessment finds and lists weaknesses without exploiting them", "rationale": "Correct."},
+        {"key": "B", "text": "A vulnerability assessment exploits; a penetration test only lists", "rationale": "This is reversed."},
+        {"key": "C", "text": "Penetration tests don't need permission", "rationale": "Authorization is what makes it a test rather than an attack."},
+        {"key": "D", "text": "They are the same activity", "rationale": "They differ in whether exploitation happens."}
+      ],
+      "answer": ["A"],
+      "explanation": "Penetration testing is an authorized, simulated attack that actively exploits weaknesses to show real impact, within an agreed scope. A vulnerability assessment doesn't exploit.",
+      "discriminator_tested": "A pen test exploits with permission, within scope."
+    },
+    {
+      "objectives": ["C08-19"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "Before a laptop joins the network, a company wants to check that its patches, antivirus, and configuration meet policy. Which assessment is this?",
+      "options": [
+        {"key": "A", "text": "A posture assessment", "rationale": "Correct: it evaluates the device's security state against policy."},
+        {"key": "B", "text": "Penetration testing", "rationale": "A pen test is an authorized attack, not a compliance check."},
+        {"key": "C", "text": "A network-wide vulnerability assessment", "rationale": "That surveys weaknesses across many hosts, not one device's compliance before it joins."},
+        {"key": "D", "text": "A risk matrix", "rationale": "A matrix rates risks; it doesn't check devices."}
+      ],
+      "answer": ["A"],
+      "explanation": "A posture assessment evaluates a device's or environment's security state against policy (patches, antivirus, configuration), confirming its compliance.",
+      "discriminator_tested": "Posture assessment checks compliance state against policy."
+    },
+    {
+      "objectives": ["C08-20", "C08-30"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Which sequence reflects change management best practices?",
+      "options": [
+        {"key": "A", "text": "Request, review, test, approve, implement, document", "rationale": "Correct."},
+        {"key": "B", "text": "Implement, document, then request approval afterward", "rationale": "Approval must come before implementation."},
+        {"key": "C", "text": "Approve, request, implement, test", "rationale": "You can't approve something not yet requested, and testing must come before implementing."},
+        {"key": "D", "text": "Test in production, implement, review", "rationale": "Testing belongs before production, and review comes early."}
+      ],
+      "answer": ["A"],
+      "explanation": "Change management best practices are a structured process to request, review, test, approve, implement, and document changes. That reduces outages and security gaps caused by uncontrolled change.",
+      "discriminator_tested": "Structured change reduces outages and security gaps."
+    },
+    {
+      "objectives": ["C08-21"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A team wants to change how invoices are approved in the ERP system, but nobody can say which departments depend on the current approval process. What is the underlying problem?",
+      "options": [
+        {"key": "A", "text": "The business process isn't documented, so the impact of changing it can't be assessed", "rationale": "Correct."},
+        {"key": "B", "text": "There is no sandbox", "rationale": "A sandbox tests the change technically; it doesn't reveal who depends on the process."},
+        {"key": "C", "text": "There is no insurance", "rationale": "Insurance has nothing to do with understanding the process."},
+        {"key": "D", "text": "The ERP system has too many users", "rationale": "The number of users isn't the problem; missing documentation is."}
+      ],
+      "answer": ["A"],
+      "explanation": "Documented business processes are written procedures describing how business functions run. You can't assess the impact of changing what isn't documented.",
+      "discriminator_tested": "You can't assess the impact of changing what isn't documented."
+    },
+    {
+      "objectives": ["C08-22"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A firmware upgrade on the core switches fails at 2 a.m., and only then does the engineer start researching how to downgrade. Which best practice was missed?",
+      "options": [
+        {"key": "A", "text": "A change rollback (backout) plan prepared before the change", "rationale": "Correct: the way back should have been ready in advance."},
+        {"key": "B", "text": "User acceptance", "rationale": "UAT confirms a successful change; it doesn't recover from a failed one."},
+        {"key": "C", "text": "A wider scope", "rationale": "Scope describes what the change touches."},
+        {"key": "D", "text": "A new risk matrix", "rationale": "A matrix rates risk; it doesn't restore service."}
+      ],
+      "answer": ["A"],
+      "explanation": "A change rollback plan, also called a backout plan, sets out predefined steps to restore the previous state if a change fails. It is prepared before the change.",
+      "discriminator_tested": "The rollback (backout) plan is prepared before the change."
+    },
+    {
+      "objectives": ["C08-23", "C08-31"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What separates sandbox testing from user acceptance?",
+      "options": [
+        {"key": "A", "text": "Sandbox testing checks the change technically in an isolated environment before production; user acceptance is end users confirming it meets their needs before the change is closed", "rationale": "Correct."},
+        {"key": "B", "text": "Sandbox testing is done by end users; user acceptance is done by engineers in isolation", "rationale": "This is reversed."},
+        {"key": "C", "text": "They are the same step", "rationale": "They differ in who tests, where, and why."},
+        {"key": "D", "text": "Sandbox testing happens after the change is closed", "rationale": "Sandbox testing comes before production."}
+      ],
+      "answer": ["A"],
+      "explanation": "Sandbox testing tests the change in an isolated environment before production, so testing can't affect live systems. User acceptance is confirmation by the people who use the system.",
+      "discriminator_tested": "Sandbox = isolated technical testing; UAT = user confirmation."
+    },
+    {
+      "objectives": ["C08-24", "C08-25"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "A change request lists 'Network Team' in the responsible field. Why might a reviewer send it back?",
+      "options": [
+        {"key": "A", "text": "Best practice names one responsible staff member who is accountable, not a whole team", "rationale": "Correct: accountability needs a named individual."},
+        {"key": "B", "text": "The change board should be listed as responsible", "rationale": "The board approves; it doesn't own the change."},
+        {"key": "C", "text": "The responsible field is optional", "rationale": "Accountability is a required element."},
+        {"key": "D", "text": "Only the CEO can be responsible for changes", "rationale": "The owner is the person accountable for this change."}
+      ],
+      "answer": ["A"],
+      "explanation": "The responsible staff member is a named person accountable for the change. It must be an individual, not a team, so it is always clear who owns it.",
+      "discriminator_tested": "Accountability needs a named individual, not a team."
+    },
+    {
+      "objectives": ["C08-25", "C08-26", "C08-27"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which two items belong on change request forms? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "The purpose of the change", "rationale": "Correct: why the change is needed."},
+        {"key": "B", "text": "The scope of the change", "rationale": "Correct: what and where it touches."},
+        {"key": "C", "text": "The license key of the vulnerability scanner", "rationale": "Not part of a change request."},
+        {"key": "D", "text": "The company's insurance policy number", "rationale": "Not part of a change request."},
+        {"key": "E", "text": "Sign-off notes from last year's unrelated project", "rationale": "Not part of this change's record."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Change request forms are the formal record of a proposed change and its paper trail. They hold the purpose, scope, risk review, and plan for the change.",
+      "discriminator_tested": "The change request holds purpose, scope, risk review, and plan."
+    },
+    {
+      "objectives": ["C08-26", "C08-27"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "On a change request, the entry 'Replace the expiring VPN certificate before it lapses on June 30, to avoid remote-access outages' fills which field?",
+      "options": [
+        {"key": "A", "text": "Purpose of change", "rationale": "Correct: it explains why the change is needed."},
+        {"key": "B", "text": "Scope of change", "rationale": "Scope lists what and where the change touches."},
+        {"key": "C", "text": "Plan for change", "rationale": "The plan lists the steps and timing."},
+        {"key": "D", "text": "Rollback plan", "rationale": "Rollback describes how to undo the change."}
+      ],
+      "answer": ["A"],
+      "explanation": "The purpose of change is the reason for it: the problem it solves or the business need. Purpose answers why; scope answers what and where.",
+      "discriminator_tested": "Purpose = why."
+    },
+    {
+      "objectives": ["C08-27", "C08-26"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "On a change request, the entry 'Affects the two VPN concentrators at headquarters and all 300 remote users, Saturday 22:00 to 23:00' fills which field?",
+      "options": [
+        {"key": "A", "text": "Scope of change", "rationale": "Correct: what the change touches, who it affects, and when."},
+        {"key": "B", "text": "Purpose of change", "rationale": "Purpose is the why."},
+        {"key": "C", "text": "Risk review", "rationale": "A risk review assesses the dangers the change introduces."},
+        {"key": "D", "text": "Change board approval", "rationale": "Approval is the board's decision."}
+      ],
+      "answer": ["A"],
+      "explanation": "The scope of change says what the change touches: systems, users, locations, and the time window. Scope answers what and where; purpose answers why.",
+      "discriminator_tested": "Scope = what and where."
+    },
+    {
+      "objectives": ["C08-28", "C08-27"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "A proposed change will reboot the payroll database in the middle of month-end processing. Which section of the change request should flag and address this danger?",
+      "options": [
+        {"key": "A", "text": "The risk review", "rationale": "Correct: it assesses the risks the change itself introduces and how they will be handled."},
+        {"key": "B", "text": "The purpose of change", "rationale": "Purpose explains why the change is needed."},
+        {"key": "C", "text": "The scope of change on its own", "rationale": "Scope records what is touched and when; assessing the danger that creates is the risk review's job."},
+        {"key": "D", "text": "User acceptance", "rationale": "UAT happens after the change, which is too late."}
+      ],
+      "answer": ["A"],
+      "explanation": "The risk review assesses the risks a change introduces and how they will be handled. The change itself can create risk.",
+      "discriminator_tested": "The change itself can create risk."
+    },
+    {
+      "objectives": ["C08-29", "C08-22"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "A change request section reads: 'Step 1: back up the config. Step 2: upload the new image. Step 3: reload. Step 4: verify. Lab-tested on Tuesday. Backout: restore the previous image.' Which field is this?",
+      "options": [
+        {"key": "A", "text": "Plan for change", "rationale": "Correct: the steps, testing, timing, and backout approach."},
+        {"key": "B", "text": "Purpose of change", "rationale": "Purpose explains why."},
+        {"key": "C", "text": "Scope of change", "rationale": "Scope lists what and where."},
+        {"key": "D", "text": "The change board's decision", "rationale": "That is approval, not the plan."}
+      ],
+      "answer": ["A"],
+      "explanation": "The plan for change covers the steps, schedule, resources, testing, and backout approach. The plan answers how and when.",
+      "discriminator_tested": "Plan = how and when."
+    },
+    {
+      "objectives": ["C08-30"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What is the role of the change board?",
+      "options": [
+        {"key": "A", "text": "To review change requests and approve or reject them, with an expedited path for urgent changes", "rationale": "Correct."},
+        {"key": "B", "text": "To carry out the changes itself", "rationale": "The responsible staff member implements; the board approves."},
+        {"key": "C", "text": "To write the application code", "rationale": "Not the board's role."},
+        {"key": "D", "text": "To perform user acceptance testing", "rationale": "Users perform UAT."}
+      ],
+      "answer": ["A"],
+      "explanation": "The change board is the group that reviews change requests and approves or rejects them. It is the approval authority, and urgent changes may use an expedited path.",
+      "discriminator_tested": "The change board is the approval authority."
+    },
+    {
+      "objectives": ["C08-31", "C08-23"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 1,
+      "stem": "A new HR portal passed every technical test in the sandbox. Before the change is closed, HR staff run through their daily tasks in it and confirm it works for them. What is this step?",
+      "options": [
+        {"key": "A", "text": "User acceptance", "rationale": "Correct: confirmation by the people who use the system."},
+        {"key": "B", "text": "Sandbox testing", "rationale": "That already happened, and it is technical testing in isolation."},
+        {"key": "C", "text": "Rollback", "rationale": "Nothing is being undone."},
+        {"key": "D", "text": "Risk review", "rationale": "The risk review happens before the change."}
+      ],
+      "answer": ["A"],
+      "explanation": "User acceptance means end users or stakeholders confirm the change works as needed before it is closed. It is distinct from technical or sandbox testing.",
+      "discriminator_tested": "User acceptance is confirmation by users, distinct from technical testing."
+    }
+  ]
+}

@@ -1,0 +1,321 @@
+{
+  "questions": [
+    {
+      "objectives": ["C10-25", "C10-24"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "An older building's server room is covered by the building's wet pipe sprinklers. What is the MAIN risk to the servers?",
+      "options": [
+        {"key": "A", "text": "Leaks or an accidental discharge", "rationale": "Correct: the pipes are full of water at all times.", "role": "best"},
+        {"key": "B", "text": "Water damage during a real fire", "rationale": "True of any sprinkler, but leaks are the everyday risk.", "role": "partial"},
+        {"key": "C", "text": "Pipes freezing in a cold winter", "rationale": "Inside a heated building that is unlikely; it drives dry pipe use.", "role": "related"},
+        {"key": "D", "text": "Oxygen loss in the room", "rationale": "That is an inert-gas system.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Wet pipe systems keep water in the pipes; heat opens a sprinkler head. They are the simplest and fastest, but accidental discharge or leaks can damage electronics.",
+      "discriminator_tested": "Wet pipe: leaks or accidental discharge."
+    },
+    {
+      "objectives": ["C10-26", "C10-27"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "An unheated loading dock, where winter temperatures drop below freezing, needs sprinklers. Which system BEST fits?",
+      "options": [
+        {"key": "A", "text": "Dry pipe sprinklers", "rationale": "Correct: gas in the pipes until a head opens.", "role": "best"},
+        {"key": "B", "text": "Wet pipe sprinklers with heat tape", "rationale": "Patches the freezing risk instead of avoiding it.", "role": "related"},
+        {"key": "C", "text": "A preaction system with detectors", "rationale": "Also dry, but adds detection meant for equipment rooms.", "role": "partial"},
+        {"key": "D", "text": "An FM-200 clean agent", "rationale": "Meant for enclosed equipment rooms.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Dry pipe systems hold pressurized gas in the pipes; water enters after a head opens. They are used where pipes could freeze, at the cost of slower water delivery.",
+      "discriminator_tested": "Dry pipe: where pipes could freeze."
+    },
+    {
+      "objectives": ["C10-27", "C10-26"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "What BEST distinguishes a preaction system from a dry pipe system?",
+      "options": [
+        {"key": "A", "text": "Detection must fill the pipes first", "rationale": "Correct: a two-step trigger.", "role": "best"},
+        {"key": "B", "text": "Its pipes are dry until triggered", "rationale": "True of both.", "role": "partial"},
+        {"key": "C", "text": "Its heads open together on detection", "rationale": "That is a deluge system.", "role": "related"},
+        {"key": "D", "text": "It uses a gas instead of water", "rationale": "Both deliver water.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Preaction systems keep the pipes dry; water enters only after detection, and a head must then open. The two-step trigger lowers accidental-discharge risk, which makes them common in data centers.",
+      "discriminator_tested": "Preaction: detection, then a head must open."
+    },
+    {
+      "objectives": ["C10-28"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "An aircraft hangar with fuel hazards needs a system that soaks the whole area at once as soon as fire is detected. Which BEST fits?",
+      "options": [
+        {"key": "A", "text": "A deluge system", "rationale": "Correct: open heads discharge together on detection.", "role": "best"},
+        {"key": "B", "text": "A preaction system", "rationale": "Still waits for individual heads to open.", "role": "related"},
+        {"key": "C", "text": "A wet pipe system", "rationale": "Opens head by head as heat reaches them.", "role": "related"},
+        {"key": "D", "text": "A clean-agent system", "rationale": "Meant for enclosed equipment rooms.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Deluge systems have open heads that discharge water from every head on detection. They deliver massive water flow for high-hazard areas.",
+      "discriminator_tested": "Deluge: massive flow for high-hazard areas."
+    },
+    {
+      "objectives": ["C10-29", "C10-24"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What is the MAIN reason a data center chooses a clean-agent system over sprinklers?",
+      "options": [
+        {"key": "A", "text": "No water damage or residue", "rationale": "Correct: suited to equipment rooms.", "role": "best"},
+        {"key": "B", "text": "It puts out fires faster", "rationale": "Can be true, but not the main reason.", "role": "partial"},
+        {"key": "C", "text": "It works where pipes freeze", "rationale": "That is the reason for dry pipe.", "role": "related"},
+        {"key": "D", "text": "It's cheaper to install and refill", "rationale": "Clean agents usually cost more.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Clean agent systems use gaseous suppression that leaves no residue. There is no water damage, so they suit equipment rooms.",
+      "discriminator_tested": "Clean agent: no water damage, no residue."
+    },
+    {
+      "objectives": ["C10-30"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A facilities manager wants to install a new halon system in the server room because halon is so effective. What BEST describes the problem?",
+      "options": [
+        {"key": "A", "text": "Production is banned; it harms ozone", "rationale": "Correct: legacy systems remain, but no new halon is made.", "role": "best"},
+        {"key": "B", "text": "Halon needs a dry pipe network", "rationale": "Halon is a gaseous agent, not a sprinkler type.", "role": "related"},
+        {"key": "C", "text": "Halon is expensive to refill", "rationale": "True, but the ban is the real obstacle.", "role": "partial"},
+        {"key": "D", "text": "Halon leaves a heavy residue", "rationale": "It leaves no residue.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Halon is an effective gaseous agent that depletes ozone. Its production is banned (EPA), so legacy systems are all that remain.",
+      "discriminator_tested": "Halon production banned; legacy only."
+    },
+    {
+      "objectives": ["C10-31", "C10-33"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which suppression agent puts out a fire by lowering the oxygen in the room?",
+      "options": [
+        {"key": "A", "text": "Argon, an inert gas", "rationale": "Correct: it displaces oxygen.", "role": "best"},
+        {"key": "B", "text": "FM-200 (HFC-227ea)", "rationale": "A chemical agent that mainly absorbs heat.", "role": "related"},
+        {"key": "C", "text": "NAF-S-III blend", "rationale": "A chemical halon replacement.", "role": "related"},
+        {"key": "D", "text": "Wet pipe sprinklers", "rationale": "Water cools the fire.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Argon is an inert gas that displaces oxygen. It is safe for equipment and works by oxygen reduction, so occupants must leave before discharge.",
+      "discriminator_tested": "Argon works by oxygen reduction."
+    },
+    {
+      "objectives": ["C10-32", "C10-30"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "A vendor proposes NAF-S-III for a server room. What BEST describes it?",
+      "options": [
+        {"key": "A", "text": "A halon-replacement clean agent", "rationale": "Correct: a chemical clean agent.", "role": "best"},
+        {"key": "B", "text": "An inert gas like argon", "rationale": "It is a chemical agent, not an inert gas.", "role": "related"},
+        {"key": "C", "text": "A water-based preaction system", "rationale": "It is a gaseous agent.", "role": "related"},
+        {"key": "D", "text": "An ozone-depleting legacy agent", "rationale": "That describes halon itself.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "NAF-S-III is a chemical clean agent developed as a replacement for halon.",
+      "discriminator_tested": "NAF-S-III replaces halon."
+    },
+    {
+      "objectives": ["C10-33", "C10-31"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes FM-200 from argon?",
+      "options": [
+        {"key": "A", "text": "It's a chemical agent", "rationale": "Correct: HFC-227ea, with fast discharge.", "role": "best"},
+        {"key": "B", "text": "It leaves no residue behind", "rationale": "True of both.", "role": "partial"},
+        {"key": "C", "text": "It works by displacing oxygen", "rationale": "That is argon.", "role": "related"},
+        {"key": "D", "text": "It's a water-mist system", "rationale": "It is a gas.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "FM-200 is a chemical clean agent (HFC-227ea) with fast discharge. It is widely used in data centers and leaves no residue; argon is an inert gas.",
+      "discriminator_tested": "FM-200 is chemical; argon is inert."
+    },
+    {
+      "objectives": ["C10-34"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "Two core switches run as one logical switch, and each access switch has an uplink to both. One core switch fails. What is the MOST likely result?",
+      "options": [
+        {"key": "A", "text": "Traffic continues through the other", "rationale": "Correct: one failure doesn't cut connectivity.", "role": "best"},
+        {"key": "B", "text": "The network stays up, more slowly", "rationale": "Capacity drops, but continuity is the point.", "role": "partial"},
+        {"key": "C", "text": "Spanning tree reconverges for minutes", "rationale": "Clustering avoids that.", "role": "related"},
+        {"key": "D", "text": "The access switches lose uplink", "rationale": "They keep the uplink to the survivor.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Switch clustering makes multiple switches operate as one logical switch, so a single switch failure doesn't cut connectivity.",
+      "discriminator_tested": "One switch failure doesn't cut connectivity."
+    },
+    {
+      "objectives": ["C10-35"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "Every host on a subnet points to one default gateway address. What BEST keeps that gateway available if its router fails?",
+      "options": [
+        {"key": "A", "text": "A first-hop redundancy protocol", "rationale": "Correct: HSRP or VRRP share a virtual gateway address.", "role": "best"},
+        {"key": "B", "text": "Two routers with two gateway IPs", "rationale": "Hosts would need reconfiguring on failure.", "role": "related"},
+        {"key": "C", "text": "Dynamic routing between the routers", "rationale": "Reroutes paths, but hosts still point at the dead gateway.", "role": "partial"},
+        {"key": "D", "text": "A larger, faster router", "rationale": "Still a single point of failure.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Router redundancy uses redundant routers and multiple paths with a first-hop redundancy protocol, so the default gateway stays available.",
+      "discriminator_tested": "The default gateway stays available."
+    },
+    {
+      "objectives": ["C10-36", "C10-43"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 3,
+      "stem": "After a firewall pair fails over, every user's VPN and web sessions drop and must reconnect. What was MOST likely missing?",
+      "options": [
+        {"key": "A", "text": "Session-state sharing between the pair", "rationale": "Correct: shared state lets sessions survive failover.", "role": "best"},
+        {"key": "B", "text": "A third firewall in the cluster", "rationale": "More units don't carry state over.", "role": "related"},
+        {"key": "C", "text": "Faster failure detection", "rationale": "Shortens the gap, but sessions still drop.", "role": "partial"},
+        {"key": "D", "text": "Identical rule sets on both", "rationale": "Different rules would block, not reset, sessions.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Firewall redundancy uses high-availability pairs (active/standby or active/active) that share session state. State sharing lets sessions survive failover.",
+      "discriminator_tested": "State sharing lets sessions survive failover."
+    },
+    {
+      "objectives": ["C10-37"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two remove single points of failure inside a server? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Redundant power supplies", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Mirrored RAID disks", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "A faster multi-core CPU", "rationale": "Faster, but still one CPU.", "role": "related"},
+        {"key": "D", "text": "Nightly backups to tape", "rationale": "Recovery, not redundancy.", "role": "related"},
+        {"key": "E", "text": "Extra memory modules", "rationale": "Capacity, not redundancy.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Server redundancy uses clustering, load balancing, redundant power supplies, and RAID. It removes single points of failure.",
+      "discriminator_tested": "Removes single points of failure."
+    },
+    {
+      "objectives": ["C10-38"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "When a company compares types of disaster recovery sites, what is the MAIN trade-off?",
+      "options": [
+        {"key": "A", "text": "Cost versus recovery time", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Distance from headquarters", "rationale": "A factor, but not the main trade-off.", "role": "partial"},
+        {"key": "C", "text": "Backup method versus media", "rationale": "A backup decision, not a site decision.", "role": "related"},
+        {"key": "D", "text": "Number of ISPs versus bandwidth", "rationale": "A network decision.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Disaster recovery sites are alternate locations to resume operations. The choice is a trade-off between cost and recovery time.",
+      "discriminator_tested": "Trade-off between cost and recovery time."
+    },
+    {
+      "objectives": ["C10-39"], "type": "single", "angle": "interpret-config", "difficulty": 1,
+      "stem": "A company's recovery agreement is summarized below. What type of recovery site is this?",
+      "exhibit": "DR agreement - Plainfield facility\nFloor space:   reserved, 400 sq ft\nPower / HVAC:  provided\nNetwork:       carrier handoff in place\nEquipment:     customer-supplied at time of disaster\nData:          none held on site",
+      "options": [
+        {"key": "A", "text": "Cold site", "rationale": "Correct: space, power, and connectivity, but no equipment or data.", "role": "best"},
+        {"key": "B", "text": "Warm site", "rationale": "Would be partly equipped.", "role": "related"},
+        {"key": "C", "text": "Hot site", "rationale": "Would be fully equipped with replicated data.", "role": "related"},
+        {"key": "D", "text": "Cloud site", "rationale": "It's a physical facility.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A cold site provides space with power and connectivity but no equipment or data. It is the cheapest and slowest option (days to weeks).",
+      "discriminator_tested": "Cold: cheapest and slowest."
+    },
+    {
+      "objectives": ["C10-40", "C10-38"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A company can tolerate about two days of downtime and has a moderate budget. Which recovery site BEST fits?",
+      "options": [
+        {"key": "A", "text": "A warm site", "rationale": "Correct: middle ground in cost and time.", "role": "best"},
+        {"key": "B", "text": "A hot site", "rationale": "Meets the target, but costs far more than needed.", "role": "partial"},
+        {"key": "C", "text": "A cold site", "rationale": "Days to weeks: too slow.", "role": "related"},
+        {"key": "D", "text": "Backups alone, no site", "rationale": "Nowhere to restore them.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A warm site is partly equipped, with data restored from backups. It is the middle ground in cost and time.",
+      "discriminator_tested": "Warm: middle ground."
+    },
+    {
+      "objectives": ["C10-41", "C10-38"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "An online brokerage must resume trading within minutes of losing its primary data center, whatever the cost. Which recovery site BEST fits?",
+      "options": [
+        {"key": "A", "text": "A hot site with live data replication", "rationale": "Correct: fastest and most expensive.", "role": "best"},
+        {"key": "B", "text": "A warm site restored from backup", "rationale": "Hours to days.", "role": "related"},
+        {"key": "C", "text": "A cloud site scaled on demand", "rationale": "Can be fast, but minutes needs a fully running copy.", "role": "partial"},
+        {"key": "D", "text": "A cold site with leased space", "rationale": "Days to weeks.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A hot site is fully equipped with near-real-time data replication. It is the fastest and most expensive option.",
+      "discriminator_tested": "Hot: fastest and most expensive."
+    },
+    {
+      "objectives": ["C10-42"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A company moves its recovery site to a cloud provider. What does its recovery now MOST depend on?",
+      "options": [
+        {"key": "A", "text": "Connectivity and the provider", "rationale": "Correct: plus regular testing.", "role": "best"},
+        {"key": "B", "text": "The size of its tape library", "rationale": "Not a cloud dependency.", "role": "related"},
+        {"key": "C", "text": "Spare hardware at a second site", "rationale": "The cloud replaces that.", "role": "related"},
+        {"key": "D", "text": "Its data center's UPS runtime", "rationale": "The primary site is the one that failed.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A cloud site is a recovery environment in a cloud provider, scaled on demand. It has lower upfront cost and is elastic, but it depends on connectivity, the provider, and testing.",
+      "discriminator_tested": "Cloud site depends on connectivity and provider."
+    },
+    {
+      "objectives": ["C10-43"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A load-balanced web pool is shown below. If node-b fails, what is the MOST likely result?",
+      "exhibit": "Pool web-prod  (active/active)\nnode-a   UP   load 70%\nnode-b   UP   load 65%",
+      "options": [
+        {"key": "A", "text": "node-a is overloaded", "rationale": "Correct: about 135% of one node's capacity lands on it.", "role": "best"},
+        {"key": "B", "text": "Traffic shifts with no impact", "rationale": "Active/active loses capacity on failure.", "role": "related"},
+        {"key": "C", "text": "node-b's standby takes over", "rationale": "That is active/passive.", "role": "related"},
+        {"key": "D", "text": "The load balancer stops serving", "rationale": "It keeps sending traffic to node-a.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Active/active vs active/passive: in active/active every node serves traffic; in active/passive a standby takes over on failure. Active/active shares load but loses capacity on failure; active/passive leaves resources idle.",
+      "discriminator_tested": "Active/active loses capacity on failure."
+    },
+    {
+      "objectives": ["C10-44"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A company buys internet service from two ISPs. A backhoe cuts one conduit outside the building, and both links go down. What BEST explains this?",
+      "options": [
+        {"key": "A", "text": "Both circuits shared one physical path", "rationale": "Correct: diversity must be physical.", "role": "best"},
+        {"key": "B", "text": "The ISPs share an upstream carrier", "rationale": "Possible, but a cut conduit is a path problem.", "role": "partial"},
+        {"key": "C", "text": "BGP failover wasn't configured", "rationale": "No path survived to fail over to.", "role": "related"},
+        {"key": "D", "text": "The firewall pair wasn't clustered", "rationale": "Unrelated to the cut.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Multiple ISPs and diverse paths mean more than one provider and physically separate routes. Diversity must be physical; two contracts in one conduit still share a failure point.",
+      "discriminator_tested": "Diversity must be physical."
+    },
+    {
+      "objectives": ["C10-45", "C10-46"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two describe a tabletop exercise? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Participants talk through a scenario", "rationale": "Correct: discussion only.", "role": "best"},
+        {"key": "B", "text": "Roles and plans are tested by discussion", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "Systems are failed over to the DR site", "rationale": "That is a validation test.", "role": "related"},
+        {"key": "D", "text": "Backups are restored to test servers", "rationale": "Hands-on: a validation test.", "role": "related"},
+        {"key": "E", "text": "Users are phished to test awareness", "rationale": "A phishing simulation.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Tabletop exercises have a team talk through a disaster scenario without touching systems. They are discussion only and test roles and plans.",
+      "discriminator_tested": "Tabletop is discussion only."
+    },
+    {
+      "objectives": ["C10-46", "C10-45"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What BEST distinguishes a validation test from a tabletop exercise?",
+      "options": [
+        {"key": "A", "text": "It exercises the actual systems", "rationale": "Correct: hands-on.", "role": "best"},
+        {"key": "B", "text": "It involves the recovery team", "rationale": "Both do.", "role": "partial"},
+        {"key": "C", "text": "It is a discussion of a scenario", "rationale": "That is a tabletop.", "role": "related"},
+        {"key": "D", "text": "It's done after a real disaster", "rationale": "Tests come before disasters.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Validation tests are hands-on tests that confirm recovery procedures and systems work. They actually exercise systems, unlike a tabletop.",
+      "discriminator_tested": "Validation exercises systems."
+    },
+    {
+      "objectives": ["C10-47", "C10-48"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two belong in a disaster recovery plan rather than the wider business continuity plan? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Steps to restore servers from backup", "rationale": "Correct: IT restoration.", "role": "best"},
+        {"key": "B", "text": "The order for bringing systems back online", "rationale": "Correct: IT restoration.", "role": "best"},
+        {"key": "C", "text": "Arrangements for staff to work from home", "rationale": "A business continuity measure.", "role": "related"},
+        {"key": "D", "text": "Manual order-taking procedures", "rationale": "Keeps the business running: BCP.", "role": "related"},
+        {"key": "E", "text": "The annual marketing budget", "rationale": "Unrelated to either plan.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A disaster recovery plan documents procedures to restore IT systems and data after a disruption. It is IT-focused and part of the broader business continuity plan.",
+      "discriminator_tested": "DRP is IT-focused restoration."
+    },
+    {
+      "objectives": ["C10-48", "C10-47"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "During a week-long outage, staff take customer orders by phone and on paper forms. Which plan covers this?",
+      "options": [
+        {"key": "A", "text": "Business continuity plan", "rationale": "Correct: keeps critical operations running.", "role": "best"},
+        {"key": "B", "text": "Disaster recovery plan", "rationale": "Restores IT; doesn't run the business meanwhile.", "role": "related"},
+        {"key": "C", "text": "Incident response plan", "rationale": "Handles security incidents.", "role": "related"},
+        {"key": "D", "text": "Backup and restore runbook", "rationale": "An IT procedure.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A business continuity plan keeps critical business operations running during and after a disruption. It is broader than IT; the DRP is part of it.",
+      "discriminator_tested": "BCP is broader than IT."
+    }
+  ]
+}

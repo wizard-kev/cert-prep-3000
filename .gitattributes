@@ -1,0 +1,4 @@
+# Store every file byte-for-byte, whatever core.autocrlf is set to, so checking out
+# an old version (e.g. the v1 tag) restores files exactly. The question pools are
+# written with CRLF by the app; the rest of the project uses LF.
+* -text

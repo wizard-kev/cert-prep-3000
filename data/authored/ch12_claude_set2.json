@@ -1,0 +1,136 @@
+{
+  "questions": [
+    {
+      "objectives": ["C12-01"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which of these is NOT a goal of forensic incident response?",
+      "options": [
+        {"key": "A", "text": "Wiping the affected systems immediately, before anything is examined", "rationale": "Correct choice: that destroys the evidence."},
+        {"key": "B", "text": "Learning what happened", "rationale": "A goal."},
+        {"key": "C", "text": "Learning how far the attack spread", "rationale": "A goal."},
+        {"key": "D", "text": "Preserving the evidence", "rationale": "A goal."}
+      ],
+      "answer": ["A"],
+      "explanation": "Forensic incident response uses forensic techniques to learn what happened, how far it spread, and why, while preserving evidence. It isn't only about restoring service.",
+      "discriminator_tested": "Forensic response preserves evidence."
+    },
+    {
+      "objectives": ["C12-02"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What does attack attribution identify, compared with identifying the technique an attacker used?",
+      "options": [
+        {"key": "A", "text": "The actor behind the attack, not just the method, and only with some uncertainty", "rationale": "Correct."},
+        {"key": "B", "text": "Only the malware family", "rationale": "That is closer to identifying the technique or tool."},
+        {"key": "C", "text": "Only the vulnerability that was exploited", "rationale": "That is the weakness, not the actor."},
+        {"key": "D", "text": "Only the victim", "rationale": "The victim is already known."}
+      ],
+      "answer": ["A"],
+      "explanation": "Attack attribution identifies who is behind an attack from evidence such as TTPs, infrastructure, malware, and timing. It is uncertain, because evidence can be spoofed or planted.",
+      "discriminator_tested": "Attribution identifies the actor, with uncertainty."
+    },
+    {
+      "objectives": ["C12-03"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "An attacker emails a booby-trapped document to an employee, who opens it, and it exploits a flaw in the document reader. In the Cyber Kill Chain, which stage is the email itself?",
+      "options": [
+        {"key": "A", "text": "Delivery", "rationale": "Correct: getting the weapon to the target."},
+        {"key": "B", "text": "Weaponization", "rationale": "Weaponization is building the malicious document, before it is sent."},
+        {"key": "C", "text": "Exploitation", "rationale": "Exploitation is the flaw being triggered when the file is opened."},
+        {"key": "D", "text": "Installation", "rationale": "Installation is persistent malware being placed on the system."}
+      ],
+      "answer": ["A"],
+      "explanation": "The Lockheed Martin Cyber Kill Chain stages are reconnaissance, weaponization, delivery, exploitation, installation, command and control, and actions on objectives. Sending the weapon to the target is delivery.",
+      "discriminator_tested": "Delivery = getting the weapon to the target."
+    },
+    {
+      "objectives": ["C12-04"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about the MITRE ATT&CK matrix is NOT true?",
+      "options": [
+        {"key": "A", "text": "It is a seven-step linear sequence that every attack must follow", "rationale": "Correct choice because it is false: that describes the Cyber Kill Chain."},
+        {"key": "B", "text": "It is a knowledge base of real-world adversary behavior", "rationale": "True."},
+        {"key": "C", "text": "Tactics form the columns, with techniques beneath them", "rationale": "True."},
+        {"key": "D", "text": "It is used to map detection coverage", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "The MITRE ATT&CK matrix is a knowledge base of real-world adversary tactics and techniques. It is not linear: tactics (why) are the columns and techniques (how) sit beneath them.",
+      "discriminator_tested": "ATT&CK is non-linear."
+    },
+    {
+      "objectives": ["C12-05", "C12-03"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which of these is NOT one of the four features of the Diamond Model?",
+      "options": [
+        {"key": "A", "text": "Exploitation", "rationale": "Correct choice: exploitation is a Kill Chain stage."},
+        {"key": "B", "text": "Adversary", "rationale": "A Diamond Model feature."},
+        {"key": "C", "text": "Infrastructure", "rationale": "A Diamond Model feature."},
+        {"key": "D", "text": "Victim", "rationale": "A Diamond Model feature."}
+      ],
+      "answer": ["A"],
+      "explanation": "The Diamond Model describes an intrusion event through four features: adversary, capability, infrastructure, and victim.",
+      "discriminator_tested": "Diamond features: adversary, capability, infrastructure, victim."
+    },
+    {
+      "objectives": ["C12-06"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Why are TTPs more valuable to defend against than IoCs such as IP addresses or file hashes?",
+      "options": [
+        {"key": "A", "text": "They describe behavior, which is much harder for attackers to change than an IP address or a hash", "rationale": "Correct: attackers can swap an IP or recompile malware easily, but changing how they operate is costly."},
+        {"key": "B", "text": "Each TTP is unique to a single attack", "rationale": "TTPs recur across a group's attacks, which is what makes them useful."},
+        {"key": "C", "text": "IoCs never change", "rationale": "IoCs change easily."},
+        {"key": "D", "text": "TTPs are legally required", "rationale": "Unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "TTPs are tactics, techniques, and procedures that describe attacker behavior. They are behavior-based and harder for attackers to change than IoCs such as IPs or hashes.",
+      "discriminator_tested": "TTPs are harder for attackers to change than IoCs."
+    },
+    {
+      "objectives": ["C12-07"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which two are artifacts and sources of evidence in a digital investigation? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A memory capture from the affected server", "rationale": "Correct."},
+        {"key": "B", "text": "Firewall and system logs", "rationale": "Correct."},
+        {"key": "C", "text": "A vendor's marketing brochure", "rationale": "Says nothing about the incident."},
+        {"key": "D", "text": "The company's organization-chart poster", "rationale": "Not evidence of what happened."},
+        {"key": "E", "text": "A sealed, never-used USB stick from the supply cupboard", "rationale": "It has never touched the incident."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Artifacts and sources of evidence include logs, memory, disk images, network captures, registry data, browser history, email, device and cloud data, and metadata. Volatile data is collected first.",
+      "discriminator_tested": "Evidence sources include memory, logs, images, and captures."
+    },
+    {
+      "objectives": ["C12-08"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which practice is NOT part of proper evidence handling?",
+      "options": [
+        {"key": "A", "text": "Letting anyone browse the evidence locker without logging it", "rationale": "Correct choice: access to evidence must be controlled and documented."},
+        {"key": "B", "text": "Labeling each item", "rationale": "Part of evidence handling."},
+        {"key": "C", "text": "Storing evidence securely", "rationale": "Part of evidence handling."},
+        {"key": "D", "text": "Documenting every transfer", "rationale": "Part of evidence handling."}
+      ],
+      "answer": ["A"],
+      "explanation": "Evidence handling means collecting, labeling, storing, transferring, and controlling access to evidence, with documentation at every step.",
+      "discriminator_tested": "Evidence handling controls and documents access."
+    },
+    {
+      "objectives": ["C12-09"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two practices help with preserving digital evidence? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Using a write blocker when imaging the drive", "rationale": "Correct: nothing can be written to the original."},
+        {"key": "B", "text": "Comparing the hashes of the original and the copy", "rationale": "Correct: matching hashes show the copy is unchanged."},
+        {"key": "C", "text": "Examining the original drive directly", "rationale": "Work from the copy, never the original."},
+        {"key": "D", "text": "Defragmenting the drive before imaging it", "rationale": "That rewrites data on the original."},
+        {"key": "E", "text": "Booting the suspect's PC to look around", "rationale": "Booting changes data on the drive."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Preserving digital evidence means making bit-for-bit forensic copies, working from the copy, using write blockers, and verifying integrity with hashes. Never examine the original.",
+      "discriminator_tested": "Write blockers and hash verification preserve evidence."
+    },
+    {
+      "objectives": ["C12-10"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about chain of custody is NOT true?",
+      "options": [
+        {"key": "A", "text": "A missing entry doesn't matter as long as the evidence looks fine", "rationale": "Correct choice because it is false: any gap undermines integrity and admissibility."},
+        {"key": "B", "text": "It records who handled the evidence", "rationale": "True."},
+        {"key": "C", "text": "It records when, where, and why", "rationale": "True."},
+        {"key": "D", "text": "A gap can make evidence inadmissible", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Chain of custody is the documented record of who handled evidence, when, where, and why. A gap undermines integrity and admissibility.",
+      "discriminator_tested": "Any chain-of-custody gap matters."
+    }
+  ]
+}

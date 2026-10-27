@@ -1,0 +1,321 @@
+{
+  "questions": [
+    {
+      "objectives": ["C13-25", "C13-26"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What BEST distinguishes eradication from recovery?",
+      "options": [
+        {"key": "A", "text": "It removes the cause", "rationale": "Correct: malware, compromised accounts, the exploited weakness.", "role": "best"},
+        {"key": "B", "text": "It follows containment", "rationale": "True, but it doesn't separate it from recovery.", "role": "partial"},
+        {"key": "C", "text": "It restores normal service", "rationale": "That is recovery.", "role": "related"},
+        {"key": "D", "text": "It assigns blame for the incident", "rationale": "Neither does.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Eradication removes the cause: malware, compromised accounts, the exploited weakness. It removes the root cause and follows containment; recovery then restores service.",
+      "discriminator_tested": "Eradication removes root cause."
+    },
+    {
+      "objectives": ["C13-26"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A team restores a server and returns it to production with no checks. A week later, the same backdoor is active again. What BEST describes the gap in recovery?",
+      "options": [
+        {"key": "A", "text": "No verification or monitoring", "rationale": "Correct: recovery verifies and monitors for recurrence.", "role": "best"},
+        {"key": "B", "text": "Restoration happened too late", "rationale": "Timing wasn't the issue.", "role": "wrong"},
+        {"key": "C", "text": "The backup was too small", "rationale": "Size doesn't matter here.", "role": "related"},
+        {"key": "D", "text": "Containment came too early", "rationale": "Containment early is right.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Recovery restores systems to normal operation, verifies them, and monitors for recurrence. It returns systems to service after eradication.",
+      "discriminator_tested": "Verify and monitor for recurrence."
+    },
+    {
+      "objectives": ["C13-27"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 1,
+      "stem": "A post-incident review is held, but managers spend it deciding which employee to discipline. What BEST describes the problem?",
+      "options": [
+        {"key": "A", "text": "It aims at blame, not improvement", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "It was held too soon", "rationale": "Timing isn't described as an issue.", "role": "related"},
+        {"key": "C", "text": "It lacked a timeline", "rationale": "Possibly, but the focus is the real problem.", "role": "partial"},
+        {"key": "D", "text": "It should have been skipped", "rationale": "Reviews are valuable.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A post-incident review is a meeting after resolution to examine what happened and how it was handled. It follows recovery and aims at improvement, not blame.",
+      "discriminator_tested": "Improvement, not blame."
+    },
+    {
+      "objectives": ["C13-28", "C13-27"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "A CSIRT holds thorough review meetings, but the same gaps keep recurring because nothing is written down or fed into its plans. What is MOST clearly missing?",
+      "options": [
+        {"key": "A", "text": "Documented lessons learned", "rationale": "Correct: the output that loops back into preparation.", "role": "best"},
+        {"key": "B", "text": "Longer review meetings", "rationale": "More talk, same gap.", "role": "related"},
+        {"key": "C", "text": "A larger response team", "rationale": "Size doesn't capture lessons.", "role": "wrong"},
+        {"key": "D", "text": "More detection tools", "rationale": "Not the gap.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Lessons learned are documented findings that feed back into plans, controls, and training. They are the output that loops back into preparation.",
+      "discriminator_tested": "Lessons learned loop back into preparation."
+    },
+    {
+      "objectives": ["C13-29", "C13-10"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "Mid-incident, a responder wants to take a production server offline. A manager says the CSIRT has no authority to do that, and nothing in writing settles it. What is MOST clearly missing?",
+      "options": [
+        {"key": "A", "text": "An IR policy", "rationale": "Correct: policy sets authority, scope, and roles.", "role": "best"},
+        {"key": "B", "text": "A detailed playbook", "rationale": "Procedures, not authority.", "role": "related"},
+        {"key": "C", "text": "A faster approval email", "rationale": "Still no defined authority.", "role": "related"},
+        {"key": "D", "text": "More senior responders", "rationale": "Seniority isn't authority.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Creating an incident response policy means a formal policy setting authority, scope, definitions, roles, severity levels, and reporting rules. Policy = high-level authority and requirements; plan = procedures.",
+      "discriminator_tested": "Policy sets authority."
+    },
+    {
+      "objectives": ["C13-30"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A partner company emails an engineer asking for details of an ongoing breach. What is the BEST way to handle the request?",
+      "options": [
+        {"key": "A", "text": "Via the designated contact", "rationale": "Correct: sharing is routed through designated people.", "role": "best"},
+        {"key": "B", "text": "The engineer replies with what's known", "rationale": "Bypasses the policy.", "role": "wrong"},
+        {"key": "C", "text": "Ignore it until the incident ends", "rationale": "Partners may need timely information.", "role": "related"},
+        {"key": "D", "text": "Send the full incident file", "rationale": "Overshares sensitive details.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Policy should document how information is shared with outside parties: what may be shared, with whom, by whom, and through which channels. It is decided in advance and routed through designated people, often with legal review.",
+      "discriminator_tested": "Routed through designated people."
+    },
+    {
+      "objectives": ["C13-31", "C13-35"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two are outside parties in incident response? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "The company's ISP", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "A sector regulator", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "The CSIRT lead", "rationale": "Internal.", "role": "related"},
+        {"key": "D", "text": "The internal help desk", "rationale": "Internal.", "role": "related"},
+        {"key": "E", "text": "The company's CISO", "rationale": "Internal.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Outside parties are external groups involved in an incident: law enforcement, regulators, ISPs, vendors, customers, media. Contact only through the defined channels.",
+      "discriminator_tested": "External groups."
+    },
+    {
+      "objectives": ["C13-32"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "When is the BEST time to decide whether and how to involve law enforcement in incidents?",
+      "options": [
+        {"key": "A", "text": "In advance, with counsel", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "After the incident closes", "rationale": "Evidence may already be lost.", "role": "related"},
+        {"key": "C", "text": "When the press asks", "rationale": "Reactive and unplanned.", "role": "wrong"},
+        {"key": "D", "text": "During containment", "rationale": "Too late to plan well.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Interfacing with law enforcement means deciding in advance when and how to involve them, with legal counsel. Evidence handling and chain of custody affect admissibility.",
+      "discriminator_tested": "Decide in advance, with legal counsel."
+    },
+    {
+      "objectives": ["C13-33"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A utility company wants to share threat details with peers in its sector and receive their alerts. Which organization BEST fits?",
+      "options": [
+        {"key": "A", "text": "A sector ISAC", "rationale": "Correct: a sector sharing group.", "role": "best"},
+        {"key": "B", "text": "Its ISP", "rationale": "Filters traffic; doesn't run peer sharing.", "role": "related"},
+        {"key": "C", "text": "A news outlet", "rationale": "Public, not peer sharing.", "role": "wrong"},
+        {"key": "D", "text": "Its insurance carrier", "rationale": "Covers losses.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Incident reporting organizations are external bodies that receive incident reports (for example CISA, sector sharing groups, regulators). Reporting meets obligations and shares intelligence.",
+      "discriminator_tested": "Reporting shares intelligence."
+    },
+    {
+      "objectives": ["C13-34"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "A federal agency's IR plan says incidents are reported to CISA \"when convenient.\" Under FISMA requirements, what is the MAIN problem?",
+      "options": [
+        {"key": "A", "text": "It ignores required timeframes", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "CISA doesn't take reports", "rationale": "It does.", "role": "wrong"},
+        {"key": "C", "text": "It should report to the ISP", "rationale": "ISPs aren't reporting bodies.", "role": "related"},
+        {"key": "D", "text": "It omits the FBI", "rationale": "CISA is the required recipient.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "FISMA requirements: US federal agencies must report incidents to CISA within required timeframes.",
+      "discriminator_tested": "Report to CISA within required timeframes."
+    },
+    {
+      "objectives": ["C13-35", "C13-06"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "During a DDoS, a company keeps adding firewall rules while its internet link stays saturated. What BEST describes the mistake?",
+      "options": [
+        {"key": "A", "text": "Not calling the ISP", "rationale": "Correct: the ISP can filter upstream.", "role": "best"},
+        {"key": "B", "text": "Too few firewall rules", "rationale": "The link fills before the firewall.", "role": "related"},
+        {"key": "C", "text": "The web server is too slow", "rationale": "The link is the bottleneck.", "role": "related"},
+        {"key": "D", "text": "The DNS records are wrong", "rationale": "Unrelated.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "ISPs are an outside party that can filter, trace, or block traffic. They are key for upstream DDoS mitigation.",
+      "discriminator_tested": "ISPs are key for upstream DDoS mitigation."
+    },
+    {
+      "objectives": ["C13-36"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two are incident prevention measures? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Prompt patching", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "User awareness training", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "Isolating infected hosts", "rationale": "Containment.", "role": "related"},
+        {"key": "D", "text": "Restoring from backups", "rationale": "Recovery.", "role": "related"},
+        {"key": "E", "text": "Holding a review meeting", "rationale": "Post-incident activity.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Preventing incidents reduces their likelihood through risk assessment, patching, hardening, network and host security, malware defenses, and user awareness. It lowers the number of incidents but can't eliminate them.",
+      "discriminator_tested": "Prevention reduces likelihood."
+    },
+    {
+      "objectives": ["C13-37"], "type": "single", "angle": "symptom-to-attack", "difficulty": 1,
+      "stem": "A user plugs in a USB drive found in the parking lot, and malware installs itself. Which attack vector is this?",
+      "options": [
+        {"key": "A", "text": "Removable media", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Email attachment", "rationale": "No email involved.", "role": "related"},
+        {"key": "C", "text": "Web browsing", "rationale": "No website involved.", "role": "related"},
+        {"key": "D", "text": "Impersonation", "rationale": "No one posed as someone else.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Attack vectors are the paths attacks use: external or removable media, attrition (brute force), web, email, impersonation, improper usage, and loss or theft of equipment. A vector is the route of entry.",
+      "discriminator_tested": "Route of entry."
+    },
+    {
+      "objectives": ["C13-38"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes an indicator from a precursor?",
+      "options": [
+        {"key": "A", "text": "It shows one has occurred", "rationale": "Correct: present or past.", "role": "best"},
+        {"key": "B", "text": "It is a sign to watch for", "rationale": "Both are.", "role": "partial"},
+        {"key": "C", "text": "It predicts a future attack", "rationale": "That is a precursor.", "role": "related"},
+        {"key": "D", "text": "It is usually a false alarm", "rationale": "Not by definition.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Signs of an incident are precursors (signs an incident may occur in the future) and indicators (signs one has occurred or is occurring).",
+      "discriminator_tested": "Precursor = future; indicator = present or past."
+    },
+    {
+      "objectives": ["C13-39", "C13-38"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two are sources of precursors and indicators? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "IDS alerts", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "A user reporting odd pop-ups", "rationale": "Correct: reports from people.", "role": "best"},
+        {"key": "C", "text": "The org chart", "rationale": "Not a detection source.", "role": "wrong"},
+        {"key": "D", "text": "The disaster recovery plan", "rationale": "A plan, not a signal.", "role": "related"},
+        {"key": "E", "text": "The office floor plan", "rationale": "Not a detection source.", "role": "related"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Precursor and indicator sources include alerts (IDS/IPS, SIEM, antivirus), logs, publicly available information, and reports from people. No single source is complete.",
+      "discriminator_tested": "Many sources."
+    },
+    {
+      "objectives": ["C13-40"], "type": "single", "angle": "assess-risk", "difficulty": 3,
+      "stem": "A worm is spreading across 300 PCs within minutes. Which factor MOST shapes the containment strategy here?",
+      "options": [
+        {"key": "A", "text": "Damage if it keeps spreading", "rationale": "Correct: potential damage demands fast isolation.", "role": "best"},
+        {"key": "B", "text": "Keeping the PCs online", "rationale": "Availability matters less than stopping the spread.", "role": "related"},
+        {"key": "C", "text": "Preserving each PC's memory", "rationale": "Evidence matters, but not at the cost of spread.", "role": "partial"},
+        {"key": "D", "text": "The attacker's identity", "rationale": "Doesn't shape containment.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Containment strategies are chosen by weighing potential damage, evidence preservation, service availability, time and resources, and duration. They balance stopping the attack against keeping evidence and services.",
+      "discriminator_tested": "Weigh damage, evidence, availability."
+    },
+    {
+      "objectives": ["C13-41"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A responder must collect evidence from a compromised laptop before it is remediated. What is the BEST approach?",
+      "options": [
+        {"key": "A", "text": "Image it; log each step", "rationale": "Correct: preserve the original and document.", "role": "best"},
+        {"key": "B", "text": "Copy the suspicious files", "rationale": "Incomplete and alters metadata.", "role": "partial"},
+        {"key": "C", "text": "Run antivirus to clean it", "rationale": "Destroys evidence.", "role": "wrong"},
+        {"key": "D", "text": "Photograph the screen", "rationale": "Captures little.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Evidence gathering and handling means collecting and preserving evidence during response and documenting each step. Gather before wiping, and keep the original intact.",
+      "discriminator_tested": "Gather before wiping; document each step."
+    },
+    {
+      "objectives": ["C13-42"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST explains why responders should be cautious about blaming the IP address seen in an attack's logs?",
+      "options": [
+        {"key": "A", "text": "Source IPs can be spoofed", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "IPs are rarely logged", "rationale": "They usually are.", "role": "wrong"},
+        {"key": "C", "text": "IPs reveal the attacker's name", "rationale": "They don't.", "role": "related"},
+        {"key": "D", "text": "Tracing must finish first", "rationale": "Containment comes first.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Attack sources work out where the attack came from (attacker addresses, related infrastructure). Source addresses can be spoofed, and identifying the source must not delay containment.",
+      "discriminator_tested": "Source addresses can be spoofed."
+    },
+    {
+      "objectives": ["C13-43", "C13-26"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A team's recovery checklist is shown below, in the order the work was done. What is the MOST serious problem?",
+      "exhibit": "[x] Malware removed from WS-22\n[x] WS-22 restored from clean image\n[x] WS-22 returned to production\n[ ] Exploited VPN flaw patched\n[ ] Compromised account passwords changed",
+      "options": [
+        {"key": "A", "text": "Restored before the cause was fixed", "rationale": "Correct: eradicate before restoring.", "role": "best"},
+        {"key": "B", "text": "The image wasn't new enough", "rationale": "Not shown.", "role": "related"},
+        {"key": "C", "text": "Malware removal came too early", "rationale": "It came first, correctly.", "role": "wrong"},
+        {"key": "D", "text": "Passwords weren't reset", "rationale": "True, and part of the same error.", "role": "partial"}
+      ],
+      "answer": ["A"],
+      "explanation": "Eradication and recovery activities: remove malware, disable compromised accounts, fix the exploited weakness, restore from clean sources, change credentials, and verify. Eradicate the cause before restoring.",
+      "discriminator_tested": "Eradicate the cause before restoring."
+    },
+    {
+      "objectives": ["C13-44"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A CSIRT closes incidents without recording time spent or costs. What is the MAIN loss?",
+      "options": [
+        {"key": "A", "text": "No basis for budget requests", "rationale": "Correct: data supports resourcing decisions.", "role": "best"},
+        {"key": "B", "text": "Slower containment next time", "rationale": "Not directly.", "role": "related"},
+        {"key": "C", "text": "Weaker encryption on servers", "rationale": "Unrelated.", "role": "wrong"},
+        {"key": "D", "text": "Fewer alerts from the SIEM", "rationale": "Unrelated.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Using collected incident data means analyzing incident data and metrics (counts, time spent, cost) to improve controls, plans, and training. It is data-driven improvement and supports resourcing decisions.",
+      "discriminator_tested": "Supports resourcing decisions."
+    },
+    {
+      "objectives": ["C13-45", "C13-47"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A team deletes incident evidence after one week to save space, before a legal review has finished. What is the MAIN risk?",
+      "options": [
+        {"key": "A", "text": "Evidence gone when needed", "rationale": "Correct: retention is set by policy and legal needs.", "role": "best"},
+        {"key": "B", "text": "Higher long-term storage costs", "rationale": "Deleting lowers cost.", "role": "wrong"},
+        {"key": "C", "text": "Backups take longer to run", "rationale": "Unrelated.", "role": "related"},
+        {"key": "D", "text": "Audits finish more quickly", "rationale": "Not a risk.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Evidence retention means keeping incident evidence for a defined period. Retention is set by policy and legal needs.",
+      "discriminator_tested": "Retention is set by policy and legal needs."
+    },
+    {
+      "objectives": ["C13-46"], "type": "single", "angle": "choose-response", "difficulty": 1,
+      "stem": "A company is writing its evidence retention policy. What should MOST drive the retention periods?",
+      "options": [
+        {"key": "A", "text": "Legal requirements", "rationale": "Correct: legal, regulatory, organizational.", "role": "best"},
+        {"key": "B", "text": "Storage vendor pricing", "rationale": "Cost isn't the driver.", "role": "related"},
+        {"key": "C", "text": "The team's workload", "rationale": "Not a driver.", "role": "wrong"},
+        {"key": "D", "text": "Industry news reports", "rationale": "Not a driver.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Evidence retention policies are rules for how long and how evidence is kept. They are driven by legal, regulatory, and organizational requirements.",
+      "discriminator_tested": "Driven by legal and regulatory requirements."
+    },
+    {
+      "objectives": ["C13-47"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two are common reasons to retain incident evidence? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Possible prosecution", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Regulator or audit requests", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "Training new marketing staff", "rationale": "Not a retention purpose.", "role": "wrong"},
+        {"key": "D", "text": "Reselling to vendors", "rationale": "Not legitimate.", "role": "related"},
+        {"key": "E", "text": "Reducing storage costs", "rationale": "Retention costs storage.", "role": "related"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Evidence retention use cases include prosecution, internal discipline, audits and regulators, and lessons learned. The purpose determines retention length and handling rigor.",
+      "discriminator_tested": "Purpose determines retention."
+    },
+    {
+      "objectives": ["C13-48"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "An evidence locker is access-controlled and logged, but expired drives are thrown in the regular trash. What is MOST clearly missing?",
+      "options": [
+        {"key": "A", "text": "Secure disposal at expiry", "rationale": "Correct: destroy securely afterward.", "role": "best"},
+        {"key": "B", "text": "More detailed access logging", "rationale": "Logging is already in place.", "role": "related"},
+        {"key": "C", "text": "Labels on each stored drive", "rationale": "Doesn't fix disposal.", "role": "related"},
+        {"key": "D", "text": "Longer retention periods", "rationale": "Delays, but doesn't fix, disposal.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Evidence retention best practices: secure storage with access control, integrity checks, chain of custody, labeling, and secure disposal when expired. Protect integrity while kept; destroy securely afterward.",
+      "discriminator_tested": "Destroy securely afterward."
+    }
+  ]
+}

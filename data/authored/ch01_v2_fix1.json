@@ -1,0 +1,30 @@
+{
+  "questions": [
+    {
+      "objectives": ["C01-30", "C01-33"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "An attacker has stolen a password-hash file and is hashing each entry of a 14-million-word leaked-password list to find matches. Which control, in place before the theft, would MOST reduce how many accounts this cracks?",
+      "options": [
+        {"key": "A", "text": "Rejecting passwords found on breach lists", "rationale": "Correct: if no account uses a listed password, the list finds nothing.", "role": "best"},
+        {"key": "B", "text": "Locking accounts after five failed logins", "rationale": "The guessing happens offline against the stolen file; no login is ever attempted.", "role": "wrong"},
+        {"key": "C", "text": "Requiring passwords of at least 8 characters", "rationale": "Many leaked passwords, such as 'Summer2024!', already meet length rules.", "role": "related"},
+        {"key": "D", "text": "Forcing a password change each quarter", "rationale": "Changes on a schedule don't stop a listed password being cracked today.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "A dictionary attack tries words from a precompiled list: it guesses likely passwords, not all of them. Offline, lockouts never trigger; what defeats it is making sure no account uses a password that appears on such lists.",
+      "discriminator_tested": "Dictionary attack guesses likely passwords; block listed passwords."
+    },
+    {
+      "objectives": ["C01-09", "C01-11"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "A smurf attack and a DNS amplification attack both send spoofed requests that make third parties flood a victim. What BEST distinguishes the smurf attack?",
+      "options": [
+        {"key": "A", "text": "It sends ICMP echo requests to a broadcast address", "rationale": "Correct: every host on the segment replies to the spoofed victim.", "role": "best"},
+        {"key": "B", "text": "It uses the victim's spoofed source address", "rationale": "True, but both attacks do this, so it doesn't distinguish them.", "role": "partial"},
+        {"key": "C", "text": "It relies on open resolvers returning large answers", "rationale": "That describes DNS amplification.", "role": "related"},
+        {"key": "D", "text": "It leaves TCP handshakes unfinished on the victim", "rationale": "That describes a SYN flood.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A smurf attack sends ICMP echo requests to a broadcast address with the victim's spoofed source IP, so the victim is flooded by replies from many hosts. Both it and DNS amplification are spoofed reflection attacks; the broadcast echo is what makes it a smurf.",
+      "discriminator_tested": "Smurf: ICMP echo to a broadcast address."
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "questions": [
+    {
+      "objectives": ["C12-01"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes forensic incident response from simply restoring service?",
+      "options": [
+        {"key": "A", "text": "It investigates with evidence intact", "rationale": "Correct: what happened, how far, and why.", "role": "best"},
+        {"key": "B", "text": "It uses the incident team", "rationale": "Both do.", "role": "partial"},
+        {"key": "C", "text": "It rebuilds systems from images", "rationale": "That is recovery.", "role": "related"},
+        {"key": "D", "text": "It skips documentation for speed", "rationale": "Documentation is essential.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Forensic incident response uses forensic techniques during incident response to learn what happened, how far it spread, and why, while preserving evidence.",
+      "discriminator_tested": "Investigation with evidence integrity."
+    },
+    {
+      "objectives": ["C12-02", "C12-04"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes attack attribution from mapping an attack's techniques?",
+      "options": [
+        {"key": "A", "text": "It names the actor behind it", "rationale": "Correct: who, not just how.", "role": "best"},
+        {"key": "B", "text": "It studies the attack", "rationale": "Both do.", "role": "partial"},
+        {"key": "C", "text": "It maps methods to ATT&CK", "rationale": "That is technique mapping.", "role": "related"},
+        {"key": "D", "text": "It lists file hashes", "rationale": "Those are IoCs.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Attack attribution identifies who is behind an attack from evidence such as TTPs, infrastructure, malware, and timing. It identifies the actor, not just the technique, and is uncertain because evidence can be spoofed.",
+      "discriminator_tested": "Identifies the actor, not just the technique."
+    },
+    {
+      "objectives": ["C12-03"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "Malware on a compromised host starts contacting an external server every 60 seconds for instructions. Which Cyber Kill Chain stage is this?",
+      "options": [
+        {"key": "A", "text": "Command and control", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Installation", "rationale": "The malware is already installed.", "role": "related"},
+        {"key": "C", "text": "Actions on objectives", "rationale": "Comes after C2 is established.", "role": "related"},
+        {"key": "D", "text": "Weaponization", "rationale": "Happens before delivery.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The Lockheed Martin Cyber Kill Chain stages are reconnaissance, weaponization, delivery, exploitation, installation, command and control, and actions on objectives. Stopping any stage disrupts the attack.",
+      "discriminator_tested": "Map activity to its Kill Chain stage."
+    },
+    {
+      "objectives": ["C12-04"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A SOC wants to map which attacker techniques its current detections cover and find the gaps. Which framework BEST fits?",
+      "options": [
+        {"key": "A", "text": "MITRE ATT&CK", "rationale": "Correct: used to map detection coverage.", "role": "best"},
+        {"key": "B", "text": "Cyber Kill Chain", "rationale": "Stages, too coarse for technique coverage.", "role": "partial"},
+        {"key": "C", "text": "Diamond Model", "rationale": "Describes single events.", "role": "related"},
+        {"key": "D", "text": "PCI DSS controls", "rationale": "A compliance standard.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The MITRE ATT&CK matrix is a knowledge base of real-world adversary tactics and techniques arranged as a matrix. Tactics (why) are columns with techniques (how) beneath; it is used to map detection coverage.",
+      "discriminator_tested": "ATT&CK maps detection coverage."
+    },
+    {
+      "objectives": ["C12-05"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "For one intrusion, an analyst links the attacker, the malware used, the C2 domains, and the targeted hospital, then pivots between them. Which model is this?",
+      "options": [
+        {"key": "A", "text": "The Diamond Model", "rationale": "Correct: four connected features of one event.", "role": "best"},
+        {"key": "B", "text": "The Cyber Kill Chain", "rationale": "Ordered stages.", "role": "related"},
+        {"key": "C", "text": "MITRE ATT&CK", "rationale": "A technique knowledge base.", "role": "related"},
+        {"key": "D", "text": "The OSI model", "rationale": "A networking model.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The Diamond Model describes an intrusion event through four features: adversary, capability, infrastructure, victim. Analysts pivot between the four connected vertices.",
+      "discriminator_tested": "Four connected vertices for a single event."
+    },
+    {
+      "objectives": ["C12-06"], "type": "single", "angle": "assess-risk", "difficulty": 3,
+      "stem": "What BEST explains why defenders value detections built on TTPs over detections built on IPs and hashes?",
+      "options": [
+        {"key": "A", "text": "Behavior is hard to change", "rationale": "Correct: attackers swap IPs and hashes easily.", "role": "best"},
+        {"key": "B", "text": "TTP data is easier to collect", "rationale": "It is usually harder.", "role": "wrong"},
+        {"key": "C", "text": "IoCs come from external feeds", "rationale": "True, but not why TTPs are valued.", "role": "related"},
+        {"key": "D", "text": "IPs and hashes are encrypted", "rationale": "They aren't.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "TTPs (tactics, techniques, and procedures) describe attacker behavior. They are behavior-based and harder for attackers to change than IoCs such as IPs or hashes.",
+      "discriminator_tested": "TTPs are harder to change than IoCs."
+    },
+    {
+      "objectives": ["C12-07"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "On a running, compromised server, which two should be captured before the disk image? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Contents of RAM", "rationale": "Correct: volatile.", "role": "best"},
+        {"key": "B", "text": "Active network connections", "rationale": "Correct: running state.", "role": "best"},
+        {"key": "C", "text": "Archived log files on disk", "rationale": "On disk; captured with the image.", "role": "related"},
+        {"key": "D", "text": "Backup tapes from last month", "rationale": "Offline and stable.", "role": "related"},
+        {"key": "E", "text": "The printed network diagram", "rationale": "Not volatile evidence.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Artifacts and sources of evidence include memory, network state, disk images, logs, and more. Collect volatile data first: memory and running state before disk.",
+      "discriminator_tested": "Order of volatility."
+    },
+    {
+      "objectives": ["C12-08", "C12-10"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "A team collects, labels, stores, transfers, and controls access to evidence, documenting each step. Which term BEST covers all of this?",
+      "options": [
+        {"key": "A", "text": "Evidence handling", "rationale": "Correct: the umbrella term.", "role": "best"},
+        {"key": "B", "text": "Chain of custody", "rationale": "One part of it.", "role": "partial"},
+        {"key": "C", "text": "Data locality", "rationale": "Where data resides.", "role": "related"},
+        {"key": "D", "text": "Attack attribution", "rationale": "Identifies the actor.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Evidence handling covers collecting, labeling, storing, transferring, and controlling access to evidence, with documentation at every step. It is the umbrella for preservation and chain of custody.",
+      "discriminator_tested": "Handling is the umbrella."
+    },
+    {
+      "objectives": ["C12-09"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A responder must examine a seized laptop drive. Which procedure BEST preserves the evidence?",
+      "options": [
+        {"key": "A", "text": "Image it via a write blocker, then hash", "rationale": "Correct: work from a verified copy.", "role": "best"},
+        {"key": "B", "text": "Copy the user folders to a USB", "rationale": "Not a bit-for-bit copy.", "role": "related"},
+        {"key": "C", "text": "Boot the laptop to look around", "rationale": "Changes the original.", "role": "wrong"},
+        {"key": "D", "text": "Hash the drive and examine it directly", "rationale": "Hashing is right; working on the original isn't.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Preserving digital evidence means making bit-for-bit forensic copies, working from the copy, using write blockers, and verifying integrity with hashes. Never examine the original.",
+      "discriminator_tested": "Write blocker, forensic copy, hash."
+    },
+    {
+      "objectives": ["C12-10", "C12-08"], "type": "multi", "angle": "find-missing-element", "difficulty": 1,
+      "stem": "Which two details must a chain-of-custody record include for each transfer? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Who received the item", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "When it changed hands", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "The analyst's view of guilt", "rationale": "Opinion, not custody.", "role": "related"},
+        {"key": "D", "text": "The item's purchase price", "rationale": "Irrelevant.", "role": "wrong"},
+        {"key": "E", "text": "The suspect's job title", "rationale": "Not a custody detail.", "role": "related"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Chain of custody is the documented record of who handled evidence, when, where, and why. A gap undermines integrity and admissibility.",
+      "discriminator_tested": "Who, when, where, and why."
+    }
+  ]
+}

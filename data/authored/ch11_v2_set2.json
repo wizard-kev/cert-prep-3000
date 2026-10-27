@@ -1,0 +1,311 @@
+{
+  "questions": [
+    {
+      "objectives": ["C11-01"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two activities are part of security monitoring? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Continuous log collection", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Analyzing network activity", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "An annual penetration test", "rationale": "Periodic testing, not monitoring.", "role": "related"},
+        {"key": "D", "text": "Drafting the security policy", "rationale": "Governance, not monitoring.", "role": "related"},
+        {"key": "E", "text": "Buying cyber insurance cover", "rationale": "Risk transfer.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Security monitoring is the continuous collection and analysis of logs, events, and network activity to detect threats. It is ongoing and feeds detection and response.",
+      "discriminator_tested": "Ongoing collection and analysis."
+    },
+    {
+      "objectives": ["C11-02"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A SIEM raised the alert below. What is the MAIN thing the SIEM added that the individual logs didn't?",
+      "exhibit": "[SIEM] Correlated alert   severity=high\n08:02  VPN      login jdoe from 203.0.113.80 (new country)\n08:03  AD       jdoe added to group Finance-Share\n08:05  FileSrv  jdoe read 1,240 files in 3 minutes",
+      "options": [
+        {"key": "A", "text": "Linked three sources into one alert", "rationale": "Correct: correlation turns scattered events into meaning.", "role": "best"},
+        {"key": "B", "text": "Recorded the VPN login", "rationale": "The VPN logged that itself.", "role": "partial"},
+        {"key": "C", "text": "Blocked the user's session", "rationale": "Response is SOAR's job.", "role": "related"},
+        {"key": "D", "text": "Encrypted the file share", "rationale": "Not a SIEM function.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A SIEM collects logs from many sources, correlates events, alerts, and retains data. Central collection plus correlation turns scattered events into meaningful alerts.",
+      "discriminator_tested": "Correlation turns scattered events into alerts."
+    },
+    {
+      "objectives": ["C11-03", "C11-05"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "Which factor would MOST push a company toward a cloud-hosted SIEM rather than one on its own servers?",
+      "options": [
+        {"key": "A", "text": "A small team with no spare servers", "rationale": "Correct: less maintenance, elastic scaling.", "role": "best"},
+        {"key": "B", "text": "A strict rule that logs stay onsite", "rationale": "Favours on-prem.", "role": "related"},
+        {"key": "C", "text": "Need for full control of the platform", "rationale": "Favours on-prem.", "role": "related"},
+        {"key": "D", "text": "Wanting to avoid internet reliance", "rationale": "Cloud depends on connectivity.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The SIEM hosting model is where the SIEM runs: on-premises or in the cloud. It is a deployment choice with trade-offs in control, cost, and maintenance.",
+      "discriminator_tested": "Hosting trade-offs: control, cost, maintenance."
+    },
+    {
+      "objectives": ["C11-04"], "type": "single", "angle": "assess-risk", "difficulty": 1,
+      "stem": "What is the MAIN drawback of running a SIEM on-premises?",
+      "options": [
+        {"key": "A", "text": "Upfront cost and upkeep", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Scaling takes more effort", "rationale": "True, and part of the upkeep.", "role": "partial"},
+        {"key": "C", "text": "Data leaves the building", "rationale": "That is a cloud concern.", "role": "related"},
+        {"key": "D", "text": "Less control over data", "rationale": "On-prem gives full control.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An on-prem SIEM is hosted and maintained by the organization. It gives full control and keeps data local, but costs more upfront and needs maintenance and scaling effort.",
+      "discriminator_tested": "On-prem: higher upfront cost and maintenance."
+    },
+    {
+      "objectives": ["C11-05"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A fast-growing startup with two security staff wants a SIEM that scales without buying servers. Which BEST fits?",
+      "options": [
+        {"key": "A", "text": "A cloud SIEM", "rationale": "Correct: elastic, vendor-maintained.", "role": "best"},
+        {"key": "B", "text": "An on-prem SIEM", "rationale": "Needs servers and upkeep.", "role": "related"},
+        {"key": "C", "text": "A SOAR platform", "rationale": "Responds; isn't a SIEM.", "role": "related"},
+        {"key": "D", "text": "A larger log server", "rationale": "Storage, not a SIEM.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A cloud SIEM is a vendor-hosted service with elastic scaling and less maintenance. It depends on connectivity, and data location may be a concern.",
+      "discriminator_tested": "Cloud SIEM: elastic scaling, less maintenance."
+    },
+    {
+      "objectives": ["C11-06", "C11-12"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two are detection methods a SIEM uses? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Comparing to a baseline", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Matching threat-intel indicators", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "Running automated playbooks", "rationale": "Response, which is SOAR.", "role": "related"},
+        {"key": "D", "text": "Full-disk encryption", "rationale": "Data protection.", "role": "wrong"},
+        {"key": "E", "text": "Deploying OS patches", "rationale": "Remediation.", "role": "related"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "SIEM detection methods are the techniques a SIEM uses to spot suspicious activity. Combine several; no single method catches everything.",
+      "discriminator_tested": "Several detection methods combined."
+    },
+    {
+      "objectives": ["C11-07", "C11-11"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A SIEM compares today's logins with each user's 30-day pattern, as shown below. What BEST describes the result?",
+      "exhibit": "User     Usual logins (30-day baseline)   Today\njsmith   08:00-17:30, HQ                  08:12 HQ\nakumar   09:00-18:00, HQ                  02:47 remote, new device\nlchen    07:30-16:00, Branch              07:41 Branch",
+      "options": [
+        {"key": "A", "text": "akumar's login departs from normal", "rationale": "Correct: it deviates from the baseline.", "role": "best"},
+        {"key": "B", "text": "Three users logged in today", "rationale": "True, but says nothing about normal.", "role": "partial"},
+        {"key": "C", "text": "akumar is confirmed compromised", "rationale": "A deviation needs investigation; it isn't proof.", "role": "related"},
+        {"key": "D", "text": "jsmith's login is anomalous", "rationale": "It matches the baseline.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Baseline analysis establishes what normal activity looks like and compares current activity to it. The baseline is the reference; deviations are leads to investigate.",
+      "discriminator_tested": "Compare current activity to the baseline."
+    },
+    {
+      "objectives": ["C11-08", "C11-06"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A team wants to catch attacks nobody has seen before and accepts more false positives as the price. Which method BEST fits?",
+      "options": [
+        {"key": "A", "text": "Anomaly detection", "rationale": "Correct: can catch unknown threats.", "role": "best"},
+        {"key": "B", "text": "Signature matching", "rationale": "Needs a known pattern.", "role": "related"},
+        {"key": "C", "text": "Threat-intel IP blocklists", "rationale": "Known indicators.", "role": "related"},
+        {"key": "D", "text": "Manual weekly log review", "rationale": "Not a SIEM method, and slow.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Anomaly detection flags activity that deviates from the baseline or expected pattern. It can catch unknown threats but raises more false positives than signature-based detection.",
+      "discriminator_tested": "Unknown threats, more false positives."
+    },
+    {
+      "objectives": ["C11-09"], "type": "single", "angle": "assess-risk", "difficulty": 3,
+      "stem": "A detection model was trained on six months of logs from a period when an attacker was already inside the network. What is the MAIN risk?",
+      "options": [
+        {"key": "A", "text": "It may learn the attack as normal", "rationale": "Correct: it depends on good data.", "role": "best"},
+        {"key": "B", "text": "It needs retraining eventually", "rationale": "True, but not the specific risk.", "role": "partial"},
+        {"key": "C", "text": "It needs analyst-written rules", "rationale": "Machine learning learns rather than using fixed rules.", "role": "related"},
+        {"key": "D", "text": "It will run too slowly", "rationale": "Speed isn't the issue.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Machine learning algorithms learn patterns from data to detect threats. They learn from data rather than fixed rules, so they depend on good data and can still misclassify.",
+      "discriminator_tested": "Machine learning depends on good data."
+    },
+    {
+      "objectives": ["C11-10"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A SOC lets its AI tool close any alert it rates low-risk, with no review. A real intrusion is closed this way. What BEST describes the flaw?",
+      "options": [
+        {"key": "A", "text": "No human validation of AI results", "rationale": "Correct: AI augments analysts; it doesn't replace them.", "role": "best"},
+        {"key": "B", "text": "The AI's model was outdated", "rationale": "Possibly, but review would have caught it anyway.", "role": "partial"},
+        {"key": "C", "text": "Too few alerts were generated", "rationale": "The alert existed.", "role": "related"},
+        {"key": "D", "text": "AI shouldn't be used in a SOC", "rationale": "AI integration helps when validated.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "AI integration assists with triage, correlation, summarization, and prioritization. It augments analysts, and its results need human validation.",
+      "discriminator_tested": "Results need human validation."
+    },
+    {
+      "objectives": ["C11-11", "C11-13"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A behavior analytics tool raised the alert below. What MOST likely explains it?",
+      "exhibit": "[UEBA] Risk score 92  entity=svc_backup\nUsual:  logs on to BACKUP01 at 01:00 daily\nToday:  logged on to 14 workstations between 13:20 and 13:31",
+      "options": [
+        {"key": "A", "text": "A hijacked service account", "rationale": "Correct: the account is acting far outside its pattern.", "role": "best"},
+        {"key": "B", "text": "A routine backup run", "rationale": "Wrong time and wrong hosts.", "role": "related"},
+        {"key": "C", "text": "A misconfigured firewall", "rationale": "Wouldn't create logons.", "role": "wrong"},
+        {"key": "D", "text": "Unusual account behavior", "rationale": "True, but that restates the alert.", "role": "partial"}
+      ],
+      "answer": ["A"],
+      "explanation": "UEBA (User and Entity Behavior Analytics) baselines users and devices and flags unusual behavior. It focuses on accounts and entities and helps find compromised accounts and insider threats.",
+      "discriminator_tested": "UEBA finds compromised accounts."
+    },
+    {
+      "objectives": ["C11-12", "C11-13"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A team wants its SIEM to flag connections to IP addresses already known to be used by attackers. Which data source BEST fits?",
+      "options": [
+        {"key": "A", "text": "Threat intel feeds", "rationale": "Correct: external lists of known bad IPs.", "role": "best"},
+        {"key": "B", "text": "A 30-day traffic baseline", "rationale": "Shows normal, not known bad.", "role": "related"},
+        {"key": "C", "text": "UEBA user profiles", "rationale": "Behavior, not known addresses.", "role": "related"},
+        {"key": "D", "text": "The DHCP lease table", "rationale": "Internal address assignments.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Threat intelligence data is external feeds of known malicious IPs, domains, hashes, and attacker techniques. It is external context, versus an internal baseline.",
+      "discriminator_tested": "External known-bad context."
+    },
+    {
+      "objectives": ["C11-13", "C11-12"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An analyst compares a threat feed with a workstation scan, as shown below. What BEST describes the finding on WS-114?",
+      "exhibit": "Threat feed: ransomware group indicators\n  SHA-256  9f2c...e41a   (loader)\n  Domain   update-cdn-check[.]com\n  IP       198.51.100.23\nWS-114 file scan:\n  9f2c...e41a  C:\\Users\\Public\\svc.exe",
+      "options": [
+        {"key": "A", "text": "An indicator of compromise", "rationale": "Correct: observable evidence the host may be compromised.", "role": "best"},
+        {"key": "B", "text": "A vulnerability in the OS", "rationale": "A weakness, not evidence of compromise.", "role": "related"},
+        {"key": "C", "text": "A baseline deviation", "rationale": "Possibly, but it was matched against known-bad data.", "role": "partial"},
+        {"key": "D", "text": "A false positive, by definition", "rationale": "A hash match is strong evidence.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "IoCs (Indicators of Compromise) are observable evidence that a system may be compromised: malicious IPs, file hashes, domains, unusual changes. They are often delivered through threat intelligence.",
+      "discriminator_tested": "IoC = evidence of compromise, often from threat intel."
+    },
+    {
+      "objectives": ["C11-14", "C11-02"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What BEST distinguishes SOAR from a SIEM?",
+      "options": [
+        {"key": "A", "text": "It acts on what was detected", "rationale": "Correct: response through playbooks.", "role": "best"},
+        {"key": "B", "text": "It uses automation", "rationale": "SIEMs automate alerting too.", "role": "partial"},
+        {"key": "C", "text": "It correlates events into alerts", "rationale": "That is the SIEM.", "role": "related"},
+        {"key": "D", "text": "It replaces the analysts", "rationale": "It assists them.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "SOAR (Security Orchestration, Automation, and Response) coordinates tools and automates response workflows (playbooks). The SIEM detects and correlates; SOAR acts on what was detected.",
+      "discriminator_tested": "SIEM detects; SOAR acts."
+    },
+    {
+      "objectives": ["C11-15", "C11-14"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A playbook enriches an alert with threat intel, opens a ticket, isolates the host through the EDR tool, and pages the on-call analyst. How is this BEST classified?",
+      "options": [
+        {"key": "A", "text": "Orchestration", "rationale": "Correct: many steps across many tools.", "role": "best"},
+        {"key": "B", "text": "Automation of one task", "rationale": "There are four tasks and several tools.", "role": "related"},
+        {"key": "C", "text": "Baseline analysis", "rationale": "A detection method.", "role": "related"},
+        {"key": "D", "text": "Manual response", "rationale": "The playbook runs it.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Orchestration vs automation: orchestration coordinates multiple tools and tasks into a workflow; automation performs a single task without human action.",
+      "discriminator_tested": "Orchestration = many steps and tools."
+    },
+    {
+      "objectives": ["C11-16"], "type": "multi", "angle": "assess-risk", "difficulty": 1,
+      "stem": "Which two are typical consequences of failing to meet a data protection regulation? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Regulatory fines", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Lawsuits or legal action", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "An internal policy exception", "rationale": "Internal, not a legal consequence.", "role": "related"},
+        {"key": "D", "text": "A lower CVSS score", "rationale": "Unrelated.", "role": "wrong"},
+        {"key": "E", "text": "A failed backup test", "rationale": "Unrelated to compliance status.", "role": "related"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Regulations and compliance are legal and industry requirements for protecting data; failure risks fines and legal action. They are external obligations, unlike internal policy.",
+      "discriminator_tested": "Failure risks fines and legal action."
+    },
+    {
+      "objectives": ["C11-17"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A hospital is choosing a cloud backup provider with data centers in several countries. Which data locality question is MOST important?",
+      "options": [
+        {"key": "A", "text": "Where it will reside", "rationale": "Correct: locality is about physical location.", "role": "best"},
+        {"key": "B", "text": "How fast restores will be", "rationale": "An RTO question.", "role": "related"},
+        {"key": "C", "text": "Whether data is encrypted", "rationale": "Important, but not locality.", "role": "partial"},
+        {"key": "D", "text": "What the monthly cost is", "rationale": "A budget question.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Data locality is a requirement that data be stored or processed in specific geographic jurisdictions. It is about where data physically resides, and it affects cloud choices.",
+      "discriminator_tested": "Where data physically resides."
+    },
+    {
+      "objectives": ["C11-18"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which type of data does FERPA protect?",
+      "options": [
+        {"key": "A", "text": "Student education records", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Customers' financial data", "rationale": "GLBA.", "role": "related"},
+        {"key": "C", "text": "Federal agency systems", "rationale": "FISMA.", "role": "related"},
+        {"key": "D", "text": "Payment card numbers", "rationale": "PCI DSS.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "FERPA (Family Educational Rights and Privacy Act) protects student education records in the US.",
+      "discriminator_tested": "FERPA = education records."
+    },
+    {
+      "objectives": ["C11-19"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "FISMA applies MOST directly to which organizations?",
+      "options": [
+        {"key": "A", "text": "US federal agencies", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Banks and lenders", "rationale": "GLBA.", "role": "related"},
+        {"key": "C", "text": "Schools and colleges", "rationale": "FERPA.", "role": "related"},
+        {"key": "D", "text": "Online card merchants", "rationale": "PCI DSS.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "FISMA (Federal Information Security Modernization Act) requires US federal agencies to run information security programs.",
+      "discriminator_tested": "FISMA = federal government."
+    },
+    {
+      "objectives": ["C11-20"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "A credit union must protect its members' nonpublic personal information. Which law BEST applies?",
+      "options": [
+        {"key": "A", "text": "GLBA", "rationale": "Correct: financial institutions.", "role": "best"},
+        {"key": "B", "text": "FERPA", "rationale": "Education records.", "role": "related"},
+        {"key": "C", "text": "FISMA", "rationale": "Federal agencies.", "role": "related"},
+        {"key": "D", "text": "PCI DSS", "rationale": "Card data only, and a standard.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "GLBA (Gramm-Leach-Bliley Act) requires financial institutions to protect customers' nonpublic personal information.",
+      "discriminator_tested": "GLBA = financial institutions."
+    },
+    {
+      "objectives": ["C11-21"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A small online shop's owner says, \"PCI DSS isn't a law, so we can skip it.\" What BEST describes the flaw in this reasoning?",
+      "options": [
+        {"key": "A", "text": "Card brands enforce it by contract", "rationale": "Correct: merchants agree to it to accept cards.", "role": "best"},
+        {"key": "B", "text": "It is a federal law", "rationale": "It is an industry standard.", "role": "wrong"},
+        {"key": "C", "text": "It applies to banks alone", "rationale": "It applies to anyone handling card data.", "role": "related"},
+        {"key": "D", "text": "The FTC issues its fines", "rationale": "Card brands and acquirers enforce it.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "PCI DSS (Payment Card Industry Data Security Standard) protects cardholder data. It is an industry standard enforced through card-brand contracts, not a government law.",
+      "discriminator_tested": "Enforced through card-brand contracts."
+    },
+    {
+      "objectives": ["C11-22", "C11-23"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "After a breach, a bank's compliance team formally informs its federal regulator about the incident. What is this activity?",
+      "options": [
+        {"key": "A", "text": "Reporting", "rationale": "Correct: to authorities and oversight.", "role": "best"},
+        {"key": "B", "text": "Notification", "rationale": "Informs affected individuals.", "role": "related"},
+        {"key": "C", "text": "Escalation", "rationale": "Internal routing of an incident.", "role": "related"},
+        {"key": "D", "text": "Remediation", "rationale": "Fixing the cause.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Reporting is the formal reporting of incidents and compliance status to regulators, management, or auditors: authorities and oversight.",
+      "discriminator_tested": "Reporting = to authorities and oversight."
+    },
+    {
+      "objectives": ["C11-23"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "State law requires notifying affected residents within 45 days of discovering a breach. Based on the timeline below, what BEST describes the problem?",
+      "exhibit": "Mar 02  Breach detected (12,000 customer records)\nMar 04  Regulator informed\nMar 05  Containment complete\nJun 18  Customers informed by email",
+      "options": [
+        {"key": "A", "text": "Customers were told too late", "rationale": "Correct: well past 45 days.", "role": "best"},
+        {"key": "B", "text": "The regulator was told too early", "rationale": "Early reporting isn't a violation.", "role": "wrong"},
+        {"key": "C", "text": "Containment took three days", "rationale": "Not the compliance issue.", "role": "related"},
+        {"key": "D", "text": "Email isn't a notification method", "rationale": "Email is commonly allowed.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Notifications inform affected individuals or customers (and sometimes regulators) after a breach, within required timeframes. Deadlines vary by law.",
+      "discriminator_tested": "Notify within required timeframes."
+    }
+  ]
+}

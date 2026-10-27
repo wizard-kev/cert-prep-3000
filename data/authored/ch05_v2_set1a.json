@@ -1,0 +1,256 @@
+{
+  "questions": [
+    {
+      "objectives": ["C05-01", "C05-34"], "type": "single", "angle": "interpret-config", "difficulty": 3,
+      "stem": "The ACL below is applied inbound on a router interface. A packet from 10.1.4.20 to 10.1.9.80 on TCP port 22 arrives. What happens to it?",
+      "exhibit": "access-list 120 permit tcp any host 10.1.9.80 eq 443\naccess-list 120 deny   tcp any host 10.1.9.80\naccess-list 120 permit ip 10.1.4.0 0.0.0.255 any",
+      "options": [
+        {"key": "A", "text": "Denied by the second entry, before the third is checked", "rationale": "Correct: first match wins, and entry 2 matches.", "role": "best"},
+        {"key": "B", "text": "Permitted by the third entry, which matches the source", "rationale": "Entry 3 would match, but entry 2 matches first.", "role": "related"},
+        {"key": "C", "text": "Denied by the implicit deny at the end of the list", "rationale": "Denied, but by entry 2; the implicit deny is never reached.", "role": "related"},
+        {"key": "D", "text": "Permitted, since permits outrank denies", "rationale": "Order decides, not the action.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "ACLs are ordered permit/deny statements processed top-down; the first match wins, and an implicit deny follows the last entry. The packet matches entry 2, so entry 3 is never checked.",
+      "discriminator_tested": "Top-down, first match wins; implicit deny at the end."
+    },
+    {
+      "objectives": ["C05-02", "C05-04"], "type": "single", "angle": "choose-device", "difficulty": 3,
+      "stem": "A standard ACL must stop subnet 10.1.4.0/24 from reaching the payroll server 10.1.9.5 while those users keep reaching everything else. Where should it be applied?",
+      "options": [
+        {"key": "A", "text": "Near the payroll server", "rationale": "Correct: near the destination, it affects only traffic headed there.", "role": "best"},
+        {"key": "B", "text": "Inbound on the users' router interface", "rationale": "Source-only filtering there would block the users from everything.", "role": "related"},
+        {"key": "C", "text": "On each router between the two networks", "rationale": "Adds work and still blocks the users broadly wherever it sits near them.", "role": "related"},
+        {"key": "D", "text": "At the internet edge router", "rationale": "Internal traffic never passes the internet edge.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Standard ACLs filter on source IP only (numbered 1-99 and 1300-1999). Because they can't consider the destination, they are placed close to the destination; near the source they would block those users from everything.",
+      "discriminator_tested": "Standard ACL: source only, so place close to the destination."
+    },
+    {
+      "objectives": ["C05-03"], "type": "single", "angle": "complete-config", "difficulty": 3,
+      "stem": "Which wildcard mask matches each host in 172.16.8.0/22?",
+      "options": [
+        {"key": "A", "text": "0.0.3.255", "rationale": "Correct: the inverse of 255.255.252.0.", "role": "best"},
+        {"key": "B", "text": "255.255.252.0", "rationale": "That is the subnet mask, not the wildcard.", "role": "related"},
+        {"key": "C", "text": "0.0.0.255", "rationale": "That matches only a /24.", "role": "related"},
+        {"key": "D", "text": "0.0.4.255", "rationale": "Not an inverse of any contiguous mask; it doesn't cover the /22.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A wildcard mask is the inverse of a subnet mask: 0 means the bit must match and 1 means it is ignored. A /22 mask is 255.255.252.0, so the wildcard is 0.0.3.255.",
+      "discriminator_tested": "Wildcard = inverse mask; 0 must match, 1 ignored."
+    },
+    {
+      "objectives": ["C05-04", "C05-02"], "type": "single", "angle": "choose-device", "difficulty": 3,
+      "stem": "Users on 10.1.4.0/24 must be blocked from the HR server 10.1.9.20 on HTTPS, while all their other traffic flows. Which ACL type and placement BEST fit?",
+      "options": [
+        {"key": "A", "text": "Extended ACL, close to the users' subnet", "rationale": "Correct: precise enough to place near the source.", "role": "best"},
+        {"key": "B", "text": "Extended ACL, close to the HR server", "rationale": "Works, but the unwanted traffic crosses the network before being dropped.", "role": "partial"},
+        {"key": "C", "text": "Standard ACL, close to the HR server", "rationale": "A standard ACL can't single out HTTPS.", "role": "related"},
+        {"key": "D", "text": "Standard ACL, close to the users' subnet", "rationale": "Source-only filtering there would cut the users off entirely.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Extended ACLs filter on source, destination, protocol, and ports (100-199, 2000-2699). Because they are precise, they are placed close to the source, dropping unwanted traffic before it crosses the network.",
+      "discriminator_tested": "Extended ACL: granular, so place close to the source."
+    },
+    {
+      "objectives": ["C05-05", "C05-01"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A router ACL permits outbound web traffic, but the replies are dropped unless a separate inbound rule allows them. Which device would admit the replies automatically?",
+      "options": [
+        {"key": "A", "text": "A stateful firewall", "rationale": "Correct: it tracks sessions and admits their return traffic.", "role": "best"},
+        {"key": "B", "text": "A standard ACL", "rationale": "ACLs are stateless; replies need their own rule.", "role": "related"},
+        {"key": "C", "text": "An extended ACL", "rationale": "More granular, but still stateless.", "role": "related"},
+        {"key": "D", "text": "A GRE tunnel", "rationale": "GRE encapsulates traffic; it doesn't filter or track it.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Firewalls enforce policy between networks and add session awareness beyond ACL filtering. ACLs are stateless filters; a stateful firewall tracks sessions and admits their return traffic.",
+      "discriminator_tested": "ACLs are stateless; stateful firewalls track sessions."
+    },
+    {
+      "objectives": ["C05-06", "C05-11"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A file is encrypted with AES before being emailed. Which protection does that encryption provide by itself?",
+      "options": [
+        {"key": "A", "text": "Keeping it confidential", "rationale": "Correct: only key holders can read it.", "role": "best"},
+        {"key": "B", "text": "Proof of who sent the file", "rationale": "That needs authentication, such as a signature.", "role": "related"},
+        {"key": "C", "text": "Detection of any change to the file", "rationale": "Integrity needs a hash or MAC; encryption alone doesn't provide it.", "role": "related"},
+        {"key": "D", "text": "Compression to reduce the file's size", "rationale": "Encryption doesn't compress.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Encryption converts plaintext to ciphertext with an algorithm and a key. It provides confidentiality; on its own it doesn't provide integrity or authentication.",
+      "discriminator_tested": "Encryption provides confidentiality, not integrity or authentication on its own."
+    },
+    {
+      "objectives": ["C05-07"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "Two offices want to encrypt a large nightly backup using the same secret key at both ends. What is the MAIN challenge of this approach?",
+      "options": [
+        {"key": "A", "text": "Getting the shared key to both sites securely", "rationale": "Correct: key distribution is the symmetric challenge.", "role": "best"},
+        {"key": "B", "text": "Keeping the key secret once both sites have it", "rationale": "Also needed, but distribution is the defining challenge.", "role": "partial"},
+        {"key": "C", "text": "The key must be published in a certificate", "rationale": "Certificates carry public keys; a shared secret key is never published.", "role": "related"},
+        {"key": "D", "text": "Symmetric encryption is too slow for bulk data", "rationale": "Symmetric ciphers are the fast choice for bulk data.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Symmetric key encryption uses the same key to encrypt and decrypt. It is fast and suited to bulk data; key distribution is the challenge.",
+      "discriminator_tested": "Symmetric: fast, but key distribution is the challenge."
+    },
+    {
+      "objectives": ["C05-08", "C05-10"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A legacy device can encrypt with DES and nothing else. What is the BEST assessment?",
+      "options": [
+        {"key": "A", "text": "Its 56-bit key is breakable; replace the device", "rationale": "Correct: DES keys can be brute-forced.", "role": "best"},
+        {"key": "B", "text": "Run DES three times for the same strength as AES", "rationale": "3DES is itself deprecated and slower than AES.", "role": "related"},
+        {"key": "C", "text": "DES is old, so performance will be poor", "rationale": "Speed isn't the problem; security is.", "role": "wrong"},
+        {"key": "D", "text": "It is acceptable on an internal network", "rationale": "A breakable cipher is no protection inside either.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DES uses a 56-bit key and 64-bit blocks. It is obsolete and insecure: the key can be brute-forced quickly.",
+      "discriminator_tested": "DES is obsolete and insecure."
+    },
+    {
+      "objectives": ["C05-09", "C05-08"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST explains why 3DES is no longer recommended, even though it isn't broken the way DES is?",
+      "options": [
+        {"key": "A", "text": "It's a slow stopgap, replaced by AES", "rationale": "Correct: deprecated in favour of AES.", "role": "best"},
+        {"key": "B", "text": "It applies DES three times", "rationale": "True, but that describes it rather than explaining why it is retired.", "role": "partial"},
+        {"key": "C", "text": "It uses a 56-bit key like DES", "rationale": "Its effective key is longer than DES's.", "role": "related"},
+        {"key": "D", "text": "It is a hash function, not a cipher", "rationale": "3DES is a block cipher.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "3DES applies DES three times. It is a deprecated stopgap: slow, and replaced by AES.",
+      "discriminator_tested": "3DES is a deprecated, slow stopgap replaced by AES."
+    },
+    {
+      "objectives": ["C05-10", "C05-13"], "type": "single", "angle": "choose-protocol", "difficulty": 1,
+      "stem": "Which algorithm should a new VPN use for bulk encryption of its traffic?",
+      "options": [
+        {"key": "A", "text": "AES-256", "rationale": "Correct: the current standard symmetric cipher.", "role": "best"},
+        {"key": "B", "text": "3DES", "rationale": "Deprecated and slow.", "role": "related"},
+        {"key": "C", "text": "DES", "rationale": "Obsolete and insecure.", "role": "wrong"},
+        {"key": "D", "text": "MD5", "rationale": "A hash, not a cipher.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "AES, with 128-, 192-, or 256-bit keys, is the current standard symmetric cipher. DES and 3DES are obsolete or deprecated, and MD5 is a hash, not a cipher.",
+      "discriminator_tested": "AES is the current standard symmetric cipher."
+    },
+    {
+      "objectives": ["C05-11", "C05-13"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An engineer downloads a switch image and runs the command below. What does the match BEST confirm?",
+      "exhibit": "Vendor page:  switch-ios.bin   SHA-256: 9F2C4E...7D0A71B\n\nPS> Get-FileHash .\\switch-ios.bin -Algorithm SHA256\nAlgorithm   Hash\nSHA256      9F2C4E...7D0A71B",
+      "options": [
+        {"key": "A", "text": "It is exactly the vendor's file", "rationale": "Correct: matching digests verify integrity.", "role": "best"},
+        {"key": "B", "text": "It was transferred without errors", "rationale": "True, but it proves more: the file is exactly what the vendor published.", "role": "partial"},
+        {"key": "C", "text": "It is encrypted and safe to email", "rationale": "Hashing doesn't encrypt anything.", "role": "related"},
+        {"key": "D", "text": "It can be reversed to recover the vendor's key", "rationale": "Hashes are one-way.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A hash is a one-way function producing a fixed-length digest. Matching digests verify integrity; because a hash isn't reversible, it isn't encryption.",
+      "discriminator_tested": "Hashes verify integrity; not reversible, so not encryption."
+    },
+    {
+      "objectives": ["C05-12", "C05-13"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A software team still publishes MD5 checksums so customers can verify releases. What BEST describes the problem?",
+      "options": [
+        {"key": "A", "text": "Its collisions can be forged", "rationale": "Correct: an attacker can craft a malicious file with the same digest.", "role": "best"},
+        {"key": "B", "text": "MD5 produces a short 128-bit digest", "rationale": "True, but the real problem is that collisions are practical.", "role": "partial"},
+        {"key": "C", "text": "MD5 encrypts files, revealing their contents", "rationale": "MD5 is a hash; it doesn't encrypt.", "role": "related"},
+        {"key": "D", "text": "MD5 is too slow for large release files", "rationale": "MD5 is fast; speed isn't the issue.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "MD5 produces a 128-bit digest and is broken: collisions can be produced, so it should be avoided for security use. SHA-256 or longer is preferred.",
+      "discriminator_tested": "MD5 is broken (collisions); avoid for security use."
+    },
+    {
+      "objectives": ["C05-13", "C05-12"], "type": "single", "angle": "choose-protocol", "difficulty": 1,
+      "stem": "A team is choosing a hash algorithm for verifying firmware images. Which choice is BEST?",
+      "options": [
+        {"key": "A", "text": "SHA-256", "rationale": "Correct: a SHA-2 hash, preferred today.", "role": "best"},
+        {"key": "B", "text": "SHA-1", "rationale": "Deprecated.", "role": "related"},
+        {"key": "C", "text": "MD5", "rationale": "Broken by collisions.", "role": "related"},
+        {"key": "D", "text": "AES-256", "rationale": "A cipher, not a hash.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The Secure Hash Algorithm (SHA) family includes SHA-1, SHA-2, and SHA-3. SHA-1 is deprecated; SHA-256 or longer is preferred.",
+      "discriminator_tested": "SHA-1 deprecated; SHA-256 or longer preferred."
+    },
+    {
+      "objectives": ["C05-14", "C05-15"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two are typical VPN use cases? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Staff working from home reaching internal apps", "rationale": "Correct: remote access (user to site).", "role": "best"},
+        {"key": "B", "text": "Linking a branch office to headquarters over the internet", "rationale": "Correct: site-to-site.", "role": "best"},
+        {"key": "C", "text": "Making public websites load faster for remote staff", "rationale": "A VPN adds overhead; it isn't a speed-up.", "role": "related"},
+        {"key": "D", "text": "Replacing antivirus on remote laptops", "rationale": "A tunnel doesn't scan for malware.", "role": "related"},
+        {"key": "E", "text": "Giving guests internet access on Wi-Fi", "rationale": "That is guest network isolation.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A VPN is an encrypted tunnel across an untrusted network such as the internet. The two main uses are remote access (user to site) and site-to-site, and it is cheaper than leased lines.",
+      "discriminator_tested": "Remote access vs site-to-site."
+    },
+    {
+      "objectives": ["C05-15", "C05-16"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes an enterprise VPN from a provider-managed VPN?",
+      "options": [
+        {"key": "A", "text": "The organization runs it and owns its security", "rationale": "Correct: customer-controlled security.", "role": "best"},
+        {"key": "B", "text": "It usually runs over the public internet", "rationale": "Often true, but control is the distinguishing point.", "role": "partial"},
+        {"key": "C", "text": "The provider isolates the customer's traffic", "rationale": "That describes a provider-managed VPN.", "role": "related"},
+        {"key": "D", "text": "It doesn't use encryption", "rationale": "Enterprise VPNs such as IPsec and SSL VPNs encrypt.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Enterprise VPNs are built and managed by the organization (IPsec, SSL VPN) over the internet, so the customer controls the security. A provider-managed VPN is operated by the service provider.",
+      "discriminator_tested": "Enterprise VPN = customer-controlled security."
+    },
+    {
+      "objectives": ["C05-16", "C05-17"], "type": "single", "angle": "assess-risk", "difficulty": 3,
+      "stem": "A company's sites connect over its carrier's MPLS VPN service. A regulator requires the traffic between sites to be encrypted. What is the BEST assessment?",
+      "options": [
+        {"key": "A", "text": "It isolates; it doesn't encrypt", "rationale": "Correct: the provider separates traffic but doesn't necessarily encrypt it.", "role": "best"},
+        {"key": "B", "text": "Traffic is isolated from other customers", "rationale": "True, but isolation doesn't meet an encryption requirement.", "role": "partial"},
+        {"key": "C", "text": "The provider is responsible for compliance", "rationale": "The company still owns its regulatory obligations.", "role": "related"},
+        {"key": "D", "text": "MPLS VPNs include IPsec encryption", "rationale": "MPLS separates traffic with labels; it doesn't encrypt.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Provider-managed VPNs, such as MPLS-based services, are operated by the service provider, which isolates customer traffic. That traffic is not necessarily encrypted, so encryption must be added if required.",
+      "discriminator_tested": "Provider-managed VPNs isolate but aren't necessarily encrypted."
+    },
+    {
+      "objectives": ["C05-17", "C05-19"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two services does IPsec provide? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Anti-replay protection", "rationale": "Correct: replayed packets are rejected.", "role": "best"},
+        {"key": "B", "text": "Data origin authentication", "rationale": "Correct: packets are proven to come from the peer.", "role": "best"},
+        {"key": "C", "text": "Malware scanning of tunneled traffic", "rationale": "IPsec protects traffic; it doesn't inspect content.", "role": "related"},
+        {"key": "D", "text": "Name resolution for remote sites", "rationale": "That is DNS.", "role": "related"},
+        {"key": "E", "text": "Application-layer content filtering", "rationale": "That is a proxy's or NGFW's job.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "IPsec is a suite securing IP traffic with confidentiality, integrity, authentication, and anti-replay. It is a framework (IKE plus AH/ESP), not a single protocol.",
+      "discriminator_tested": "IPsec is a framework: IKE plus AH/ESP."
+    },
+    {
+      "objectives": ["C05-18", "C05-20"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A new site-to-site tunnel shows the output below. What does it BEST indicate?",
+      "exhibit": "R1# show crypto isakmp sa\ndst            src            state     status\n203.0.113.2    198.51.100.1   QM_IDLE   ACTIVE\n\nR1# show crypto ipsec sa | include pkts\n    #pkts encaps: 0, #pkts encrypt: 0, #pkts digest: 0\n    #pkts decaps: 0, #pkts decrypt: 0, #pkts verify: 0",
+      "options": [
+        {"key": "A", "text": "Phase 1 up; no data through phase 2", "rationale": "Correct: QM_IDLE shows the IKE channel is up; zero counters show no data has used the tunnel.", "role": "best"},
+        {"key": "B", "text": "The IKE management channel is established", "rationale": "True, but it ignores the zero data counters.", "role": "partial"},
+        {"key": "C", "text": "Phase 1 failed, so no data SAs were built", "rationale": "QM_IDLE and ACTIVE mean phase 1 succeeded.", "role": "related"},
+        {"key": "D", "text": "Traffic is flowing but not being encrypted", "rationale": "No packets have been encapsulated at all.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Cisco IOS IPsec is configured with an IKE policy, a transform set, and a crypto map or profile applied to an interface. IKE phase 1 builds the secure management channel (QM_IDLE means it is up); phase 2 builds the data SAs that carry traffic.",
+      "discriminator_tested": "Phase 1 = management channel; phase 2 = data SAs."
+    },
+    {
+      "objectives": ["C05-19", "C05-17"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "Traffic between two sites must be encrypted as well as authenticated. Which IPsec protocol is required?",
+      "options": [
+        {"key": "A", "text": "ESP (IP protocol 50)", "rationale": "Correct: ESP encrypts and also authenticates.", "role": "best"},
+        {"key": "B", "text": "AH (IP protocol 51)", "rationale": "AH authenticates but doesn't encrypt.", "role": "related"},
+        {"key": "C", "text": "GRE (IP protocol 47)", "rationale": "GRE encapsulates without encrypting.", "role": "wrong"},
+        {"key": "D", "text": "IKE (UDP 500)", "rationale": "IKE negotiates keys; it doesn't carry the data.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "AH (protocol 51) provides integrity and authentication; ESP (protocol 50) provides encryption plus integrity and authentication. AH does not encrypt; ESP is the one that does.",
+      "discriminator_tested": "AH does not encrypt; ESP does."
+    }
+  ]
+}

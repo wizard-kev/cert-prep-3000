@@ -1,0 +1,518 @@
+{
+  "questions": [
+    {
+      "objectives": ["C03-01", "C03-02"], "type": "single", "angle": "identify-from-port", "difficulty": 1,
+      "stem": "A packet capture on a switch's management VLAN shows an administrator's username and password readable in plain text, in a session to TCP port 23. Which protocol is in use, and why is it a risk?",
+      "options": [
+        {"key": "A", "text": "Telnet; it sends everything, including credentials, in cleartext", "rationale": "Correct: Telnet on TCP 23 has no encryption."},
+        {"key": "B", "text": "SSH; its encryption has been misconfigured", "rationale": "SSH uses TCP 22 and encrypts the whole session, including the login."},
+        {"key": "C", "text": "TFTP; it has no authentication", "rationale": "TFTP uses UDP 69 for file transfer and has no username or password at all."},
+        {"key": "D", "text": "HTTP; it sends web forms in cleartext", "rationale": "HTTP uses TCP 80 and carries web traffic, not a command-line session."}
+      ],
+      "answer": ["A"],
+      "explanation": "Telnet provides remote command-line access on TCP 23 with no encryption, so credentials cross the network in cleartext. SSH on TCP 22 is its secure replacement.",
+      "discriminator_tested": "Telnet is cleartext remote access on TCP 23."
+    },
+    {
+      "objectives": ["C03-02", "C03-01"], "type": "multi", "angle": "secure-replacement", "difficulty": 1,
+      "stem": "A company must stop sending router management sessions and credentials in cleartext. Which two statements about the recommended replacement for Telnet are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "It is SSH", "rationale": "Correct: SSH is the secure replacement for Telnet."},
+        {"key": "B", "text": "It encrypts the whole session, including the login credentials", "rationale": "Correct: encryption is the reason to switch."},
+        {"key": "C", "text": "It listens on TCP port 23", "rationale": "TCP 23 is Telnet; SSH uses TCP 22."},
+        {"key": "D", "text": "It uses UDP to reduce overhead", "rationale": "SSH runs over TCP."},
+        {"key": "E", "text": "It is SNMPv3, which adds encryption", "rationale": "SNMPv3 secures device monitoring; it does not provide an interactive command line."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "SSH provides encrypted remote command-line access over TCP 22 and replaces Telnet, which sends everything in cleartext.",
+      "discriminator_tested": "SSH is encrypted remote access on TCP 22, replacing Telnet."
+    },
+    {
+      "objectives": ["C03-03", "C03-04", "C03-05"], "type": "single", "angle": "identify-from-port", "difficulty": 2,
+      "stem": "A legacy file transfer service listens on TCP 21 and opens data connections on TCP 20. An auditor flags it because login names, passwords, and file contents can be read on the wire. Which protocol is it?",
+      "options": [
+        {"key": "A", "text": "FTP", "rationale": "Correct: TCP 20 and 21, with credentials and data in cleartext."},
+        {"key": "B", "text": "SFTP", "rationale": "SFTP runs through SSH on TCP 22 and is encrypted."},
+        {"key": "C", "text": "TFTP", "rationale": "TFTP uses UDP 69 and has no login at all."},
+        {"key": "D", "text": "SNMP", "rationale": "SNMP uses UDP 161 for device monitoring, not file transfer."}
+      ],
+      "answer": ["A"],
+      "explanation": "FTP uses TCP 20 and 21 and sends credentials and data in cleartext. It is reliable because it runs over TCP, but it is not secure.",
+      "discriminator_tested": "FTP: TCP 20/21, cleartext credentials and data."
+    },
+    {
+      "objectives": ["C03-04", "C03-03"], "type": "single", "angle": "secure-replacement", "difficulty": 2,
+      "stem": "A team must replace FTP for sending payroll files to a bank, keeping the files and credentials encrypted. The bank already accepts SSH connections. Which protocol should they use?",
+      "options": [
+        {"key": "A", "text": "SFTP over TCP 22", "rationale": "Correct: file transfer tunneled through SSH, so everything is encrypted."},
+        {"key": "B", "text": "TFTP over UDP 69", "rationale": "TFTP has neither authentication nor encryption."},
+        {"key": "C", "text": "FTP with longer passwords", "rationale": "FTP still sends the password and files in cleartext, whatever their length."},
+        {"key": "D", "text": "Telnet over TCP 23", "rationale": "Telnet is cleartext remote command-line access, not file transfer."}
+      ],
+      "answer": ["A"],
+      "explanation": "SFTP transfers files through an SSH tunnel on TCP 22, so credentials and data are encrypted. Despite the similar name, it is not FTP or TFTP.",
+      "discriminator_tested": "SFTP runs through SSH on TCP 22 and is encrypted."
+    },
+    {
+      "objectives": ["C03-05", "C03-03"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A network engineer needs a lightweight protocol that switches can use at boot to pull a configuration file from a server, with no username or password. Which protocol fits, and what is its main security weakness?",
+      "options": [
+        {"key": "A", "text": "TFTP over UDP 69; it has no authentication", "rationale": "Correct: simple boot and config transfers, but anyone who can reach the server can use it."},
+        {"key": "B", "text": "FTP over TCP 21; it sends credentials in cleartext", "rationale": "FTP requires a login, which the scenario rules out."},
+        {"key": "C", "text": "SFTP over TCP 22; it has no encryption", "rationale": "SFTP is encrypted through SSH and also requires authentication."},
+        {"key": "D", "text": "NTP over UDP 123; it can be spoofed", "rationale": "NTP synchronizes clocks; it does not transfer files."}
+      ],
+      "answer": ["A"],
+      "explanation": "TFTP is a simple file transfer protocol on UDP 69, used for config, firmware, and boot files. It has no authentication, so it should only be reachable from trusted networks.",
+      "discriminator_tested": "TFTP: UDP 69, no authentication, used for config, firmware, and boot files."
+    },
+    {
+      "objectives": ["C03-06"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "An administrator is choosing an SNMP version for monitoring routers and switches. Which two statements are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "SNMPv3 adds authentication and encryption", "rationale": "Correct: this is why SNMPv3 is the secure choice."},
+        {"key": "B", "text": "SNMPv1 and SNMPv2c rely on community strings", "rationale": "Correct: community strings act as shared passwords and are sent in cleartext."},
+        {"key": "C", "text": "SNMP managers poll devices on TCP port 22", "rationale": "SNMP polling uses UDP 161; TCP 22 is SSH."},
+        {"key": "D", "text": "SNMP traps are sent to UDP port 69", "rationale": "Traps go to UDP 162; UDP 69 is TFTP."},
+        {"key": "E", "text": "SNMPv2c encrypts its community strings", "rationale": "Only SNMPv3 adds encryption; v2c community strings are readable on the wire."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "SNMP monitors and manages network devices on UDP 161, with traps on UDP 162. Versions 1 and 2c use cleartext community strings; SNMPv3 adds authentication and encryption.",
+      "discriminator_tested": "SNMPv3 adds authentication and encryption; v1 and v2c use community strings."
+    },
+    {
+      "objectives": ["C03-07", "C03-08"], "type": "single", "angle": "identify-from-port", "difficulty": 1,
+      "stem": "A packet capture shows a user's web login form, including the password field, readable in the payload of traffic to TCP port 80. Which protocol is the site using?",
+      "options": [
+        {"key": "A", "text": "HTTP", "rationale": "Correct: web traffic on TCP 80 with no encryption."},
+        {"key": "B", "text": "HTTPS", "rationale": "HTTPS uses TCP 443 and TLS, so the form would not be readable."},
+        {"key": "C", "text": "SSH", "rationale": "SSH is encrypted remote access on TCP 22."},
+        {"key": "D", "text": "NTP", "rationale": "NTP synchronizes clocks on UDP 123."}
+      ],
+      "answer": ["A"],
+      "explanation": "HTTP carries web traffic over TCP 80 in cleartext, so form contents, including passwords, can be read. HTTPS adds TLS on TCP 443.",
+      "discriminator_tested": "HTTP is cleartext on TCP 80."
+    },
+    {
+      "objectives": ["C03-08", "C03-07"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements about HTTPS are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "It is HTTP protected by TLS", "rationale": "Correct: HTTPS is HTTP plus TLS."},
+        {"key": "B", "text": "It normally uses TCP port 443", "rationale": "Correct: 443 is the standard HTTPS port."},
+        {"key": "C", "text": "It normally uses TCP port 80", "rationale": "TCP 80 is plain HTTP."},
+        {"key": "D", "text": "It encrypts traffic but cannot authenticate the server", "rationale": "TLS uses the server's certificate to authenticate it as well as to encrypt."},
+        {"key": "E", "text": "It is the same protocol as SFTP, used for web pages", "rationale": "SFTP is file transfer over SSH; HTTPS is HTTP over TLS."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "HTTPS is HTTP protected by TLS, normally on TCP 443. TLS both encrypts the traffic and authenticates the server through its certificate.",
+      "discriminator_tested": "HTTPS = HTTP + TLS: encrypted and authenticated, TCP 443."
+    },
+    {
+      "objectives": ["C03-09"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "During an incident review, analysts cannot line up events from the firewall, the web server, and the domain controller because their timestamps differ by several minutes. Some devices also report certificate validity errors. Which protocol is most likely misconfigured?",
+      "options": [
+        {"key": "A", "text": "NTP", "rationale": "Correct: unsynchronized clocks break log correlation and certificate date checks."},
+        {"key": "B", "text": "SNMP", "rationale": "SNMP monitors devices; it does not set their clocks."},
+        {"key": "C", "text": "DNS", "rationale": "DNS problems break name resolution, not timestamps."},
+        {"key": "D", "text": "DHCP", "rationale": "DHCP assigns IP configuration; it does not keep clocks synchronized."}
+      ],
+      "answer": ["A"],
+      "explanation": "NTP synchronizes clocks over UDP 123. Consistent time is needed to correlate logs across devices and to check certificate validity periods.",
+      "discriminator_tested": "NTP keeps time consistent for logs and certificates."
+    },
+    {
+      "objectives": ["C03-10"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 3,
+      "stem": "A firewall rule allows DNS only over UDP port 53. Ordinary name lookups work, but zone transfers to a secondary DNS server fail. What is the most likely reason?",
+      "options": [
+        {"key": "A", "text": "Zone transfers and large DNS responses use TCP 53, which the rule blocks", "rationale": "Correct: DNS falls back to TCP for zone transfers and large responses."},
+        {"key": "B", "text": "Zone transfers use UDP 69", "rationale": "UDP 69 is TFTP, not DNS."},
+        {"key": "C", "text": "Zone transfers require TCP 443", "rationale": "TCP 443 is HTTPS; standard zone transfers use port 53."},
+        {"key": "D", "text": "The secondary server needs an APIPA address", "rationale": "APIPA signals a DHCP failure and has nothing to do with zone transfers."}
+      ],
+      "answer": ["A"],
+      "explanation": "DNS uses port 53: UDP for normal queries, and TCP for zone transfers and responses too large for UDP. Allowing only UDP 53 breaks the TCP cases.",
+      "discriminator_tested": "DNS uses UDP 53 for normal queries and TCP 53 for zone transfers and large responses."
+    },
+    {
+      "objectives": ["C03-11", "C03-12", "C03-13"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A new laptop joins the office network and automatically receives an IP address, subnet mask, default gateway, and DNS server from a pool, with no manual setup or pre-built table. Which protocol did this, and on which ports?",
+      "options": [
+        {"key": "A", "text": "DHCP, with the server on UDP 67 and the client on UDP 68", "rationale": "Correct: dynamic assignment of the full IP configuration."},
+        {"key": "B", "text": "BootP, using a static MAC-to-IP table", "rationale": "BootP needs an administrator-maintained table; this assignment came dynamically from a pool."},
+        {"key": "C", "text": "APIPA, using 169.254.0.0/16", "rationale": "APIPA is self-assigned and provides no default gateway or DNS server."},
+        {"key": "D", "text": "DNS, on port 53", "rationale": "DNS resolves names to addresses; it does not assign them."}
+      ],
+      "answer": ["A"],
+      "explanation": "DHCP dynamically assigns address, mask, gateway, and DNS settings, with servers on UDP 67 and clients on UDP 68. Because it is unauthenticated, a rogue DHCP server can abuse it.",
+      "discriminator_tested": "DHCP dynamically assigns IP configuration over UDP 67/68."
+    },
+    {
+      "objectives": ["C03-12", "C03-11"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "An older system gives each device the same IP address every time by looking up the device's MAC address in a table that an administrator maintains by hand. Which protocol does this describe, and what does its successor add?",
+      "options": [
+        {"key": "A", "text": "BootP; DHCP adds dynamic assignment from a pool", "rationale": "Correct: BootP uses static mappings, and DHCP adds dynamic allocation."},
+        {"key": "B", "text": "DHCP; BootP adds dynamic assignment", "rationale": "This is reversed: BootP is the older, static protocol."},
+        {"key": "C", "text": "APIPA; DHCP adds a default gateway", "rationale": "APIPA is self-assigned by the host and uses no table."},
+        {"key": "D", "text": "ARP; DHCP adds MAC address resolution", "rationale": "ARP resolves IP addresses to MAC addresses; it does not assign addresses."}
+      ],
+      "answer": ["A"],
+      "explanation": "BootP, the predecessor of DHCP, uses static MAC-to-IP mappings on UDP 67/68. DHCP uses the same ports but adds dynamic assignment.",
+      "discriminator_tested": "BootP = static MAC-to-IP mapping; DHCP adds dynamic assignment."
+    },
+    {
+      "objectives": ["C03-13", "C03-27"], "type": "single", "angle": "classify-address", "difficulty": 2,
+      "stem": "A user reports no internet access. Running ipconfig shows the IPv4 address 169.254.37.12 and no default gateway. What does this most likely indicate?",
+      "options": [
+        {"key": "A", "text": "The PC self-assigned an APIPA address because no DHCP server answered", "rationale": "Correct: 169.254.0.0/16 is self-assigned when DHCP fails."},
+        {"key": "B", "text": "The PC has an RFC 1918 private address and only needs NAT", "rationale": "169.254.x.x is not in any RFC 1918 range, and NAT would not fix a missing gateway."},
+        {"key": "C", "text": "The PC received a public address directly from the ISP", "rationale": "169.254.x.x is link-local and never used as a public address."},
+        {"key": "D", "text": "The PC is using a Class D multicast address", "rationale": "Class D addresses start with 224 to 239."}
+      ],
+      "answer": ["A"],
+      "explanation": "APIPA addresses in 169.254.0.0/16 are self-assigned when no DHCP server responds. They are link-local only, with no gateway, so they signal a DHCP failure.",
+      "discriminator_tested": "APIPA 169.254.x.x signals a DHCP failure; link-local only, unlike RFC 1918 addresses."
+    },
+    {
+      "objectives": ["C03-14", "C03-15"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which feature is NOT part of TCP?",
+      "options": [
+        {"key": "A", "text": "Best-effort delivery with no acknowledgments", "rationale": "Correct choice because this describes UDP, not TCP."},
+        {"key": "B", "text": "A three-way handshake before data is sent", "rationale": "Part of TCP: it sets up the connection."},
+        {"key": "C", "text": "Sequence numbers used to put data back in order", "rationale": "Part of TCP: sequencing provides ordering."},
+        {"key": "D", "text": "Acknowledgments and retransmission of lost segments", "rationale": "Part of TCP: this provides reliability."}
+      ],
+      "answer": ["A"],
+      "explanation": "TCP is connection-oriented and reliable: it uses a three-way handshake, sequencing, and acknowledgments. Connectionless best-effort delivery describes UDP.",
+      "discriminator_tested": "TCP provides reliability and ordering; UDP does not."
+    },
+    {
+      "objectives": ["C03-15", "C03-14"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A sensor sends a small temperature reading many times per second. A lost reading doesn't matter because a new one arrives almost immediately, but connection setup delay and per-packet overhead do matter. Which transport protocol fits, and why?",
+      "options": [
+        {"key": "A", "text": "UDP, because it is connectionless with low overhead and no delivery guarantee", "rationale": "Correct: occasional losses are acceptable, and low overhead is the priority."},
+        {"key": "B", "text": "TCP, because its handshake makes each reading arrive faster", "rationale": "The handshake adds setup delay rather than removing it."},
+        {"key": "C", "text": "TCP, because its acknowledgments reduce overhead", "rationale": "Acknowledgments add overhead in exchange for reliability."},
+        {"key": "D", "text": "ICMP, because it carries application data efficiently", "rationale": "ICMP carries control and error messages, not application data."}
+      ],
+      "answer": ["A"],
+      "explanation": "UDP is connectionless and best-effort: there is no handshake and no acknowledgments, so overhead is low but delivery is not guaranteed.",
+      "discriminator_tested": "UDP: low overhead, no delivery guarantee."
+    },
+    {
+      "objectives": ["C03-16"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two applications are normally better suited to UDP than to TCP? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Live voice calls (VoIP)", "rationale": "Correct: a late, retransmitted packet is useless in a live call, so speed matters more."},
+        {"key": "B", "text": "Standard DNS queries", "rationale": "Correct: small, quick request-and-response exchanges use UDP."},
+        {"key": "C", "text": "Downloading a software installer", "rationale": "Every byte must arrive intact and in order, so TCP fits."},
+        {"key": "D", "text": "Sending email", "rationale": "Email needs accurate, complete delivery, so it uses TCP."},
+        {"key": "E", "text": "Transferring a file with SFTP", "rationale": "SFTP runs over SSH on TCP 22, because the file must arrive complete."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "TCP suits traffic that must arrive complete and in order, such as web, email, and file transfer. UDP suits traffic where speed and low overhead matter more than retransmitting losses, such as voice, video, and DNS queries.",
+      "discriminator_tested": "TCP for accuracy; UDP for speed and low overhead."
+    },
+    {
+      "objectives": ["C03-17"], "type": "single", "angle": "identify-from-port", "difficulty": 3,
+      "stem": "A workstation opens a secure web session to a server. The capture shows source port 51544 and destination port 443. Which statement about these port numbers is correct?",
+      "options": [
+        {"key": "A", "text": "The client chose 51544 as a temporary source port from the dynamic range; the server listens on the well-known port 443", "rationale": "Correct: clients use ephemeral ports, and servers listen on well-known ports."},
+        {"key": "B", "text": "The server listens on 51544, which is a well-known port", "rationale": "Well-known ports are 0 to 1023; 51544 is in the dynamic range 49152 to 65535."},
+        {"key": "C", "text": "Port 443 falls in the registered range 1024 to 49151", "rationale": "443 is below 1024, so it is a well-known port."},
+        {"key": "D", "text": "Both ports are well-known ports assigned to HTTPS", "rationale": "Only 443 is assigned to HTTPS; 51544 is a temporary client port."}
+      ],
+      "answer": ["A"],
+      "explanation": "Port numbers identify the service. Well-known ports are 0 to 1023, registered ports are 1024 to 49151, and dynamic ports are 49152 to 65535. Servers listen on well-known ports, and clients use temporary source ports.",
+      "discriminator_tested": "Clients use ephemeral source ports; servers listen on well-known ports."
+    },
+    {
+      "objectives": ["C03-18", "C03-14"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which statement best describes the Internet Protocol (IP) itself, as opposed to the protocols that run above or alongside it?",
+      "options": [
+        {"key": "A", "text": "It provides logical addressing and routing, but it is connectionless and does not guarantee delivery", "rationale": "Correct: IP is best-effort; reliability is added by TCP when needed."},
+        {"key": "B", "text": "It guarantees delivery by retransmitting lost packets", "rationale": "Retransmission is a TCP feature."},
+        {"key": "C", "text": "It resolves IPv4 addresses to MAC addresses", "rationale": "That is ARP."},
+        {"key": "D", "text": "It reports errors and runs diagnostics such as ping", "rationale": "That is ICMP."}
+      ],
+      "answer": ["A"],
+      "explanation": "IP handles logical addressing and routing of packets on a best-effort, connectionless basis. When reliability is needed, TCP provides it above IP.",
+      "discriminator_tested": "IP is connectionless and best-effort; reliability comes from TCP."
+    },
+    {
+      "objectives": ["C03-19"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A technician uses ping and traceroute to find where packets to a remote server are being dropped. Which protocol provides the echo replies and 'time exceeded' messages these tools rely on?",
+      "options": [
+        {"key": "A", "text": "ICMP", "rationale": "Correct: echo replies and time-exceeded messages are ICMP control messages."},
+        {"key": "B", "text": "UDP", "rationale": "UDP carries application data; the replies these tools read are ICMP messages."},
+        {"key": "C", "text": "ARP", "rationale": "ARP only resolves MAC addresses on the local segment."},
+        {"key": "D", "text": "SNMP", "rationale": "SNMP polls devices for management data; it is not used by ping or traceroute."}
+      ],
+      "answer": ["A"],
+      "explanation": "ICMP carries control and error messages, such as echo replies and time-exceeded messages, rather than application data. Its echo traffic can also be abused, as in a Smurf attack.",
+      "discriminator_tested": "ICMP carries control messages, not application data."
+    },
+    {
+      "objectives": ["C03-20"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Host 192.168.1.20 needs to send a frame to its default gateway at 192.168.1.1 but does not know the gateway's MAC address. What happens next?",
+      "options": [
+        {"key": "A", "text": "It broadcasts an ARP request asking which device has 192.168.1.1", "rationale": "Correct: ARP resolves the IPv4 address to a MAC address on the local segment."},
+        {"key": "B", "text": "It sends a DNS query for 192.168.1.1", "rationale": "DNS resolves names to IP addresses, not IP addresses to MAC addresses."},
+        {"key": "C", "text": "It asks the DHCP server for the gateway's MAC address", "rationale": "DHCP hands out IP settings; it does not resolve MAC addresses."},
+        {"key": "D", "text": "It sends an ICMP echo request to the gateway first", "rationale": "A ping would itself need the gateway's MAC address before it could be sent."}
+      ],
+      "answer": ["A"],
+      "explanation": "ARP resolves an IPv4 address to a MAC address on the local segment by broadcasting a request. It works only within the local subnet, which is also why ARP spoofing is local.",
+      "discriminator_tested": "ARP resolves IPv4 to MAC on the local segment only."
+    },
+    {
+      "objectives": ["C03-21"], "type": "single", "angle": "classify-address", "difficulty": 2,
+      "stem": "Using IP addressing terminology, what is 192.168.10.255 on the network 192.168.10.0/24?",
+      "options": [
+        {"key": "A", "text": "The broadcast address, because all host bits are 1", "rationale": "Correct: in a /24 the last octet is the host portion, and 255 sets all of it to 1."},
+        {"key": "B", "text": "The network address, because all host bits are 0", "rationale": "The network address would be 192.168.10.0."},
+        {"key": "C", "text": "A usable host address", "rationale": "With all host bits set to 1, it is reserved as the broadcast address."},
+        {"key": "D", "text": "A multicast address", "rationale": "Multicast addresses start with 224 to 239."}
+      ],
+      "answer": ["A"],
+      "explanation": "In a /24, the last octet (8 bits) holds the host bits. Setting all host bits to 0 gives the network address, and setting them all to 1 gives the broadcast address.",
+      "discriminator_tested": "Host bits all 0 = network address; all 1 = broadcast address."
+    },
+    {
+      "objectives": ["C03-22"], "type": "single", "angle": "classify-address", "difficulty": 2,
+      "stem": "In the address 172.20.5.9/16, which part identifies the network and which part identifies the device?",
+      "options": [
+        {"key": "A", "text": "172.20 is the network portion; 5.9 is the host portion", "rationale": "Correct: /16 means the first 16 bits (two octets) are the network portion."},
+        {"key": "B", "text": "172 is the network portion; 20.5.9 is the host portion", "rationale": "That split would be /8."},
+        {"key": "C", "text": "172.20.5 is the network portion; 9 is the host portion", "rationale": "That split would be /24."},
+        {"key": "D", "text": "The whole address identifies the device; the mask only sets the gateway", "rationale": "The mask defines where the network portion ends and the host portion begins."}
+      ],
+      "answer": ["A"],
+      "explanation": "An IPv4 address is 32 bits split into a network portion and a host portion. With /16, the first two octets identify the network and the last two identify the device.",
+      "discriminator_tested": "The network part identifies the network; the host part identifies the device."
+    },
+    {
+      "objectives": ["C03-23", "C03-39"], "type": "single", "angle": "classify-address", "difficulty": 2,
+      "stem": "Which of these addresses is a usable IPv4 Class A host address?",
+      "options": [
+        {"key": "A", "text": "10.4.7.1", "rationale": "Correct: first octet 10 is within 1 to 126, with a default /8 mask."},
+        {"key": "B", "text": "127.0.0.1", "rationale": "127 is reserved for loopback and is not used as a normal Class A network."},
+        {"key": "C", "text": "128.10.1.1", "rationale": "128 is the first value of the Class B range."},
+        {"key": "D", "text": "192.0.2.5", "rationale": "192 is in the Class C range."}
+      ],
+      "answer": ["A"],
+      "explanation": "Class A covers first octets 1 to 126 with a default /8 mask, giving few networks with very many hosts each. 127 is reserved for loopback.",
+      "discriminator_tested": "Class A: first octet 1-126, /8; 127 is loopback."
+    },
+    {
+      "objectives": ["C03-24"], "type": "multi", "angle": "classify-address", "difficulty": 2,
+      "stem": "Which two addresses fall in IPv4 Class B? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "128.1.1.1", "rationale": "Correct: 128 is the first value of the Class B range."},
+        {"key": "B", "text": "191.255.0.9", "rationale": "Correct: 191 is the last value of the Class B range."},
+        {"key": "C", "text": "127.0.0.1", "rationale": "127 is reserved for loopback."},
+        {"key": "D", "text": "192.168.1.1", "rationale": "192 starts the Class C range."},
+        {"key": "E", "text": "126.5.5.5", "rationale": "126 is the last value of the Class A range."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Class B covers first octets 128 to 191, with a default mask of 255.255.0.0 (/16) for medium-sized networks.",
+      "discriminator_tested": "Class B: first octet 128-191, /16."
+    },
+    {
+      "objectives": ["C03-25"], "type": "single", "angle": "classify-address", "difficulty": 2,
+      "stem": "Using its classful default mask, how many usable host addresses does the network 203.0.113.0 provide?",
+      "options": [
+        {"key": "A", "text": "254", "rationale": "Correct: a Class C /24 has 256 addresses, minus the network and broadcast addresses."},
+        {"key": "B", "text": "256", "rationale": "This counts the network and broadcast addresses, which hosts cannot use."},
+        {"key": "C", "text": "65,534", "rationale": "That is a Class B /16."},
+        {"key": "D", "text": "16,777,214", "rationale": "That is a Class A /8."}
+      ],
+      "answer": ["A"],
+      "explanation": "203 falls in Class C (192 to 223), whose default mask is /24. That leaves 8 host bits: 256 addresses minus the network and broadcast addresses gives 254 usable hosts.",
+      "discriminator_tested": "Class C: 192-223, /24, 254 hosts per network."
+    },
+    {
+      "objectives": ["C03-26", "C03-31"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about IPv4 Class D addresses is NOT true?",
+      "options": [
+        {"key": "A", "text": "They are assigned to individual hosts as their normal unicast address", "rationale": "Correct choice because it is false: Class D addresses identify multicast groups."},
+        {"key": "B", "text": "Their first octet is in the range 224 to 239", "rationale": "True: this is the Class D range."},
+        {"key": "C", "text": "They are reserved for multicast", "rationale": "True: multicast is their purpose."},
+        {"key": "D", "text": "They have no network/host split like Classes A to C", "rationale": "True: a multicast group address is not divided into network and host parts."}
+      ],
+      "answer": ["A"],
+      "explanation": "Class D (224 to 239) is reserved for multicast and has no network/host split, so these addresses are never assigned to a single host as its own address.",
+      "discriminator_tested": "Class D = multicast, never assigned to a single host."
+    },
+    {
+      "objectives": ["C03-27", "C03-13"], "type": "multi", "angle": "classify-address", "difficulty": 3,
+      "stem": "Which two addresses are RFC 1918 private addresses? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "172.20.14.3", "rationale": "Correct: within 172.16.0.0/12 (172.16 to 172.31)."},
+        {"key": "B", "text": "10.250.0.9", "rationale": "Correct: within 10.0.0.0/8."},
+        {"key": "C", "text": "172.32.1.1", "rationale": "172.32 is just outside the 172.16 to 172.31 private range."},
+        {"key": "D", "text": "169.254.8.8", "rationale": "169.254.0.0/16 is the APIPA link-local range, not RFC 1918."},
+        {"key": "E", "text": "192.169.1.1", "rationale": "The private range is 192.168.0.0/16; 192.169 is public."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "The private ranges are 10.0.0.0/8, 172.16.0.0/12 (172.16 to 172.31), and 192.168.0.0/16. They are not routable on the internet and need NAT to reach it.",
+      "discriminator_tested": "RFC 1918: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16."
+    },
+    {
+      "objectives": ["C03-28", "C03-29"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "A frame is sent with destination MAC address FF:FF:FF:FF:FF:FF. Which statement is correct?",
+      "options": [
+        {"key": "A", "text": "It is a Layer-2 broadcast that reaches every device on the local segment, and routers do not forward it", "rationale": "Correct: the all-ones MAC address is the Layer-2 broadcast."},
+        {"key": "B", "text": "It is a Layer-3 broadcast addressed to 255.255.255.255", "rationale": "A Layer-3 broadcast is defined by the IP address, not the MAC address."},
+        {"key": "C", "text": "Routers forward it to every network in the organization", "rationale": "Routers do not forward Layer-2 broadcasts beyond the local segment."},
+        {"key": "D", "text": "It is a multicast frame delivered only to group members", "rationale": "The all-ones MAC address is broadcast, not a multicast group."}
+      ],
+      "answer": ["A"],
+      "explanation": "A Layer-2 broadcast uses the all-ones MAC address FF:FF:FF:FF:FF:FF and reaches every device on the local segment. A Layer-3 broadcast is addressed at the IP layer instead.",
+      "discriminator_tested": "Layer-2 broadcast = MAC FF:FF:FF:FF:FF:FF on the local segment."
+    },
+    {
+      "objectives": ["C03-29", "C03-28"], "type": "single", "angle": "classify-address", "difficulty": 2,
+      "stem": "A host sends a DHCP Discover packet to the destination IP address 255.255.255.255. What kind of address is this, and how far does the packet travel?",
+      "options": [
+        {"key": "A", "text": "A Layer-3 limited broadcast; routers do not forward it beyond the local network", "rationale": "Correct: it is addressed at the IP layer and stays on the local network."},
+        {"key": "B", "text": "A Layer-2 broadcast MAC address; it crosses routers", "rationale": "255.255.255.255 is an IP address, and routers do not forward it."},
+        {"key": "C", "text": "A Class D multicast address; only group members receive it", "rationale": "Class D starts with 224 to 239, not 255."},
+        {"key": "D", "text": "A unicast address belonging to the DHCP server", "rationale": "The host does not yet know the server's address, so it broadcasts."}
+      ],
+      "answer": ["A"],
+      "explanation": "A Layer-3 broadcast is addressed at the IP layer, such as the limited broadcast 255.255.255.255. Routers do not forward the limited broadcast, so it stays on the local network.",
+      "discriminator_tested": "A Layer-3 broadcast is addressed by IP; the limited broadcast is not routed."
+    },
+    {
+      "objectives": ["C03-30", "C03-31"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "A laptop downloads a file from one specific file server, and only that server receives the laptop's requests. Which IPv4 delivery type is this?",
+      "options": [
+        {"key": "A", "text": "Unicast", "rationale": "Correct: one sender to one receiver."},
+        {"key": "B", "text": "Multicast", "rationale": "Multicast goes to a group of interested receivers."},
+        {"key": "C", "text": "Broadcast", "rationale": "Broadcast goes to every device on the local segment."},
+        {"key": "D", "text": "Anycast", "rationale": "Anycast is an IPv6 type delivered to the nearest of several devices sharing an address."}
+      ],
+      "answer": ["A"],
+      "explanation": "Unicast is one sender to one receiver. Multicast goes to a group of interested receivers, and broadcast goes to every device on the segment.",
+      "discriminator_tested": "Unicast is one-to-one."
+    },
+    {
+      "objectives": ["C03-31", "C03-26"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A video server streams one live training session to 200 subscribed workstations without sending a separate copy to each one, and devices that did not subscribe ignore it. Which delivery type and address range fit?",
+      "options": [
+        {"key": "A", "text": "Multicast, using 224.0.0.0/4", "rationale": "Correct: one stream to a group of interested receivers."},
+        {"key": "B", "text": "Broadcast, using 255.255.255.255", "rationale": "Broadcast reaches every device, subscribed or not."},
+        {"key": "C", "text": "Unicast, using RFC 1918 addresses", "rationale": "Unicast would need a separate copy for each of the 200 receivers."},
+        {"key": "D", "text": "Multicast, using 169.254.0.0/16", "rationale": "The delivery type is right, but 169.254.0.0/16 is the APIPA range."}
+      ],
+      "answer": ["A"],
+      "explanation": "Multicast sends one stream to a group of interested receivers, using 224.0.0.0/4 (Class D). Unlike broadcast, it reaches only group members.",
+      "discriminator_tested": "Multicast is one-to-many, only to group members."
+    },
+    {
+      "objectives": ["C03-32"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "A manager says, 'We use NAT, so we don't need a firewall.' What is wrong with this reasoning?",
+      "options": [
+        {"key": "A", "text": "NAT translates addresses to conserve public IPv4 space; it is not a firewall and does not enforce a security policy", "rationale": "Correct: NAT is address translation, so filtering still needs a firewall."},
+        {"key": "B", "text": "NAT works only with IPv6, so it gives IPv4 networks no protection", "rationale": "NAT is mainly used with IPv4 to conserve public addresses."},
+        {"key": "C", "text": "NAT encrypts traffic, so a firewall would only duplicate it", "rationale": "NAT does not encrypt anything."},
+        {"key": "D", "text": "NAT removes the need for private addresses", "rationale": "NAT exists so that private addresses can reach the internet."}
+      ],
+      "answer": ["A"],
+      "explanation": "NAT is used to conserve public IPv4 addresses and to connect private networks to the internet. It is address translation, not a firewall, so a firewall is still needed to enforce security policy.",
+      "discriminator_tested": "NAT is address translation, not a firewall."
+    },
+    {
+      "objectives": ["C03-33"], "type": "single", "angle": "nat-scenario", "difficulty": 2,
+      "stem": "A small office has 40 PCs with private addresses and one public IPv4 address from its ISP. All 40 PCs need to browse the internet at the same time. Which type of NAT makes this possible?",
+      "options": [
+        {"key": "A", "text": "PAT (NAT overload), which maps many inside hosts to one public address using port numbers", "rationale": "Correct: many-to-one translation, tracked by port."},
+        {"key": "B", "text": "Static NAT, which maps one inside address permanently to one public address", "rationale": "Static NAT is one-to-one, so only one PC could use the single public address."},
+        {"key": "C", "text": "Dynamic NAT, which assigns public addresses from a pool one-to-one", "rationale": "Dynamic NAT needs as many public addresses as simultaneous users."},
+        {"key": "D", "text": "APIPA, which self-assigns link-local addresses", "rationale": "APIPA is not a type of NAT and cannot reach the internet."}
+      ],
+      "answer": ["A"],
+      "explanation": "Static and dynamic NAT are one-to-one. PAT (overload) is many-to-one: it tracks each session by port number, so many hosts can share one public address. It is the most common type of NAT.",
+      "discriminator_tested": "PAT is many-to-one using ports; static and dynamic NAT are one-to-one."
+    },
+    {
+      "objectives": ["C03-34"], "type": "single", "angle": "nat-scenario", "difficulty": 3,
+      "stem": "Inside PC 192.168.1.50 browses to a web server at 198.51.100.20. The router translates the PC's address to 203.0.113.7. In NAT terminology, what is 203.0.113.7?",
+      "options": [
+        {"key": "A", "text": "Inside global", "rationale": "Correct: it is the inside host's address as seen from outside."},
+        {"key": "B", "text": "Inside local", "rationale": "Inside local is the PC's private address, 192.168.1.50."},
+        {"key": "C", "text": "Outside global", "rationale": "Outside global is the remote server's real public address, 198.51.100.20."},
+        {"key": "D", "text": "Outside local", "rationale": "Outside local describes the remote host as seen from inside, not the inside PC."}
+      ],
+      "answer": ["A"],
+      "explanation": "Inside local is the inside host's private address as seen inside (192.168.1.50). Inside global is that host's public address as seen from outside (203.0.113.7). The outside names describe the remote host.",
+      "discriminator_tested": "Inside local = private address seen inside; inside global = public address seen outside."
+    },
+    {
+      "objectives": ["C03-35", "C03-33"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 3,
+      "stem": "An outside host sends an unsolicited packet to a router's public address. The router uses PAT, has no static mappings, and no inside host has started a matching session. What happens to the packet, and why?",
+      "options": [
+        {"key": "A", "text": "It is dropped, because there is no entry in the NAT translation table to map it to an inside host", "rationale": "Correct: without a table entry, the router doesn't know which inside host it is for."},
+        {"key": "B", "text": "It is forwarded to every inside host, because NAT broadcasts unknown traffic", "rationale": "NAT does not broadcast unmatched traffic."},
+        {"key": "C", "text": "It is forwarded to the inside host with the lowest address", "rationale": "There is no default inside host without a mapping."},
+        {"key": "D", "text": "It is given an APIPA address and delivered", "rationale": "APIPA is host self-assignment and plays no part in NAT."}
+      ],
+      "answer": ["A"],
+      "explanation": "The router rewrites the source address (and port, for PAT) on outbound traffic, records it in a translation table, and reverses the mapping for replies. With no table entry, the incoming traffic has nowhere to go and is dropped.",
+      "discriminator_tested": "NAT keeps a stateful translation table; no entry means the packet is dropped."
+    },
+    {
+      "objectives": ["C03-36"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "An engineer compares 192.0.2.10 with 2001:db8:0:0:8:800:200c:417a. Which statement about the IPv6 address is correct?",
+      "options": [
+        {"key": "A", "text": "It is 128 bits, written as eight 16-bit hexadecimal groups separated by colons", "rationale": "Correct: this is the standard IPv6 notation."},
+        {"key": "B", "text": "It is 64 bits, written as four decimal groups", "rationale": "IPv6 addresses are 128 bits and written in hexadecimal."},
+        {"key": "C", "text": "It is 32 bits, the same size as IPv4, just written in hexadecimal", "rationale": "IPv4 is 32 bits; IPv6 is four times larger."},
+        {"key": "D", "text": "It is 128 bits, written as sixteen 8-bit decimal groups separated by dots", "rationale": "The size is right, but IPv6 uses 16-bit hexadecimal groups and colons."}
+      ],
+      "answer": ["A"],
+      "explanation": "IPv6 addresses are 128 bits, written as eight 16-bit hexadecimal groups separated by colons. IPv4 addresses are 32 bits in dotted decimal.",
+      "discriminator_tested": "IPv6 is 128 bits; IPv4 is 32 bits."
+    },
+    {
+      "objectives": ["C03-37"], "type": "single", "angle": "ipv6-shorten-or-type", "difficulty": 3,
+      "stem": "Which is a correct shortened form of the IPv6 address 2001:0db8:0000:0000:0001:0000:0000:0abc?",
+      "options": [
+        {"key": "A", "text": "2001:db8::1:0:0:abc", "rationale": "Correct: leading zeros are dropped, and one run of zero groups is replaced with ::."},
+        {"key": "B", "text": "2001:db8::1::abc", "rationale": "Invalid: :: appears twice, so the address cannot be expanded unambiguously."},
+        {"key": "C", "text": "2001:db8:0:0:1:0:0:abc0", "rationale": "Only leading zeros may be dropped; abc0 is a different value from 0abc."},
+        {"key": "D", "text": "2001:db8::1:abc", "rationale": "This expands to 2001:db8:0:0:0:0:1:abc, which is a different address."}
+      ],
+      "answer": ["A"],
+      "explanation": "Drop leading zeros in each group (0db8 becomes db8, 0abc becomes abc) and replace one run of all-zero groups with ::. Using :: twice would make the shortened expression ambiguous.",
+      "discriminator_tested": ":: may appear only once per address."
+    },
+    {
+      "objectives": ["C03-38"], "type": "multi", "angle": "ipv6-shorten-or-type", "difficulty": 2,
+      "stem": "Which two statements about IPv6 address types are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Link-local unicast addresses begin with FE80::/10", "rationale": "Correct: link-local addresses use FE80::/10."},
+        {"key": "B", "text": "IPv6 has no broadcast; multicast takes its role", "rationale": "Correct: IPv6 has no broadcast address type."},
+        {"key": "C", "text": "Addresses beginning with FF00::/8 are unique local unicast", "rationale": "FF00::/8 is multicast; unique local addresses use FC00::/7."},
+        {"key": "D", "text": "Global unicast addresses come from FE80::/10", "rationale": "Global unicast addresses come from 2000::/3."},
+        {"key": "E", "text": "IPv6 hosts use a special broadcast address to reach every node on a link", "rationale": "IPv6 has no broadcast; the all-nodes multicast group FF02::1 is used instead."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "IPv6 has unicast (global 2000::/3, link-local FE80::/10, unique local FC00::/7), multicast (FF00::/8), and anycast addresses. There is no broadcast; multicast takes its role.",
+      "discriminator_tested": "No broadcast in IPv6; multicast takes its role."
+    },
+    {
+      "objectives": ["C03-39", "C03-38"], "type": "single", "angle": "ipv6-shorten-or-type", "difficulty": 2,
+      "stem": "A technician wants to test a server's own IPv6 stack without sending anything onto the network, just as pinging 127.0.0.1 does in IPv4. Which IPv6 address should they ping?",
+      "options": [
+        {"key": "A", "text": "::1", "rationale": "Correct: ::1 is the IPv6 loopback address."},
+        {"key": "B", "text": "::", "rationale": "This is the unspecified address, used when a host has no address yet."},
+        {"key": "C", "text": "FE80::1", "rationale": "This is a link-local address, so traffic goes out onto the local link."},
+        {"key": "D", "text": "FF02::1", "rationale": "This is the all-nodes multicast group, which reaches every node on the link."}
+      ],
+      "answer": ["A"],
+      "explanation": "In IPv6, ::1 is the loopback address (the equivalent of 127.0.0.1). The unspecified address is ::, link-local addresses use FE80::/10, and FF02::1 is the all-nodes multicast group.",
+      "discriminator_tested": "The IPv6 loopback is ::1; :: is the unspecified address."
+    }
+  ]
+}

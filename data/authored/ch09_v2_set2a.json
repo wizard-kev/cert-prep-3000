@@ -1,0 +1,258 @@
+{
+  "questions": [
+    {
+      "objectives": ["C09-01"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A storage share holding payroll files is readable by any domain user. No one has misused it yet, and no attacker is known to be targeting the company. What BEST describes the share's status?",
+      "options": [
+        {"key": "A", "text": "A vulnerability, exploited or not", "rationale": "Correct: the weakness exists whether or not anyone has used it.", "role": "best"},
+        {"key": "B", "text": "A misconfiguration", "rationale": "True, but it doesn't say whether that makes it a vulnerability.", "role": "partial"},
+        {"key": "C", "text": "A threat, since attackers could use it", "rationale": "The attacker would be the threat; the open share is the weakness.", "role": "related"},
+        {"key": "D", "text": "No issue until someone misuses it", "rationale": "Exploitation isn't what makes a weakness a vulnerability.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerabilities are weaknesses (software flaws, misconfigurations, weak processes) that can be exploited. The weakness itself is the vulnerability; it doesn't need to have been exploited, or targeted, to count.",
+      "discriminator_tested": "Vulnerability = the weakness itself, exploited or not."
+    },
+    {
+      "objectives": ["C09-02", "C09-03"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two activities belong to the identification stage of the vulnerability cycle? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Running a credentialed scan of the servers", "rationale": "Correct: discovers weaknesses.", "role": "best"},
+        {"key": "B", "text": "Checking the inventory for unsupported OS versions", "rationale": "Correct: an inventory review finds weaknesses too.", "role": "best"},
+        {"key": "C", "text": "Applying the vendor's patch to the web servers", "rationale": "That is remediation.", "role": "related"},
+        {"key": "D", "text": "Rescanning to confirm a fix worked", "rationale": "That is verification.", "role": "related"},
+        {"key": "E", "text": "Restoring a server from last night's backup", "rationale": "That is recovery, not identification.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Vulnerability identification means discovering weaknesses through scans, testing, inventories, and threat intelligence. You can't fix what you haven't found; remediation and verification come later in the cycle.",
+      "discriminator_tested": "Identification = scans, testing, inventories, threat intel."
+    },
+    {
+      "objectives": ["C09-03"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 1,
+      "stem": "Which sequence matches the vulnerability management cycle?",
+      "options": [
+        {"key": "A", "text": "Identify, prioritize, remediate, verify, report", "rationale": "Correct, and then it repeats.", "role": "best"},
+        {"key": "B", "text": "Remediate, identify, verify, prioritize, report", "rationale": "You can't remediate what you haven't found.", "role": "related"},
+        {"key": "C", "text": "Identify, remediate, report, prioritize, verify", "rationale": "Prioritizing comes before fixing.", "role": "related"},
+        {"key": "D", "text": "Prioritize, report, identify, verify, remediate", "rationale": "Nothing to prioritize before identifying.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability management is an ongoing cycle: identify, prioritize, remediate or mitigate, verify, and report, then repeat. It is a continuous process, not a one-time scan.",
+      "discriminator_tested": "Identify, prioritize, remediate, verify, report; repeat."
+    },
+    {
+      "objectives": ["C09-04"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Team 1 installs the vendor's fix for a flaw in its servers. Team 2 can't patch yet, so it restricts the vulnerable service to the management subnet with an ACL. What BEST describes Team 2's action?",
+      "options": [
+        {"key": "A", "text": "Mitigation", "rationale": "Correct: exposure drops, but the flaw remains.", "role": "best"},
+        {"key": "B", "text": "Remediation", "rationale": "That is what Team 1 did: the flaw is removed.", "role": "related"},
+        {"key": "C", "text": "Risk acceptance", "rationale": "Accepting would mean doing nothing.", "role": "related"},
+        {"key": "D", "text": "Risk transfer", "rationale": "Transfer shifts the impact to another party, such as an insurer.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability mitigation reduces exposure when a full fix isn't immediately possible (segmentation, ACLs, disabling the service). Mitigation lowers risk; remediation, such as patching, removes the flaw.",
+      "discriminator_tested": "Mitigation lowers risk; remediation removes the flaw."
+    },
+    {
+      "objectives": ["C09-05", "C09-06", "C09-11"], "type": "multi", "angle": "assess-risk", "difficulty": 2,
+      "stem": "Which two reconnaissance activities are MOST likely to show up in the target company's own logs? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A port scan of its public web server", "rationale": "Correct: active, so the firewall or IDS can log it.", "role": "best"},
+        {"key": "B", "text": "A zone-transfer request to its DNS server", "rationale": "Correct: the target's own server receives the query.", "role": "best"},
+        {"key": "C", "text": "Reading its job ads for product names", "rationale": "Passive: nothing reaches the company's systems.", "role": "related"},
+        {"key": "D", "text": "Searching social media for its staff", "rationale": "Passive OSINT on third-party sites.", "role": "related"},
+        {"key": "E", "text": "Looking up its domain's public WHOIS record", "rationale": "The registry answers, not the company.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Passive reconnaissance gathers information without touching the target; active reconnaissance interacts with it directly. Active can be detected and logged; passive generally can't.",
+      "discriminator_tested": "Active can be detected; passive generally cannot."
+    },
+    {
+      "objectives": ["C09-06", "C09-07"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A tester scans a host and gets the output below. What is the BEST conclusion?",
+      "exhibit": "$ nmap -sS 10.1.9.30\nPORT     STATE     SERVICE\n22/tcp   open      ssh\n80/tcp   open      http\n3389/tcp filtered  ms-wbt-server",
+      "options": [
+        {"key": "A", "text": "SSH and HTTP are listening", "rationale": "Correct: a port scan shows what is listening and reachable.", "role": "best"},
+        {"key": "B", "text": "The host is up and responding", "rationale": "True, but it ignores what the scan found.", "role": "partial"},
+        {"key": "C", "text": "The SSH service has a known flaw", "rationale": "A port scan can't tell that; a vulnerability scan could.", "role": "related"},
+        {"key": "D", "text": "RDP is open to the whole network", "rationale": "Filtered means something blocked the probe.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Port scanning probes hosts for open ports and running services. It is active and finds open ports only, not known flaws.",
+      "discriminator_tested": "Port scan finds open ports only, not known flaws."
+    },
+    {
+      "objectives": ["C09-07"], "type": "single", "angle": "choose-tool", "difficulty": 3,
+      "stem": "A team needs the most complete list of missing patches and weak settings on its Windows servers. Which approach is BEST?",
+      "options": [
+        {"key": "A", "text": "A credentialed vulnerability scan", "rationale": "Correct: logs in and checks installed software and settings.", "role": "best"},
+        {"key": "B", "text": "A non-credentialed vulnerability scan", "rationale": "Works, but only sees what the services expose from outside.", "role": "partial"},
+        {"key": "C", "text": "A full TCP port scan", "rationale": "Finds open ports, not missing patches.", "role": "related"},
+        {"key": "D", "text": "A packet capture of server traffic", "rationale": "Shows traffic, not patch levels.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability scanning is automated checking of systems against known vulnerabilities, credentialed or non-credentialed. A credentialed scan logs in and sees installed software and settings, so it finds far more than one that only probes from outside.",
+      "discriminator_tested": "Credentialed scans see installed software and settings."
+    },
+    {
+      "objectives": ["C09-08"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An analyst captures traffic from a legacy app and sees the packets below. What is the MOST important finding?",
+      "exhibit": "10.1.4.22 -> 10.1.9.40  FTP  Request: USER svc_backup\n10.1.9.40 -> 10.1.4.22  FTP  Response: 331 Password required\n10.1.4.22 -> 10.1.9.40  FTP  Request: PASS Wint3r!2026\n10.1.9.40 -> 10.1.4.22  FTP  Response: 230 Login successful",
+      "options": [
+        {"key": "A", "text": "Credentials sent in cleartext", "rationale": "Correct: anyone listening can read it.", "role": "best"},
+        {"key": "B", "text": "A service account logged in", "rationale": "True, but the cleartext password is the finding.", "role": "partial"},
+        {"key": "C", "text": "A brute-force attack against FTP", "rationale": "One successful login isn't a brute-force attempt.", "role": "related"},
+        {"key": "D", "text": "An encrypted SFTP file transfer", "rationale": "The password is readable, so it isn't encrypted.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Packet sniffing, or network traffic analysis, captures and examines traffic to see protocols, cleartext credentials, and anomalies. It reveals what crosses the network, and it is passive when only listening.",
+      "discriminator_tested": "Packet sniffing reveals cleartext credentials."
+    },
+    {
+      "objectives": ["C09-09"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "The login log below shows a pattern. Which control BEST counters it?",
+      "exhibit": "09:12:01  FAIL  user=admin  src=198.51.100.7\n09:12:01  FAIL  user=admin  src=198.51.100.7\n09:12:02  FAIL  user=admin  src=198.51.100.7\n09:12:02  FAIL  user=admin  src=198.51.100.7\n... 4,812 more failures from 198.51.100.7 in 10 minutes ...",
+      "options": [
+        {"key": "A", "text": "Account lockout thresholds", "rationale": "Correct: lockout (or throttling) stops repeated guessing.", "role": "best"},
+        {"key": "B", "text": "Block the source IP address", "rationale": "Stops this source, but the attacker can switch addresses.", "role": "partial"},
+        {"key": "C", "text": "Serve the login page over TLS", "rationale": "Protects data in transit, not against guessing.", "role": "related"},
+        {"key": "D", "text": "Lengthen the session timeout", "rationale": "Unrelated to failed logins.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Brute-force attacks try many credential combinations to test or break password strength. They are active and noisy, and lockouts counter them.",
+      "discriminator_tested": "Brute force is active and noisy; lockouts counter it."
+    },
+    {
+      "objectives": ["C09-10"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "A company's job ads name its firewall model, VPN product, and software versions. What BEST reduces what attackers can learn this way?",
+      "options": [
+        {"key": "A", "text": "Leave product details out of public posts", "rationale": "Correct: less public detail, less OSINT.", "role": "best"},
+        {"key": "B", "text": "Watch what is posted about the company", "rationale": "Helps notice exposure, but doesn't reduce it.", "role": "partial"},
+        {"key": "C", "text": "Port-scan the company's own network", "rationale": "Checks exposure of systems, not of information.", "role": "related"},
+        {"key": "D", "text": "Block job sites at the firewall", "rationale": "Outsiders read the ads from their own networks.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "OSINT is information gathered from public sources: websites, social media, public records, job posts. It is passive and leaves no trace, so the defence is limiting what is published.",
+      "discriminator_tested": "OSINT is passive; limit what is published."
+    },
+    {
+      "objectives": ["C09-11"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "A tester obtained every internal hostname by requesting a zone transfer from the company's DNS server. Which change BEST prevents this?",
+      "options": [
+        {"key": "A", "text": "Restrict zone transfers", "rationale": "Correct: allowing transfers to the secondary servers alone stops outsiders pulling the whole zone.", "role": "best"},
+        {"key": "B", "text": "Log zone-transfer requests", "rationale": "Detects the request, but still answers it.", "role": "partial"},
+        {"key": "C", "text": "Enable DNSSEC on the zone", "rationale": "DNSSEC protects integrity; it doesn't hide records.", "role": "related"},
+        {"key": "D", "text": "Shorten the records' TTL values", "rationale": "Affects caching, not who can transfer the zone.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DNS enumeration discovers a domain's hostnames, subdomains, and records, mapping its DNS footprint. It is active when it queries the target's DNS servers, and an open zone transfer hands over the whole map.",
+      "discriminator_tested": "DNS enumeration is active when querying the target's servers."
+    },
+    {
+      "objectives": ["C09-12", "C09-10"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST separates social-engineering reconnaissance from OSINT?",
+      "options": [
+        {"key": "A", "text": "It involves contacting people directly", "rationale": "Correct: human-based and active.", "role": "best"},
+        {"key": "B", "text": "It gathers information about staff", "rationale": "Both can do that.", "role": "partial"},
+        {"key": "C", "text": "It relies on public websites", "rationale": "That describes OSINT.", "role": "related"},
+        {"key": "D", "text": "It needs access to the internal network", "rationale": "A phone call needs no network access.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Social engineering for reconnaissance manipulates people into revealing information. It is human-based and active; OSINT is passive and needs no contact.",
+      "discriminator_tested": "Social engineering recon is human-based and active."
+    },
+    {
+      "objectives": ["C09-13"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "A consultant starts probing a client's web app for flaws after a developer said \"go ahead\" in a hallway conversation. What is MOST clearly missing?",
+      "options": [
+        {"key": "A", "text": "Written authorization and scope", "rationale": "Correct: testing must be authorized and scoped.", "role": "best"},
+        {"key": "B", "text": "A recent backup of the app", "rationale": "Good practice, but it doesn't make the test legitimate.", "role": "partial"},
+        {"key": "C", "text": "A vulnerability scan beforehand", "rationale": "A scan would still need authorization.", "role": "related"},
+        {"key": "D", "text": "The app's admin passwords", "rationale": "Credentials don't grant permission.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Testing is systematic, authorized checking to find and confirm weaknesses. It must be authorized and scoped by someone with the authority to approve it.",
+      "discriminator_tested": "Testing is authorized and scoped."
+    },
+    {
+      "objectives": ["C09-14", "C09-19"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A script scans nightly and files a ticket for every finding. Developers now face 400 tickets, most of them low risk or false positives. What BEST describes the problem?",
+      "options": [
+        {"key": "A", "text": "Nobody reviews or ranks the results", "rationale": "Correct: automation finds; people judge and prioritize.", "role": "best"},
+        {"key": "B", "text": "The scans run too often", "rationale": "Less often would mean fewer tickets, not better ones.", "role": "partial"},
+        {"key": "C", "text": "The scanner needs credentials", "rationale": "Might reduce false positives, but not the triage gap.", "role": "related"},
+        {"key": "D", "text": "Scanning shouldn't be automated", "rationale": "Automation is fine; it needs human review.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Automation means scheduled, scripted, tool-driven scans and checks: fast, consistent, and repeatable at scale. Its results still need human review and prioritization.",
+      "discriminator_tested": "Results still need human review."
+    },
+    {
+      "objectives": ["C09-15", "C09-01"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two items are threat intelligence? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Reports of a gang targeting hospital VPNs", "rationale": "Correct: external context on an actor and its tactics.", "role": "best"},
+        {"key": "B", "text": "Known botnet IP addresses", "rationale": "Correct: indicators about a threat.", "role": "best"},
+        {"key": "C", "text": "Our scanner's report of unpatched servers", "rationale": "Internal vulnerability findings.", "role": "related"},
+        {"key": "D", "text": "Our inventory of internet-facing assets", "rationale": "Internal asset data.", "role": "related"},
+        {"key": "E", "text": "Our firewall's configuration backup", "rationale": "A configuration record, not intelligence.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Threat intelligence is information about threats, actors, tactics, and indicators used to anticipate and defend. It is external, actionable context; vulnerability findings are internal.",
+      "discriminator_tested": "Threat intel is external; vulnerability findings are internal."
+    },
+    {
+      "objectives": ["C09-16", "C09-17"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An analyst looks up a flaw and sees the entry below. What does the 9.8 represent?",
+      "exhibit": "ID:          CVE-YYYY-NNNNN\nSource:      NVD\nDescription: Buffer overflow in the web admin interface of a router\nBase score:  9.8 CRITICAL (CVSS v3.1)\nVector:      AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "options": [
+        {"key": "A", "text": "The CVSS base severity score", "rationale": "Correct: a generic severity rating.", "role": "best"},
+        {"key": "B", "text": "The risk to our own network", "rationale": "The base score lacks your environment's context.", "role": "related"},
+        {"key": "C", "text": "The NVD's version of the CVE ID", "rationale": "The ID is the CVE line.", "role": "related"},
+        {"key": "D", "text": "The share of routers exploited so far", "rationale": "It isn't an exploitation statistic.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability databases are public catalogs of known vulnerabilities. CVE is the identifier, NVD the enriched database, and CVSS the severity score.",
+      "discriminator_tested": "CVE = identifier; NVD = database; CVSS = score."
+    },
+    {
+      "objectives": ["C09-17", "C09-19"], "type": "single", "angle": "choose-response", "difficulty": 3,
+      "stem": "A scan reports a CVSS 9.8 flaw on an isolated lab PC with no network connection, and a CVSS 6.5 flaw on the public web server. What should the team fix FIRST?",
+      "options": [
+        {"key": "A", "text": "The web server flaw, given its exposure", "rationale": "Correct: context outweighs the generic score.", "role": "best"},
+        {"key": "B", "text": "The lab PC flaw, given its higher score", "rationale": "The score lacks the context that the PC is isolated.", "role": "related"},
+        {"key": "C", "text": "Both, in order of CVSS score", "rationale": "Same mistake: score alone sets the order.", "role": "related"},
+        {"key": "D", "text": "Neither until the scores are confirmed", "rationale": "Delays a real exposure.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability databases have limitations: they lag new discoveries, can be inconsistent, and their scores lack your environment's context. A high score may matter little in a given environment.",
+      "discriminator_tested": "A high score may matter little in a given environment."
+    },
+    {
+      "objectives": ["C09-18", "C09-07"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "An auditor must check 300 Windows servers against the company's hardening baseline: password policy, disabled services, and audit settings. Which assessment tool is BEST?",
+      "options": [
+        {"key": "A", "text": "A configuration auditor", "rationale": "Correct: compares settings to a baseline.", "role": "best"},
+        {"key": "B", "text": "A vulnerability scanner", "rationale": "Finds known flaws; some check settings, but baselines are the auditor's job.", "role": "partial"},
+        {"key": "C", "text": "A port scanner", "rationale": "Shows open ports only.", "role": "related"},
+        {"key": "D", "text": "A packet sniffer", "rationale": "Captures traffic, not settings.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Assessment tools assess systems: vulnerability scanners, port scanners, configuration auditors. They automate discovery, but their output still needs analysis.",
+      "discriminator_tested": "Choose the assessment tool that fits the goal."
+    },
+    {
+      "objectives": ["C09-19", "C09-27"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "An assessment report contains the four entries below. Which one is the BEST example of a recommendation?",
+      "options": [
+        {"key": "A", "text": "Patch the 12 exposed VPN servers within 7 days", "rationale": "Correct: specific, prioritized, actionable.", "role": "best"},
+        {"key": "B", "text": "Improve the organization's overall security", "rationale": "Advice, but too vague to act on.", "role": "partial"},
+        {"key": "C", "text": "12 VPN servers run a vulnerable build", "rationale": "A finding, not guidance.", "role": "related"},
+        {"key": "D", "text": "The VPN flaw has a CVSS score of 9.1", "rationale": "A severity detail.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Recommendations are the specific, prioritized guidance that comes out of an assessment: its actionable output.",
+      "discriminator_tested": "Recommendations are specific and actionable."
+    }
+  ]
+}

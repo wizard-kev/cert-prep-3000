@@ -1,0 +1,17 @@
+{
+  "questions": [
+    {
+      "objectives": ["C09-16"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "A scanner finding lists three things: a CVE ID for the flaw, a link to its NVD entry, and a CVSS base score of 9.8. Using what you know about vulnerability databases, what does each one represent?",
+      "options": [
+        {"key": "A", "text": "The CVE ID is the vulnerability's identifier; the NVD entry is the enriched database record; the CVSS score is the severity rating", "rationale": "Correct."},
+        {"key": "B", "text": "The CVE ID is the severity score; the NVD entry is the vendor's patch; CVSS is the identifier", "rationale": "The roles are mixed up."},
+        {"key": "C", "text": "The NVD is the vendor that wrote the patch", "rationale": "The NVD is a public vulnerability database."},
+        {"key": "D", "text": "CVSS is the name of the vulnerable product", "rationale": "CVSS is a scoring system."}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability databases are public catalogs of known vulnerabilities: CVE identifiers, the NVD, and CVSS severity scores. CVE is the identifier, the NVD is the enriched database, and CVSS is the severity score.",
+      "discriminator_tested": "CVE = identifier; NVD = enriched database; CVSS = severity score."
+    }
+  ]
+}

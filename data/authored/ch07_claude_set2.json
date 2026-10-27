@@ -1,0 +1,557 @@
+{
+  "questions": [
+    {
+      "objectives": ["C07-01"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "On a Windows PC, a command prints:\n\n  Proto  Local Address        Foreign Address        State\n  TCP    10.0.0.25:49712      203.0.113.66:4444      ESTABLISHED\n\nWhich tool produced this, and what stands out?",
+      "options": [
+        {"key": "A", "text": "netstat; there is an established connection from this PC to an unknown external host on an unusual port", "rationale": "Correct: netstat shows the local host's connections, and this one deserves investigation."},
+        {"key": "B", "text": "nslookup; it resolved 203.0.113.66 to a name", "rationale": "nslookup output shows a DNS server and name-to-address answers."},
+        {"key": "C", "text": "tcpdump; it captured a single packet", "rationale": "tcpdump prints individual packets, not a connection table."},
+        {"key": "D", "text": "nmap; it found port 4444 open on a remote host", "rationale": "nmap scans other hosts; this is the local PC's own connection table."}
+      ],
+      "answer": ["A"],
+      "explanation": "netstat shows active connections, listening ports, the routing table, and interface statistics on the local host, which is useful for spotting unexpected connections such as this one.",
+      "discriminator_tested": "netstat gives the local view of what is connected or listening."
+    },
+    {
+      "objectives": ["C07-02", "C07-01"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which of these is NOT something nslookup does?",
+      "options": [
+        {"key": "A", "text": "List the local host's listening ports", "rationale": "Correct choice: that is netstat's job."},
+        {"key": "B", "text": "Resolve a name to an IP address", "rationale": "nslookup does this."},
+        {"key": "C", "text": "Look up the name for an IP address (reverse lookup)", "rationale": "nslookup does this."},
+        {"key": "D", "text": "Query a specific DNS server", "rationale": "nslookup does this."}
+      ],
+      "answer": ["A"],
+      "explanation": "nslookup queries DNS to resolve names to IPs and back, on Windows and Linux. Listing local connections and ports is done with netstat.",
+      "discriminator_tested": "nslookup is for DNS, not local connections."
+    },
+    {
+      "objectives": ["C07-03", "C07-05"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about dig is NOT true?",
+      "options": [
+        {"key": "A", "text": "It shows each router hop on the way to a destination", "rationale": "Correct choice because it is false: that is tracert/traceroute."},
+        {"key": "B", "text": "It is a detailed DNS query tool", "rationale": "True."},
+        {"key": "C", "text": "It shows record sections, TTLs, and query time", "rationale": "True."},
+        {"key": "D", "text": "It is commonly used on Linux and macOS", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "dig is a detailed DNS query tool (for example 'dig example.com MX'), more detailed than nslookup, and common on Linux and macOS.",
+      "discriminator_tested": "dig is a detailed DNS tool."
+    },
+    {
+      "objectives": ["C07-04"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about ping is NOT true?",
+      "options": [
+        {"key": "A", "text": "A failed ping proves that the host is down", "rationale": "Correct choice because it is false: ICMP may simply be blocked."},
+        {"key": "B", "text": "It uses ICMP echo", "rationale": "True."},
+        {"key": "C", "text": "It reports round-trip time", "rationale": "True."},
+        {"key": "D", "text": "It tests whether a host is reachable", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "ping is an ICMP echo test of reachability and round-trip time. A failed ping doesn't prove the host is down, because ICMP may be blocked.",
+      "discriminator_tested": "A failed ping doesn't prove the host is down."
+    },
+    {
+      "objectives": ["C07-05"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A technician runs tracert and sees:\n\nTracing route to app.example.com [198.51.100.20]\n  1    <1 ms    <1 ms    <1 ms  10.1.1.1\n  2     8 ms     7 ms     9 ms  203.0.113.1\n  3     *        *        *     Request timed out.\n  4     *        *        *     Request timed out.\n\nWhat does this show?",
+      "options": [
+        {"key": "A", "text": "Traffic gets past the first two hops; the problem, or ICMP filtering, starts at or after hop 3", "rationale": "Correct: tracert locates where along the path replies stop."},
+        {"key": "B", "text": "DNS resolution failed", "rationale": "The name resolved to 198.51.100.20, so DNS worked."},
+        {"key": "C", "text": "The PC's own network card has failed", "rationale": "Hops 1 and 2 answered, so the local link works."},
+        {"key": "D", "text": "The destination was reached successfully", "rationale": "Neither the destination nor hop 3 replied."}
+      ],
+      "answer": ["A"],
+      "explanation": "tracert (traceroute on Linux and macOS) shows each hop along the path, locating where connectivity fails. Timeouts can also mean a device simply doesn't answer probes.",
+      "discriminator_tested": "tracert locates where along the path connectivity fails."
+    },
+    {
+      "objectives": ["C07-06"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "An analyst must capture DNS packets on interface eth0 of a Linux server to inspect what is being queried. Which command fits?",
+      "options": [
+        {"key": "A", "text": "tcpdump -i eth0 port 53", "rationale": "Correct: it captures the actual packets on that interface and port."},
+        {"key": "B", "text": "netstat -an", "rationale": "netstat lists connections; it doesn't capture packet contents."},
+        {"key": "C", "text": "nslookup", "rationale": "nslookup makes its own DNS queries; it doesn't capture others' traffic."},
+        {"key": "D", "text": "gpresult /r", "rationale": "gpresult is a Windows Group Policy tool."}
+      ],
+      "answer": ["A"],
+      "explanation": "tcpdump is a command-line packet capture and analysis tool. It captures the actual packets, whereas netstat only lists connections.",
+      "discriminator_tested": "tcpdump captures packets."
+    },
+    {
+      "objectives": ["C07-07", "C07-09", "C07-11"], "type": "multi", "angle": "choose-tool", "difficulty": 2,
+      "stem": "Which two tasks can nmap perform? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Discover live hosts on a subnet", "rationale": "Correct."},
+        {"key": "B", "text": "Identify open ports and services on remote hosts", "rationale": "Correct."},
+        {"key": "C", "text": "Show the Group Policy settings applied to a PC", "rationale": "That is gpresult."},
+        {"key": "D", "text": "Measure throughput between two endpoints", "rationale": "That is iPerf."},
+        {"key": "E", "text": "List the local host's routing table", "rationale": "That is netstat (or route print)."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "nmap scans hosts for live devices, open ports, services, and OS details. It probes other hosts, unlike netstat, which reports on the local host.",
+      "discriminator_tested": "nmap probes other hosts for hosts, ports, services, and OS details."
+    },
+    {
+      "objectives": ["C07-08"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about gpresult is NOT true?",
+      "options": [
+        {"key": "A", "text": "It runs on Linux to show sudo rules", "rationale": "Correct choice because it is false: gpresult is a Windows-only Group Policy tool."},
+        {"key": "B", "text": "It shows the Group Policy settings applied to a user or computer", "rationale": "True."},
+        {"key": "C", "text": "It is Windows-only", "rationale": "True."},
+        {"key": "D", "text": "'gpresult /r' shows a summary", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "gpresult shows the Group Policy settings applied to a user or computer ('gpresult /r'). It is Windows-only and confirms which policies actually applied.",
+      "discriminator_tested": "gpresult is Windows-only and confirms applied policies."
+    },
+    {
+      "objectives": ["C07-09"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A port scanner reports these results for 10.0.0.15:\n\n22/tcp   open\n80/tcp   open\n3389/tcp filtered\n23/tcp   closed\n\nWhich interpretation is correct?",
+      "options": [
+        {"key": "A", "text": "SSH and HTTP accept connections; RDP probes are blocked by a filter such as a firewall; on TCP 23 the host answered but nothing is listening", "rationale": "Correct: open, filtered, and closed mean different things."},
+        {"key": "B", "text": "All four ports are open", "rationale": "Only 22 and 80 are open."},
+        {"key": "C", "text": "Telnet (23) is open and accepting connections", "rationale": "'closed' means the host replied that nothing is listening."},
+        {"key": "D", "text": "'filtered' means the port is open and unprotected", "rationale": "'filtered' means the probes were dropped or blocked."}
+      ],
+      "answer": ["A"],
+      "explanation": "A port scanner probes a host to find open, closed, or filtered ports. Open means something is listening, closed means the host answered but nothing is listening, and filtered means probes were blocked.",
+      "discriminator_tested": "Port scan states: open, closed, filtered."
+    },
+    {
+      "objectives": ["C07-10"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about iPerf is NOT true?",
+      "options": [
+        {"key": "A", "text": "It finds open ports on remote hosts", "rationale": "Correct choice because it is false: that is a port scanner's job."},
+        {"key": "B", "text": "It measures network throughput", "rationale": "True."},
+        {"key": "C", "text": "It runs as a client and a server", "rationale": "True."},
+        {"key": "D", "text": "It can test over TCP or UDP", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "iPerf measures network throughput between two endpoints (a client and a server, over TCP or UDP). It is for performance testing, not security scanning.",
+      "discriminator_tested": "iPerf is for performance testing, not scanning."
+    },
+    {
+      "objectives": ["C07-11", "C07-09"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which question does an IP scanner answer?",
+      "options": [
+        {"key": "A", "text": "Which hosts are active across an address range?", "rationale": "Correct: typically through a ping sweep."},
+        {"key": "B", "text": "Which ports are open on one host?", "rationale": "That is a port scanner."},
+        {"key": "C", "text": "How much throughput does this link have?", "rationale": "That is iPerf."},
+        {"key": "D", "text": "Which Group Policy settings applied?", "rationale": "That is gpresult."}
+      ],
+      "answer": ["A"],
+      "explanation": "An IP scanner discovers active devices across an address range, usually with a ping sweep. It answers 'which hosts are on this network?' and helps find rogue devices.",
+      "discriminator_tested": "IP scanner: which hosts are on this network."
+    },
+    {
+      "objectives": ["C07-12"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which item is NOT normally recorded in a hardware inventory?",
+      "options": [
+        {"key": "A", "text": "The user's personal email password", "rationale": "Correct choice: passwords never belong in an inventory."},
+        {"key": "B", "text": "Device type", "rationale": "Recorded."},
+        {"key": "C", "text": "Serial number", "rationale": "Recorded."},
+        {"key": "D", "text": "Owner and location", "rationale": "Recorded."}
+      ],
+      "answer": ["A"],
+      "explanation": "A hardware inventory records physical devices: type, serial number, owner, location, and status. You can't protect devices you don't know exist.",
+      "discriminator_tested": "Hardware inventory records physical devices."
+    },
+    {
+      "objectives": ["C07-13"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 1,
+      "stem": "An asset management system tracks a laptop through which life cycle, in order?",
+      "options": [
+        {"key": "A", "text": "Purchase, deployment, maintenance, retirement and disposal", "rationale": "Correct: from acquisition to disposal."},
+        {"key": "B", "text": "Disposal, purchase, maintenance, deployment", "rationale": "Disposal comes last."},
+        {"key": "C", "text": "Deployment, purchase, disposal, maintenance", "rationale": "A device has to be bought before it is deployed."},
+        {"key": "D", "text": "Maintenance, disposal, deployment, purchase", "rationale": "This is backwards."}
+      ],
+      "answer": ["A"],
+      "explanation": "Asset management systems are software that tracks assets from purchase through disposal. They are the system of record; a tag is only the physical identifier.",
+      "discriminator_tested": "An asset management system tracks assets from purchase to disposal."
+    },
+    {
+      "objectives": ["C07-14", "C07-13"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about asset tags is NOT true?",
+      "options": [
+        {"key": "A", "text": "The tag itself is the system of record that holds all the asset data", "rationale": "Correct choice because it is false: the asset management system is the record; the tag only identifies the device."},
+        {"key": "B", "text": "It can be a physical, barcode, or RFID label", "rationale": "True."},
+        {"key": "C", "text": "It carries a unique ID", "rationale": "True."},
+        {"key": "D", "text": "It ties the device to its inventory record", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Asset tags are physical, barcode, or RFID labels with a unique ID that ties the device to its inventory record. The record itself lives in the asset management system.",
+      "discriminator_tested": "The tag identifies the device; the system holds the record."
+    },
+    {
+      "objectives": ["C07-15", "C07-12"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What separates a software inventory from a hardware inventory?",
+      "options": [
+        {"key": "A", "text": "A software inventory records installed programs, versions, and licenses; a hardware inventory records physical devices", "rationale": "Correct."},
+        {"key": "B", "text": "A software inventory records serial numbers; a hardware inventory records licenses", "rationale": "This is reversed."},
+        {"key": "C", "text": "They are the same", "rationale": "They track different things."},
+        {"key": "D", "text": "A software inventory lists only the operating system", "rationale": "It covers all installed software."}
+      ],
+      "answer": ["A"],
+      "explanation": "A software inventory records installed software, versions, and licenses. Versions reveal vulnerable software, and it also flags unauthorized or unlicensed programs.",
+      "discriminator_tested": "Software inventory = programs, versions, licenses."
+    },
+    {
+      "objectives": ["C07-16"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two actions are forms of remediation? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Patching a vulnerable application", "rationale": "Correct."},
+        {"key": "B", "text": "Isolating a system that can't be patched yet", "rationale": "Correct: isolation mitigates the finding."},
+        {"key": "C", "text": "Running another vulnerability scan", "rationale": "That is discovery, which fixes nothing."},
+        {"key": "D", "text": "Writing the finding into a report and closing the ticket", "rationale": "Documenting a problem doesn't fix it."},
+        {"key": "E", "text": "Putting a new asset tag on the server", "rationale": "Tagging identifies the device; it doesn't remediate anything."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Remediation means fixing or mitigating identified vulnerabilities and non-compliance: patching, reconfiguring, removing, or isolating. Discovery alone fixes nothing.",
+      "discriminator_tested": "Remediation acts on findings."
+    },
+    {
+      "objectives": ["C07-17"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which is NOT a sound remediation consideration?",
+      "options": [
+        {"key": "A", "text": "Deploy the fix to all production systems at once, with no rollback plan", "rationale": "Correct choice: untested, all-at-once changes risk a widespread outage."},
+        {"key": "B", "text": "Prioritize by risk", "rationale": "Sound."},
+        {"key": "C", "text": "Use maintenance windows", "rationale": "Sound."},
+        {"key": "D", "text": "Check dependencies", "rationale": "Sound."}
+      ],
+      "answer": ["A"],
+      "explanation": "Remediation considerations: risk and priority, business impact, testing, maintenance windows, dependencies, and a rollback plan. Test before wide deployment.",
+      "discriminator_tested": "Test before wide deployment; prioritize by risk."
+    },
+    {
+      "objectives": ["C07-18", "C07-20"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which two are proper destruction and disposal practices? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Follow the disposal policy and document what was done", "rationale": "Correct."},
+        {"key": "B", "text": "Make sure the data can't be recovered before the device leaves", "rationale": "Correct."},
+        {"key": "C", "text": "Delete the files and assume the data is gone", "rationale": "Deleting is not sanitizing."},
+        {"key": "D", "text": "Empty the Recycle Bin and donate the PC", "rationale": "The data is still recoverable."},
+        {"key": "E", "text": "Quick-format the drive and sell it", "rationale": "A quick format leaves the data recoverable."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Destruction and disposal means retiring devices and media so data can't be recovered, following policy and documenting it. Deleting files is not sanitizing.",
+      "discriminator_tested": "Deleting files is not sanitizing; follow policy and document."
+    },
+    {
+      "objectives": ["C07-19"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A technician quick-formats used drives before selling them. One buyer recovers old customer files with a free tool. Why was that possible?",
+      "options": [
+        {"key": "A", "text": "A standard (quick) format only rebuilds file system structures; the old data stays on the drive", "rationale": "Correct."},
+        {"key": "B", "text": "The buyer must have known the original password", "rationale": "No password is needed to read unformatted data."},
+        {"key": "C", "text": "Formatting encrypts the data, and the tool decrypted it", "rationale": "Formatting doesn't encrypt."},
+        {"key": "D", "text": "A low-level format was used, which preserves the data", "rationale": "A low-level format overwrites every sector."}
+      ],
+      "answer": ["A"],
+      "explanation": "Low-level format vs standard format: a standard quick format only rebuilds file system structures, leaving the data recoverable, while a low-level format overwrites every sector.",
+      "discriminator_tested": "A standard quick format leaves data recoverable."
+    },
+    {
+      "objectives": ["C07-20"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two factors should decide the hard drive sanitization method? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "How sensitive the data is", "rationale": "Correct: the highest sensitivity points to destruction."},
+        {"key": "B", "text": "Whether the drive will be reused", "rationale": "Correct: reuse allows an overwrite or wipe instead of destruction."},
+        {"key": "C", "text": "How full the drive is", "rationale": "Every sector matters; the amount of data doesn't change the method."},
+        {"key": "D", "text": "Whether the drive has an asset tag", "rationale": "A tag identifies the drive; it doesn't decide the method."},
+        {"key": "E", "text": "Which operating system was installed on it", "rationale": "The OS doesn't decide how the media must be sanitized."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Hard drive sanitization makes data unrecoverable. The method depends on data sensitivity and whether the drive will be reused: reuse allows an overwrite or wipe, while the highest sensitivity points to destruction.",
+      "discriminator_tested": "Sensitivity and reuse decide the method."
+    },
+    {
+      "objectives": ["C07-21"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about the overwrite method is NOT true?",
+      "options": [
+        {"key": "A", "text": "It always leaves the drive destroyed and unusable", "rationale": "Correct choice because it is false: overwriting allows the drive to be reused."},
+        {"key": "B", "text": "It writes patterns over all addressable areas", "rationale": "True."},
+        {"key": "C", "text": "It may use one or more passes", "rationale": "True."},
+        {"key": "D", "text": "It is less reliable on SSDs and failed sectors", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "To overwrite is to write patterns over all addressable areas of the media, in one or more passes. It allows reuse but is less reliable on SSDs and failed sectors.",
+      "discriminator_tested": "Overwrite allows reuse."
+    },
+    {
+      "objectives": ["C07-22", "C07-23"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "An organization will hand 300 SSD-equipped laptops to new employees and needs a verifiable, documented erase first. Which approach fits?",
+      "options": [
+        {"key": "A", "text": "A drive wipe using firmware secure erase or cryptographic erase, with a verification report", "rationale": "Correct: it supports reuse and works on SSDs."},
+        {"key": "B", "text": "Physically shredding each SSD", "rationale": "The laptops are being reused."},
+        {"key": "C", "text": "A standard quick format", "rationale": "It leaves the data recoverable."},
+        {"key": "D", "text": "Degaussing", "rationale": "Degaussing doesn't work on SSDs."}
+      ],
+      "answer": ["A"],
+      "explanation": "A drive wipe is a tool-driven erase of the whole drive (wipe utilities, firmware secure erase, cryptographic erase), often with verification. It is automated, reportable, and supports reuse.",
+      "discriminator_tested": "A drive wipe supports reuse and is reportable."
+    },
+    {
+      "objectives": ["C07-23"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about physical destruction is NOT true?",
+      "options": [
+        {"key": "A", "text": "Degaussing reliably destroys the data on SSDs", "rationale": "Correct choice because it is false: degaussing works only on magnetic media."},
+        {"key": "B", "text": "Methods include shredding, crushing, and incineration", "rationale": "True."},
+        {"key": "C", "text": "It is the most certain method", "rationale": "True."},
+        {"key": "D", "text": "It leaves the drive unusable", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Physical destruction means shredding, crushing, incineration, or degaussing (for magnetic media). It is the most certain method and leaves the drive unusable; degaussing doesn't work on SSDs.",
+      "discriminator_tested": "Degaussing doesn't work on SSDs."
+    },
+    {
+      "objectives": ["C07-24"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Why are untested data backups considered unproven?",
+      "options": [
+        {"key": "A", "text": "You don't know a backup can actually be restored until you try", "rationale": "Correct: corrupt or incomplete backups often go unnoticed until they're needed."},
+        {"key": "B", "text": "Testing a backup deletes it", "rationale": "Test restores leave the backup intact."},
+        {"key": "C", "text": "Untested backups are automatically encrypted by ransomware", "rationale": "Testing doesn't affect ransomware exposure."},
+        {"key": "D", "text": "Backups only count once they have been restored to production", "rationale": "A test restore doesn't need to touch production."}
+      ],
+      "answer": ["A"],
+      "explanation": "Data backups are copies kept for recovery after loss, failure, or ransomware. An untested backup is unproven, and offline or offsite copies resist ransomware.",
+      "discriminator_tested": "An untested backup is unproven."
+    },
+    {
+      "objectives": ["C07-25"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 1,
+      "stem": "A US hospital's endpoint team must protect patient data on its laptops because federal law requires it. The team also follows its own laptop naming standard. Which of these is an example of regulatory compliance?",
+      "options": [
+        {"key": "A", "text": "Protecting patient data to meet HIPAA", "rationale": "Correct: an external legal requirement."},
+        {"key": "B", "text": "Following the internal laptop naming standard", "rationale": "That is internal practice, not externally imposed."},
+        {"key": "C", "text": "Letting staff use personal phones (BYOD)", "rationale": "BYOD is an ownership model, not a legal requirement."},
+        {"key": "D", "text": "Letting laptop settings drift from the baseline", "rationale": "That is a configuration management failure."}
+      ],
+      "answer": ["A"],
+      "explanation": "Regulatory compliance means meeting external legal and industry requirements for handling data, such as HIPAA, PCI DSS, and GDPR. It is externally imposed, unlike internal policy.",
+      "discriminator_tested": "Regulatory compliance is externally imposed."
+    },
+    {
+      "objectives": ["C07-26", "C07-27"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "An employee wants to use a personal phone for work email, but doesn't want the company able to erase personal photos. Which approach best balances security and privacy?",
+      "options": [
+        {"key": "A", "text": "Enroll the phone as BYOD with limited management, such as a work profile and a selective wipe that removes only work data", "rationale": "Correct: control matches ownership."},
+        {"key": "B", "text": "Apply full-device wipe rights, exactly as on an organization-owned phone", "rationale": "That ignores the employee's ownership and privacy."},
+        {"key": "C", "text": "Apply no controls at all, because the phone is personal", "rationale": "Work data still needs protection."},
+        {"key": "D", "text": "Require the employee to transfer ownership of the phone to the company", "rationale": "That is unrealistic and isn't how BYOD works."}
+      ],
+      "answer": ["A"],
+      "explanation": "BYOD vs organization-owned: ownership drives how much control and privacy there is. On a personal device, management is limited to the work data.",
+      "discriminator_tested": "Ownership drives control and privacy."
+    },
+    {
+      "objectives": ["C07-27"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which of these is NOT a typical MDM capability?",
+      "options": [
+        {"key": "A", "text": "Measuring WAN throughput between sites", "rationale": "Correct choice: that is iPerf's job."},
+        {"key": "B", "text": "Enrolling devices", "rationale": "An MDM capability."},
+        {"key": "C", "text": "Enforcing configuration policy", "rationale": "An MDM capability."},
+        {"key": "D", "text": "Remote lock and wipe", "rationale": "An MDM capability."}
+      ],
+      "answer": ["A"],
+      "explanation": "MDM is a central platform that enrolls, configures, and enforces policy on mobile devices, including remote lock and wipe.",
+      "discriminator_tested": "MDM enrolls, configures, enforces, and can lock or wipe."
+    },
+    {
+      "objectives": ["C07-28"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which practice best prevents configuration drift on servers?",
+      "options": [
+        {"key": "A", "text": "Approved baselines under change control, regularly compared with the live configuration", "rationale": "Correct."},
+        {"key": "B", "text": "Letting administrators change settings freely as needed", "rationale": "Uncontrolled change is exactly what causes drift."},
+        {"key": "C", "text": "Documenting configurations once a year", "rationale": "Drift goes unnoticed for most of the year."},
+        {"key": "D", "text": "Turning off logging to reduce noise", "rationale": "That hides changes."}
+      ],
+      "answer": ["A"],
+      "explanation": "Configuration management maintains consistent, documented, approved configurations (baselines) under change control. Comparing against the baseline detects configuration drift.",
+      "discriminator_tested": "Baselines plus change control detect drift."
+    },
+    {
+      "objectives": ["C07-29"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which two are app distribution controls on managed devices? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A managed app store", "rationale": "Correct."},
+        {"key": "B", "text": "Allow and block lists for apps", "rationale": "Correct."},
+        {"key": "C", "text": "Full-disk encryption", "rationale": "That is data encryption."},
+        {"key": "D", "text": "Remote wipe", "rationale": "That is an MDM device action, not app distribution."},
+        {"key": "E", "text": "Asset tags", "rationale": "Tags identify the device."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "App distribution controls which apps are installed and from where, through a managed app store and allow or block lists. It governs software sources on managed devices.",
+      "discriminator_tested": "App distribution governs software sources."
+    },
+    {
+      "objectives": ["C07-30", "C07-27"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "What separates device data encryption from an MDM remote wipe as protection for a lost phone?",
+      "options": [
+        {"key": "A", "text": "Encryption keeps the data unreadable even if the phone never reconnects; a remote wipe works only if the phone comes online to receive the command", "rationale": "Correct: encryption doesn't depend on the device connecting."},
+        {"key": "B", "text": "They are identical protections", "rationale": "They work in different ways and have different dependencies."},
+        {"key": "C", "text": "A remote wipe works even when the phone is offline", "rationale": "The phone has to receive the wipe command."},
+        {"key": "D", "text": "Encryption deletes the data when the phone is lost", "rationale": "Encryption makes data unreadable; it doesn't delete it."}
+      ],
+      "answer": ["A"],
+      "explanation": "Data encryption, such as full-disk encryption, protects data on the device, so a lost or stolen device doesn't expose readable data, whether or not it ever reconnects.",
+      "discriminator_tested": "Encryption protects even if the device never reconnects."
+    },
+    {
+      "objectives": ["C07-31", "C07-24"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 1,
+      "stem": "Ransomware has encrypted a laptop's operating system. What is the right endpoint recovery approach?",
+      "options": [
+        {"key": "A", "text": "Reimage or rebuild the laptop, then restore data from a clean backup", "rationale": "Correct: return it to a known-good state."},
+        {"key": "B", "text": "Run a port scan against the laptop", "rationale": "That discovers ports; it doesn't recover anything."},
+        {"key": "C", "text": "Install a host-based firewall", "rationale": "That is protection, which comes too late now."},
+        {"key": "D", "text": "Put a new asset tag on the laptop", "rationale": "Tagging doesn't restore the system."}
+      ],
+      "answer": ["A"],
+      "explanation": "Endpoint recovery restores an endpoint to a known-good state through a restore from backup, a reimage, or a rebuild. It is recovery after a problem, whereas protection tries to prevent one.",
+      "discriminator_tested": "Recovery restores a known-good state."
+    },
+    {
+      "objectives": ["C07-32", "C07-31"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which of these is NOT an endpoint protection control?",
+      "options": [
+        {"key": "A", "text": "Restoring from backup after an incident", "rationale": "Correct choice: that is recovery."},
+        {"key": "B", "text": "EDR", "rationale": "An endpoint protection control."},
+        {"key": "C", "text": "Host intrusion detection", "rationale": "An endpoint protection control."},
+        {"key": "D", "text": "A host-based firewall", "rationale": "An endpoint protection control."}
+      ],
+      "answer": ["A"],
+      "explanation": "Endpoint protection covers controls on the device itself: antimalware, a host-based firewall, host intrusion detection, and EDR. Restoring from backup is recovery.",
+      "discriminator_tested": "Protection prevents and detects; recovery restores."
+    },
+    {
+      "objectives": ["C07-33"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about cloud-based protection for endpoints is NOT true?",
+      "options": [
+        {"key": "A", "text": "It works fully, with all features, without any internet connection", "rationale": "Correct choice because it is false: its cloud features need connectivity."},
+        {"key": "B", "text": "It delivers fast updates", "rationale": "True."},
+        {"key": "C", "text": "It uses cloud threat intelligence", "rationale": "True."},
+        {"key": "D", "text": "It is managed from a central console", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Cloud-based protection delivers or analyzes endpoint security through the cloud (cloud signatures, threat intelligence, a central console). It gives fast updates and off-network coverage but needs connectivity.",
+      "discriminator_tested": "Cloud-based protection needs connectivity."
+    },
+    {
+      "objectives": ["C07-34"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "When reviewing scan logs, which two things should be checked in addition to the detections? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Whether the scheduled scans actually ran", "rationale": "Correct: a scan that didn't run can't find anything."},
+        {"key": "B", "text": "Whether the definitions were current", "rationale": "Correct: old definitions miss new threats."},
+        {"key": "C", "text": "How many printers are on the network", "rationale": "Unrelated to whether the scans can be trusted."},
+        {"key": "D", "text": "Which Wi-Fi channel the PC uses", "rationale": "Unrelated to scan results."},
+        {"key": "E", "text": "The DNS TTL of the antivirus vendor's website", "rationale": "Unrelated to scan results."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Reviewing scan logs means examining antimalware and vulnerability scan results for detections, failures, and patterns. A clean log doesn't prove safety, so check that scans ran and definitions were current.",
+      "discriminator_tested": "Check that scans ran and definitions were current."
+    },
+    {
+      "objectives": ["C07-35"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which of these is NOT one of the seven steps of the malware remediation process?",
+      "options": [
+        {"key": "A", "text": "Reformat every PC in the department as the first step", "rationale": "Correct choice: the first step is to identify and verify the symptoms."},
+        {"key": "B", "text": "Quarantine infected systems", "rationale": "One of the seven steps."},
+        {"key": "C", "text": "Disable System Restore", "rationale": "One of the seven steps."},
+        {"key": "D", "text": "Educate end users", "rationale": "One of the seven steps (the last)."}
+      ],
+      "answer": ["A"],
+      "explanation": "The malware remediation process has seven steps: identify and verify symptoms, quarantine, disable System Restore, remediate, schedule scans and run updates, re-enable System Restore and create restore points, and educate users.",
+      "discriminator_tested": "Seven steps, in order; the first is identifying and verifying symptoms."
+    },
+    {
+      "objectives": ["C07-36"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A user reports a slow PC. The technician reimages it immediately, and the slowness turns out to have been a failing disk, not malware. Which step of the malware process was skipped?",
+      "options": [
+        {"key": "A", "text": "Identify and verify malware symptoms, confirming it was malware before acting", "rationale": "Correct: slowness alone doesn't prove malware."},
+        {"key": "B", "text": "Educate end users", "rationale": "Education comes last; the mistake was at the start."},
+        {"key": "C", "text": "Schedule scans and run updates", "rationale": "That comes after remediation."},
+        {"key": "D", "text": "Enable System Restore", "rationale": "That comes near the end."}
+      ],
+      "answer": ["A"],
+      "explanation": "The first step is to identify and verify malware symptoms: gather the symptoms and confirm it really is malware before acting. Slowness can have many other causes.",
+      "discriminator_tested": "Confirm it is malware before acting."
+    },
+    {
+      "objectives": ["C07-37"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 1,
+      "stem": "Which risk does quarantining infected systems most directly reduce?",
+      "options": [
+        {"key": "A", "text": "The malware spreading to other systems while the infected one is being cleaned", "rationale": "Correct."},
+        {"key": "B", "text": "Data loss from a failed backup", "rationale": "That is about backups."},
+        {"key": "C", "text": "Slow Wi-Fi", "rationale": "Unrelated."},
+        {"key": "D", "text": "Expired software licenses", "rationale": "Unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "To quarantine infected systems, isolate them from the network (disconnect them or use an isolated VLAN). This stops the spread before cleaning.",
+      "discriminator_tested": "Quarantine stops the spread before cleaning."
+    },
+    {
+      "objectives": ["C07-38", "C07-37"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "At which point in the malware remediation process do you disable System Restore in Windows?",
+      "options": [
+        {"key": "A", "text": "After quarantine and before remediating", "rationale": "Correct: it is step 3, done before cleaning."},
+        {"key": "B", "text": "After educating the user", "rationale": "Education is the last step."},
+        {"key": "C", "text": "As the very first step, before identifying symptoms", "rationale": "Symptoms are confirmed first."},
+        {"key": "D", "text": "After System Restore has been re-enabled", "rationale": "Disabling comes well before re-enabling."}
+      ],
+      "answer": ["A"],
+      "explanation": "Disable System Restore in Windows before cleaning, so malware saved in old restore points isn't preserved. It sits between quarantine and remediation.",
+      "discriminator_tested": "Disable System Restore before cleaning."
+    },
+    {
+      "objectives": ["C07-39"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which is NOT good practice when remediating infected systems?",
+      "options": [
+        {"key": "A", "text": "Scanning with outdated definitions to save time", "rationale": "Correct choice: old definitions miss newer malware."},
+        {"key": "B", "text": "Updating antimalware before scanning", "rationale": "Good practice."},
+        {"key": "C", "text": "Using safe mode when needed", "rationale": "Good practice."},
+        {"key": "D", "text": "Using rescue media for stealthy malware such as rootkits", "rationale": "Good practice."}
+      ],
+      "answer": ["A"],
+      "explanation": "To remediate infected systems, update antimalware, then scan and remove, using safe mode or rescue media when needed. Current definitions are essential.",
+      "discriminator_tested": "Use current definitions."
+    },
+    {
+      "objectives": ["C07-40"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two actions belong to the 'schedule scans and run updates' step? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Patch the operating system and applications", "rationale": "Correct."},
+        {"key": "B", "text": "Schedule recurring antimalware scans", "rationale": "Correct."},
+        {"key": "C", "text": "Disable System Restore", "rationale": "That happens earlier, before cleaning."},
+        {"key": "D", "text": "Disconnect the PC from the network", "rationale": "That is quarantine."},
+        {"key": "E", "text": "Shred the hard drive", "rationale": "That is disposal, not part of remediation."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Schedule scans and run updates: patch the OS and applications, update signatures, and schedule recurring scans, which closes the hole that let the malware in.",
+      "discriminator_tested": "Patch, update signatures, and schedule scans."
+    },
+    {
+      "objectives": ["C07-41"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about re-enabling System Restore and creating restore points is NOT true?",
+      "options": [
+        {"key": "A", "text": "It should be done right after quarantine, before cleaning", "rationale": "Correct choice because it is false: it comes only after the system is verified clean."},
+        {"key": "B", "text": "It happens only after the system is verified clean", "rationale": "True."},
+        {"key": "C", "text": "A fresh restore point is created", "rationale": "True."},
+        {"key": "D", "text": "It comes just before educating users", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Enable System Restore and create a fresh restore point only after the system is verified clean. It is step 6, followed by educating users.",
+      "discriminator_tested": "Re-enable only after the system is verified clean."
+    },
+    {
+      "objectives": ["C07-42"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which topic is NOT typically part of educating end users after a malware incident?",
+      "options": [
+        {"key": "A", "text": "How to configure routing protocols on core routers", "rationale": "Correct choice: that is network engineering, not end-user training."},
+        {"key": "B", "text": "Recognizing phishing", "rationale": "Typical."},
+        {"key": "C", "text": "Downloading software safely", "rationale": "Typical."},
+        {"key": "D", "text": "How to report suspicious activity", "rationale": "Typical."}
+      ],
+      "answer": ["A"],
+      "explanation": "Educate end users on phishing, safe downloads, and reporting. It is the final step of the process and prevents recurrence.",
+      "discriminator_tested": "User education targets phishing, downloads, and reporting."
+    }
+  ]
+}

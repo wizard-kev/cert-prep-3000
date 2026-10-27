@@ -1,0 +1,630 @@
+{
+  "questions": [
+    {
+      "objectives": ["C10-01"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "In disaster prevention and recovery, what separates prevention from recovery?",
+      "options": [
+        {"key": "A", "text": "Prevention lowers the likelihood of a disruption; recovery restores service after one happens", "rationale": "Correct."},
+        {"key": "B", "text": "Prevention restores service; recovery lowers the likelihood", "rationale": "This is reversed."},
+        {"key": "C", "text": "They are the same activity", "rationale": "One happens before the event; the other happens after it."},
+        {"key": "D", "text": "Prevention means only taking backups", "rationale": "Backups support recovery; prevention covers many controls."}
+      ],
+      "answer": ["A"],
+      "explanation": "Disaster prevention and recovery means reducing the chance of disruptive events and restoring operations when they happen. Prevention lowers likelihood; recovery restores service.",
+      "discriminator_tested": "Prevention lowers likelihood; recovery restores service."
+    },
+    {
+      "objectives": ["C10-02"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 1,
+      "stem": "What is the primary defense against data loss from hardware failure, accidental deletion, corruption, or ransomware?",
+      "options": [
+        {"key": "A", "text": "Backups", "rationale": "Correct: a good copy lets the data be restored."},
+        {"key": "B", "text": "Surge protectors", "rationale": "They protect against voltage spikes only."},
+        {"key": "C", "text": "HVAC", "rationale": "Cooling prevents heat damage, not deletion or ransomware."},
+        {"key": "D", "text": "Tabletop exercises", "rationale": "Those test plans; they don't preserve data."}
+      ],
+      "answer": ["A"],
+      "explanation": "Data loss can come from hardware failure, deletion, corruption, ransomware, or disaster. Backups are the primary defense.",
+      "discriminator_tested": "Backups are the primary defense against data loss."
+    },
+    {
+      "objectives": ["C10-03", "C10-04"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A user accidentally deletes one spreadsheet. Separately, a server's OS drive fails completely. Which backup type is designed for each case?",
+      "options": [
+        {"key": "A", "text": "A file-level restore for the spreadsheet; an image-based restore for the server", "rationale": "Correct: a single file versus the whole system."},
+        {"key": "B", "text": "An image-based restore for the spreadsheet; a file-level restore for the server", "rationale": "File-level backups can't rebuild a whole system."},
+        {"key": "C", "text": "File-level backups for both", "rationale": "File-level backups alone can't rebuild the server's OS and applications."},
+        {"key": "D", "text": "Neither; backups can't help with deleted files", "rationale": "Restoring deleted files is a core purpose of backups."}
+      ],
+      "answer": ["A"],
+      "explanation": "File-level backups cover selected files and folders: fast, small, and good for restoring individual files, but they can't rebuild a whole system alone. Image-based backups can.",
+      "discriminator_tested": "File-level restores individual files; it can't rebuild a whole system."
+    },
+    {
+      "objectives": ["C10-04"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "After a ransomware attack, a server must be rebuilt quickly with exactly the OS, applications, settings, and data it had before. Which backup type enables this bare-metal restore?",
+      "options": [
+        {"key": "A", "text": "Image-based backups", "rationale": "Correct: they capture the entire disk or system."},
+        {"key": "B", "text": "File-level backups of the documents folder", "rationale": "They don't include the OS, applications, or settings."},
+        {"key": "C", "text": "A copy of a router's configuration", "rationale": "That covers network device settings, not a server."},
+        {"key": "D", "text": "A list of installed software", "rationale": "An inventory isn't a backup."}
+      ],
+      "answer": ["A"],
+      "explanation": "Image-based backups capture the entire disk or system: OS, applications, settings, and data. That enables a full-system (bare-metal) restore, at the cost of larger backups.",
+      "discriminator_tested": "Image-based backups enable bare-metal restore."
+    },
+    {
+      "objectives": ["C10-05"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Before setting backup schedules, a team ranks the order-processing system above the internal wiki. Why do critical applications get this treatment?",
+      "options": [
+        {"key": "A", "text": "They get more frequent backups and are recovered first, based on how critical they are to the business", "rationale": "Correct."},
+        {"key": "B", "text": "Applications are ranked alphabetically", "rationale": "Name order says nothing about importance."},
+        {"key": "C", "text": "The newest application always comes first", "rationale": "Age isn't the measure."},
+        {"key": "D", "text": "The smallest application is backed up first", "rationale": "Size isn't the measure."}
+      ],
+      "answer": ["A"],
+      "explanation": "Identifying critical applications, those essential to operations, sets backup frequency and recovery order. The priority comes from business criticality.",
+      "discriminator_tested": "Priority comes from business criticality."
+    },
+    {
+      "objectives": ["C10-06"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "An administrator wants to save a router's running configuration to a central server for network device backup and restore. Which approach fits best?",
+      "options": [
+        {"key": "A", "text": "Copy the running-config to the server over a secure transfer such as SCP or SFTP", "rationale": "Correct: the config is backed up, and it doesn't cross the network in cleartext."},
+        {"key": "B", "text": "Copy it to a TFTP server across the internet", "rationale": "TFTP has no authentication or encryption."},
+        {"key": "C", "text": "Back up the users' files through the router", "rationale": "Device backups cover configurations, not user data."},
+        {"key": "D", "text": "Rely on memory and retype the config after a failure", "rationale": "That is slow and error-prone."}
+      ],
+      "answer": ["A"],
+      "explanation": "Network device backup/restore means saving device configurations (for example 'copy running-config' to a remote server) and restoring them after a failure. Prefer secure transfer over TFTP.",
+      "discriminator_tested": "Device backups cover configs, not user data; prefer secure transfer over TFTP."
+    },
+    {
+      "objectives": ["C10-07"], "type": "single", "angle": "assess-risk", "difficulty": 3,
+      "stem": "Backups run every night at midnight. A server fails at 6 p.m., and restoring it from the latest backup takes three hours. Thinking about data restoration characteristics, how much data can be lost, and how long is the outage?",
+      "options": [
+        {"key": "A", "text": "Up to 18 hours of data (the RPO side) and about 3 hours to restore (the RTO side)", "rationale": "Correct: the last backup was at midnight, and the restore takes three hours."},
+        {"key": "B", "text": "Up to 3 hours of data and 18 hours to restore", "rationale": "This swaps the two."},
+        {"key": "C", "text": "No data lost, because a backup exists", "rationale": "Changes made since midnight aren't in the backup."},
+        {"key": "D", "text": "24 hours of data, and no downtime", "rationale": "The failure came 18 hours after the backup, and the restore takes time."}
+      ],
+      "answer": ["A"],
+      "explanation": "Data restoration characteristics describe how fast and how current a restore is. RTO is how long restoration takes; RPO is how much data loss is tolerable, set by the age of the last backup.",
+      "discriminator_tested": "RTO = how long; RPO = how much data, set by the age of the last backup."
+    },
+    {
+      "objectives": ["C10-08"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "Ransomware encrypts every disk it can reach, including the network storage (NAS) used for backups. Which backup media would most likely have survived?",
+      "options": [
+        {"key": "A", "text": "Offline or offsite media, such as disconnected tapes or immutable cloud copies", "rationale": "Correct: the ransomware couldn't reach them."},
+        {"key": "B", "text": "A second NAS on the same network", "rationale": "It would be just as reachable and get encrypted too."},
+        {"key": "C", "text": "A USB drive left plugged into the server", "rationale": "A connected drive is reachable."},
+        {"key": "D", "text": "A larger NAS", "rationale": "Size doesn't stop encryption."}
+      ],
+      "answer": ["A"],
+      "explanation": "Backup media include disk/NAS, tape, cloud, and removable media, each with trade-offs in cost, speed, capacity, and durability. Offline or offsite media survive ransomware and the loss of a site.",
+      "discriminator_tested": "Offline or offsite media survive ransomware and site loss."
+    },
+    {
+      "objectives": ["C10-09"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 3,
+      "stem": "Using these backup methods, a full backup runs on Sunday and incremental backups run Monday through Thursday. The server fails on Friday morning. What is needed to restore it fully?",
+      "options": [
+        {"key": "A", "text": "The Sunday full backup plus every incremental from Monday to Thursday, applied in order", "rationale": "Correct: each incremental holds only the changes since the previous backup."},
+        {"key": "B", "text": "The Sunday full backup plus only Thursday's incremental", "rationale": "That would work for differentials, not incrementals."},
+        {"key": "C", "text": "Only Thursday's incremental", "rationale": "An incremental holds only one day's changes."},
+        {"key": "D", "text": "Only the Sunday full backup", "rationale": "That loses all changes from Monday to Thursday."}
+      ],
+      "answer": ["A"],
+      "explanation": "Backup methods: full (everything), incremental (changes since the last backup of any type), and differential (changes since the last full). Incremental is fastest to back up but slowest to restore, needing the full plus every incremental.",
+      "discriminator_tested": "Incremental restore needs the full plus every incremental."
+    },
+    {
+      "objectives": ["C10-10", "C10-02"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "During an outage, the team discovers that its backups have been failing silently for two months. Which practice would have caught this?",
+      "options": [
+        {"key": "A", "text": "Regular backup testing: periodic restores that check integrity, completeness, and timing", "rationale": "Correct: a test restore would have exposed the failures."},
+        {"key": "B", "text": "Taking more backups", "rationale": "More failing backups are still failures."},
+        {"key": "C", "text": "Buying larger backup media", "rationale": "Capacity wasn't the problem."},
+        {"key": "D", "text": "Upgrading the HVAC", "rationale": "Cooling isn't related."}
+      ],
+      "answer": ["A"],
+      "explanation": "Backup testing means periodically restoring data to verify integrity, completeness, and timing. An untested backup is unproven.",
+      "discriminator_tested": "An untested backup is unproven."
+    },
+    {
+      "objectives": ["C10-11"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "Attackers take over an executive's cloud email by hijacking the phone number used for SMS account recovery. What does this show about online account recovery?",
+      "options": [
+        {"key": "A", "text": "The recovery channel is itself an attack path and must be protected", "rationale": "Correct: the attackers used the recovery route, not the password."},
+        {"key": "B", "text": "MFA is always useless", "rationale": "The weakness was the recovery channel, not MFA itself."},
+        {"key": "C", "text": "Only a local administrator can recover cloud accounts", "rationale": "Cloud accounts are recovered online."},
+        {"key": "D", "text": "A domain administrator should have reset the account", "rationale": "This is a cloud service account, not a directory account."}
+      ],
+      "answer": ["A"],
+      "explanation": "Online account recovery resets access through email, phone, recovery codes, or MFA. The recovery channel is itself an attack path, so it must be protected.",
+      "discriminator_tested": "The recovery channel is itself an attack path."
+    },
+    {
+      "objectives": ["C10-12", "C10-13"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A standalone laptop's only local administrator has forgotten the password, and no other administrator account exists. What does local account recovery depend on?",
+      "options": [
+        {"key": "A", "text": "Another local administrator, or recovery media and tools used with physical access; there is no central reset", "rationale": "Correct."},
+        {"key": "B", "text": "A domain administrator resetting it in the directory", "rationale": "The laptop isn't in a domain."},
+        {"key": "C", "text": "An email reset link", "rationale": "That is online account recovery."},
+        {"key": "D", "text": "A help desk reset in Active Directory", "rationale": "That is domain account recovery."}
+      ],
+      "answer": ["A"],
+      "explanation": "Local account recovery is done by another local administrator or with recovery media and tools. It depends on a second admin account or physical access; there is no central reset.",
+      "discriminator_tested": "Local recovery needs a second admin or physical access; no central reset."
+    },
+    {
+      "objectives": ["C10-13"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "An employee whose account is in the corporate domain is locked out. What is the normal domain account recovery path?",
+      "options": [
+        {"key": "A", "text": "A domain administrator or the help desk resets or unlocks the account in the directory, or the employee uses self-service reset", "rationale": "Correct: managed centrally."},
+        {"key": "B", "text": "Boot the PC from recovery media", "rationale": "That is a local recovery method."},
+        {"key": "C", "text": "Reinstall the operating system", "rationale": "Far too drastic for a locked account."},
+        {"key": "D", "text": "Send a code to the employee's personal email only", "rationale": "Domain accounts are managed through the directory."}
+      ],
+      "answer": ["A"],
+      "explanation": "Domain account recovery means a domain administrator or the help desk resets or unlocks the account in the directory. It is managed centrally, and self-service reset is possible.",
+      "discriminator_tested": "Domain recovery is managed centrally."
+    },
+    {
+      "objectives": ["C10-14", "C10-19"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A small office relies only on battery backup units. A storm cuts utility power for six hours. What happens?",
+      "options": [
+        {"key": "A", "text": "The batteries last only minutes, so equipment shuts down long before power returns, unless a generator is added", "rationale": "Correct: battery backup is short-term."},
+        {"key": "B", "text": "The batteries run everything for the full six hours", "rationale": "Battery runtime is minutes, not hours."},
+        {"key": "C", "text": "The batteries recharge themselves during the outage", "rationale": "They need utility power to recharge."},
+        {"key": "D", "text": "Nothing happens, because batteries prevent outages", "rationale": "Batteries only bridge short gaps."}
+      ],
+      "answer": ["A"],
+      "explanation": "Battery backup provides short-term power during an outage, with runtime in minutes, not hours. Long outages need a generator.",
+      "discriminator_tested": "Battery runtime is minutes, not hours."
+    },
+    {
+      "objectives": ["C10-15"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What does a UPS provide in addition to battery power?",
+      "options": [
+        {"key": "A", "text": "It conditions the incoming power, and it bridges to a graceful shutdown or a generator start rather than supplying long-term power", "rationale": "Correct."},
+        {"key": "B", "text": "Unlimited runtime", "rationale": "Its batteries last a limited time."},
+        {"key": "C", "text": "Fire suppression", "rationale": "Unrelated."},
+        {"key": "D", "text": "Redundant network paths", "rationale": "Unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "A UPS is battery-backed power that also conditions the input power. It bridges to a graceful shutdown or a generator start; it is not long-term power.",
+      "discriminator_tested": "A UPS bridges to shutdown or generator; it isn't long-term power."
+    },
+    {
+      "objectives": ["C10-16", "C10-18"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which UPS type passes utility power straight through, switches to battery on failure with a brief gap, and costs the least?",
+      "options": [
+        {"key": "A", "text": "Standby UPS", "rationale": "Correct."},
+        {"key": "B", "text": "Online UPS", "rationale": "An online UPS has no transfer gap and costs the most."},
+        {"key": "C", "text": "Line-interactive UPS", "rationale": "A line-interactive UPS also regulates voltage and is mid-range in cost."},
+        {"key": "D", "text": "A generator", "rationale": "A generator isn't a UPS."}
+      ],
+      "answer": ["A"],
+      "explanation": "A standby UPS passes utility power through and switches to battery on failure. It has a brief switchover gap and offers the lowest cost and the least protection.",
+      "discriminator_tested": "Standby: brief switchover gap, lowest cost, least protection."
+    },
+    {
+      "objectives": ["C10-17"], "type": "single", "angle": "choose-tool", "difficulty": 3,
+      "stem": "An office has frequent small voltage sags but rare full outages. It wants protection that handles the sags without draining the batteries every time, at mid-range cost. Which UPS fits?",
+      "options": [
+        {"key": "A", "text": "Line-interactive UPS", "rationale": "Correct: it regulates sags and surges without using the battery."},
+        {"key": "B", "text": "Standby UPS", "rationale": "A standby UPS switches to battery for each sag."},
+        {"key": "C", "text": "Online UPS", "rationale": "It would work, but at the highest cost."},
+        {"key": "D", "text": "A surge protector only", "rationale": "Surge protectors don't fix sags or cover outages."}
+      ],
+      "answer": ["A"],
+      "explanation": "A line-interactive UPS regulates voltage sags and surges without using the battery, and switches to battery on an outage. It handles voltage fluctuation and is mid-range in cost.",
+      "discriminator_tested": "Line-interactive handles voltage fluctuation; mid-range."
+    },
+    {
+      "objectives": ["C10-18"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A hospital lab instrument can't tolerate even milliseconds of transfer time during a power problem. Which UPS fits?",
+      "options": [
+        {"key": "A", "text": "Online UPS (double conversion)", "rationale": "Correct: the equipment always runs from the inverter, so there is no transfer."},
+        {"key": "B", "text": "Standby UPS", "rationale": "It has a brief switchover gap."},
+        {"key": "C", "text": "Line-interactive UPS", "rationale": "It still has a short transfer when it switches to battery."},
+        {"key": "D", "text": "A surge protector", "rationale": "A surge protector gives no power during an outage."}
+      ],
+      "answer": ["A"],
+      "explanation": "An online UPS uses double conversion: the equipment always runs from the inverter. It has no transfer time and offers the best protection at the highest cost.",
+      "discriminator_tested": "Online UPS: no transfer time; best protection, highest cost."
+    },
+    {
+      "objectives": ["C10-19", "C10-15"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Utility power fails at a data center that has a UPS and diesel power generators. What is the correct sequence?",
+      "options": [
+        {"key": "A", "text": "The UPS carries the load immediately; the generator starts and takes over; the UPS has bridged the gap", "rationale": "Correct: the generator needs time to start."},
+        {"key": "B", "text": "The generator takes over instantly, so the UPS is never used", "rationale": "Generators take time to start."},
+        {"key": "C", "text": "The UPS runs everything for days", "rationale": "UPS batteries last minutes."},
+        {"key": "D", "text": "Everything shuts down first, then the generator restarts it", "rationale": "The UPS exists to prevent that."}
+      ],
+      "answer": ["A"],
+      "explanation": "Power generators provide long-duration backup power (diesel or natural gas). They take time to start, so a UPS bridges the gap, and they need fuel and testing.",
+      "discriminator_tested": "Generators take time to start, so a UPS bridges the gap."
+    },
+    {
+      "objectives": ["C10-20"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What does surge protection do, and what does it not do?",
+      "options": [
+        {"key": "A", "text": "It diverts voltage spikes away from equipment; it doesn't supply power during an outage", "rationale": "Correct."},
+        {"key": "B", "text": "It supplies power during outages", "rationale": "That is a UPS or a generator."},
+        {"key": "C", "text": "It conditions power continuously, like an online UPS", "rationale": "It only handles spikes."},
+        {"key": "D", "text": "It starts the generator", "rationale": "Unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "Surge protection diverts excess voltage spikes away from equipment. It protects against spikes, not outages, and it is not a UPS.",
+      "discriminator_tested": "Surge protection covers spikes, not outages."
+    },
+    {
+      "objectives": ["C10-21", "C10-15"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A technician says: 'Our rack has a metered PDU, so we're covered if the power goes out.' What is wrong with this?",
+      "options": [
+        {"key": "A", "text": "A PDU distributes power (a metered one adds monitoring); it provides backup only when it is fed by a UPS", "rationale": "Correct: a PDU distributes power; it doesn't back it up."},
+        {"key": "B", "text": "Nothing; PDUs contain large batteries", "rationale": "PDUs have no batteries."},
+        {"key": "C", "text": "PDUs are a fire suppression device", "rationale": "Unrelated."},
+        {"key": "D", "text": "Metered PDUs generate their own power", "rationale": "Metering only measures power."}
+      ],
+      "answer": ["A"],
+      "explanation": "A PDU distributes power to rack equipment; metered and switched versions add monitoring and remote outlet control. It handles distribution, not backup, and gains backup only when fed by a UPS.",
+      "discriminator_tested": "A PDU distributes power; backup comes only from a UPS feeding it."
+    },
+    {
+      "objectives": ["C10-22"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 1,
+      "stem": "Servers in a small closet keep failing on summer afternoons, and nothing else has changed. Which continuity control is most likely missing or inadequate?",
+      "options": [
+        {"key": "A", "text": "HVAC cooling, since overheating causes failures", "rationale": "Correct."},
+        {"key": "B", "text": "Surge protection", "rationale": "Spikes don't follow summer afternoons."},
+        {"key": "C", "text": "A clean agent fire suppression system", "rationale": "Suppression handles fires, not heat failures."},
+        {"key": "D", "text": "RAID", "rationale": "Disk redundancy doesn't prevent overheating."}
+      ],
+      "answer": ["A"],
+      "explanation": "HVAC controls temperature, airflow, and humidity. Overheating causes failures, so cooling is a continuity control.",
+      "discriminator_tested": "Cooling is a continuity control."
+    },
+    {
+      "objectives": ["C10-23", "C10-22"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two describe correctly what happens when humidity is outside the range in ASHRAE standards? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Too dry raises the risk of static discharge", "rationale": "Correct."},
+        {"key": "B", "text": "Too humid causes condensation and corrosion", "rationale": "Correct."},
+        {"key": "C", "text": "Too dry causes condensation", "rationale": "Condensation comes with high humidity."},
+        {"key": "D", "text": "Too humid raises the risk of static discharge", "rationale": "Static comes with low humidity."},
+        {"key": "E", "text": "Humidity has no effect on equipment", "rationale": "Both extremes cause damage."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "ASHRAE standards recommend temperature and humidity ranges for computing environments (about 18-27 °C). Too dry raises static discharge risk; too humid causes condensation and corrosion.",
+      "discriminator_tested": "Too dry = static; too humid = condensation and corrosion."
+    },
+    {
+      "objectives": ["C10-24"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "When choosing fire suppression for a space, what is the key decision?",
+      "options": [
+        {"key": "A", "text": "Matching the system to the space, water-based or clean agent, while limiting harm to people and equipment", "rationale": "Correct."},
+        {"key": "B", "text": "Always using water everywhere", "rationale": "Water can destroy electronics in equipment rooms."},
+        {"key": "C", "text": "Always installing new halon", "rationale": "Halon production is banned."},
+        {"key": "D", "text": "Skipping suppression if a UPS is installed", "rationale": "A UPS has nothing to do with fire."}
+      ],
+      "answer": ["A"],
+      "explanation": "Fire suppression extinguishes fires while limiting damage to people and equipment. Match the system to the space: water-based or clean agent.",
+      "discriminator_tested": "Match the suppression system to the space."
+    },
+    {
+      "objectives": ["C10-25"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What is the main drawback of wet pipe systems in a server room?",
+      "options": [
+        {"key": "A", "text": "The pipes always hold water, so an accidental discharge or a leak can damage electronics", "rationale": "Correct."},
+        {"key": "B", "text": "They are the slowest systems to deliver water", "rationale": "Wet pipe systems are the fastest."},
+        {"key": "C", "text": "They don't work in heated buildings", "rationale": "Freezing, not heat, is the concern for water in pipes."},
+        {"key": "D", "text": "They use halon", "rationale": "They use water."}
+      ],
+      "answer": ["A"],
+      "explanation": "In wet pipe systems, the pipes always hold water, and heat opens a sprinkler head. They are the simplest and fastest, but accidental discharge or leaks can damage electronics.",
+      "discriminator_tested": "Wet pipe: simplest and fastest; leaks can damage electronics."
+    },
+    {
+      "objectives": ["C10-26"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A sprinkler system must protect an unheated warehouse where water in the pipes could freeze. Which type fits?",
+      "options": [
+        {"key": "A", "text": "Dry pipe", "rationale": "Correct: the pipes hold pressurized gas until a head opens."},
+        {"key": "B", "text": "Wet pipe", "rationale": "Water standing in the pipes could freeze."},
+        {"key": "C", "text": "A clean agent", "rationale": "Gas suits equipment rooms, not a large unheated warehouse."},
+        {"key": "D", "text": "Deluge", "rationale": "Deluge is for special high-hazard areas."}
+      ],
+      "answer": ["A"],
+      "explanation": "Dry pipe systems keep pressurized gas in the pipes, and water enters only after a head opens. They are used where pipes could freeze, at the cost of slower water delivery.",
+      "discriminator_tested": "Dry pipe is used where pipes could freeze; slower water delivery."
+    },
+    {
+      "objectives": ["C10-27", "C10-25"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A data center wants water-based suppression but must minimize the risk of accidental discharge. Water should enter the pipes only after a detector triggers, and a sprinkler head must then open. Which system fits?",
+      "options": [
+        {"key": "A", "text": "A preaction system", "rationale": "Correct: a two-step trigger."},
+        {"key": "B", "text": "A wet pipe system", "rationale": "Its pipes always hold water."},
+        {"key": "C", "text": "A deluge system", "rationale": "Deluge releases water through all open heads at once."},
+        {"key": "D", "text": "A dry pipe system", "rationale": "Opening a head admits water without any detection step."}
+      ],
+      "answer": ["A"],
+      "explanation": "In preaction systems, the pipes stay dry; water enters only after detection, and a head must then open. The two-step trigger lowers the risk of accidental discharge, which is why they are common in data centers.",
+      "discriminator_tested": "Preaction's two-step trigger lowers accidental-discharge risk."
+    },
+    {
+      "objectives": ["C10-28"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What separates deluge systems from other sprinkler systems?",
+      "options": [
+        {"key": "A", "text": "Their heads are open, so on detection water pours from every head at once, giving massive flow for high-hazard areas", "rationale": "Correct."},
+        {"key": "B", "text": "Only the single head nearest the fire opens", "rationale": "That describes standard sprinkler heads."},
+        {"key": "C", "text": "They use gas instead of water", "rationale": "Deluge systems are water-based."},
+        {"key": "D", "text": "Their closed heads hold water at all times", "rationale": "That is a wet pipe system."}
+      ],
+      "answer": ["A"],
+      "explanation": "Deluge systems have open heads that discharge water from all heads on detection. They provide massive water flow for high-hazard areas.",
+      "discriminator_tested": "Deluge: all open heads discharge on detection."
+    },
+    {
+      "objectives": ["C10-29"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A telecom equipment room needs fire suppression that causes no water damage and leaves no residue. Which category fits?",
+      "options": [
+        {"key": "A", "text": "A clean agent (gaseous) system", "rationale": "Correct."},
+        {"key": "B", "text": "A wet pipe system", "rationale": "Water damages the equipment."},
+        {"key": "C", "text": "A deluge system", "rationale": "A massive water flow is the opposite of what's needed."},
+        {"key": "D", "text": "A dry pipe system", "rationale": "It still delivers water."}
+      ],
+      "answer": ["A"],
+      "explanation": "Clean agent systems use gaseous suppression that leaves no residue. With no water damage, they suit equipment rooms.",
+      "discriminator_tested": "Clean agent: no residue, no water damage."
+    },
+    {
+      "objectives": ["C10-30"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Why aren't new halon fire suppression systems installed?",
+      "options": [
+        {"key": "A", "text": "Halon depletes ozone, and its production is banned, so only legacy systems remain", "rationale": "Correct."},
+        {"key": "B", "text": "Halon doesn't put out fires", "rationale": "Halon is very effective; the problem is ozone."},
+        {"key": "C", "text": "Halon is a water-based system", "rationale": "Halon is a gaseous agent."},
+        {"key": "D", "text": "Halon is too cheap to sell", "rationale": "Cost isn't the reason."}
+      ],
+      "answer": ["A"],
+      "explanation": "Halon is an effective gaseous agent that depletes ozone. Its production is banned (EPA), so only legacy systems remain.",
+      "discriminator_tested": "Halon production is banned; only legacy systems remain."
+    },
+    {
+      "objectives": ["C10-31"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "How does an argon-based suppression system put out a fire?",
+      "options": [
+        {"key": "A", "text": "As an inert gas, it lowers the oxygen level in the space", "rationale": "Correct: the fire is starved of oxygen."},
+        {"key": "B", "text": "It soaks the area with water", "rationale": "Argon is a gas."},
+        {"key": "C", "text": "It smothers the fire with foam", "rationale": "Argon isn't foam."},
+        {"key": "D", "text": "It removes the fuel", "rationale": "It works on oxygen, not fuel."}
+      ],
+      "answer": ["A"],
+      "explanation": "Argon is an inert gas that displaces oxygen. It is safe for equipment and works by reducing oxygen.",
+      "discriminator_tested": "Argon works by oxygen reduction."
+    },
+    {
+      "objectives": ["C10-32", "C10-30"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What was NAF-S-III developed for?",
+      "options": [
+        {"key": "A", "text": "As a chemical clean agent to replace halon", "rationale": "Correct."},
+        {"key": "B", "text": "As an additive for sprinkler water", "rationale": "It is a gaseous clean agent."},
+        {"key": "C", "text": "As a type of UPS battery", "rationale": "Unrelated."},
+        {"key": "D", "text": "As a backup file format", "rationale": "Unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "NAF-S-III is a chemical clean agent developed as a replacement for halon.",
+      "discriminator_tested": "NAF-S-III is a halon replacement."
+    },
+    {
+      "objectives": ["C10-33", "C10-29"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "Which chemical clean agent (HFC-227ea) is widely used in data centers, discharges quickly, and leaves no residue?",
+      "options": [
+        {"key": "A", "text": "FM-200", "rationale": "Correct."},
+        {"key": "B", "text": "Halon", "rationale": "Halon depletes ozone, and its production is banned."},
+        {"key": "C", "text": "Argon", "rationale": "Argon is an inert gas, not a chemical agent."},
+        {"key": "D", "text": "A wet pipe system", "rationale": "That uses water."}
+      ],
+      "answer": ["A"],
+      "explanation": "FM-200 is a chemical clean agent (HFC-227ea) with fast discharge. It is widely used in data centers and leaves no residue.",
+      "discriminator_tested": "FM-200: chemical clean agent, widely used in data centers."
+    },
+    {
+      "objectives": ["C10-34"], "type": "single", "angle": "symptom-to-attack", "difficulty": 1,
+      "stem": "One of two switches that operate together as a single logical switch fails, and users stay connected. Which feature made this possible?",
+      "options": [
+        {"key": "A", "text": "Switch clustering", "rationale": "Correct."},
+        {"key": "B", "text": "Router redundancy", "rationale": "That keeps the default gateway available, not switching."},
+        {"key": "C", "text": "A firewall HA pair", "rationale": "That covers firewalls."},
+        {"key": "D", "text": "A cold site", "rationale": "That is an alternate location."}
+      ],
+      "answer": ["A"],
+      "explanation": "Switch clustering makes multiple switches operate as one logical switch, so a single switch failure doesn't cut connectivity.",
+      "discriminator_tested": "Switch clustering: one failure doesn't cut connectivity."
+    },
+    {
+      "objectives": ["C10-35"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 3,
+      "stem": "A branch office has two routers, but when the router acting as the PCs' default gateway fails, the PCs lose access until someone reconfigures them. What is missing from the router redundancy design?",
+      "options": [
+        {"key": "A", "text": "A first-hop redundancy protocol, so the default gateway address stays available", "rationale": "Correct: having two routers isn't enough on its own."},
+        {"key": "B", "text": "Switch clustering", "rationale": "The failure is at the gateway, not the switches."},
+        {"key": "C", "text": "A clean agent suppression system", "rationale": "Unrelated."},
+        {"key": "D", "text": "A metered PDU", "rationale": "Unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "Router redundancy uses redundant routers and multiple paths with first-hop redundancy, so the default gateway stays available.",
+      "discriminator_tested": "First-hop redundancy keeps the default gateway available."
+    },
+    {
+      "objectives": ["C10-36"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "Two firewalls form a high-availability pair. When the active one fails, users' existing VPN and web sessions carry on without reconnecting. What made this possible?",
+      "options": [
+        {"key": "A", "text": "The pair shares session state, so sessions survive the failover", "rationale": "Correct."},
+        {"key": "B", "text": "A surge protector", "rationale": "Unrelated to sessions."},
+        {"key": "C", "text": "A cold site", "rationale": "A cold site takes days to bring up."},
+        {"key": "D", "text": "A tabletop exercise", "rationale": "That is a discussion, not a mechanism."}
+      ],
+      "answer": ["A"],
+      "explanation": "Firewall redundancy uses high-availability pairs (active/standby or active/active) that share session state. State sharing lets sessions survive failover.",
+      "discriminator_tested": "State sharing lets sessions survive failover."
+    },
+    {
+      "objectives": ["C10-37"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "Which two measures provide server redundancy by removing single points of failure? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Redundant power supplies", "rationale": "Correct."},
+        {"key": "B", "text": "RAID", "rationale": "Correct: it survives a disk failure."},
+        {"key": "C", "text": "A single power cable", "rationale": "That is a single point of failure."},
+        {"key": "D", "text": "A single disk with no copy", "rationale": "That is a single point of failure."},
+        {"key": "E", "text": "A single network interface", "rationale": "That is a single point of failure."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Server redundancy uses clustering, load balancing, redundant power supplies, and RAID to remove single points of failure.",
+      "discriminator_tested": "Server redundancy removes single points of failure."
+    },
+    {
+      "objectives": ["C10-38"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What is the main trade-off when choosing among disaster recovery sites?",
+      "options": [
+        {"key": "A", "text": "Cost versus recovery time", "rationale": "Correct: faster recovery costs more."},
+        {"key": "B", "text": "Building color", "rationale": "Irrelevant."},
+        {"key": "C", "text": "Server brand", "rationale": "Irrelevant."},
+        {"key": "D", "text": "Only the distance from headquarters", "rationale": "Location matters, but the main trade-off is cost versus time."}
+      ],
+      "answer": ["A"],
+      "explanation": "Disaster recovery sites are alternate locations for resuming operations. Choosing one is a trade-off between cost and recovery time.",
+      "discriminator_tested": "Cost versus recovery time."
+    },
+    {
+      "objectives": ["C10-39", "C10-38"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A small nonprofit could tolerate a two-week outage and has almost no budget for disaster recovery. Which kind of site fits?",
+      "options": [
+        {"key": "A", "text": "A cold site", "rationale": "Correct: the cheapest and slowest option."},
+        {"key": "B", "text": "A hot site", "rationale": "The most expensive option."},
+        {"key": "C", "text": "A warm site", "rationale": "More than this budget needs."},
+        {"key": "D", "text": "An active/active second data center", "rationale": "Very expensive."}
+      ],
+      "answer": ["A"],
+      "explanation": "A cold site is space with power and connectivity but no equipment or data. It is the cheapest and slowest option, taking days to weeks.",
+      "discriminator_tested": "Cold site: cheapest and slowest."
+    },
+    {
+      "objectives": ["C10-40"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A company can be down for a couple of days, has a moderate budget, and can restore its data from backups. Which kind of site fits?",
+      "options": [
+        {"key": "A", "text": "A warm site", "rationale": "Correct: the middle ground."},
+        {"key": "B", "text": "A hot site", "rationale": "More than this tolerance needs, and much more expensive."},
+        {"key": "C", "text": "A cold site", "rationale": "Days to weeks may be too slow."},
+        {"key": "D", "text": "No site at all", "rationale": "A recovery location is still needed."}
+      ],
+      "answer": ["A"],
+      "explanation": "A warm site is partly equipped, with data restored from backups. It is the middle ground in cost and time.",
+      "discriminator_tested": "Warm site: the middle ground."
+    },
+    {
+      "objectives": ["C10-41"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "A stock-trading firm must resume within minutes with almost no data loss, whatever the cost. Which kind of site fits?",
+      "options": [
+        {"key": "A", "text": "A hot site with near-real-time data replication", "rationale": "Correct: the fastest option."},
+        {"key": "B", "text": "A warm site", "rationale": "Restoring from backups takes too long."},
+        {"key": "C", "text": "A cold site", "rationale": "Far too slow."},
+        {"key": "D", "text": "A cloud site that has never been tested", "rationale": "An untested plan can't be relied on for minutes."}
+      ],
+      "answer": ["A"],
+      "explanation": "A hot site is fully equipped with near-real-time data replication. It is the fastest and most expensive option.",
+      "discriminator_tested": "Hot site: fastest and most expensive."
+    },
+    {
+      "objectives": ["C10-42"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A startup chooses a cloud site for disaster recovery to avoid buying hardware. What must it still plan for?",
+      "options": [
+        {"key": "A", "text": "Connectivity, its dependence on the provider, and regular testing", "rationale": "Correct."},
+        {"key": "B", "text": "Nothing; cloud recovery is fully automatic", "rationale": "Cloud recovery still needs planning and testing."},
+        {"key": "C", "text": "Nothing about backups, which the cloud makes unnecessary", "rationale": "Data still has to be replicated or backed up."},
+        {"key": "D", "text": "Buying a diesel generator for the cloud provider", "rationale": "The provider handles its own power."}
+      ],
+      "answer": ["A"],
+      "explanation": "A cloud site is a recovery environment in a cloud provider, scaled on demand. It has lower upfront cost and is elastic, but it depends on connectivity, the provider, and testing.",
+      "discriminator_tested": "Cloud site: elastic, but depends on connectivity, the provider, and testing."
+    },
+    {
+      "objectives": ["C10-43"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "Two web servers both serve traffic. When one fails, the other carries everything but becomes noticeably slower. Thinking about active/active vs active/passive, which design is this, and what is its trade-off?",
+      "options": [
+        {"key": "A", "text": "Active/active: it shares the load normally but loses capacity on failure", "rationale": "Correct."},
+        {"key": "B", "text": "Active/passive: the standby sat idle", "rationale": "Both servers were serving traffic."},
+        {"key": "C", "text": "A cold site", "rationale": "Both servers were live."},
+        {"key": "D", "text": "A standby UPS", "rationale": "That is power equipment."}
+      ],
+      "answer": ["A"],
+      "explanation": "In active/active, all nodes serve traffic; in active/passive, a standby takes over on failure. Active/active shares load but loses capacity on failure; active/passive leaves resources idle.",
+      "discriminator_tested": "Active/active loses capacity on failure; active/passive leaves resources idle."
+    },
+    {
+      "objectives": ["C10-44"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 3,
+      "stem": "A company has contracts with two different ISPs, yet both links fail when a construction crew cuts one conduit outside the building. Why did having multiple ISPs not provide diverse paths?",
+      "options": [
+        {"key": "A", "text": "Both circuits ran through the same physical path; diversity has to be physical", "rationale": "Correct: two contracts, but one shared point of failure."},
+        {"key": "B", "text": "The ISPs coordinated the outage", "rationale": "The cut conduit explains it."},
+        {"key": "C", "text": "A third ISP was needed", "rationale": "A third line through the same conduit would have failed too."},
+        {"key": "D", "text": "The firewall failover was misconfigured", "rationale": "Both links were physically down."}
+      ],
+      "answer": ["A"],
+      "explanation": "Multiple ISPs and diverse paths means more than one provider and physically separate routes. Diversity must be physical; two contracts in one conduit still share a failure point.",
+      "discriminator_tested": "Diversity must be physical."
+    },
+    {
+      "objectives": ["C10-45", "C10-46"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What makes tabletop exercises different from validation tests?",
+      "options": [
+        {"key": "A", "text": "A tabletop exercise is discussion only, talking through a scenario without touching systems; a validation test actually exercises the systems", "rationale": "Correct."},
+        {"key": "B", "text": "A tabletop exercise restores real systems; a validation test is only a discussion", "rationale": "This is reversed."},
+        {"key": "C", "text": "They are the same", "rationale": "They differ in whether systems are touched."},
+        {"key": "D", "text": "A tabletop exercise replaces the need for any plan", "rationale": "It tests a plan; it doesn't replace one."}
+      ],
+      "answer": ["A"],
+      "explanation": "In tabletop exercises, the team talks through a disaster scenario without touching systems. They are discussion only and test roles and plans.",
+      "discriminator_tested": "Tabletop is discussion only."
+    },
+    {
+      "objectives": ["C10-46", "C10-10"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 1,
+      "stem": "A team restores last night's backup to a spare server and confirms the application works within the target time. What kind of test is this?",
+      "options": [
+        {"key": "A", "text": "A validation test", "rationale": "Correct: a hands-on check of the recovery procedure."},
+        {"key": "B", "text": "A tabletop exercise", "rationale": "A tabletop doesn't touch systems."},
+        {"key": "C", "text": "A penetration test", "rationale": "Pen testing attacks systems."},
+        {"key": "D", "text": "User acceptance testing", "rationale": "UAT confirms a change works for its users."}
+      ],
+      "answer": ["A"],
+      "explanation": "Validation tests are hands-on tests that confirm recovery procedures and systems work. Unlike a tabletop, they actually exercise the systems.",
+      "discriminator_tested": "Validation actually exercises systems."
+    },
+    {
+      "objectives": ["C10-47", "C10-48"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What does a disaster recovery plan focus on?",
+      "options": [
+        {"key": "A", "text": "Documented procedures for restoring IT systems and data after a disruption", "rationale": "Correct: IT-focused restoration."},
+        {"key": "B", "text": "Keeping every business operation running, including non-IT work", "rationale": "That broader goal is the business continuity plan."},
+        {"key": "C", "text": "Marketing strategy", "rationale": "Unrelated."},
+        {"key": "D", "text": "Hiring plans", "rationale": "Unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "A disaster recovery plan holds the documented procedures for restoring IT systems and data after a disruption. It is focused on IT restoration.",
+      "discriminator_tested": "The DRP is focused on IT restoration."
+    },
+    {
+      "objectives": ["C10-48", "C10-47"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "How does a business continuity plan relate to a disaster recovery plan?",
+      "options": [
+        {"key": "A", "text": "The BCP is broader, keeping critical business operations running, and the DRP is one part of it", "rationale": "Correct."},
+        {"key": "B", "text": "The DRP is broader, and the BCP is one part of it", "rationale": "This is reversed."},
+        {"key": "C", "text": "They are the same document", "rationale": "They differ in scope."},
+        {"key": "D", "text": "They are unrelated", "rationale": "The DRP sits inside the BCP."}
+      ],
+      "answer": ["A"],
+      "explanation": "A business continuity plan keeps critical business operations running during and after a disruption. It is broader than IT, and the DRP is part of it.",
+      "discriminator_tested": "The BCP is broader than IT; the DRP is part of it."
+    }
+  ]
+}

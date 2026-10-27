@@ -1,0 +1,485 @@
+{
+  "questions": [
+    {
+      "objectives": ["C05-01", "C05-34"], "type": "single", "angle": "interpret-config", "difficulty": 3,
+      "stem": "An ACL applied inbound on a router interface contains:\n\naccess-list 120 permit tcp any any eq 443\naccess-list 120 deny tcp host 10.1.1.50 any eq 443\n\nHost 10.1.1.50 sends HTTPS traffic in through that interface. What happens, and why?",
+      "options": [
+        {"key": "A", "text": "It is permitted, because the first entry matches and processing stops at the first match", "rationale": "Correct: the broad permit matches before the deny is ever checked."},
+        {"key": "B", "text": "It is denied, because the more specific entry always wins", "rationale": "ACLs don't rank entries by specificity; order decides."},
+        {"key": "C", "text": "It is denied by the implicit deny at the end", "rationale": "The implicit deny applies only when no entry matches, and the first entry matches."},
+        {"key": "D", "text": "It is permitted only after both entries have been checked", "rationale": "Processing stops at the first match."}
+      ],
+      "answer": ["A"],
+      "explanation": "ACLs are processed top-down, the first match wins, and an implicit deny follows the last entry. A broad entry placed above a specific one hides it.",
+      "discriminator_tested": "Top-down, first match wins; implicit deny at the end."
+    },
+    {
+      "objectives": ["C05-02", "C05-04"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "Traffic from the 10.20.0.0/16 sales network must be kept away from the HR server subnet, but sales must still reach everything else. If a standard ACL is used, where should it be placed, and why?",
+      "options": [
+        {"key": "A", "text": "Close to the destination, on the interface toward the HR subnet, because a standard ACL matches only the source and would block sales from everything if placed near it", "rationale": "Correct: near the destination it affects only traffic heading to HR."},
+        {"key": "B", "text": "Close to the source, on the sales network's interface, to stop the traffic early", "rationale": "With only a source to match, it would block sales traffic to every destination."},
+        {"key": "C", "text": "On every router interface", "rationale": "That blocks sales everywhere and adds needless processing."},
+        {"key": "D", "text": "Anywhere, because placement doesn't matter for standard ACLs", "rationale": "Placement matters a great deal, because a standard ACL can't see the destination."}
+      ],
+      "answer": ["A"],
+      "explanation": "Standard ACLs filter on source IP only (numbers 1-99 and 1300-1999). Because they can't see the destination, they are placed close to the destination.",
+      "discriminator_tested": "Standard ACLs see only the source, so they go close to the destination."
+    },
+    {
+      "objectives": ["C05-03"], "type": "single", "angle": "classify-address", "difficulty": 2,
+      "stem": "Which wildcard mask matches every address in 172.16.8.0/22?",
+      "options": [
+        {"key": "A", "text": "0.0.3.255", "rationale": "Correct: a /22 subnet mask is 255.255.252.0, and its inverse is 0.0.3.255."},
+        {"key": "B", "text": "255.255.252.0", "rationale": "That is the subnet mask, not the wildcard mask."},
+        {"key": "C", "text": "0.0.0.255", "rationale": "That matches a /24 only."},
+        {"key": "D", "text": "0.0.255.255", "rationale": "That matches a /16, far wider than the /22."}
+      ],
+      "answer": ["A"],
+      "explanation": "Wildcard masking is an inverse mask: a 0 bit must match and a 1 bit is ignored. Invert the subnet mask (255.255.252.0) to get 0.0.3.255.",
+      "discriminator_tested": "A wildcard mask is the inverse of the subnet mask."
+    },
+    {
+      "objectives": ["C05-04", "C05-02"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "Policy says: block only Telnet (TCP 23) from the 10.1.1.0/24 lab to the server 10.9.9.10, and allow all other traffic. Which ACL type can express this, and where should it be placed?",
+      "options": [
+        {"key": "A", "text": "An extended ACL, placed close to the source", "rationale": "Correct: it can match source, destination, protocol, and port, so it can stop the traffic early without side effects."},
+        {"key": "B", "text": "A standard ACL, placed close to the destination", "rationale": "A standard ACL can't match the destination or the Telnet port."},
+        {"key": "C", "text": "A standard ACL, placed close to the source", "rationale": "It would block all lab traffic, not just Telnet to one server."},
+        {"key": "D", "text": "An extended ACL, which must always be placed at the destination", "rationale": "Extended ACLs are precise enough to go close to the source."}
+      ],
+      "answer": ["A"],
+      "explanation": "Extended ACLs filter on source, destination, protocol, and ports (numbers 100-199 and 2000-2699). Because they are so granular, they are placed close to the source.",
+      "discriminator_tested": "Extended ACLs are granular, so they go close to the source."
+    },
+    {
+      "objectives": ["C05-05", "C05-01"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A router ACL permits outbound web requests, but the replies are dropped unless a matching inbound entry is added. What do stateful firewalls add that this ACL lacks?",
+      "options": [
+        {"key": "A", "text": "Session awareness: they track connections and allow the return traffic automatically", "rationale": "Correct: an ACL judges each packet with no memory of sessions."},
+        {"key": "B", "text": "Encryption of the traffic", "rationale": "Encryption is a VPN function, not what separates firewalls from ACLs."},
+        {"key": "C", "text": "Faster first-match processing", "rationale": "Speed is not the difference; session tracking is."},
+        {"key": "D", "text": "Support for wildcard masks", "rationale": "ACLs already use wildcard masks."}
+      ],
+      "answer": ["A"],
+      "explanation": "Firewalls enforce policy between networks and add session awareness beyond ACL filtering. ACLs are stateless filters; stateful firewalls track sessions.",
+      "discriminator_tested": "ACLs are stateless; stateful firewalls track sessions."
+    },
+    {
+      "objectives": ["C05-06"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 2,
+      "stem": "A laptop's disk is fully encrypted. Which threat does this encryption, by itself, address?",
+      "options": [
+        {"key": "A", "text": "Someone reading the data after stealing the laptop", "rationale": "Correct: encryption provides confidentiality."},
+        {"key": "B", "text": "Someone altering files without anyone noticing", "rationale": "Detecting changes is integrity, which needs hashing or signatures."},
+        {"key": "C", "text": "Proving who wrote a particular file", "rationale": "Proving identity is authentication."},
+        {"key": "D", "text": "The laptop becoming unavailable when its disk fails", "rationale": "Availability needs backups or redundancy."}
+      ],
+      "answer": ["A"],
+      "explanation": "Encryption converts plaintext to ciphertext with an algorithm and a key. It provides confidentiality, but not integrity or authentication on its own.",
+      "discriminator_tested": "Encryption provides confidentiality, not integrity or authentication on its own."
+    },
+    {
+      "objectives": ["C05-07", "C05-10"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Two branch routers encrypt bulk traffic with AES, using the same secret key at both ends. What is the main challenge of this kind of symmetric key encryption?",
+      "options": [
+        {"key": "A", "text": "Getting the shared key to both ends securely", "rationale": "Correct: key distribution is the classic problem with symmetric encryption."},
+        {"key": "B", "text": "It is too slow for bulk data", "rationale": "Symmetric ciphers are fast, which is why they are used for bulk data."},
+        {"key": "C", "text": "Each end needs a different key", "rationale": "Using the same key at both ends is what makes it symmetric."},
+        {"key": "D", "text": "It can encrypt but never decrypt", "rationale": "The same key both encrypts and decrypts."}
+      ],
+      "answer": ["A"],
+      "explanation": "Symmetric key encryption uses the same key to encrypt and decrypt. It is fast and suits bulk data, but distributing the key securely is the challenge.",
+      "discriminator_tested": "Symmetric: same key, fast; key distribution is the challenge."
+    },
+    {
+      "objectives": ["C05-08"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 1,
+      "stem": "Why must DES never be used in new deployments?",
+      "options": [
+        {"key": "A", "text": "Its 56-bit key is short enough to brute-force, so it is obsolete and insecure", "rationale": "Correct: modern hardware can try every possible key."},
+        {"key": "B", "text": "It is a hash function, not a cipher", "rationale": "DES is a symmetric block cipher."},
+        {"key": "C", "text": "It uses public and private key pairs", "rationale": "DES is symmetric."},
+        {"key": "D", "text": "It can encrypt only text files", "rationale": "DES encrypts any data in 64-bit blocks."}
+      ],
+      "answer": ["A"],
+      "explanation": "DES uses a 56-bit key and 64-bit blocks. The key is far too short for today's computing power, so DES is obsolete and insecure.",
+      "discriminator_tested": "DES: 56-bit key, obsolete and insecure."
+    },
+    {
+      "objectives": ["C05-09", "C05-08"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Why was 3DES introduced, and why is it now deprecated?",
+      "options": [
+        {"key": "A", "text": "It applied DES three times as a stopgap for DES's short key; it is slow and has been replaced by AES", "rationale": "Correct: it was a stopgap that has since been superseded."},
+        {"key": "B", "text": "It is a hash that replaced MD5; it is deprecated because its digests are too long", "rationale": "3DES is a cipher, not a hash."},
+        {"key": "C", "text": "It replaced AES because AES was broken", "rationale": "AES is the current standard; 3DES came before it."},
+        {"key": "D", "text": "It is DES with larger 168-bit blocks", "rationale": "3DES keeps DES's 64-bit blocks and runs DES three times."}
+      ],
+      "answer": ["A"],
+      "explanation": "3DES applies DES three times. It was a stopgap, is slow, and has been replaced by AES.",
+      "discriminator_tested": "3DES: deprecated, slow stopgap, replaced by AES."
+    },
+    {
+      "objectives": ["C05-10", "C05-12"], "type": "single", "angle": "choose-protocol", "difficulty": 1,
+      "stem": "A team must choose a symmetric cipher to encrypt its backup archives. The options are DES, 3DES, AES-256, and MD5. Which should it choose?",
+      "options": [
+        {"key": "A", "text": "AES-256", "rationale": "Correct: AES is the current standard symmetric cipher."},
+        {"key": "B", "text": "DES", "rationale": "DES is obsolete and insecure."},
+        {"key": "C", "text": "3DES", "rationale": "3DES is a deprecated, slow stopgap."},
+        {"key": "D", "text": "MD5", "rationale": "MD5 is a (broken) hash function, not a cipher."}
+      ],
+      "answer": ["A"],
+      "explanation": "AES, with 128-, 192-, or 256-bit keys, is the current standard symmetric cipher. DES and 3DES are obsolete or deprecated, and MD5 doesn't encrypt at all.",
+      "discriminator_tested": "AES is the current standard symmetric cipher."
+    },
+    {
+      "objectives": ["C05-11", "C05-13"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A download page lists a file's SHA-256 value. A user computes the SHA-256 hash of the downloaded file, and it matches. What does the match show, and why isn't hashing a form of encryption?",
+      "options": [
+        {"key": "A", "text": "The file was not altered; hashes are one-way and can't be reversed to recover the data", "rationale": "Correct: hashing verifies integrity and has no decryption."},
+        {"key": "B", "text": "The file is now encrypted on the user's disk", "rationale": "Computing a hash changes nothing about the file."},
+        {"key": "C", "text": "It proves who published the file", "rationale": "Proving the publisher needs a digital signature; anyone can post a hash value."},
+        {"key": "D", "text": "The hash can be decrypted with the publisher's key to rebuild the file", "rationale": "Hashes are one-way; nothing can turn one back into the data."}
+      ],
+      "answer": ["A"],
+      "explanation": "Hashes are one-way functions that produce a fixed-length digest. They verify integrity, and because they can't be reversed, hashing is not encryption.",
+      "discriminator_tested": "Hashes verify integrity; they are one-way, so they are not encryption."
+    },
+    {
+      "objectives": ["C05-12"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "A developer proposes MD5 for verifying the integrity of security-critical firmware updates. What is the problem with this choice?",
+      "options": [
+        {"key": "A", "text": "MD5 is broken: an attacker can craft a different file with the same digest, so SHA-256 or longer should be used", "rationale": "Correct: MD5 collisions make it unfit for security use."},
+        {"key": "B", "text": "MD5 is too slow for large files", "rationale": "MD5 is fast; the problem is that it is broken."},
+        {"key": "C", "text": "MD5 is an encryption algorithm, not a hash", "rationale": "MD5 is a hash function."},
+        {"key": "D", "text": "MD5 produces a 512-bit digest that is too large to store", "rationale": "MD5 produces a 128-bit digest."}
+      ],
+      "answer": ["A"],
+      "explanation": "MD5 produces a 128-bit digest, but practical collisions have been shown. That makes it broken for security use; SHA-256 or longer is preferred.",
+      "discriminator_tested": "MD5 is broken (collisions); avoid it for security use."
+    },
+    {
+      "objectives": ["C05-13"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about the SHA family of hash algorithms is NOT true?",
+      "options": [
+        {"key": "A", "text": "SHA-1 is the recommended choice for new systems", "rationale": "Correct choice because it is false: SHA-1 is deprecated."},
+        {"key": "B", "text": "SHA-256 or longer is preferred", "rationale": "True."},
+        {"key": "C", "text": "SHA-2 and SHA-3 are members of the family", "rationale": "True."},
+        {"key": "D", "text": "Each algorithm produces a fixed-length digest", "rationale": "True: that is how hash functions work."}
+      ],
+      "answer": ["A"],
+      "explanation": "The Secure Hash Algorithm family includes SHA-1, SHA-2, and SHA-3. SHA-1 is deprecated; SHA-256 or longer is preferred.",
+      "discriminator_tested": "SHA-1 is deprecated; use SHA-256 or longer."
+    },
+    {
+      "objectives": ["C05-14"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "A traveling salesperson connects to headquarters from hotel rooms. Separately, two branch offices are permanently linked over the internet. Which VPN use cases are these?",
+      "options": [
+        {"key": "A", "text": "Remote access (user to site) for the salesperson; site-to-site for the branches", "rationale": "Correct: one user versus two whole networks."},
+        {"key": "B", "text": "Site-to-site for the salesperson; remote access for the branches", "rationale": "This is reversed."},
+        {"key": "C", "text": "Both are site-to-site", "rationale": "The salesperson is a single user, not a site."},
+        {"key": "D", "text": "Both are provider-managed MPLS VPNs", "rationale": "Nothing says a provider runs either one."}
+      ],
+      "answer": ["A"],
+      "explanation": "A VPN is an encrypted tunnel across an untrusted network such as the internet. Its main use cases are remote access (user to site) and site-to-site, and it is cheaper than leased lines.",
+      "discriminator_tested": "Remote access = user to site; site-to-site = network to network."
+    },
+    {
+      "objectives": ["C05-15", "C05-16"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What most clearly separates enterprise VPNs from provider-managed VPNs?",
+      "options": [
+        {"key": "A", "text": "The organization itself builds and manages an enterprise VPN, such as IPsec or SSL VPN, and controls its security", "rationale": "Correct: the customer controls the security."},
+        {"key": "B", "text": "Enterprise VPNs always run over MPLS", "rationale": "MPLS is typical of provider-managed VPNs."},
+        {"key": "C", "text": "Provider-managed VPNs are always encrypted, while enterprise VPNs are not", "rationale": "A provider isolates traffic but doesn't necessarily encrypt it."},
+        {"key": "D", "text": "Enterprise VPNs can't cross the internet", "rationale": "Enterprise VPNs normally run over the internet."}
+      ],
+      "answer": ["A"],
+      "explanation": "Enterprise VPNs are built and managed by the organization, typically IPsec or SSL VPN over the internet, so the customer controls the security. With provider-managed VPNs, the service provider runs it.",
+      "discriminator_tested": "Enterprise VPN = customer-controlled security."
+    },
+    {
+      "objectives": ["C05-16"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "A company moves its branch links to an MPLS-based VPN service run by its carrier. A manager assumes all branch traffic is now encrypted. Is that right?",
+      "options": [
+        {"key": "A", "text": "Not necessarily: the provider keeps each customer's traffic separate but doesn't necessarily encrypt it", "rationale": "Correct: isolation is not encryption."},
+        {"key": "B", "text": "Yes: MPLS always encrypts traffic with AES", "rationale": "MPLS labels and separates traffic; it does not encrypt it."},
+        {"key": "C", "text": "Yes: the provider automatically runs IPsec for every customer", "rationale": "Encryption is not automatic; the customer may need to add it."},
+        {"key": "D", "text": "No: MPLS VPNs send traffic over the public internet with no separation", "rationale": "The provider does separate customer traffic."}
+      ],
+      "answer": ["A"],
+      "explanation": "With provider-managed VPNs, such as MPLS-based ones, the service provider isolates customer traffic, but that traffic is not necessarily encrypted. Customers who need confidentiality add their own encryption.",
+      "discriminator_tested": "Provider-managed VPNs isolate traffic but don't necessarily encrypt it."
+    },
+    {
+      "objectives": ["C05-17"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about IPsec is NOT true?",
+      "options": [
+        {"key": "A", "text": "It is a single protocol with one fixed algorithm", "rationale": "Correct choice because it is false: IPsec is a framework of protocols and algorithms."},
+        {"key": "B", "text": "It can provide confidentiality, integrity, authentication, and anti-replay protection", "rationale": "True."},
+        {"key": "C", "text": "It uses IKE to negotiate its security parameters", "rationale": "True."},
+        {"key": "D", "text": "It uses AH and/or ESP to protect packets", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "IPsec is a suite that secures IP traffic with confidentiality, integrity, authentication, and anti-replay. It is a framework (IKE plus AH/ESP), not a single protocol.",
+      "discriminator_tested": "IPsec is a framework, not a single protocol."
+    },
+    {
+      "objectives": ["C05-18", "C05-17"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 3,
+      "stem": "When Cisco IOS IPsec brings up a tunnel, what do IKE phase 1 and IKE phase 2 each establish, in order?",
+      "options": [
+        {"key": "A", "text": "Phase 1 builds a secure management channel between the peers; phase 2 then builds the security associations that protect the data", "rationale": "Correct: first the management channel, then the data SAs."},
+        {"key": "B", "text": "Phase 1 protects the user data; phase 2 builds the management channel", "rationale": "This is reversed."},
+        {"key": "C", "text": "Phase 1 applies the crypto map; phase 2 creates the transform set", "rationale": "These are configuration items, not IKE negotiation phases."},
+        {"key": "D", "text": "Both phases encrypt user data, with no separate management channel", "rationale": "Phase 1 exists to create the protected management channel."}
+      ],
+      "answer": ["A"],
+      "explanation": "Cisco IOS IPsec is configured with an IKE policy, a transform set, and a crypto map or profile on an interface. IKE phase 1 builds the secure management channel, then phase 2 builds the data SAs.",
+      "discriminator_tested": "IKE phase 1 = management channel; phase 2 = data SAs."
+    },
+    {
+      "objectives": ["C05-19"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "Two sites must keep their traffic confidential as it crosses the internet. Which IPsec security protocol is required?",
+      "options": [
+        {"key": "A", "text": "ESP (IP protocol 50)", "rationale": "Correct: ESP provides encryption plus integrity and authentication."},
+        {"key": "B", "text": "AH (IP protocol 51)", "rationale": "AH provides integrity and authentication but no encryption."},
+        {"key": "C", "text": "GRE (IP protocol 47)", "rationale": "GRE is not part of IPsec and doesn't encrypt."},
+        {"key": "D", "text": "AH with a longer key", "rationale": "AH never encrypts, whatever the key length."}
+      ],
+      "answer": ["A"],
+      "explanation": "Of the IPsec security protocols, AH (protocol 51) provides integrity and authentication only. ESP (protocol 50) adds encryption, so it is the one that provides confidentiality.",
+      "discriminator_tested": "AH does not encrypt; ESP does."
+    },
+    {
+      "objectives": ["C05-20", "C05-19"], "type": "single", "angle": "choose-protocol", "difficulty": 3,
+      "stem": "Two branch routers protect the traffic between their LANs. The original packets, including the PCs' private IP headers, must be hidden in transit. Which IPsec encryption mode fits?",
+      "options": [
+        {"key": "A", "text": "ESP in tunnel mode", "rationale": "Correct: the whole original packet is encapsulated and encrypted."},
+        {"key": "B", "text": "ESP in transport mode", "rationale": "Transport mode protects only the payload and leaves the original IP header visible."},
+        {"key": "C", "text": "AH in transport mode", "rationale": "AH doesn't encrypt at all."},
+        {"key": "D", "text": "GRE alone", "rationale": "GRE encapsulates without encrypting."}
+      ],
+      "answer": ["A"],
+      "explanation": "IPsec encryption uses ESP with symmetric ciphers (AES preferred), with keys negotiated through IKE and Diffie-Hellman. Tunnel mode encapsulates the whole original packet and is typical for site-to-site; transport mode protects only the payload.",
+      "discriminator_tested": "Tunnel = whole packet (site-to-site); transport = payload only."
+    },
+    {
+      "objectives": ["C05-21"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "Two sites need to run OSPF, a routing protocol that uses multicast, across a tunnel over a private provider link. Encryption is not required. Which tunnel type fits?",
+      "options": [
+        {"key": "A", "text": "A GRE tunnel", "rationale": "Correct: GRE carries multicast and routing protocols."},
+        {"key": "B", "text": "A crypto-map IPsec tunnel on its own", "rationale": "Crypto-map IPsec carries unicast IP only, not multicast routing traffic."},
+        {"key": "C", "text": "AH in transport mode", "rationale": "AH adds integrity, not a multicast-capable tunnel."},
+        {"key": "D", "text": "An SSL VPN for remote users", "rationale": "That connects individual users, not two routers running OSPF."}
+      ],
+      "answer": ["A"],
+      "explanation": "GRE tunnels use IP protocol 47 and can carry many protocols, including multicast and routing protocols. They are flexible but provide no encryption.",
+      "discriminator_tested": "GRE is flexible (multicast, routing) but has no encryption."
+    },
+    {
+      "objectives": ["C05-22", "C05-21", "C05-19"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "Two sites must run OSPF over the internet, and all traffic must be encrypted. Why is GRE over IPsec a common answer?",
+      "options": [
+        {"key": "A", "text": "GRE carries the multicast routing traffic; IPsec adds the encryption", "rationale": "Correct: each protocol covers what the other lacks."},
+        {"key": "B", "text": "GRE adds the encryption; IPsec adds multicast support", "rationale": "This reverses their roles."},
+        {"key": "C", "text": "GRE alone encrypts, so IPsec is optional", "rationale": "GRE provides no encryption."},
+        {"key": "D", "text": "IPsec with crypto maps handles both, so GRE adds nothing", "rationale": "Crypto-map IPsec doesn't carry multicast routing protocols."}
+      ],
+      "answer": ["A"],
+      "explanation": "In GRE over IPsec, a GRE tunnel is protected by IPsec. GRE adds multiprotocol and multicast support; IPsec adds encryption.",
+      "discriminator_tested": "GRE adds multicast and multiprotocol support; IPsec adds encryption."
+    },
+    {
+      "objectives": ["C05-23"], "type": "single", "angle": "choose-protocol", "difficulty": 2,
+      "stem": "A company with 120 branches wants a hub-and-spoke VPN in which branches can also build tunnels to each other on demand, without configuring a full mesh by hand. Which Cisco solution fits?",
+      "options": [
+        {"key": "A", "text": "DMVPN", "rationale": "Correct: hub-and-spoke with dynamic spoke-to-spoke tunnels."},
+        {"key": "B", "text": "A static full mesh of point-to-point GRE tunnels", "rationale": "That is the hand-built full mesh the company wants to avoid; it doesn't scale."},
+        {"key": "C", "text": "A single IPsec VTI to headquarters", "rationale": "One VTI gives one point-to-point tunnel, with no dynamic spoke-to-spoke links."},
+        {"key": "D", "text": "An SSL VPN for each employee", "rationale": "That provides user remote access, not branch-to-branch networking."}
+      ],
+      "answer": ["A"],
+      "explanation": "Cisco DMVPN is a hub-and-spoke VPN with dynamic spoke-to-spoke tunnels, built from mGRE, NHRP, and IPsec. It scales without configuring a full mesh.",
+      "discriminator_tested": "DMVPN scales without configuring a full mesh."
+    },
+    {
+      "objectives": ["C05-24", "C05-18"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 3,
+      "stem": "What separates a Cisco IPsec VTI from a crypto-map-based IPsec configuration?",
+      "options": [
+        {"key": "A", "text": "A VTI is a routable virtual interface (route-based, with no GRE header); crypto maps are policy-based and pick traffic with an ACL", "rationale": "Correct: route-based versus policy-based."},
+        {"key": "B", "text": "A VTI always adds a GRE header", "rationale": "A VTI needs no GRE header."},
+        {"key": "C", "text": "A VTI doesn't encrypt traffic", "rationale": "A VTI is an IPsec tunnel and encrypts."},
+        {"key": "D", "text": "Crypto maps are route-based; VTIs are policy-based", "rationale": "This is reversed."}
+      ],
+      "answer": ["A"],
+      "explanation": "A Cisco IPsec VTI makes the IPsec tunnel a routable virtual interface. It is route-based with no GRE header, in contrast to policy-based crypto maps.",
+      "discriminator_tested": "VTI is route-based with no GRE header; crypto maps are policy-based."
+    },
+    {
+      "objectives": ["C05-25", "C05-26"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which description best fits a public key infrastructure (PKI)?",
+      "options": [
+        {"key": "A", "text": "The whole framework of CAs, certificates, policies, and processes that bind public keys to identities", "rationale": "Correct: PKI is the complete trust system."},
+        {"key": "B", "text": "A single digital certificate", "rationale": "A certificate is one component of a PKI."},
+        {"key": "C", "text": "A symmetric cipher used for bulk encryption", "rationale": "PKI deals with public keys and identities, not bulk symmetric encryption."},
+        {"key": "D", "text": "One certificate authority server", "rationale": "A CA is one component; PKI includes the policies and processes around it."}
+      ],
+      "answer": ["A"],
+      "explanation": "A public key infrastructure is the framework of CAs, certificates, policies, and processes that bind public keys to identities. It is the whole trust system, not any one component.",
+      "discriminator_tested": "PKI is the whole trust system, not one component."
+    },
+    {
+      "objectives": ["C05-26", "C05-28"], "type": "single", "angle": "symptom-to-attack", "difficulty": 1,
+      "stem": "A browser trusts a website's certificate because it was signed by an organization already in the browser's trusted list. What role does that organization play?",
+      "options": [
+        {"key": "A", "text": "A certificate authority: the trust anchor that issued and signed the certificate", "rationale": "Correct: the CA signs certificates with its own private key."},
+        {"key": "B", "text": "A certificate template", "rationale": "A template is a set of issuing settings, not an organization."},
+        {"key": "C", "text": "A VPN concentrator", "rationale": "That terminates VPN tunnels; it doesn't vouch for websites."},
+        {"key": "D", "text": "A hash algorithm", "rationale": "A hash is a function, not a trusted organization."}
+      ],
+      "answer": ["A"],
+      "explanation": "Certificate authorities are trusted entities that issue, sign, and revoke certificates. A CA is the trust anchor and signs with its own private key.",
+      "discriminator_tested": "The CA is the trust anchor and signs with its own private key."
+    },
+    {
+      "objectives": ["C05-27", "C05-26"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "An administrator wants every new web-server certificate issued with the same key usage, validity period, and key size, without setting them by hand each time. What does the CA use to apply these settings automatically?",
+      "options": [
+        {"key": "A", "text": "A certificate template", "rationale": "Correct: a template is the blueprint the CA applies when issuing."},
+        {"key": "B", "text": "An existing certificate", "rationale": "A certificate is something that was issued, not the blueprint for future ones."},
+        {"key": "C", "text": "A certificate revocation list", "rationale": "A revocation list records cancelled certificates; it doesn't set issuing options."},
+        {"key": "D", "text": "The root CA's private key", "rationale": "The key signs certificates; it doesn't define their settings."}
+      ],
+      "answer": ["A"],
+      "explanation": "A certificate template holds predefined settings (key usage, validity, key size, subject fields) that a CA applies when issuing certificates. It is the blueprint, not a certificate itself.",
+      "discriminator_tested": "A template is the blueprint for issuing, not a certificate."
+    },
+    {
+      "objectives": ["C05-28"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about digital certificates is NOT true?",
+      "options": [
+        {"key": "A", "text": "A certificate contains its owner's private key", "rationale": "Correct choice because it is false: certificates hold only the public key; the private key is never shared."},
+        {"key": "B", "text": "A certificate binds a public key to an identity", "rationale": "True."},
+        {"key": "C", "text": "Certificates commonly use the X.509 format", "rationale": "True."},
+        {"key": "D", "text": "A certificate is checked using the CA's signature, its validity dates, and its revocation status", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Certificates are signed digital documents (X.509) that bind a public key to an identity. They hold the public key, never the private key, and are validated by the CA signature, dates, and revocation status.",
+      "discriminator_tested": "Certificates hold the public key, never the private key."
+    },
+    {
+      "objectives": ["C05-29", "C05-03"], "type": "single", "angle": "find-config-error", "difficulty": 2,
+      "stem": "To permit the 192.168.1.0/24 subnet, an administrator enters:\n\naccess-list 10 permit 192.168.1.0 255.255.255.0\n\nWhat is wrong with this standard ACL command?",
+      "options": [
+        {"key": "A", "text": "A subnet mask was used where a wildcard mask is required; it should be 0.0.0.255", "rationale": "Correct: ACLs use inverse (wildcard) masks."},
+        {"key": "B", "text": "Standard ACLs need a protocol keyword such as 'ip'", "rationale": "Standard ACL entries have no protocol field."},
+        {"key": "C", "text": "10 is an extended ACL number", "rationale": "1-99 is the standard range."},
+        {"key": "D", "text": "A destination address is missing", "rationale": "Standard ACLs match the source only."}
+      ],
+      "answer": ["A"],
+      "explanation": "Standard ACL commands take a number, an action, and a source with a wildcard, for example 'access-list 10 permit 192.168.1.0 0.0.0.255'. There is no protocol or port.",
+      "discriminator_tested": "Standard ACL commands: number, action, source plus wildcard."
+    },
+    {
+      "objectives": ["C05-30", "C05-35"], "type": "single", "angle": "complete-config", "difficulty": 2,
+      "stem": "Which command permits HTTP traffic from the 192.168.1.0/24 users to the web server 10.1.1.10?",
+      "options": [
+        {"key": "A", "text": "access-list 110 permit tcp 192.168.1.0 0.0.0.255 host 10.1.1.10 eq 80", "rationale": "Correct: action, protocol, source, destination, then port."},
+        {"key": "B", "text": "access-list 110 permit 192.168.1.0 0.0.0.255 host 10.1.1.10 eq 80 tcp", "rationale": "The protocol must come right after the action."},
+        {"key": "C", "text": "access-list 10 permit tcp 192.168.1.0 0.0.0.255 host 10.1.1.10 eq 80", "rationale": "10 is a standard ACL number, and standard ACLs can't match protocols or ports."},
+        {"key": "D", "text": "access-list 110 permit ip 192.168.1.0 0.0.0.255 host 10.1.1.10 eq 80", "rationale": "'ip' matches all traffic and can't take a port."}
+      ],
+      "answer": ["A"],
+      "explanation": "Extended ACL commands follow the order: number, action, protocol, source (with wildcard), destination, then port. Port matching requires 'tcp' or 'udp'.",
+      "discriminator_tested": "Extended order: action, protocol, source, destination, then port."
+    },
+    {
+      "objectives": ["C05-31"], "type": "single", "angle": "find-config-error", "difficulty": 2,
+      "stem": "An administrator types:\n\nip access-list WEB-IN\n permit tcp any any eq 443\n\nand the router rejects the first line. What is missing?",
+      "options": [
+        {"key": "A", "text": "The 'standard' or 'extended' keyword; here it should be 'ip access-list extended WEB-IN'", "rationale": "Correct: named ACLs must state their type."},
+        {"key": "B", "text": "Named ACLs can't match TCP", "rationale": "An extended named ACL can match TCP and ports."},
+        {"key": "C", "text": "Each entry must begin with 'access-list'", "rationale": "Entries in a named ACL leave out the 'access-list' keyword."},
+        {"key": "D", "text": "ACL names must be numbers", "rationale": "Named ACLs exist precisely so a name can be used."}
+      ],
+      "answer": ["A"],
+      "explanation": "Named ACLs are created with 'ip access-list standard NAME' or 'ip access-list extended NAME'. The keyword is required, and entries in ACL config mode omit 'access-list'.",
+      "discriminator_tested": "Named ACLs require the standard or extended keyword."
+    },
+    {
+      "objectives": ["C05-32"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "An administrator writes a careful extended ACL 150, but the traffic it should block still passes. 'show running-config' shows no 'ip access-group' command under any interface. Why is nothing being filtered?",
+      "options": [
+        {"key": "A", "text": "The ACL was never applied to an interface, and an unapplied ACL filters nothing", "rationale": "Correct: it has to be applied with 'ip access-group' in a direction."},
+        {"key": "B", "text": "The implicit deny is turned off", "rationale": "The implicit deny can't be turned off, and it doesn't matter while the ACL is unapplied."},
+        {"key": "C", "text": "Extended ACLs must be applied with 'access-class'", "rationale": "'access-class' is for VTY lines; interfaces use 'ip access-group'."},
+        {"key": "D", "text": "The router must be rebooted before ACLs take effect", "rationale": "Applied ACLs take effect immediately."}
+      ],
+      "answer": ["A"],
+      "explanation": "Applying an ACL to an interface uses 'ip access-group 150 in' (or 'out') under the interface. An unapplied ACL filters nothing, and direction is relative to the router.",
+      "discriminator_tested": "An unapplied ACL filters nothing."
+    },
+    {
+      "objectives": ["C05-33", "C05-32"], "type": "single", "angle": "complete-config", "difficulty": 2,
+      "stem": "To allow SSH management of a router only from 10.0.0.0/24, an administrator creates:\n\naccess-list 5 permit 10.0.0.0 0.0.0.255\n\nWhich commands apply it correctly?",
+      "options": [
+        {"key": "A", "text": "line vty 0 4, then access-class 5 in", "rationale": "Correct: 'access-class' on the VTY lines limits management sessions to the device."},
+        {"key": "B", "text": "interface g0/0, then ip access-group 5 in", "rationale": "That filters all traffic passing through the interface, not specifically management sessions to the router."},
+        {"key": "C", "text": "line vty 0 4, then ip access-group 5 in", "rationale": "'ip access-group' is an interface command, not a line command."},
+        {"key": "D", "text": "interface g0/0, then access-class 5 in", "rationale": "'access-class' belongs under the VTY lines."}
+      ],
+      "answer": ["A"],
+      "explanation": "Applying an ACL to VTY lines uses 'line vty 0 4' and 'access-class 5 in'. 'access-class' limits management sessions to the device; 'ip access-group' filters traffic through an interface.",
+      "discriminator_tested": "'access-class' = VTY management access; 'ip access-group' = interface traffic."
+    },
+    {
+      "objectives": ["C05-34", "C05-01"], "type": "single", "angle": "find-config-error", "difficulty": 3,
+      "stem": "A named ACL is applied, but Telnet to 10.5.5.5 is still allowed:\n\nip access-list extended BRANCH\n 10 permit ip any any\n 20 deny tcp any host 10.5.5.5 eq 23\n\nWhy?",
+      "options": [
+        {"key": "A", "text": "The broad permit at sequence 10 matches first and shadows the deny; the deny needs a lower sequence number, such as 5", "rationale": "Correct: order decides, and the first match wins."},
+        {"key": "B", "text": "The implicit deny overrides sequence 20", "rationale": "The implicit deny is only reached when nothing matches; sequence 10 already matched."},
+        {"key": "C", "text": "A deny entry only works with the 'log' keyword", "rationale": "'log' only records matches; it doesn't change them."},
+        {"key": "D", "text": "Telnet uses TCP 22, so the port is wrong", "rationale": "Telnet uses TCP 23; SSH uses 22."}
+      ],
+      "answer": ["A"],
+      "explanation": "Entry order and sequence numbers decide behavior. A broad entry above a specific one shadows it, and sequence numbers in a named ACL let you insert the deny above the permit.",
+      "discriminator_tested": "A broad entry above a specific one shadows it."
+    },
+    {
+      "objectives": ["C05-35", "C05-30"], "type": "single", "angle": "find-config-error", "difficulty": 2,
+      "stem": "The router rejects this command:\n\naccess-list 120 deny ip any any eq 23\n\nWhy?",
+      "options": [
+        {"key": "A", "text": "Ports require 'tcp' or 'udp'; 'ip' matches all traffic and can't take a port", "rationale": "Correct: 'eq 23' needs 'tcp'."},
+        {"key": "B", "text": "'eq' must be replaced with 'range'", "rationale": "'eq' is valid for a single port."},
+        {"key": "C", "text": "Port 23 must be written as 'telnet'", "rationale": "Ports can be given by number or by name."},
+        {"key": "D", "text": "120 is a standard ACL number", "rationale": "100-199 is the extended range."}
+      ],
+      "answer": ["A"],
+      "explanation": "Port and protocol keywords: protocols include tcp, udp, icmp, and ip, and operators include eq, neq, gt, lt, and range. Ports require tcp or udp; 'ip' matches everything and can't take ports.",
+      "discriminator_tested": "Ports require tcp or udp; 'ip' can't take ports."
+    },
+    {
+      "objectives": ["C05-36", "C05-32"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "'show access-lists' displays:\n\nExtended IP access list 110\n    10 permit tcp 192.168.1.0 0.0.0.255 any eq www (152 matches)\n    20 deny ip any any (37 matches)\n\nWhat can you conclude from this output?",
+      "options": [
+        {"key": "A", "text": "The ACL's entries and how many packets matched each; it doesn't show where the ACL is applied", "rationale": "Correct: use 'show ip interface' to see the interface and direction."},
+        {"key": "B", "text": "ACL 110 is applied inbound on g0/0", "rationale": "This output doesn't show where the ACL is applied."},
+        {"key": "C", "text": "Entry 20 is the implicit deny", "rationale": "The implicit deny isn't listed; entry 20 is an explicit deny with its own counter."},
+        {"key": "D", "text": "152 packets were denied", "rationale": "The 152 matches were on the permit entry."}
+      ],
+      "answer": ["A"],
+      "explanation": "For verifying ACLs, 'show access-lists' shows what the ACL says and its hit counts; 'show ip interface' shows where it is applied and in which direction.",
+      "discriminator_tested": "'show access-lists' = contents and hits; 'show ip interface' = where applied."
+    },
+    {
+      "objectives": ["C05-37", "C05-32"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "An administrator wants ACL 110 to stop filtering on g0/0 for now, but keep the ACL itself for later. Which command does this?",
+      "options": [
+        {"key": "A", "text": "Under interface g0/0: no ip access-group 110 in", "rationale": "Correct: this removes only the application."},
+        {"key": "B", "text": "no access-list 110", "rationale": "This deletes the whole ACL."},
+        {"key": "C", "text": "access-list 110 remark DISABLED", "rationale": "A remark only adds a comment; filtering continues."},
+        {"key": "D", "text": "Under line vty 0 4: no access-class 110 in", "rationale": "That concerns VTY lines, not the interface filter."}
+      ],
+      "answer": ["A"],
+      "explanation": "When removing and documenting ACLs, 'no ip access-group 110 in' removes the application only, 'no access-list 110' deletes the whole ACL, and 'remark' documents entries.",
+      "discriminator_tested": "Removing the application vs deleting the ACL itself."
+    }
+  ]
+}

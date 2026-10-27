@@ -1,0 +1,167 @@
+{
+  "questions": [
+    {
+      "objectives": [
+        "C07-26",
+        "C07-27"
+      ],
+      "type": "single",
+      "angle": "choose-response",
+      "difficulty": 2,
+      "stem": "A company wants to fully wipe any lost phone remotely, with no staff privacy concerns. Which device model BEST fits?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Organization-owned devices",
+          "rationale": "Correct: full organizational control, no personal data at stake.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "BYOD phones enrolled in MDM",
+          "rationale": "Possible, but wiping personal phones raises privacy issues.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "BYOD phones with a screen-lock rule",
+          "rationale": "A screen lock doesn't allow remote wiping.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Personal phones with no enrollment",
+          "rationale": "No control at all.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "BYOD means employee-owned devices; organization-owned devices are under full organizational control. Ownership drives how much control and privacy there is.",
+      "discriminator_tested": "Ownership drives control and privacy."
+    },
+    {
+      "objectives": [
+        "C07-30"
+      ],
+      "type": "single",
+      "angle": "mitigation-to-threat",
+      "difficulty": 1,
+      "stem": "A managed laptop has full-disk encryption. Which risk does this MOST directly reduce?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Data exposure if the device is lost",
+          "rationale": "Correct: the disk is unreadable without the key.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Malware infection while it is in use",
+          "rationale": "While running, the disk is unlocked.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Phishing emails reaching the user",
+          "rationale": "Email filtering and training address that.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Network eavesdropping on its traffic",
+          "rationale": "Disk encryption doesn't touch network traffic.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Data encryption protects data on the device, for example with full-disk encryption. A lost or stolen device doesn't expose readable data.",
+      "discriminator_tested": "Lost or stolen device doesn't expose readable data."
+    },
+    {
+      "objectives": [
+        "C07-39",
+        "C07-32"
+      ],
+      "type": "single",
+      "angle": "choose-response",
+      "difficulty": 3,
+      "stem": "A rootkit hides from the antivirus while Windows is running. Which approach BEST removes it?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Scan from bootable rescue media",
+          "rationale": "Correct: the rootkit can't hide when its OS isn't running.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Update definitions and rescan normally",
+          "rationale": "Necessary, but the rootkit still hides from a scan run inside Windows.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "Disable UAC and rescan",
+          "rationale": "UAC has nothing to do with detection.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Delete the System32 folder",
+          "rationale": "That destroys Windows.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Remediating infected systems means updating antimalware, scanning, and removing the malware, using safe mode or rescue media when needed. Use current definitions; rescue media helps with stealthy malware such as rootkits.",
+      "discriminator_tested": "Rescue media helps with stealthy malware such as rootkits."
+    },
+    {
+      "objectives": [
+        "C07-42",
+        "C07-35"
+      ],
+      "type": "single",
+      "angle": "find-missing-element",
+      "difficulty": 2,
+      "stem": "A user's PC was cleaned of malware that arrived in a phishing email. A week later it is reinfected the same way. Which step was MOST likely skipped?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Security awareness training",
+          "rationale": "Correct: the final step prevents a repeat.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Scheduling scans and updates",
+          "rationale": "Scans can't stop a user clicking a link.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Disabling System Restore",
+          "rationale": "That affects cleanup, not how the user got phished again.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Quarantining the PC",
+          "rationale": "Quarantine contains spread during cleaning.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Educating end users (phishing, safe downloads, reporting) is the final step of the malware remediation process, and it prevents recurrence.",
+      "discriminator_tested": "Education is the final step; prevents recurrence."
+    }
+  ]
+}

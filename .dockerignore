@@ -1,0 +1,13 @@
+.venv/
+.git/
+.env
+.env.*
+!.env.example
+**/__pycache__/
+.pytest_cache/
+data/
+tests/
+Project Documents/
+Objective Documents/
+install/
+*.md

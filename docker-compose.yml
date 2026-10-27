@@ -1,0 +1,59 @@
+# CCST Cybersecurity prep: app + local Ollama (plan section 14.1).
+# Start: docker compose up -d     Then open http://127.0.0.1:8000
+# Image tags are pinned (SR11). Change OLLAMA_MODEL in .env to use a different model.
+
+name: ccst
+
+services:
+  app:
+    build: .
+    image: ccst-app:1.0.0
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${CCST_PORT:-8000}:8000"   # localhost only, never the LAN (SR10)
+    environment:
+      CCST_PROVIDER: ${CCST_PROVIDER:-ollama}
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen3:4b}
+      OLLAMA_NUM_CTX: ${OLLAMA_NUM_CTX:-12288}
+      OLLAMA_TIMEOUT_S: ${OLLAMA_TIMEOUT_S:-1800}
+      CCST_BATCH_SIZE: ${CCST_BATCH_SIZE:-5}
+      CCST_GENERATE_COOLDOWN_S: ${CCST_GENERATE_COOLDOWN_S:-10}
+    volumes:
+      - "./Objective Documents:/app/objectives:ro"   # source of truth, read-only
+      - "./data:/data"                                # question pool + tracker.db; survives rebuilds
+    depends_on:
+      ollama:
+        condition: service_healthy
+
+  ollama:
+    image: ollama/ollama:0.40.0
+    restart: unless-stopped
+    # No "ports:" on purpose (SR9). Ollama has no authentication, so only the app
+    # can reach it, over the Compose network at http://ollama:11434.
+    volumes:
+      - ollama-models:/root/.ollama   # models survive rebuilds (SR12)
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
+    # NVIDIA GPU support lives in docker-compose.gpu.yml; the installer enables it via COMPOSE_FILE in .env.
+
+  # Optional one-shot model download (the installer normally handles models, including offline).
+  # Run manually with:  docker compose --profile pull run --rm ollama-pull
+  # Re-running is safe: Ollama skips layers it already has.
+  ollama-pull:
+    image: ollama/ollama:0.40.0
+    profiles: ["pull"]
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["ollama", "pull", "${OLLAMA_MODEL:-qwen3:4b}"]
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: "no"
+
+volumes:
+  ollama-models:

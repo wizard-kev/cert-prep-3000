@@ -1,0 +1,323 @@
+{
+  "questions": [
+    {
+      "objectives": ["C13-01", "C13-28"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A company handles each incident competently but never meets afterward, and the same weaknesses keep causing repeat incidents. What BEST describes the gap?",
+      "options": [
+        {"key": "A", "text": "The cycle doesn't loop back", "rationale": "Correct: incident handling is a lifecycle; learning feeds preparation.", "role": "best"},
+        {"key": "B", "text": "The response is too slow", "rationale": "Speed isn't described as a problem.", "role": "related"},
+        {"key": "C", "text": "The team is too small", "rationale": "Size doesn't explain repeats.", "role": "related"},
+        {"key": "D", "text": "The firewall is misconfigured", "rationale": "A guess; the gap is the missing feedback.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Incident handling is the overall process of preparing for, detecting, responding to, and learning from incidents. It runs as a lifecycle, not a one-time event.",
+      "discriminator_tested": "A lifecycle, not a one-time event."
+    },
+    {
+      "objectives": ["C13-02"], "type": "multi", "angle": "interpret-output", "difficulty": 2,
+      "stem": "Which two entries in the log below are security incidents rather than ordinary events? (Choose two.)",
+      "exhibit": "09:00  User jlee logged in (VPN)\n09:14  AV quarantined EICAR test file (scheduled test)\n09:31  Firewall blocked inbound scan from 203.0.113.9\n09:47  HR database exported to unknown external host\n09:52  Ransom note found on file server FS-03",
+      "options": [
+        {"key": "A", "text": "The HR database export", "rationale": "Correct: confidentiality harmed.", "role": "best"},
+        {"key": "B", "text": "The ransom note on FS-03", "rationale": "Correct: availability harmed.", "role": "best"},
+        {"key": "C", "text": "The blocked inbound scan", "rationale": "An event; the control worked.", "role": "related"},
+        {"key": "D", "text": "The quarantined test file", "rationale": "A planned test.", "role": "related"},
+        {"key": "E", "text": "The VPN login", "rationale": "Normal activity.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Security incidents are events that violate or threaten security policy or harm confidentiality, integrity, or availability. An event is any observable occurrence; an incident is an event with an adverse effect.",
+      "discriminator_tested": "An incident is an event with an adverse effect."
+    },
+    {
+      "objectives": ["C13-03", "C13-09"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "What BEST explains why a company should set its ransomware payment policy before any ransomware incident?",
+      "options": [
+        {"key": "A", "text": "Decisions under pressure go badly", "rationale": "Correct: a pre-set policy avoids panic decisions.", "role": "best"},
+        {"key": "B", "text": "Payment prices rise over time", "rationale": "Not the reason.", "role": "wrong"},
+        {"key": "C", "text": "Insurers forbid paying", "rationale": "Not universally true.", "role": "related"},
+        {"key": "D", "text": "It speeds up restoring backups", "rationale": "Backups are restored either way.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "A ransomware incident encrypts data for payment. The response relies on isolation, backups, and a pre-set payment policy.",
+      "discriminator_tested": "Pre-set payment policy."
+    },
+    {
+      "objectives": ["C13-04"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "A visitor in a hi-vis vest follows staff through a secure door, then asks the receptionist for the Wi-Fi password and is given it. What type of incident is this?",
+      "options": [
+        {"key": "A", "text": "Social engineering", "rationale": "Correct: people manipulated into giving access.", "role": "best"},
+        {"key": "B", "text": "Phishing", "rationale": "Phishing uses fraudulent messages.", "role": "related"},
+        {"key": "C", "text": "Insider threat", "rationale": "The visitor has no legitimate access.", "role": "related"},
+        {"key": "D", "text": "Supply chain attack", "rationale": "No vendor is involved.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A social engineering incident is one where people are manipulated into giving access or information. The response includes credential resets (here, the Wi-Fi password) and user education.",
+      "discriminator_tested": "People manipulated into giving access."
+    },
+    {
+      "objectives": ["C13-05"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "Several staff report the email below. What is the BEST first response?",
+      "exhibit": "From:     IT Support <it-support@micros0ft-help.com>\nSubject:  Your password expires today\nBody:     Keep your access: hxxp://micros0ft-help[.]com/reset",
+      "options": [
+        {"key": "A", "text": "Block the sender and link", "rationale": "Correct: stops more people falling for it.", "role": "best"},
+        {"key": "B", "text": "Delete your own copy", "rationale": "Protects one inbox.", "role": "partial"},
+        {"key": "C", "text": "Reply asking for proof", "rationale": "Engages the attacker.", "role": "wrong"},
+        {"key": "D", "text": "Reimage the reporters' PCs", "rationale": "Reporting isn't infection.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "A phishing incident uses fraudulent messages to steal credentials or deliver malware. Report it, block the sender and URLs, and reset any exposed credentials.",
+      "discriminator_tested": "Block sender and URLs."
+    },
+    {
+      "objectives": ["C13-06"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What BEST distinguishes a DDoS incident from a denial-of-service attack launched from one host?",
+      "options": [
+        {"key": "A", "text": "Traffic comes from many sources", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "It disrupts availability", "rationale": "Both do.", "role": "partial"},
+        {"key": "C", "text": "It steals data in transit", "rationale": "Not a DoS goal.", "role": "wrong"},
+        {"key": "D", "text": "It is blocked by one ACL entry", "rationale": "That suits a single source.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "A DDoS incident is a flood of traffic from many sources that exhausts a resource. Mitigation often needs upstream help from the ISP.",
+      "discriminator_tested": "Many sources."
+    },
+    {
+      "objectives": ["C13-07"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A vendor announces that one of its software updates shipped with a backdoor. A company installed that update last month. What is the BEST first step?",
+      "options": [
+        {"key": "A", "text": "Find and isolate affected systems", "rationale": "Correct: scope and contain.", "role": "best"},
+        {"key": "B", "text": "Remove each vendor product", "rationale": "Drastic, and doesn't find what the backdoor touched.", "role": "related"},
+        {"key": "C", "text": "Wait for the vendor's patch", "rationale": "The backdoor stays open meanwhile.", "role": "related"},
+        {"key": "D", "text": "Change the firewall vendor", "rationale": "Unrelated.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Supply chain attacks deliver compromise through a trusted vendor, software update, or component. They arrive through a trusted third party, so they are hard to detect.",
+      "discriminator_tested": "Compromise via a trusted third party."
+    },
+    {
+      "objectives": ["C13-08"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "An employee with legitimate database access sells customer records. The perimeter firewall and IDS raised no alerts. What BEST explains why?",
+      "options": [
+        {"key": "A", "text": "The access was legitimate", "rationale": "Correct: insiders use valid access.", "role": "best"},
+        {"key": "B", "text": "The IDS signatures were old", "rationale": "Nothing malicious crossed the perimeter.", "role": "related"},
+        {"key": "C", "text": "The firewall was misconfigured", "rationale": "The traffic was authorized.", "role": "related"},
+        {"key": "D", "text": "The data was encrypted", "rationale": "Not the reason.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Insider threats are harm from someone with legitimate access. The response includes access revocation and monitoring.",
+      "discriminator_tested": "Harm from someone with legitimate access."
+    },
+    {
+      "objectives": ["C13-09", "C13-21"], "type": "single", "angle": "assess-risk", "difficulty": 1,
+      "stem": "What is the MAIN benefit of incident response planning?",
+      "options": [
+        {"key": "A", "text": "Being ready in advance", "rationale": "Correct: plans, teams, tools, and policies exist beforehand.", "role": "best"},
+        {"key": "B", "text": "Fewer incidents occur", "rationale": "Prevention does that.", "role": "partial"},
+        {"key": "C", "text": "No need to detect", "rationale": "Detection is still needed.", "role": "wrong"},
+        {"key": "D", "text": "Lower insurance premiums", "rationale": "A possible side effect.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Incident response planning means preparing plans, teams, tools, and policies before incidents occur. It is done in advance, not during the incident.",
+      "discriminator_tested": "Done in advance."
+    },
+    {
+      "objectives": ["C13-10", "C13-29"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "During an incident, responders ask who to escalate to and how. The company's IR policy says the CSIRT has authority to act, but nothing more. What document is MOST clearly missing?",
+      "options": [
+        {"key": "A", "text": "An incident response plan", "rationale": "Correct: roles, procedures, communication, escalation.", "role": "best"},
+        {"key": "B", "text": "A stricter incident policy", "rationale": "Policy sets authority, not procedures.", "role": "related"},
+        {"key": "C", "text": "A detailed risk register", "rationale": "Guides priorities, not escalation.", "role": "related"},
+        {"key": "D", "text": "A support contract with a vendor", "rationale": "Unrelated.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An incident response plan is the documented roadmap of roles, procedures, communication, and escalation. Plan = procedures; policy = authority and requirements.",
+      "discriminator_tested": "Plan = procedures."
+    },
+    {
+      "objectives": ["C13-11"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "A company's CSIRT is made up of network and server engineers. During a breach, nobody can approve customer notices or advise on legal duties. What is MOST clearly missing?",
+      "options": [
+        {"key": "A", "text": "Legal and communications roles", "rationale": "Correct: a CSIRT is cross-functional.", "role": "best"},
+        {"key": "B", "text": "More network engineers", "rationale": "More of the same skills.", "role": "related"},
+        {"key": "C", "text": "A faster SIEM platform", "rationale": "Tools don't approve notices.", "role": "wrong"},
+        {"key": "D", "text": "Company-wide awareness training", "rationale": "Useful, but not the gap.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "A CSIRT (Computer Security Incident Response Team) is the group that handles incidents. It is cross-functional and includes non-technical roles: legal, HR, communications, management.",
+      "discriminator_tested": "Cross-functional, including non-technical roles."
+    },
+    {
+      "objectives": ["C13-12"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which statement from an IR plan BEST shows specifically defined responsibilities?",
+      "options": [
+        {"key": "A", "text": "The CISO decides; the PR lead speaks", "rationale": "Correct: named roles assigned in advance.", "role": "best"},
+        {"key": "B", "text": "Everyone helps where needed", "rationale": "Invites gaps and duplicated effort.", "role": "wrong"},
+        {"key": "C", "text": "The team will decide roles then", "rationale": "Not in advance.", "role": "related"},
+        {"key": "D", "text": "Roles follow seniority on the day", "rationale": "Not defined in advance.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Specifically defined responsibilities mean each person's role is assigned in advance: who decides, who communicates, who acts. Clear roles prevent gaps and duplicated effort.",
+      "discriminator_tested": "Roles assigned in advance."
+    },
+    {
+      "objectives": ["C13-13"], "type": "single", "angle": "choose-response", "difficulty": 1,
+      "stem": "A cyberattack has taken down order processing. What is the MAIN goal of the business continuity section of the IR plan in this situation?",
+      "options": [
+        {"key": "A", "text": "Keep sales running", "rationale": "Correct: critical business functions continue.", "role": "best"},
+        {"key": "B", "text": "Remove the malware from servers", "rationale": "Eradication.", "role": "related"},
+        {"key": "C", "text": "Notify the regulators on time", "rationale": "Reporting.", "role": "related"},
+        {"key": "D", "text": "Restore last year's backups", "rationale": "Stale data, and recovery rather than continuity.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The business continuity plan in the IR plan keeps critical business functions running during an incident. It is business-wide continuity.",
+      "discriminator_tested": "Keeps critical functions running."
+    },
+    {
+      "objectives": ["C13-14", "C13-12"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two belong in an incident communications plan? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Who informs whom, and when", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Backup contact channels", "rationale": "Correct: if normal channels are compromised.", "role": "best"},
+        {"key": "C", "text": "Step-by-step malware removal", "rationale": "Eradication procedure.", "role": "related"},
+        {"key": "D", "text": "Planned firewall rule changes", "rationale": "Change management.", "role": "related"},
+        {"key": "E", "text": "Employee salary bands", "rationale": "Unrelated.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "A communications plan defines who is informed, how, when, and by whom, internally and externally. It uses a designated spokesperson, and backup channels matter if normal ones are compromised.",
+      "discriminator_tested": "Who, how, when; backup channels."
+    },
+    {
+      "objectives": ["C13-15"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "Each responder records incident notes in a personal style and local time zone. What is the MAIN risk?",
+      "options": [
+        {"key": "A", "text": "Unreliable timelines", "rationale": "Correct: consistency makes timelines and evidence reliable.", "role": "best"},
+        {"key": "B", "text": "Responders type more slowly", "rationale": "Not the risk.", "role": "wrong"},
+        {"key": "C", "text": "Notes may be lost or deleted", "rationale": "A storage issue, not a format issue.", "role": "related"},
+        {"key": "D", "text": "Notes become too detailed", "rationale": "Detail isn't the problem.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Specifically defined documentation standards are consistent templates and formats for recording incident details. Consistency makes timelines and evidence reliable.",
+      "discriminator_tested": "Consistency makes timelines reliable."
+    },
+    {
+      "objectives": ["C13-16"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "Two merged companies use different names for incident phases, which causes confusion in joint exercises. What BEST fixes this?",
+      "options": [
+        {"key": "A", "text": "Adopt one IR framework", "rationale": "Correct: a common set of phases and terms.", "role": "best"},
+        {"key": "B", "text": "Hire extra incident responders", "rationale": "More people, same confusion.", "role": "related"},
+        {"key": "C", "text": "Buy one shared SIEM platform", "rationale": "A tool, not a vocabulary.", "role": "related"},
+        {"key": "D", "text": "Write separate policies for each", "rationale": "Keeps them apart.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Incident response frameworks give structured guidance for organizing incident response. Frameworks give a common set of phases and terms.",
+      "discriminator_tested": "Frameworks give common phases and terms."
+    },
+    {
+      "objectives": ["C13-17", "C13-19"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "A team's process treats isolating hosts, removing malware, and restoring systems as three separate steps. Which model does this match?",
+      "options": [
+        {"key": "A", "text": "SANS", "rationale": "Correct: it separates containment, eradication, and recovery.", "role": "best"},
+        {"key": "B", "text": "NIST SP 800-61", "rationale": "Combines them into one phase.", "role": "related"},
+        {"key": "C", "text": "Diamond Model", "rationale": "An intrusion analysis model.", "role": "related"},
+        {"key": "D", "text": "Kill Chain", "rationale": "An attack model.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "SANS uses six steps: preparation, identification, containment, eradication, recovery, lessons learned. It separates containment, eradication, and recovery.",
+      "discriminator_tested": "SANS separates the three."
+    },
+    {
+      "objectives": ["C13-18", "C13-20"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What BEST describes NIST's role in incident response?",
+      "options": [
+        {"key": "A", "text": "Publishes guidance like SP 800-61", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Receives federal incident reports", "rationale": "That is CISA.", "role": "related"},
+        {"key": "C", "text": "Trains responders via courses", "rationale": "That is SANS's main business.", "role": "related"},
+        {"key": "D", "text": "Enforces PCI DSS", "rationale": "Card brands do.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "NIST is the US standards body whose publications guide incident response. It provides the four-phase lifecycle commonly tested.",
+      "discriminator_tested": "NIST publishes guidance."
+    },
+    {
+      "objectives": ["C13-19", "C13-23"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "In the NIST SP 800-61 (Rev. 2) lifecycle, which phase comes right after detection and analysis?",
+      "options": [
+        {"key": "A", "text": "Containment, eradication, and recovery", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Post-incident activity and review", "rationale": "Comes last.", "role": "related"},
+        {"key": "C", "text": "Preparation and prevention", "rationale": "Comes first.", "role": "related"},
+        {"key": "D", "text": "Identification and scoping", "rationale": "SANS wording, and it precedes containment.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "NIST SP 800-61 (Rev. 2): preparation; detection and analysis; containment, eradication, and recovery; post-incident activity. NIST combines containment, eradication, and recovery into one phase; Revision 3 (April 2025) now supersedes Rev. 2.",
+      "discriminator_tested": "Four phases; the third combines three steps."
+    },
+    {
+      "objectives": ["C13-20", "C13-33"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A small US company hit by major ransomware wants to report it to the federal government and get guidance. Where should it go?",
+      "options": [
+        {"key": "A", "text": "CISA", "rationale": "Correct: guidance, alerts, and a place to report.", "role": "best"},
+        {"key": "B", "text": "NIST", "rationale": "Publishes standards; doesn't take reports.", "role": "related"},
+        {"key": "C", "text": "SANS", "rationale": "A private training organization.", "role": "related"},
+        {"key": "D", "text": "PCI SSC", "rationale": "Card industry.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "CISA (Cybersecurity and Infrastructure Security Agency) provides guidance, alerts, and a place to report incidents. It is a government agency and reporting point, not a lifecycle model.",
+      "discriminator_tested": "CISA: agency and reporting point."
+    },
+    {
+      "objectives": ["C13-21"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A company skips baselines, training, and tools, planning to figure things out when an incident happens. What is the MAIN consequence?",
+      "options": [
+        {"key": "A", "text": "Slower, weaker response", "rationale": "Correct: preparation is the first phase.", "role": "best"},
+        {"key": "B", "text": "Fewer alerts to triage", "rationale": "Fewer alerts because less is detected.", "role": "related"},
+        {"key": "C", "text": "Lower costs in the long run", "rationale": "Incidents cost more unprepared.", "role": "wrong"},
+        {"key": "D", "text": "Faster eradication", "rationale": "Slower, without tools.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Incident preparation means policies, a trained team, tools, baselines, and communication ready before an incident. It is the first phase and also covers prevention planning.",
+      "discriminator_tested": "Preparation comes first."
+    },
+    {
+      "objectives": ["C13-22"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "Given the risk assessment below, what should the CSIRT prepare for FIRST?",
+      "exhibit": "Asset            Threat likelihood   Impact\nPayment portal   High                High\nIntranet wiki    Medium              Low\nPrint server     Low                 Low",
+      "options": [
+        {"key": "A", "text": "Attacks on the payment portal", "rationale": "Correct: highest likelihood and impact.", "role": "best"},
+        {"key": "B", "text": "Intranet wiki defacement", "rationale": "Lower impact.", "role": "related"},
+        {"key": "C", "text": "Print server outages", "rationale": "Lowest risk.", "role": "related"},
+        {"key": "D", "text": "The three assets equally", "rationale": "Risk drives priority.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Risk assessments in preparation identify likely threats, vulnerabilities, and valuable assets to focus preparation. They drive priorities.",
+      "discriminator_tested": "Risk drives priorities."
+    },
+    {
+      "objectives": ["C13-23"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "An alert shows a possible intrusion on a database server. What is the BEST next step before any containment?",
+      "options": [
+        {"key": "A", "text": "Validate and scope it", "rationale": "Correct: detection and analysis.", "role": "best"},
+        {"key": "B", "text": "Wipe and rebuild the server", "rationale": "Premature and destroys evidence.", "role": "wrong"},
+        {"key": "C", "text": "Notify customers right away", "rationale": "Before knowing what happened.", "role": "related"},
+        {"key": "D", "text": "Close it as a false positive", "rationale": "Unverified.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Detection and analysis means detecting, validating, scoping, and prioritizing a suspected incident. It follows preparation and determines whether, and how badly, something happened.",
+      "discriminator_tested": "Validate, scope, prioritize."
+    },
+    {
+      "objectives": ["C13-24", "C13-25"], "type": "multi", "angle": "interpret-output", "difficulty": 2,
+      "stem": "Which two entries in the response log below are containment actions? (Choose two.)",
+      "exhibit": "10:02  EDR: host WS-22 network-isolated\n10:05  FW: blocked outbound traffic to 198.51.100.7\n10:40  EDR: malware removed from WS-22\n11:30  WS-22 reimaged and returned to service\n14:00  Lessons-learned meeting scheduled",
+      "options": [
+        {"key": "A", "text": "Isolating WS-22", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Blocking 198.51.100.7", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "Removing the malware", "rationale": "Eradication.", "role": "related"},
+        {"key": "D", "text": "Reimaging and returning WS-22", "rationale": "Recovery.", "role": "related"},
+        {"key": "E", "text": "Scheduling the meeting", "rationale": "Post-incident activity.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Containment limits spread and damage: isolate hosts, block addresses, disable accounts. It stops the damage first and precedes eradication.",
+      "discriminator_tested": "Containment: isolate, block, disable."
+    }
+  ]
+}

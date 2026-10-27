@@ -1,0 +1,308 @@
+{
+  "questions": [
+    {
+      "objectives": ["C11-01"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about security monitoring is NOT true?",
+      "options": [
+        {"key": "A", "text": "One log review per quarter is enough", "rationale": "Correct choice because it is false: monitoring is continuous."},
+        {"key": "B", "text": "It is continuous", "rationale": "True."},
+        {"key": "C", "text": "It feeds detection and response", "rationale": "True."},
+        {"key": "D", "text": "It covers logs, events, and network activity", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Security monitoring is the continuous collection and analysis of logs, events, and network activity to detect threats. It is ongoing, not one-time.",
+      "discriminator_tested": "Security monitoring is continuous."
+    },
+    {
+      "objectives": ["C11-02"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which of these is NOT a SIEM function?",
+      "options": [
+        {"key": "A", "text": "Blocking packets inline at the network edge", "rationale": "Correct choice: that is an IPS or firewall."},
+        {"key": "B", "text": "Collecting logs from many sources", "rationale": "A SIEM function."},
+        {"key": "C", "text": "Correlating events", "rationale": "A SIEM function."},
+        {"key": "D", "text": "Raising alerts and retaining data", "rationale": "A SIEM function."}
+      ],
+      "answer": ["A"],
+      "explanation": "A SIEM collects logs from many sources, correlates events, raises alerts, and retains data. It analyzes; it doesn't filter traffic inline.",
+      "discriminator_tested": "A SIEM collects, correlates, alerts, and retains."
+    },
+    {
+      "objectives": ["C11-03"], "type": "multi", "angle": "assess-risk", "difficulty": 2,
+      "stem": "Which two factors are real trade-offs when choosing a SIEM hosting model? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "How much control you keep over the platform and its data", "rationale": "Correct."},
+        {"key": "B", "text": "Cost and maintenance effort", "rationale": "Correct."},
+        {"key": "C", "text": "Whether the SIEM can correlate events at all", "rationale": "Both hosting models correlate events."},
+        {"key": "D", "text": "Whether threat intelligence exists", "rationale": "Threat intelligence exists either way."},
+        {"key": "E", "text": "Whether users need passwords", "rationale": "Unrelated to hosting."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "The SIEM hosting model is where the SIEM runs, on-premises or in the cloud. It is a deployment choice with trade-offs in control, cost, and maintenance.",
+      "discriminator_tested": "The trade-offs are control, cost, and maintenance."
+    },
+    {
+      "objectives": ["C11-04"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about an on-prem SIEM is NOT true?",
+      "options": [
+        {"key": "A", "text": "It has no upfront hardware cost and needs no maintenance", "rationale": "Correct choice because it is false: it costs more upfront and needs maintenance."},
+        {"key": "B", "text": "The organization keeps full control", "rationale": "True."},
+        {"key": "C", "text": "The data stays local", "rationale": "True."},
+        {"key": "D", "text": "Scaling it takes effort", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "With an on-prem SIEM, the organization hosts and maintains the platform. It gets full control and keeps data local, but faces higher upfront cost, maintenance, and scaling effort.",
+      "discriminator_tested": "On-prem means more cost and maintenance in exchange for control."
+    },
+    {
+      "objectives": ["C11-05"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about a cloud SIEM is NOT true?",
+      "options": [
+        {"key": "A", "text": "It works fully without any internet connection", "rationale": "Correct choice because it is false: it depends on connectivity."},
+        {"key": "B", "text": "It is hosted by a vendor", "rationale": "True."},
+        {"key": "C", "text": "It scales elastically", "rationale": "True."},
+        {"key": "D", "text": "It needs less maintenance", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "A cloud SIEM is a vendor-hosted service with elastic scaling and less maintenance. It depends on connectivity, and data location may be a concern.",
+      "discriminator_tested": "A cloud SIEM depends on connectivity."
+    },
+    {
+      "objectives": ["C11-06", "C11-17"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which of these is NOT one of the SIEM detection methods?",
+      "options": [
+        {"key": "A", "text": "Data locality", "rationale": "Correct choice: that is a compliance requirement about where data is stored."},
+        {"key": "B", "text": "Baseline analysis", "rationale": "A detection method."},
+        {"key": "C", "text": "Anomaly detection", "rationale": "A detection method."},
+        {"key": "D", "text": "Matching against threat intelligence", "rationale": "A detection method."}
+      ],
+      "answer": ["A"],
+      "explanation": "SIEM detection methods are the techniques a SIEM uses to spot suspicious activity, such as baselines, anomaly detection, UEBA, and threat intelligence. Several are combined, because no single method catches everything.",
+      "discriminator_tested": "SIEM detection methods include baselines, anomalies, UEBA, and threat intelligence."
+    },
+    {
+      "objectives": ["C11-07"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Which order of steps is correct for baseline analysis?",
+      "options": [
+        {"key": "A", "text": "Collect normal activity over time; establish the baseline; compare current activity with it; investigate the deviations", "rationale": "Correct."},
+        {"key": "B", "text": "Investigate deviations; then collect normal activity", "rationale": "You can't spot deviations before you know what normal looks like."},
+        {"key": "C", "text": "Compare current activity first; build the baseline afterward", "rationale": "The baseline has to exist before the comparison."},
+        {"key": "D", "text": "Establish the baseline from a single minute of data", "rationale": "A baseline needs enough data to represent normal activity."}
+      ],
+      "answer": ["A"],
+      "explanation": "Baseline analysis establishes what normal activity looks like and compares current activity with it. The baseline is the reference and must exist before deviations mean anything.",
+      "discriminator_tested": "The baseline comes first."
+    },
+    {
+      "objectives": ["C11-08"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about anomaly detection is NOT true?",
+      "options": [
+        {"key": "A", "text": "It never produces false positives", "rationale": "Correct choice because it is false: it raises more false positives than signature matching."},
+        {"key": "B", "text": "It flags deviations from the baseline", "rationale": "True."},
+        {"key": "C", "text": "It can catch unknown threats", "rationale": "True."},
+        {"key": "D", "text": "It needs a baseline or an expected pattern", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Anomaly detection flags activity that deviates from the baseline or expected pattern. It can catch unknown threats but raises more false positives.",
+      "discriminator_tested": "Anomaly detection raises more false positives."
+    },
+    {
+      "objectives": ["C11-09"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about machine learning in a SIEM is NOT true?",
+      "options": [
+        {"key": "A", "text": "Its results are always correct, however poor the data", "rationale": "Correct choice because it is false: it depends on good data and can misclassify."},
+        {"key": "B", "text": "It learns patterns from data", "rationale": "True."},
+        {"key": "C", "text": "It reduces manual rule tuning", "rationale": "True."},
+        {"key": "D", "text": "It can still misclassify", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Machine learning algorithms learn patterns from data to detect threats and reduce manual rule tuning. They depend on good data and can still misclassify.",
+      "discriminator_tested": "Machine learning depends on good data and can misclassify."
+    },
+    {
+      "objectives": ["C11-10"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which is NOT a sound use of AI integration in incident handling?",
+      "options": [
+        {"key": "A", "text": "Letting AI close incidents automatically, with no human ever checking", "rationale": "Correct choice: AI results need human validation."},
+        {"key": "B", "text": "Triage", "rationale": "Sound."},
+        {"key": "C", "text": "Summarizing incidents", "rationale": "Sound."},
+        {"key": "D", "text": "Prioritizing alerts", "rationale": "Sound."}
+      ],
+      "answer": ["A"],
+      "explanation": "AI integration assists with triage, correlation, summarization, and prioritization. It augments analysts, and its results need human validation.",
+      "discriminator_tested": "AI results need human validation."
+    },
+    {
+      "objectives": ["C11-11"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements about UEBA are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "It baselines the behavior of users and entities such as devices", "rationale": "Correct."},
+        {"key": "B", "text": "It helps find compromised accounts and insider threats", "rationale": "Correct."},
+        {"key": "C", "text": "It only matches known malware file hashes", "rationale": "That is indicator matching, not behavior analytics."},
+        {"key": "D", "text": "It only stores logs", "rationale": "It analyzes behavior."},
+        {"key": "E", "text": "It replaces the SIEM entirely", "rationale": "It is a capability that works with the SIEM."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "UEBA (User and Entity Behavior Analytics) baselines users and devices and flags unusual behavior. It helps find compromised accounts and insider threats.",
+      "discriminator_tested": "UEBA focuses on account and entity behavior."
+    },
+    {
+      "objectives": ["C11-12", "C11-13"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A security operations center wants its SIEM to alert whenever an internal host contacts an IP address or domain that is already known to be malicious elsewhere. Which data source does it need?",
+      "options": [
+        {"key": "A", "text": "Threat intelligence data feeds", "rationale": "Correct: external lists of known-bad indicators."},
+        {"key": "B", "text": "An internal baseline alone", "rationale": "A baseline shows what is normal for you, not what is known-bad elsewhere."},
+        {"key": "C", "text": "UEBA", "rationale": "UEBA models user behavior; it doesn't know which addresses are malicious."},
+        {"key": "D", "text": "A data locality policy", "rationale": "That governs where data is stored."}
+      ],
+      "answer": ["A"],
+      "explanation": "Threat intelligence data comes from external feeds of known malicious IPs, domains, hashes, and attacker techniques. It provides external context, versus an internal baseline.",
+      "discriminator_tested": "Threat intelligence provides external known-bad context."
+    },
+    {
+      "objectives": ["C11-13", "C11-12"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What separates an IoC from a threat intelligence feed?",
+      "options": [
+        {"key": "A", "text": "An IoC is a specific piece of evidence that a system may be compromised; the feed is the external source that often delivers IoCs", "rationale": "Correct."},
+        {"key": "B", "text": "They are the same thing", "rationale": "One is the evidence; the other is a delivery source."},
+        {"key": "C", "text": "The feed is the evidence on your system, and the IoC is the vendor", "rationale": "This mixes up their roles."},
+        {"key": "D", "text": "An IoC is a regulation", "rationale": "It is evidence, not a law."}
+      ],
+      "answer": ["A"],
+      "explanation": "An IoC (indicator of compromise) is observable evidence that a system may be compromised, such as malicious IPs, file hashes, domains, or unusual changes. IoCs are often delivered through threat intelligence.",
+      "discriminator_tested": "An IoC is evidence; a feed delivers it."
+    },
+    {
+      "objectives": ["C11-14"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A SOC wants phishing alerts from its SIEM to trigger a playbook automatically, quarantining the emails and blocking the senders. What should it add?",
+      "options": [
+        {"key": "A", "text": "SOAR", "rationale": "Correct: it acts on detections with playbooks."},
+        {"key": "B", "text": "A second SIEM", "rationale": "Another detector doesn't add response."},
+        {"key": "C", "text": "UEBA", "rationale": "UEBA detects; it doesn't run response playbooks."},
+        {"key": "D", "text": "FERPA compliance", "rationale": "Unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "SOAR (Security Orchestration, Automation, and Response) coordinates tools and automates response workflows (playbooks). The SIEM detects; SOAR acts.",
+      "discriminator_tested": "SOAR acts on what the SIEM detects."
+    },
+    {
+      "objectives": ["C11-15"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements about orchestration vs automation are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Orchestration coordinates multiple tools and tasks into one workflow", "rationale": "Correct."},
+        {"key": "B", "text": "Automation performs a single task without human action", "rationale": "Correct."},
+        {"key": "C", "text": "Orchestration and automation are identical", "rationale": "They differ in scope."},
+        {"key": "D", "text": "Orchestration means one task only", "rationale": "That describes automation."},
+        {"key": "E", "text": "Automation always needs a human for each step", "rationale": "Automation means no human action for that task."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Orchestration coordinates multiple tools and tasks into a workflow; automation performs a single task without human action.",
+      "discriminator_tested": "Orchestration = many steps; automation = one task."
+    },
+    {
+      "objectives": ["C11-16"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about regulations and compliance is NOT true?",
+      "options": [
+        {"key": "A", "text": "They are optional guidelines with no penalties", "rationale": "Correct choice because it is false: failure risks fines and legal action."},
+        {"key": "B", "text": "They are external obligations", "rationale": "True."},
+        {"key": "C", "text": "Failing them risks fines", "rationale": "True."},
+        {"key": "D", "text": "Failing them risks legal action", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "Regulations and compliance are legal and industry requirements for protecting data; failure risks fines and legal action. They are external obligations, unlike internal policy.",
+      "discriminator_tested": "Regulations carry real penalties."
+    },
+    {
+      "objectives": ["C11-17"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 1,
+      "stem": "What is data locality about?",
+      "options": [
+        {"key": "A", "text": "Which geographic jurisdictions data must be stored or processed in, which affects cloud choices", "rationale": "Correct."},
+        {"key": "B", "text": "How often data is backed up", "rationale": "That is backup frequency."},
+        {"key": "C", "text": "Who owns the company", "rationale": "Unrelated."},
+        {"key": "D", "text": "Which encryption algorithm is used", "rationale": "Unrelated."}
+      ],
+      "answer": ["A"],
+      "explanation": "Data locality is a requirement that data be stored or processed in specific geographic jurisdictions. It is about where data physically resides, and it affects cloud choices.",
+      "discriminator_tested": "Data locality is about where data physically resides."
+    },
+    {
+      "objectives": ["C11-18"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which of these is NOT covered by FERPA?",
+      "options": [
+        {"key": "A", "text": "A bank's customer financial records", "rationale": "Correct choice: that falls under GLBA."},
+        {"key": "B", "text": "Student transcripts", "rationale": "Covered."},
+        {"key": "C", "text": "Student grades", "rationale": "Covered."},
+        {"key": "D", "text": "Other education records", "rationale": "Covered."}
+      ],
+      "answer": ["A"],
+      "explanation": "FERPA (Family Educational Rights and Privacy Act) protects student education records in the US. Bank customer data falls under GLBA.",
+      "discriminator_tested": "FERPA = education records."
+    },
+    {
+      "objectives": ["C11-19"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which statement about FISMA is NOT true?",
+      "options": [
+        {"key": "A", "text": "It governs payment card data at retailers", "rationale": "Correct choice because it is false: that is PCI DSS."},
+        {"key": "B", "text": "It applies to US federal agencies", "rationale": "True."},
+        {"key": "C", "text": "It requires information security programs", "rationale": "True."},
+        {"key": "D", "text": "It covers federal government systems", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "FISMA (Federal Information Security Modernization Act) requires US federal agencies to run information security programs for federal government systems.",
+      "discriminator_tested": "FISMA = federal government systems."
+    },
+    {
+      "objectives": ["C11-20", "C11-18"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two pairings of a regulation with its scope are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "GLBA: financial institutions", "rationale": "Correct."},
+        {"key": "B", "text": "FERPA: student education records", "rationale": "Correct."},
+        {"key": "C", "text": "FISMA: payment card data", "rationale": "FISMA covers federal agencies."},
+        {"key": "D", "text": "PCI DSS: federal agencies", "rationale": "PCI DSS covers cardholder data."},
+        {"key": "E", "text": "GLBA: student records", "rationale": "GLBA covers financial institutions."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "GLBA requires financial institutions to protect customers' nonpublic personal information. FERPA covers education records, FISMA covers federal systems, and PCI DSS covers card data.",
+      "discriminator_tested": "GLBA = financial; FERPA = education; FISMA = federal; PCI DSS = cards."
+    },
+    {
+      "objectives": ["C11-21"], "type": "single", "angle": "which-is-not", "difficulty": 2,
+      "stem": "Which statement about PCI DSS is NOT true?",
+      "options": [
+        {"key": "A", "text": "It is a US federal law passed by Congress", "rationale": "Correct choice because it is false: it is an industry standard."},
+        {"key": "B", "text": "It protects cardholder data", "rationale": "True."},
+        {"key": "C", "text": "It is an industry standard", "rationale": "True."},
+        {"key": "D", "text": "It is enforced through contracts with the card brands", "rationale": "True."}
+      ],
+      "answer": ["A"],
+      "explanation": "PCI DSS (Payment Card Industry Data Security Standard) protects cardholder data. It is an industry standard enforced through card-brand contracts, not a government law.",
+      "discriminator_tested": "PCI DSS is a standard, not a law."
+    },
+    {
+      "objectives": ["C11-22"], "type": "single", "angle": "which-is-not", "difficulty": 1,
+      "stem": "Which of these is NOT an audience for formal incident reporting?",
+      "options": [
+        {"key": "A", "text": "The attacker who caused the incident", "rationale": "Correct choice: reporting goes to authorities and oversight, not to attackers."},
+        {"key": "B", "text": "Regulators", "rationale": "An audience."},
+        {"key": "C", "text": "Management", "rationale": "An audience."},
+        {"key": "D", "text": "Auditors", "rationale": "An audience."}
+      ],
+      "answer": ["A"],
+      "explanation": "Reporting is the formal reporting of incidents and compliance status to regulators, management, or auditors.",
+      "discriminator_tested": "Reporting goes to authorities and oversight."
+    },
+    {
+      "objectives": ["C11-23"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two statements about breach notifications are correct? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "They inform the affected individuals or customers", "rationale": "Correct."},
+        {"key": "B", "text": "Their deadlines vary by law", "rationale": "Correct."},
+        {"key": "C", "text": "They are the same as formal reporting to auditors", "rationale": "Reporting goes to oversight; notifications go to the affected people."},
+        {"key": "D", "text": "They are always optional", "rationale": "Laws often require them."},
+        {"key": "E", "text": "They go only to internal IT staff", "rationale": "They go to the affected parties."}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Notifications inform affected individuals or customers (and sometimes regulators) after a breach, within required timeframes. The deadlines vary by law.",
+      "discriminator_tested": "Notifications go to affected parties; deadlines vary."
+    }
+  ]
+}

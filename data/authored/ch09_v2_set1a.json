@@ -1,0 +1,255 @@
+{
+  "questions": [
+    {
+      "objectives": ["C09-01"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "A help-desk process lets anyone reset an account's password by giving the user's name and birthday. How is this BEST classified?",
+      "options": [
+        {"key": "A", "text": "A process vulnerability", "rationale": "Correct: a weak procedure that can be exploited.", "role": "best"},
+        {"key": "B", "text": "A threat to the company", "rationale": "A threat is the source of harm, such as an attacker.", "role": "related"},
+        {"key": "C", "text": "An exploit technique", "rationale": "Calling in with someone's details would be the exploit.", "role": "related"},
+        {"key": "D", "text": "A protected asset", "rationale": "The accounts are assets; the process is the weakness.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerabilities are weaknesses (software flaws, misconfigurations, weak processes) that can be exploited. A weak reset procedure is as much a vulnerability as an unpatched server.",
+      "discriminator_tested": "Vulnerability = the weakness itself."
+    },
+    {
+      "objectives": ["C09-02", "C09-03"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "A company patches every server it knows about, but a breach comes through a forgotten FTP server. What was the MOST basic gap?",
+      "options": [
+        {"key": "A", "text": "The server was never identified", "rationale": "Correct: you can't fix what you haven't found.", "role": "best"},
+        {"key": "B", "text": "The FTP server wasn't patched", "rationale": "True, but it wasn't patched because nobody found it.", "role": "partial"},
+        {"key": "C", "text": "FTP is an insecure protocol", "rationale": "A real issue, but it doesn't explain the blind spot.", "role": "related"},
+        {"key": "D", "text": "The firewall logs weren't reviewed", "rationale": "Logs don't replace discovery.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability identification means discovering weaknesses through scans, testing, inventories, and threat intelligence. You can't fix what you haven't found.",
+      "discriminator_tested": "You cannot fix what you have not found."
+    },
+    {
+      "objectives": ["C09-03"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 2,
+      "stem": "A company runs one vulnerability scan a year, fixes the top findings, and considers the job done. What BEST describes the problem?",
+      "options": [
+        {"key": "A", "text": "It's a continuous cycle", "rationale": "Correct: identify, prioritize, fix, verify, report, then repeat.", "role": "best"},
+        {"key": "B", "text": "One scan a year is too infrequent", "rationale": "True, but more scans alone still wouldn't make it a cycle.", "role": "partial"},
+        {"key": "C", "text": "The scan should exploit the findings", "rationale": "Exploiting findings is penetration testing.", "role": "related"},
+        {"key": "D", "text": "Fixing the top findings is enough", "rationale": "That is exactly the mistake described.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability management is an ongoing cycle: identify, prioritize, remediate or mitigate, verify, and report. It is a continuous process, not a one-time scan.",
+      "discriminator_tested": "A continuous process, not a one-time scan."
+    },
+    {
+      "objectives": ["C09-04"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A critical flaw is found in a building-control server, and the vendor has no patch yet. What is the BEST immediate step?",
+      "options": [
+        {"key": "A", "text": "Isolate it with ACLs until a patch exists", "rationale": "Correct: mitigation reduces exposure while no fix exists.", "role": "best"},
+        {"key": "B", "text": "Wait for the vendor to release a patch", "rationale": "Leaves the flaw exposed in the meantime.", "role": "related"},
+        {"key": "C", "text": "Record it in the risk register", "rationale": "Worth doing, but it doesn't reduce exposure.", "role": "partial"},
+        {"key": "D", "text": "Apply last year's patch for a similar flaw", "rationale": "An unrelated patch won't fix this flaw.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability mitigation reduces exposure when a full fix isn't immediately possible (segmentation, ACLs, disabling the service). Mitigation lowers risk; remediation, such as patching, removes the flaw.",
+      "discriminator_tested": "Mitigation lowers risk; remediation removes the flaw."
+    },
+    {
+      "objectives": ["C09-05", "C09-10", "C09-11"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two activities are passive reconnaissance? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Reading the company's job ads for tech details", "rationale": "Correct: public information, no contact with the target.", "role": "best"},
+        {"key": "B", "text": "Searching public records for staff names", "rationale": "Correct: no contact with the target.", "role": "best"},
+        {"key": "C", "text": "Port-scanning the company's web server", "rationale": "Touches the target, so it is active.", "role": "related"},
+        {"key": "D", "text": "Requesting a zone transfer from its DNS server", "rationale": "Queries the target's own server, so it is active.", "role": "related"},
+        {"key": "E", "text": "Phoning the help desk while posing as staff", "rationale": "Direct contact: active social engineering.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Passive reconnaissance gathers information without touching the target; active reconnaissance interacts with it directly. Active can be detected and logged; passive generally can't.",
+      "discriminator_tested": "Active can be detected; passive generally cannot."
+    },
+    {
+      "objectives": ["C09-06", "C09-07"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes a port scan from a vulnerability scan?",
+      "options": [
+        {"key": "A", "text": "It finds open ports, not known flaws", "rationale": "Correct: a port scan stops at what is listening.", "role": "best"},
+        {"key": "B", "text": "It is an active technique", "rationale": "Both are active.", "role": "partial"},
+        {"key": "C", "text": "It checks services against known weaknesses", "rationale": "That is a vulnerability scan.", "role": "related"},
+        {"key": "D", "text": "It needs credentials to run", "rationale": "Port scans don't need credentials.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Port scanning probes hosts for open ports and running services. It is active and finds open ports only, not known flaws; a vulnerability scan goes further.",
+      "discriminator_tested": "Port scan finds open ports only, not known flaws."
+    },
+    {
+      "objectives": ["C09-07", "C09-18"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A security team receives the report below. What kind of tool produced it?",
+      "exhibit": "Host 10.1.9.15   (credentialed scan)\nSeverity   Finding                               Port\nCritical   OpenSSL version with known RCE flaw   443/tcp\nHigh       SMBv1 enabled                         445/tcp\nMedium     TLS 1.0 accepted                      443/tcp\nInfo       OS: Windows Server 2016               -",
+      "options": [
+        {"key": "A", "text": "A vulnerability scanner", "rationale": "Correct: it matched services against known weaknesses.", "role": "best"},
+        {"key": "B", "text": "A port scanner", "rationale": "It shows ports, but a port scan wouldn't name known flaws.", "role": "related"},
+        {"key": "C", "text": "A packet sniffer", "rationale": "A sniffer shows captured traffic.", "role": "related"},
+        {"key": "D", "text": "An OSINT search engine", "rationale": "Public-source searching doesn't scan hosts.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability scanning is automated checking of systems against known vulnerabilities, credentialed or non-credentialed. It reports known weaknesses on services and goes beyond a port scan.",
+      "discriminator_tested": "Vulnerability scan reports known weaknesses; goes beyond a port scan."
+    },
+    {
+      "objectives": ["C09-08"], "type": "single", "angle": "choose-tool", "difficulty": 2,
+      "stem": "An auditor wants to prove that a legacy application sends passwords in cleartext across the network. Which technique BEST shows this?",
+      "options": [
+        {"key": "A", "text": "Capturing the app's traffic", "rationale": "Correct: the capture shows exactly what crosses the wire.", "role": "best"},
+        {"key": "B", "text": "Port-scanning the app's server", "rationale": "Shows open ports, not what is sent.", "role": "related"},
+        {"key": "C", "text": "Running a vulnerability scan on the app", "rationale": "Might flag a cleartext protocol, but doesn't show the actual passwords.", "role": "partial"},
+        {"key": "D", "text": "Searching OSINT for the app's name", "rationale": "Public sources don't show its traffic.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Packet sniffing, or network traffic analysis, captures and examines traffic to see protocols, cleartext credentials, and anomalies. It reveals what crosses the network.",
+      "discriminator_tested": "Packet sniffing reveals what crosses the network."
+    },
+    {
+      "objectives": ["C09-09"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "During an authorized test, a tool tries 50,000 passwords against the VPN portal, which has account lockout enabled. What is MOST likely to happen?",
+      "options": [
+        {"key": "A", "text": "Accounts get locked and alerts fire", "rationale": "Correct: brute force is noisy, and lockouts counter it.", "role": "best"},
+        {"key": "B", "text": "The test is detected", "rationale": "True, but it misses the lockouts.", "role": "partial"},
+        {"key": "C", "text": "The tool finds the password quietly", "rationale": "Brute force is anything but quiet.", "role": "related"},
+        {"key": "D", "text": "The VPN portal is patched automatically", "rationale": "Nothing patches itself.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Brute-force attacks try many credential combinations to test or break password strength. They are active and noisy, and lockouts counter them.",
+      "discriminator_tested": "Brute force is active and noisy; lockouts counter it."
+    },
+    {
+      "objectives": ["C09-10", "C09-05"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "Before a test, the tester gathers employee names from the company website, LinkedIn, and press releases, without contacting the company. What is this?",
+      "options": [
+        {"key": "A", "text": "OSINT gathering", "rationale": "Correct: public sources, no contact.", "role": "best"},
+        {"key": "B", "text": "Active reconnaissance", "rationale": "Nothing touched the target.", "role": "related"},
+        {"key": "C", "text": "Social engineering", "rationale": "No person was manipulated.", "role": "related"},
+        {"key": "D", "text": "Vulnerability scanning", "rationale": "No systems were scanned.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "OSINT is information gathered from public sources: websites, social media, public records, job posts. It is passive, with no direct contact with the target.",
+      "discriminator_tested": "OSINT is passive; no direct contact."
+    },
+    {
+      "objectives": ["C09-11", "C09-05"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "A tester runs the command below. What BEST describes what the tester has accomplished?",
+      "exhibit": "$ dig axfr corp.example.com @ns1.corp.example.com\ncorp.example.com.               SOA  ns1.corp.example.com. ...\nvpn.corp.example.com.           A    203.0.113.20\ndev-jenkins.corp.example.com.   A    10.1.9.44\nhr-db.corp.example.com.         A    10.1.9.61",
+      "options": [
+        {"key": "A", "text": "Enumerated the domain's hosts", "rationale": "Correct: a zone transfer maps the DNS footprint.", "role": "best"},
+        {"key": "B", "text": "Mapped some of the company's servers", "rationale": "True, but vague about how.", "role": "partial"},
+        {"key": "C", "text": "Passive OSINT with no contact with the target", "rationale": "This queried the target's own DNS server, so it was active.", "role": "related"},
+        {"key": "D", "text": "Exploited a flaw in the Jenkins server", "rationale": "Nothing was exploited.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DNS enumeration discovers a domain's hostnames, subdomains, and records, mapping its DNS footprint. It is passive from public records and active when querying the target's DNS servers.",
+      "discriminator_tested": "DNS enumeration is active when querying the target's servers."
+    },
+    {
+      "objectives": ["C09-12", "C09-05"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "A tester phones the help desk pretending to be a new hire and learns the VPN client name and the password-reset steps. How is this BEST classified?",
+      "options": [
+        {"key": "A", "text": "Active social engineering", "rationale": "Correct: human-based and active.", "role": "best"},
+        {"key": "B", "text": "Passive reconnaissance", "rationale": "Calling the target is direct contact.", "role": "related"},
+        {"key": "C", "text": "OSINT gathering", "rationale": "The information came from a person, not public sources.", "role": "related"},
+        {"key": "D", "text": "Vulnerability scanning", "rationale": "No systems were scanned.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Social engineering for reconnaissance manipulates people into revealing information. It is human-based and active.",
+      "discriminator_tested": "Social engineering recon is human-based and active."
+    },
+    {
+      "objectives": ["C09-13", "C09-07"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A scanner reports a possible SQL injection flaw in a web app. What BEST describes what authorized testing adds?",
+      "options": [
+        {"key": "A", "text": "It confirms the flaw is real", "rationale": "Correct: testing confirms what scans suggest.", "role": "best"},
+        {"key": "B", "text": "It checks the finding manually", "rationale": "Part of it, but the point is confirmation.", "role": "partial"},
+        {"key": "C", "text": "It produces a second report", "rationale": "A report isn't the value.", "role": "related"},
+        {"key": "D", "text": "It removes the flaw from the code", "rationale": "Testing finds and confirms; it doesn't fix.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Testing is systematic, authorized checking to find and confirm weaknesses. It is authorized and scoped, and it confirms what scans suggest.",
+      "discriminator_tested": "Testing confirms what scans suggest."
+    },
+    {
+      "objectives": ["C09-14"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "A team automates weekly vulnerability scans of 5,000 hosts. What still MOST requires people?",
+      "options": [
+        {"key": "A", "text": "Reviewing and ranking results", "rationale": "Correct: automation finds; people judge and prioritize.", "role": "best"},
+        {"key": "B", "text": "Checking the scans actually ran", "rationale": "Worth monitoring, but it can be automated too.", "role": "partial"},
+        {"key": "C", "text": "Writing each finding's CVE entry", "rationale": "CVE entries are published by others.", "role": "related"},
+        {"key": "D", "text": "Starting each scan by hand", "rationale": "Automation does that.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Automation means scheduled, scripted, tool-driven scans and checks: fast, consistent, and repeatable at scale. The results still need human review and prioritization.",
+      "discriminator_tested": "Results still need human review."
+    },
+    {
+      "objectives": ["C09-15", "C09-01"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes threat intelligence from vulnerability findings?",
+      "options": [
+        {"key": "A", "text": "It's external context on actors and tactics", "rationale": "Correct: about attackers, not our systems.", "role": "best"},
+        {"key": "B", "text": "It helps prioritize work", "rationale": "True of both.", "role": "partial"},
+        {"key": "C", "text": "It lists weaknesses found in our own systems", "rationale": "That describes vulnerability findings.", "role": "related"},
+        {"key": "D", "text": "It is produced by our scanners", "rationale": "Scanners produce internal findings.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Threat intelligence is information about threats, actors, tactics, and indicators used to anticipate and defend. It is external, actionable context; vulnerability findings are internal.",
+      "discriminator_tested": "Threat intel is external; vulnerability findings are internal."
+    },
+    {
+      "objectives": ["C09-16"], "type": "single", "angle": "classify-element", "difficulty": 2,
+      "stem": "Of these three related public resources, which one is the severity score?",
+      "options": [
+        {"key": "A", "text": "CVSS", "rationale": "Correct: the scoring system.", "role": "best"},
+        {"key": "B", "text": "CVE", "rationale": "CVE is the identifier.", "role": "related"},
+        {"key": "C", "text": "NVD", "rationale": "NVD is the enriched database.", "role": "related"},
+        {"key": "D", "text": "OSINT", "rationale": "OSINT is public-source intelligence in general.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability databases are public catalogs of known vulnerabilities. CVE is the identifier, NVD the enriched database, and CVSS the severity score.",
+      "discriminator_tested": "CVE = identifier; NVD = database; CVSS = score."
+    },
+    {
+      "objectives": ["C09-17", "C09-16"], "type": "single", "angle": "assess-risk", "difficulty": 3,
+      "stem": "A server shows no matches in the public vulnerability databases. What BEST explains why that doesn't prove it is safe?",
+      "options": [
+        {"key": "A", "text": "Unknown flaws aren't in any database", "rationale": "Correct: zero-days aren't listed.", "role": "best"},
+        {"key": "B", "text": "The database may be out of date", "rationale": "True, and lag is a limitation, but the deeper issue is undiscovered flaws.", "role": "partial"},
+        {"key": "C", "text": "CVSS scores are often too high", "rationale": "Score accuracy doesn't affect missing entries.", "role": "related"},
+        {"key": "D", "text": "Databases cover Linux systems alone", "rationale": "They cover all kinds of software.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vulnerability databases lag behind new discoveries, can be incomplete or inconsistent, and their scores lack your environment's context. They don't list unknown (zero-day) flaws.",
+      "discriminator_tested": "Databases don't list zero-day flaws."
+    },
+    {
+      "objectives": ["C09-18", "C09-14"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two are assessment tools? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A configuration auditor", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "A vulnerability scanner", "rationale": "Correct.", "role": "best"},
+        {"key": "C", "text": "A ticketing system for changes", "rationale": "Tracks work; doesn't assess systems.", "role": "related"},
+        {"key": "D", "text": "A SIEM dashboard", "rationale": "Monitors events rather than assessing configurations.", "role": "related"},
+        {"key": "E", "text": "A backup appliance", "rationale": "Protects data; doesn't assess it.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Assessment tools assess systems: vulnerability scanners, port scanners, configuration auditors. They automate discovery, but their output still needs analysis.",
+      "discriminator_tested": "Assessment tools automate discovery; output needs analysis."
+    },
+    {
+      "objectives": ["C09-19", "C09-27"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "An assessment report lists 120 findings with no ranking and no suggested next steps. What is MOST clearly missing?",
+      "options": [
+        {"key": "A", "text": "Ranked, specific next steps", "rationale": "Correct: the actionable output of an assessment.", "role": "best"},
+        {"key": "B", "text": "An executive summary", "rationale": "Useful, but it still wouldn't tell anyone what to do first.", "role": "partial"},
+        {"key": "C", "text": "A longer list of findings", "rationale": "More findings make it worse.", "role": "related"},
+        {"key": "D", "text": "Raw scanner output", "rationale": "Adds detail, not direction.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Recommendations are the specific, prioritized guidance that comes out of an assessment: its actionable output.",
+      "discriminator_tested": "Recommendations are the actionable output."
+    }
+  ]
+}

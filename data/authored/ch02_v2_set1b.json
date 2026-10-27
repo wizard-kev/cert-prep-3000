@@ -1,0 +1,299 @@
+{
+  "questions": [
+    {
+      "objectives": ["C02-23", "C02-22"], "type": "single", "angle": "choose-band-or-standard", "difficulty": 2,
+      "stem": "A warehouse has older handhelds that support only 2.4 GHz and newer laptops that work best on 5 GHz. Of the standards listed, which one lets a single AP model serve both groups?",
+      "options": [
+        {"key": "A", "text": "802.11n", "rationale": "Correct: dual-band, so it serves 2.4 GHz and 5 GHz clients.", "role": "best"},
+        {"key": "B", "text": "802.11ac", "rationale": "5 GHz only; the handhelds couldn't connect.", "role": "related"},
+        {"key": "C", "text": "802.11g", "rationale": "2.4 GHz only; the laptops couldn't use 5 GHz.", "role": "related"},
+        {"key": "D", "text": "802.11a", "rationale": "5 GHz only, and an older standard.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "802.11n operates in either band (dual-band), so it can serve 2.4 GHz-only devices and 5 GHz clients alike. 802.11ac is 5 GHz only.",
+      "discriminator_tested": "802.11n spans both bands."
+    },
+    {
+      "objectives": ["C02-24", "C02-22"], "type": "single", "angle": "choose-band-or-standard", "difficulty": 3,
+      "stem": "A stadium's Wi-Fi has plenty of bandwidth on paper, but performance collapses when 20,000 fans connect at once. Which upgrade BEST targets this problem?",
+      "options": [
+        {"key": "A", "text": "802.11ax (Wi-Fi 6), for efficiency in dense crowds", "rationale": "Correct: built to serve many clients at once efficiently, using OFDMA.", "role": "best"},
+        {"key": "B", "text": "802.11ac, for wider channels and higher peak speeds", "rationale": "Raises peak speed, but the problem is serving thousands of clients at once.", "role": "partial"},
+        {"key": "C", "text": "More 2.4 GHz APs on channels 1, 6, and 11", "rationale": "Three channels can't carry a stadium crowd.", "role": "related"},
+        {"key": "D", "text": "WPA3 for a stronger handshake on each client", "rationale": "Security doesn't fix capacity.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Wi-Fi 6 (802.11ax) focuses on efficiency in dense environments, using features such as OFDMA to serve many clients at once. Its gains are efficiency and capacity, not just raw speed.",
+      "discriminator_tested": "Wi-Fi 6 gains are efficiency and capacity, not just raw speed."
+    },
+    {
+      "objectives": ["C02-25", "C02-26"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "Wi-Fi in the break room slows down every day around lunchtime. The AP's statistics are below. What is the MOST likely cause?",
+      "exhibit": "AP-Break   Band 2.4 GHz   Channel 6   (mounted beside the staff kitchen)\nTime     Retries   Noise floor   Clients\n11:50    4%        -92 dBm       9\n12:05    41%       -61 dBm       14\n12:20    38%       -63 dBm       15\n12:40    5%        -91 dBm       8",
+      "options": [
+        {"key": "A", "text": "Microwave ovens raising noise in the 2.4 GHz band", "rationale": "Correct: the noise floor jumps 30 dB only while the kitchen is busy.", "role": "best"},
+        {"key": "B", "text": "More clients joining the AP at lunchtime", "rationale": "Clients rise modestly; that doesn't explain a 30 dB jump in noise.", "role": "partial"},
+        {"key": "C", "text": "A neighbouring AP overlapping on channel 6", "rationale": "Co-channel overlap would be constant, not just at lunch.", "role": "related"},
+        {"key": "D", "text": "The AP's WPA2 keys expiring at midday", "rationale": "Key handling doesn't change the noise floor.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Interference is signal degradation from other wireless sources or overlapping channels. Non-Wi-Fi sources such as microwave ovens raise the noise floor in 2.4 GHz, which is more exposed than 5 GHz; retries spike only while the noise rises.",
+      "discriminator_tested": "Non-Wi-Fi sources interfere; 2.4 GHz is more exposed."
+    },
+    {
+      "objectives": ["C02-26"], "type": "single", "angle": "choose-band-or-standard", "difficulty": 2,
+      "stem": "A sensor in a detached shed 60 m from the AP, behind two brick walls, needs a reliable but modest-speed connection. Which band BEST fits, and why?",
+      "options": [
+        {"key": "A", "text": "2.4 GHz, because it reaches farther through walls", "rationale": "Correct: longer range and better penetration matter more than speed here.", "role": "best"},
+        {"key": "B", "text": "5 GHz, because it has more nonoverlapping channels", "rationale": "True of 5 GHz, but channel count doesn't help a weak, obstructed link.", "role": "related"},
+        {"key": "C", "text": "5 GHz, because it delivers higher speeds", "rationale": "Higher speed comes with shorter range and worse penetration.", "role": "related"},
+        {"key": "D", "text": "2.4 GHz, because it is the faster band", "rationale": "2.4 GHz is the slower band.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "2.4 GHz offers longer range and better penetration but is slower; 5 GHz is faster with shorter range. For a distant device behind walls that needs only modest speed, range wins.",
+      "discriminator_tested": "2.4 GHz = range; 5 GHz = speed."
+    },
+    {
+      "objectives": ["C02-27"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A cafe's Wi-Fi is an open network with a captive portal where customers enter a voucher code from their receipt. Which statement BEST describes the protection?",
+      "options": [
+        {"key": "A", "text": "Users are checked, but traffic is not encrypted", "rationale": "Correct: the portal controls who gets on; the open network leaves traffic unencrypted.", "role": "best"},
+        {"key": "B", "text": "Paying customers are the ones who get access", "rationale": "True, but it says nothing about whether traffic is protected.", "role": "partial"},
+        {"key": "C", "text": "Traffic is encrypted, but users aren't checked", "rationale": "This is reversed.", "role": "related"},
+        {"key": "D", "text": "The voucher code encrypts each customer's traffic", "rationale": "A voucher grants access; it isn't an encryption key.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Authentication verifies who connects; encryption protects the data. They are separate functions: a voucher portal controls who gets on, but on an open network the traffic itself travels unencrypted.",
+      "discriminator_tested": "Authentication (identity) and encryption (confidentiality) are separate functions."
+    },
+    {
+      "objectives": ["C02-28", "C02-30"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A wireless audit produces the table below. Which network should be reconfigured FIRST?",
+      "exhibit": "SSID          Security          Cipher\nScanners      WEP               WEP-104 (RC4)\nOffice        WPA2-Personal     CCMP (AES)\nVisitors      WPA3-Personal     CCMP (AES)\nEngineering   WPA2-Enterprise   CCMP (AES)",
+      "options": [
+        {"key": "A", "text": "Scanners", "rationale": "Correct: WEP is broken and can be cracked quickly.", "role": "best"},
+        {"key": "B", "text": "Office", "rationale": "Could move to WPA3 later, but WPA2 with AES isn't broken.", "role": "partial"},
+        {"key": "C", "text": "Visitors", "rationale": "Already on the current generation.", "role": "related"},
+        {"key": "D", "text": "Engineering", "rationale": "WPA2-Enterprise with AES is sound.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "WEP, the original wireless security, uses RC4 with a short initialization vector. It is broken and obsolete and never acceptable, so it is replaced first; WPA2 networks can move to WPA3 later.",
+      "discriminator_tested": "WEP is broken and obsolete; never acceptable."
+    },
+    {
+      "objectives": ["C02-29", "C02-30"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "An audit finds a legacy access point still configured for WPA with TKIP. What is the BEST reason to upgrade it?",
+      "options": [
+        {"key": "A", "text": "WPA was a stopgap for old hardware, replaced by WPA2", "rationale": "Correct: an interim fix, superseded by WPA2 with AES.", "role": "best"},
+        {"key": "B", "text": "TKIP is slower than modern ciphers on busy networks", "rationale": "Performance suffers too, but the security weakness is the real reason.", "role": "partial"},
+        {"key": "C", "text": "WPA uses a short IV that cracks within minutes", "rationale": "That describes WEP.", "role": "related"},
+        {"key": "D", "text": "WPA sends traffic without encryption", "rationale": "WPA does encrypt, using TKIP.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "WPA was the interim replacement for WEP, using TKIP so it could run on legacy hardware. It was a stopgap, superseded by WPA2 with AES.",
+      "discriminator_tested": "WPA/TKIP was a stopgap superseded by WPA2."
+    },
+    {
+      "objectives": ["C02-30", "C02-34"], "type": "single", "angle": "interpret-config", "difficulty": 2,
+      "stem": "An access point is configured with the settings below. Which security configuration is it using?",
+      "exhibit": "ssid=Office\nwpa=2\nwpa_key_mgmt=WPA-PSK\nrsn_pairwise=CCMP\nwpa_passphrase=Spring2026!",
+      "options": [
+        {"key": "A", "text": "WPA2-Personal with AES-CCMP", "rationale": "Correct: WPA-PSK key management with CCMP (AES) and a shared passphrase.", "role": "best"},
+        {"key": "B", "text": "WPA2-Enterprise with per-user RADIUS logins", "rationale": "Enterprise would use 802.1X (WPA-EAP), not a passphrase.", "role": "related"},
+        {"key": "C", "text": "WPA3-Personal using SAE with a passphrase", "rationale": "WPA3-Personal would show SAE key management.", "role": "related"},
+        {"key": "D", "text": "WPA with TKIP and a shared passphrase", "rationale": "The cipher is CCMP, not TKIP.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "WPA2 uses AES-CCMP and is the long-standing standard; Personal mode uses one shared passphrase (WPA-PSK). Enterprise would use 802.1X, and WPA3-Personal would use SAE.",
+      "discriminator_tested": "WPA2-Personal = AES-CCMP with a shared passphrase."
+    },
+    {
+      "objectives": ["C02-31", "C02-30"], "type": "single", "angle": "secure-replacement", "difficulty": 2,
+      "stem": "A company of 400 staff shares one Wi-Fi passphrase. Each time someone leaves, IT has to change it on every device. Which change BEST solves this?",
+      "options": [
+        {"key": "A", "text": "WPA2-Enterprise with 802.1X and RADIUS accounts", "rationale": "Correct: each user has their own credentials, so a leaver's account is simply disabled.", "role": "best"},
+        {"key": "B", "text": "WPA3-Personal with a longer shared passphrase", "rationale": "Stronger, but still one shared key to change when someone leaves.", "role": "partial"},
+        {"key": "C", "text": "Hide the SSID so former staff won't find it", "rationale": "Hidden SSIDs are easily found, and the leaver still knows the key.", "role": "related"},
+        {"key": "D", "text": "Change the passphrase monthly instead", "rationale": "Still a shared key; a leaver keeps access until the next change.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "WPA2-Enterprise uses 802.1X authentication against a RADIUS server, so each user has individual credentials rather than one shared key; disabling a leaver's account removes only their access.",
+      "discriminator_tested": "WPA2-Enterprise = individual credentials per user."
+    },
+    {
+      "objectives": ["C02-32", "C02-30"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which statement BEST describes how 802.11i relates to WPA2?",
+      "options": [
+        {"key": "A", "text": "802.11i is the IEEE standard; WPA2 certifies it", "rationale": "Correct: WPA2 is the Wi-Fi Alliance certification of 802.11i.", "role": "best"},
+        {"key": "B", "text": "WPA2 is the IEEE standard; 802.11i certifies it", "rationale": "This is reversed.", "role": "related"},
+        {"key": "C", "text": "Both describe AES-based Wi-Fi security", "rationale": "True, but it doesn't state how they relate.", "role": "partial"},
+        {"key": "D", "text": "802.11i is a faster Wi-Fi standard than WPA2", "rationale": "802.11i is about security, not speed.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "802.11i is the IEEE standard for wireless security that WPA2 implements. WPA2 is the Wi-Fi Alliance certification of it.",
+      "discriminator_tested": "802.11i is the standard; WPA2 is its certification."
+    },
+    {
+      "objectives": ["C02-33", "C02-34"], "type": "multi", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "Which two are improvements WPA3 brings over WPA2? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Resistance to offline password guessing", "rationale": "Correct: a captured handshake no longer allows offline cracking.", "role": "best"},
+        {"key": "B", "text": "A stronger handshake that replaces PSK", "rationale": "Correct: SAE replaces the PSK handshake.", "role": "best"},
+        {"key": "C", "text": "Support for both 2.4 GHz and 5 GHz bands", "rationale": "Band support comes from the radio standard, such as 802.11n.", "role": "related"},
+        {"key": "D", "text": "AES encryption of wireless traffic", "rationale": "WPA2 already uses AES.", "role": "related"},
+        {"key": "E", "text": "Hiding the SSID from scanners", "rationale": "SSID hiding isn't a WPA3 feature or a security control.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "WPA3 is the current generation, with a stronger handshake and protections than WPA2. It replaces the PSK handshake and resists offline password guessing; AES was already part of WPA2.",
+      "discriminator_tested": "WPA3 replaces the PSK handshake and resists offline guessing."
+    },
+    {
+      "objectives": ["C02-34", "C02-30"], "type": "single", "angle": "interpret-config", "difficulty": 3,
+      "stem": "An access point is configured with the settings below. Which security mode does it set up?",
+      "exhibit": "ssid=Studio\nwpa=2\nwpa_key_mgmt=SAE\nieee80211w=2\nrsn_pairwise=CCMP\nsae_password=Lantern-Orbit-42",
+      "options": [
+        {"key": "A", "text": "WPA3-Personal using SAE", "rationale": "Correct: SAE key management with a passphrase, plus required management-frame protection.", "role": "best"},
+        {"key": "B", "text": "WPA2-Personal using PSK", "rationale": "WPA2-Personal would show WPA-PSK, not SAE.", "role": "related"},
+        {"key": "C", "text": "WPA3-Enterprise using 802.1X", "rationale": "Enterprise would use 802.1X and a RADIUS server, not a password.", "role": "related"},
+        {"key": "D", "text": "WEP using a long static key", "rationale": "WEP doesn't use SAE or CCMP.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "WPA3-Personal is passphrase-based WPA3 using SAE (Simultaneous Authentication of Equals) instead of WPA2's PSK handshake. key_mgmt=SAE gives it away; WPA3 also requires protected management frames (ieee80211w=2).",
+      "discriminator_tested": "WPA3-Personal uses SAE instead of PSK."
+    },
+    {
+      "objectives": ["C02-35", "C02-31"], "type": "single", "angle": "choose-protocol", "difficulty": 3,
+      "stem": "A defense contractor must protect its Wi-Fi to the highest available standard and authenticate each user individually. Which mode BEST fits?",
+      "options": [
+        {"key": "A", "text": "WPA3-Enterprise in 192-bit mode", "rationale": "Correct: per-user 802.1X plus the high-security cryptographic suite.", "role": "best"},
+        {"key": "B", "text": "WPA3-Enterprise with default settings", "rationale": "Strong and per-user, but not the highest available level.", "role": "partial"},
+        {"key": "C", "text": "WPA2-Enterprise with RADIUS", "rationale": "Per-user, but the previous generation.", "role": "related"},
+        {"key": "D", "text": "WPA3-Personal with a long passphrase", "rationale": "A shared passphrase doesn't authenticate users individually.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "WPA3-Enterprise uses 802.1X/RADIUS for per-user authentication with stronger cryptography. Its optional 192-bit mode is intended for high-security environments.",
+      "discriminator_tested": "WPA3-Enterprise 192-bit mode is for high-security use."
+    },
+    {
+      "objectives": ["C02-36", "C02-41", "C02-44"], "type": "single", "angle": "choose-device", "difficulty": 1,
+      "stem": "An admin needs to stop the internet from reaching the HR database while still letting web traffic reach the public web server. Which device's core job is this?",
+      "options": [
+        {"key": "A", "text": "A firewall", "rationale": "Correct: it permits or denies traffic between networks by rule.", "role": "best"},
+        {"key": "B", "text": "An IDS", "rationale": "An IDS alerts on suspicious traffic; it doesn't enforce rules.", "role": "related"},
+        {"key": "C", "text": "A proxy server", "rationale": "A proxy makes requests on clients' behalf; it isn't the boundary policy device.", "role": "related"},
+        {"key": "D", "text": "A wireless access point", "rationale": "An AP connects wireless clients; it doesn't filter traffic between networks.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A firewall permits or denies traffic between networks based on rules: boundary enforcement by policy. An IDS only alerts, and a proxy acts for clients at the application level.",
+      "discriminator_tested": "Firewall = boundary enforcement by policy."
+    },
+    {
+      "objectives": ["C02-37", "C02-38"], "type": "single", "angle": "find-config-error", "difficulty": 3,
+      "stem": "After this ACL was applied inbound on a router's internet-facing interface, staff inside can no longer load external websites. The router keeps no connection table. What is the MOST likely reason?",
+      "exhibit": "access-list 110 permit tcp any host 203.0.113.20 eq 443\naccess-list 110 deny   ip any any\n!\ninterface Gi0/0\n description Internet\n ip access-group 110 in",
+      "options": [
+        {"key": "A", "text": "Replies to staff requests match no permit rule", "rationale": "Correct: without session memory, return traffic needs its own permit rule.", "role": "best"},
+        {"key": "B", "text": "The deny rule drops whatever isn't explicitly allowed", "rationale": "True, but it doesn't say which traffic is being dropped or why it matters.", "role": "partial"},
+        {"key": "C", "text": "The ACL blocks staff's outbound HTTPS requests", "rationale": "It is applied inbound; outbound requests leave fine.", "role": "related"},
+        {"key": "D", "text": "Port 443 can be used by one host at a time", "rationale": "Many hosts use port 443 simultaneously.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A stateless (packet-filtering) firewall judges each packet alone on IP, port, and protocol. It has no memory of sessions, so return traffic needs its own permit rule; a stateful firewall would allow the replies automatically.",
+      "discriminator_tested": "Stateless: no memory of sessions; every packet needs a matching rule."
+    },
+    {
+      "objectives": ["C02-38", "C02-37"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST explains why a stateful firewall needs fewer rules than a stateless one to let internal users browse the web?",
+      "options": [
+        {"key": "A", "text": "It tracks sessions and admits their return traffic", "rationale": "Correct: replies to established sessions are allowed automatically.", "role": "best"},
+        {"key": "B", "text": "It inspects packets more thoroughly than a stateless filter", "rationale": "Vaguely true, but session tracking is the specific reason.", "role": "partial"},
+        {"key": "C", "text": "It identifies applications rather than ports", "rationale": "That describes a next-generation firewall.", "role": "related"},
+        {"key": "D", "text": "It drops inbound traffic unless it is web traffic", "rationale": "That would be a rule, not a reason fewer rules are needed.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A stateful firewall tracks connection state and allows return traffic for established sessions. A stateless firewall remembers nothing, so each direction needs its own rule.",
+      "discriminator_tested": "Stateful remembers sessions; contrast with stateless."
+    },
+    {
+      "objectives": ["C02-39", "C02-38"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "All three sessions in the log below use TCP 443, yet the device treats them differently. What type of device produced this log?",
+      "exhibit": "rule    src          dst              port  app-id                action\nr-web   10.1.5.22    198.51.100.10    443   web-browsing          allow\nr-web   10.1.5.22    198.51.100.20    443   bittorrent            deny\nr-web   10.1.5.31    192.0.2.50       443   cloud-storage-upload  deny",
+      "options": [
+        {"key": "A", "text": "A next-generation firewall", "rationale": "Correct: it identifies the application, not just the port.", "role": "best"},
+        {"key": "B", "text": "A stateful firewall", "rationale": "A stateful firewall sees ports and sessions, so all three would look alike.", "role": "related"},
+        {"key": "C", "text": "A stateless packet filter", "rationale": "A packet filter sees only addresses and ports.", "role": "related"},
+        {"key": "D", "text": "An intrusion detection system", "rationale": "An IDS alerts; it doesn't allow or deny sessions.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A next-generation firewall (NGFW) adds application awareness, deep packet inspection, and integrated IPS. It sees applications, not just ports, which is how it tells web browsing from BitTorrent on the same port.",
+      "discriminator_tested": "NGFW sees applications, not just ports."
+    },
+    {
+      "objectives": ["C02-40"], "type": "single", "angle": "choose-device", "difficulty": 2,
+      "stem": "A salesperson's laptop is used on hotel and airport Wi-Fi. Which firewall BEST protects it there?",
+      "options": [
+        {"key": "A", "text": "A host-based firewall, because it travels with the laptop", "rationale": "Correct: it protects the device wherever it is.", "role": "best"},
+        {"key": "B", "text": "A network firewall, once the VPN connects to the office", "rationale": "Covers traffic in the tunnel, but not the laptop on the hotel network before or outside it.", "role": "partial"},
+        {"key": "C", "text": "A host-based firewall, because it filters more ports", "rationale": "Right device, wrong reason: it isn't about port count.", "role": "related"},
+        {"key": "D", "text": "The hotel's network firewall, which isolates guests", "rationale": "The company doesn't control it, and guests share the network.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A host-based firewall runs on one endpoint and protects that device wherever it is; a network-based firewall sits at a network boundary and protects a whole segment.",
+      "discriminator_tested": "Host-based protects one device; network-based protects a segment."
+    },
+    {
+      "objectives": ["C02-41", "C02-42"], "type": "single", "angle": "choose-device", "difficulty": 2,
+      "stem": "A hospital wants alerts about suspicious traffic on its clinical network but won't accept any device that could drop or delay traffic to patient monitors. Which option BEST fits?",
+      "options": [
+        {"key": "A", "text": "An IDS fed by a SPAN port copy", "rationale": "Correct: it watches a copy, so it can never block or delay the real traffic.", "role": "best"},
+        {"key": "B", "text": "An IPS set to alert without blocking", "rationale": "Can alert without blocking, but an inline device can still fail and disrupt traffic.", "role": "partial"},
+        {"key": "C", "text": "An inline IPS that blocks attacks", "rationale": "Blocking in the path is exactly what the hospital refuses.", "role": "related"},
+        {"key": "D", "text": "A stateless firewall with logging", "rationale": "A firewall sits in the path and filters traffic.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An IDS monitors traffic, typically a passive copy, and alerts on suspicious activity; it detects and alerts only. An IPS sits inline, so a failure can disrupt traffic.",
+      "discriminator_tested": "IDS detects and alerts only; does not block."
+    },
+    {
+      "objectives": ["C02-42", "C02-41"], "type": "single", "angle": "interpret-output", "difficulty": 3,
+      "stem": "Users report a 38-second network outage at 10:52. Given the sensor log below, what BEST explains it?",
+      "exhibit": "10:41:12 sig 41022 \"SMB remote code execution attempt\" src 10.8.3.14 dst 10.8.1.5:445 action=DROP\n10:41:12 sensor eth1-eth2 inline  mode=prevention  fail-mode=closed\n10:52:40 sensor process restart\n10:52:40 traffic on eth1-eth2 halted for 00:00:38",
+      "options": [
+        {"key": "A", "text": "The inline sensor restarted while set to fail closed", "rationale": "Correct: an inline device that fails closed stops traffic while it recovers.", "role": "best"},
+        {"key": "B", "text": "A device in the traffic path briefly stopped forwarding", "rationale": "True, but it doesn't say why: the inline sensor's fail-closed restart.", "role": "partial"},
+        {"key": "C", "text": "A passive IDS lost its copy of the traffic", "rationale": "Losing a passive copy can't interrupt users' traffic.", "role": "related"},
+        {"key": "D", "text": "The SMB exploit crashed the file server", "rationale": "That attempt was dropped at 10:41, eleven minutes earlier.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "An IPS sits inline and blocks detected malicious traffic. Because it sits in the path, a sensor failure can disrupt traffic; with fail-mode closed, traffic stops until the sensor recovers.",
+      "discriminator_tested": "IPS is inline; a failure can disrupt traffic."
+    },
+    {
+      "objectives": ["C02-43"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "A brand-new attack with no published signature slips past one sensor but is flagged by another, because a server suddenly sent 40 times its usual outbound volume at 3 a.m. Which detection method caught it?",
+      "options": [
+        {"key": "A", "text": "Anomaly-based detection", "rationale": "Correct: it flagged a deviation from the server's baseline.", "role": "best"},
+        {"key": "B", "text": "Signature-based detection", "rationale": "There was no signature to match; that's why the first sensor missed it.", "role": "related"},
+        {"key": "C", "text": "Stateful inspection", "rationale": "Stateful inspection tracks sessions; it doesn't judge volume against a baseline.", "role": "wrong"},
+        {"key": "D", "text": "Honeypot monitoring", "rationale": "The server is a production system, not a decoy.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Signature-based detection matches known patterns, so it misses novel attacks. Anomaly-based detection flags deviation from a baseline and catches them, at the cost of more false positives.",
+      "discriminator_tested": "Signature misses novel attacks; anomaly catches them with more false positives."
+    },
+    {
+      "objectives": ["C02-44", "C02-37"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A security analyst reviews the log below. What type of device produced it?",
+      "exhibit": "10:02:11 user=amartin  GET https://news.example.com/      category=News        action=ALLOW\n10:02:47 user=amartin  GET https://casino.example.net/    category=Gambling    action=BLOCK\n10:03:05 user=tlee     GET https://drive.example.org/up   category=File-share  action=BLOCK",
+      "options": [
+        {"key": "A", "text": "A web proxy filtering requests for users", "rationale": "Correct: it sees users, full URLs, and categories because it makes the requests on their behalf.", "role": "best"},
+        {"key": "B", "text": "A stateless firewall filtering on IP and port", "rationale": "A packet filter can't see users, full URLs, or content categories.", "role": "related"},
+        {"key": "C", "text": "An IDS alerting on users' suspicious requests", "rationale": "An IDS doesn't block requests.", "role": "wrong"},
+        {"key": "D", "text": "A DNS resolver blocking names on a blocklist", "rationale": "DNS sees hostnames only, not the user or the full URL path.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "A proxy server or web filter is an intermediary that makes requests for clients and can filter content. It works at the application level, so it sees full URLs, users, and categories, which a packet filter can't.",
+      "discriminator_tested": "Proxy works at the application level on behalf of clients."
+    }
+  ]
+}

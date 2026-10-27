@@ -1,0 +1,322 @@
+{
+  "questions": [
+    {
+      "objectives": ["C01-25"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which control BEST limits the damage if malware records everything a user types, including passwords?",
+      "options": [
+        {"key": "A", "text": "Multifactor authentication for remote sign-ins", "rationale": "Correct: a captured password alone no longer gets the attacker in.", "role": "best"},
+        {"key": "B", "text": "Requiring longer, more complex passwords", "rationale": "A recorded password is captured whatever its length.", "role": "wrong"},
+        {"key": "C", "text": "Changing passwords on a 90-day cycle", "rationale": "Shortens how long a stolen password works, but it still works until then.", "role": "partial"},
+        {"key": "D", "text": "Antivirus that scans for spyware", "rationale": "May detect it eventually, but doesn't limit what was already captured.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "A keylogger records keystrokes to capture credentials; it is a specific capture method, often delivered by spyware or a Trojan. Because it captures whatever is typed, a second factor the attacker can't type in is what blunts it.",
+      "discriminator_tested": "Keylogger captures typed input; a second factor blunts it."
+    },
+    {
+      "objectives": ["C01-26"], "type": "single", "angle": "choose-response", "difficulty": 3,
+      "stem": "A server is confirmed to have malware hidden at the kernel level that conceals its own files and processes. What is the BEST way to return the server to a trustworthy state?",
+      "options": [
+        {"key": "A", "text": "Rebuild it from known-good media and restore clean data", "rationale": "Correct: the compromised OS can't be trusted to report on itself.", "role": "best"},
+        {"key": "B", "text": "Run a removal tool, then monitor the server closely", "rationale": "May remove it, but a tool running on the infected OS can't prove it is gone.", "role": "partial"},
+        {"key": "C", "text": "Patch the operating system and reboot the server", "rationale": "Patching closes the entry point but leaves the hidden malware in place.", "role": "related"},
+        {"key": "D", "text": "Change the administrator password on the server", "rationale": "The malware already has privileged access without the password.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A rootkit hides deep in the OS, kernel, or firmware to keep privileged, stealthy access, and it is defined by concealment. Because the infected OS can't be trusted to report on itself, rebuilding from known-good media is the reliable fix.",
+      "discriminator_tested": "Rootkit is defined by concealment; the infected OS can't be trusted."
+    },
+    {
+      "objectives": ["C01-27", "C01-28"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which practice BEST prevents programs that flood staff browsers with pop-up offers from being bundled onto company PCs?",
+      "options": [
+        {"key": "A", "text": "Blocking unapproved free software installs", "rationale": "Correct: the bundle never arrives.", "role": "best"},
+        {"key": "B", "text": "Using an ad blocker in the web browser", "rationale": "Blocks ads on websites (the malvertising route), not installed ad software.", "role": "related"},
+        {"key": "C", "text": "Running regular antivirus scans", "rationale": "Can remove it afterwards, but doesn't stop it being installed.", "role": "partial"},
+        {"key": "D", "text": "Changing the native VLAN on trunks", "rationale": "Unrelated to software on PCs.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Adware delivers unwanted ads, often bundled with free software. Stopping unapproved installs stops the bundle arriving; an ad blocker deals with ads served on websites, the malvertising route.",
+      "discriminator_tested": "Adware arrives bundled with software."
+    },
+    {
+      "objectives": ["C01-28"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "Which control BEST protects users from malicious ads served through third-party ad networks on otherwise legitimate websites?",
+      "options": [
+        {"key": "A", "text": "Ad blocking plus prompt browser patching", "rationale": "Correct: removes the delivery path and the exploit target.", "role": "best"},
+        {"key": "B", "text": "Visiting well-known, reputable websites", "rationale": "Reputable sites are exactly where these ads appear.", "role": "wrong"},
+        {"key": "C", "text": "Blocking unapproved software installs", "rationale": "That stops bundled adware, not ads on websites.", "role": "related"},
+        {"key": "D", "text": "Antivirus scanning of downloaded files", "rationale": "Helps if a file is downloaded, but browser exploits may not need one.", "role": "partial"}
+      ],
+      "answer": ["A"],
+      "explanation": "Malvertising puts malicious ads on legitimate sites, riding on ad networks; the site itself isn't compromised, so avoiding bad sites doesn't help. Blocking ads and keeping the browser patched removes the delivery path and the exploit target.",
+      "discriminator_tested": "Malvertising rides on ad networks; the site itself isn't compromised."
+    },
+    {
+      "objectives": ["C01-29", "C01-33"], "type": "multi", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "An online attack is working through every possible password combination for one account. Which two controls BEST defeat it? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Lock the account after a few failed attempts", "rationale": "Correct: caps the number of guesses.", "role": "best"},
+        {"key": "B", "text": "Require long passwords or passphrases", "rationale": "Correct: makes the search space far too large.", "role": "best"},
+        {"key": "C", "text": "Block passwords found on breach lists", "rationale": "Counters dictionary attacks, which try likely passwords; an exhaustive search reaches any password.", "role": "related"},
+        {"key": "D", "text": "Hash stored passwords with a fast algorithm", "rationale": "Fast hashing helps attackers who steal the hashes.", "role": "wrong"},
+        {"key": "E", "text": "Disable ICMP replies on the login server", "rationale": "Unrelated to password guessing.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Brute force tries every possible combination: exhaustive and slow. Lockouts cap the number of online guesses and length makes the search space impractically large; blocking common passwords counters dictionary attacks.",
+      "discriminator_tested": "Brute force is defeated by lockouts and length."
+    },
+    {
+      "objectives": ["C01-30", "C01-29"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A honeypot that records attempted passwords logs the session below from a new attacker. Which attack BEST fits?",
+      "exhibit": "10:15:02  user=admin  password=123456     result=fail\n10:15:02  user=admin  password=password   result=fail\n10:15:03  user=admin  password=qwerty     result=fail\n10:15:03  user=admin  password=letmein    result=fail\n10:15:04  user=admin  password=admin2024  result=fail",
+      "options": [
+        {"key": "A", "text": "Dictionary attack", "rationale": "Correct: likely passwords from a precompiled list.", "role": "best"},
+        {"key": "B", "text": "Brute-force attack", "rationale": "Brute force works through combinations in sequence, not popular choices.", "role": "related"},
+        {"key": "C", "text": "Password spraying", "rationale": "Spraying tries one common password across many accounts; this is many passwords on one account.", "role": "related"},
+        {"key": "D", "text": "Keylogger capture", "rationale": "A keylogger records real keystrokes; it doesn't guess.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A dictionary attack tries words from a precompiled list: likely passwords such as 123456 and qwerty, not every combination. Blocking common passwords counters it.",
+      "discriminator_tested": "Dictionary attack guesses likely passwords, not all of them."
+    },
+    {
+      "objectives": ["C01-31"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 2,
+      "stem": "A company adds threat hunting, year-long log retention, and alerts on unusual movement between internal servers. Which threat are these controls BEST suited to uncover?",
+      "options": [
+        {"key": "A", "text": "An intruder who stays hidden for months", "rationale": "Correct: long histories and internal movement are where long-dwelling intruders show.", "role": "best"},
+        {"key": "B", "text": "A flood that knocks the website offline", "rationale": "A flood is loud and immediate; it doesn't need hunting.", "role": "related"},
+        {"key": "C", "text": "Users choosing weak, common passwords", "rationale": "That is addressed by password policy, not hunting.", "role": "wrong"},
+        {"key": "D", "text": "A phishing email that reaches inboxes", "rationale": "Email filtering and training target that; these controls look for what happens long after.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "An advanced persistent threat (APT) is a stealthy, long-term, targeted intrusion defined by persistence and dwell time. Hunting through long log histories and watching internal movement is how hidden, long-dwelling intruders are found.",
+      "discriminator_tested": "APT is defined by persistence and dwell time."
+    },
+    {
+      "objectives": ["C01-32", "C01-17"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "Which order of steps BEST protects a batch of new IP cameras during deployment?",
+      "options": [
+        {"key": "A", "text": "Change the default login on a staging network, then deploy", "rationale": "Correct: the device is never exposed with factory credentials.", "role": "best"},
+        {"key": "B", "text": "Deploy to the LAN, then change the default login that day", "rationale": "The login does get changed, but the device is exposed in the meantime.", "role": "partial"},
+        {"key": "C", "text": "Deploy to the LAN, then block common passwords for users", "rationale": "User password policy doesn't touch the cameras' vendor login.", "role": "related"},
+        {"key": "D", "text": "Deploy to the LAN, keeping the vendor login for support", "rationale": "Leaves a published password on every camera.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Changing default credentials means replacing vendor logins before deployment. Default logins are published and malware scans for them constantly, so a device exposed even briefly with factory credentials can be taken over.",
+      "discriminator_tested": "Change default credentials before deployment."
+    },
+    {
+      "objectives": ["C01-33", "C01-30"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 1,
+      "stem": "A sign-up page rejects any password found in a list of the 100,000 most common passwords. Which attack does this control MOST directly counter?",
+      "options": [
+        {"key": "A", "text": "Dictionary attack", "rationale": "Correct: it removes the passwords those lists try first.", "role": "best"},
+        {"key": "B", "text": "Brute-force attack", "rationale": "Exhaustive search reaches any password; lockouts and length counter it.", "role": "related"},
+        {"key": "C", "text": "Default-login abuse", "rationale": "That is countered by changing vendor credentials.", "role": "related"},
+        {"key": "D", "text": "Shoulder surfing", "rationale": "Watching someone type works whatever the password is.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Avoiding common passwords means blocking easily guessed passwords. It counters dictionary attacks, which try likely passwords first; brute force is defeated by lockouts and length instead.",
+      "discriminator_tested": "Blocking common passwords counters dictionary attacks."
+    },
+    {
+      "objectives": ["C01-34", "C01-16"], "type": "single", "angle": "find-config-error", "difficulty": 3,
+      "stem": "After DHCP snooping was enabled, users on VLAN 10 stop getting addresses, yet a test server on a desk port can still hand out leases. Which change BEST fixes the configuration below?",
+      "exhibit": "ip dhcp snooping\nip dhcp snooping vlan 10\n!\ninterface Gi1/0/1\n description Uplink to core (real DHCP server)\n!\ninterface Gi1/0/12\n description User desk port\n ip dhcp snooping trust",
+      "options": [
+        {"key": "A", "text": "Trust the uplink port and remove trust from the desk port", "rationale": "Correct: offers must be accepted from the real server and refused from user ports.", "role": "best"},
+        {"key": "B", "text": "Remove trust from the desk port and leave the uplink as is", "rationale": "Stops the test server, but users still get no addresses from the real one.", "role": "partial"},
+        {"key": "C", "text": "Enable snooping on VLAN 1 as well as VLAN 10", "rationale": "Users are on VLAN 10; the trust settings are what's wrong.", "role": "related"},
+        {"key": "D", "text": "Disable DHCP snooping so the real server can reply", "rationale": "Restores addresses but reopens the door to rogue servers.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "DHCP snooping is a switch feature that accepts DHCP offers only from trusted ports. The port toward the real server must be trusted and user ports must stay untrusted; here it is the other way round.",
+      "discriminator_tested": "DHCP snooping: trust the server-facing port only."
+    },
+    {
+      "objectives": ["C01-35", "C01-14"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 2,
+      "stem": "A network team moves the native VLAN on each trunk to VLAN 999, which carries no users. Which attack does this change MOST directly counter?",
+      "options": [
+        {"key": "A", "text": "VLAN hopping by double tagging", "rationale": "Correct: the attacker's outer tag can no longer match the native VLAN.", "role": "best"},
+        {"key": "B", "text": "VLAN hopping of any kind", "rationale": "True for one method only; switch spoofing needs negotiation disabled.", "role": "partial"},
+        {"key": "C", "text": "VLAN hopping by switch spoofing", "rationale": "Switch spoofing is stopped by disabling trunk negotiation.", "role": "related"},
+        {"key": "D", "text": "ARP spoofing on the user VLAN", "rationale": "ARP spoofing works within one VLAN whatever the native VLAN is.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Changing the native VLAN moves it off the default, which counters double-tagging VLAN hopping: the attacker's outer tag no longer matches the native VLAN. Switch spoofing is stopped by disabling trunk negotiation.",
+      "discriminator_tested": "Changing the native VLAN counters double tagging."
+    },
+    {
+      "objectives": ["C01-36"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "A server was compromised through a flaw the vendor had fixed eight months earlier. The server had antivirus, a firewall, and strong passwords. What is the BEST statement of the root cause?",
+      "options": [
+        {"key": "A", "text": "The vendor's fix wasn't applied to the server", "rationale": "Correct: the flaw was known and fixable.", "role": "best"},
+        {"key": "B", "text": "The firewall allowed traffic to the vulnerable service", "rationale": "A contributing factor, but the service had to be reachable to do its job.", "role": "partial"},
+        {"key": "C", "text": "The server's firmware was out of date", "rationale": "The flaw was in software the vendor fixed, not in firmware.", "role": "related"},
+        {"key": "D", "text": "The antivirus definitions were too old", "rationale": "Antivirus isn't designed to close software flaws.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Patching and updating fixes known software vulnerabilities. A fix available for eight months means the flaw was known; failing to apply it is the root cause, whatever other controls were in place.",
+      "discriminator_tested": "Patching fixes known software vulnerabilities."
+    },
+    {
+      "objectives": ["C01-37", "C01-36"], "type": "multi", "angle": "classify-element", "difficulty": 2,
+      "stem": "Which two of these flaws are fixed by upgrading firmware rather than by patching software? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A flaw in a switch's boot code", "rationale": "Correct: boot code is embedded device-level code.", "role": "best"},
+        {"key": "B", "text": "A bug in a hard drive controller's code", "rationale": "Correct: controller code lives on the device.", "role": "best"},
+        {"key": "C", "text": "A flaw in a web browser", "rationale": "An application, fixed by a software update.", "role": "related"},
+        {"key": "D", "text": "A bug in the server's operating system", "rationale": "Fixed by an OS patch.", "role": "related"},
+        {"key": "E", "text": "A weak password on a router admin page", "rationale": "A configuration problem, not a code flaw.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Upgrading firmware updates device-level code embedded in hardware, such as boot code or a drive controller. OS and application flaws are fixed by patching software.",
+      "discriminator_tested": "Firmware is device-level code; OS and apps are patched."
+    },
+    {
+      "objectives": ["C01-38"], "type": "single", "angle": "find-missing-element", "difficulty": 3,
+      "stem": "A company relies on one perimeter firewall for protection. Inside, the servers share one flat network, users are local admins, and there is no endpoint protection. Which principle is it MOST clearly failing to apply?",
+      "options": [
+        {"key": "A", "text": "Defense in depth", "rationale": "Correct: one control is relied on for everything.", "role": "best"},
+        {"key": "B", "text": "Least privilege", "rationale": "Also missing, but it is one of the absent layers, not the overall principle.", "role": "partial"},
+        {"key": "C", "text": "Network segmentation", "rationale": "Also missing, but it too is one layer within the bigger principle.", "role": "partial"},
+        {"key": "D", "text": "Separation of duties", "rationale": "Splitting tasks between people isn't what's described.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Defense in depth uses layered, overlapping controls so that no single control is relied on. Here one firewall is the only layer; segmentation and least privilege are missing layers within that principle.",
+      "discriminator_tested": "Defense in depth: no single control is relied on."
+    },
+    {
+      "objectives": ["C01-39"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which control BEST reduces the success of attacks that manipulate employees into giving away access?",
+      "options": [
+        {"key": "A", "text": "Realistic awareness training", "rationale": "Correct: it targets the people being manipulated.", "role": "best"},
+        {"key": "B", "text": "Multifactor authentication on user accounts", "rationale": "Limits what a stolen password achieves, but doesn't stop the manipulation.", "role": "partial"},
+        {"key": "C", "text": "Patching operating systems each month", "rationale": "Patching fixes system flaws, not human ones.", "role": "related"},
+        {"key": "D", "text": "Stronger encryption on the office Wi-Fi", "rationale": "Encryption doesn't stop someone being talked into helping.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Social engineering manipulates people rather than systems, so the most direct control trains people to recognise and report it. MFA limits what a stolen password achieves but doesn't stop the manipulation itself.",
+      "discriminator_tested": "Social engineering targets people; train people."
+    },
+    {
+      "objectives": ["C01-40"], "type": "multi", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "Which two controls MOST directly limit the harm that staff who already have legitimate access can do? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Give each role only the access it needs", "rationale": "Correct: least privilege limits what any one person can damage.", "role": "best"},
+        {"key": "B", "text": "Prompt removal of leavers' access", "rationale": "Correct: closes access that is no longer needed.", "role": "best"},
+        {"key": "C", "text": "Log and review privileged user activity", "rationale": "Valuable for detection and deterrence, but it records harm rather than limiting it.", "role": "partial"},
+        {"key": "D", "text": "A stronger perimeter firewall", "rationale": "Insiders are already inside the perimeter.", "role": "related"},
+        {"key": "E", "text": "Blocking common passwords", "rationale": "Insiders use their own valid credentials.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Insider threats are harm from someone with legitimate access, malicious or accidental; they're already inside the perimeter. Least privilege limits what each person can damage and prompt deprovisioning closes unneeded access; monitoring detects misuse rather than limiting it.",
+      "discriminator_tested": "Insiders are already inside the perimeter."
+    },
+    {
+      "objectives": ["C01-41"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "An employee clicked a link in a fake 'password expiry' email and entered their password on the page it opened. What should happen FIRST?",
+      "options": [
+        {"key": "A", "text": "Reset the employee's password and end active sessions", "rationale": "Correct: the password is compromised and may already be in use.", "role": "best"},
+        {"key": "B", "text": "Block the sender and the link at the email gateway", "rationale": "Needed to protect others, but the exposed credential comes first.", "role": "partial"},
+        {"key": "C", "text": "Enroll the employee in awareness training", "rationale": "Useful afterwards, but it doesn't contain the exposure.", "role": "related"},
+        {"key": "D", "text": "Reimage the employee's laptop to remove malware", "rationale": "Nothing suggests malware; a password was typed into a fake page.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Phishing uses fraudulent messages to steal data or credentials. Once a password has been entered on a fake page it is compromised, so resetting it and ending sessions comes first; blocking and training follow.",
+      "discriminator_tested": "Phishing steals credentials; contain the exposed credential first."
+    },
+    {
+      "objectives": ["C01-42"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Callers claiming to be from IT keep phoning staff and asking them for their one-time sign-in codes. Which control BEST counters this?",
+      "options": [
+        {"key": "A", "text": "A rule to hang up and ring back on a known number", "rationale": "Correct: a call-back to a known number defeats an impersonator.", "role": "best"},
+        {"key": "B", "text": "Multifactor authentication on staff accounts", "rationale": "Already in place; the codes it produces are what the callers are stealing.", "role": "partial"},
+        {"key": "C", "text": "An email filter that blocks spoofed senders", "rationale": "The attack arrives by phone, not email.", "role": "related"},
+        {"key": "D", "text": "Longer passwords for staff accounts", "rationale": "The callers want the codes, and length doesn't stop a person reading one out.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Vishing is phishing by voice or phone. Because the medium is a phone call, the defence is a process people follow on calls: verify the caller through a known number before sharing anything.",
+      "discriminator_tested": "Vishing: medium = voice; verify the caller."
+    },
+    {
+      "objectives": ["C01-43", "C01-42"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two of these are smishing? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "A text saying a parcel is held, with a short link", "rationale": "Correct: phishing by text message.", "role": "best"},
+        {"key": "B", "text": "A bank 'security' SMS asking for a code", "rationale": "Correct: phishing by SMS.", "role": "best"},
+        {"key": "C", "text": "A phone call from 'IT' asking for your password", "rationale": "Voice is vishing.", "role": "related"},
+        {"key": "D", "text": "An email from 'HR' with a fake benefits form link", "rationale": "Email is ordinary phishing.", "role": "related"},
+        {"key": "E", "text": "A stranger watching you enter your phone PIN", "rationale": "That is shoulder surfing.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Smishing is phishing by SMS or text message: the medium is the text. Calls are vishing, and emails are ordinary phishing.",
+      "discriminator_tested": "Smishing: medium = text message."
+    },
+    {
+      "objectives": ["C01-44"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 3,
+      "stem": "An attacker researches a finance team on social media and sends each member an email that refers to their real projects and colleagues. Which control BEST reduces this risk?",
+      "options": [
+        {"key": "A", "text": "Verify requests through a second channel", "rationale": "Correct: independent verification works however convincing the email is.", "role": "best"},
+        {"key": "B", "text": "Filter emails from newly registered look-alike domains", "rationale": "Helps, but a tailored email can come from a compromised real account.", "role": "partial"},
+        {"key": "C", "text": "Block attachments with macros at the gateway", "rationale": "Many tailored emails carry no attachment at all.", "role": "related"},
+        {"key": "D", "text": "Require complex passwords for finance staff", "rationale": "Doesn't stop staff being persuaded to act on a request.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Spear phishing is phishing tailored to a specific person or group, using personal detail so it looks credible. Independent verification through a known channel defeats it, however convincing the email is.",
+      "discriminator_tested": "Spear phishing is targeted; verify independently."
+    },
+    {
+      "objectives": ["C01-45", "C01-42"], "type": "single", "angle": "scenario-with-distractor", "difficulty": 3,
+      "stem": "An attacker phones the CFO's assistant pretending to be the CEO, then emails the CFO a personalised request to wire funds before a deadline. Which part of this campaign is whaling?",
+      "options": [
+        {"key": "A", "text": "The tailored email to the CFO", "rationale": "Correct: targeted phishing aimed at a senior executive.", "role": "best"},
+        {"key": "B", "text": "The phone call to the assistant", "rationale": "That is vishing aimed at a non-executive.", "role": "related"},
+        {"key": "C", "text": "The whole campaign taken as one", "rationale": "The campaign mixes techniques; only one part targets an executive by email.", "role": "wrong"},
+        {"key": "D", "text": "The research into the executives", "rationale": "Reconnaissance supports the attack but isn't phishing itself.", "role": "related"}
+      ],
+      "answer": ["A"],
+      "explanation": "Whaling is spear phishing aimed at executives or other high-value targets; target seniority is the differentiator. The call to the assistant is vishing aimed at a non-executive.",
+      "discriminator_tested": "Whaling: target seniority is the differentiator."
+    },
+    {
+      "objectives": ["C01-46", "C01-47"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Which control BEST stops unauthorized people slipping through a secure door behind staff who don't notice them?",
+      "options": [
+        {"key": "A", "text": "A one-person-per-badge turnstile", "rationale": "Correct: enforces one entry per badge whether staff notice or not.", "role": "best"},
+        {"key": "B", "text": "Security cameras recording the entrance", "rationale": "Records the breach but doesn't stop it.", "role": "partial"},
+        {"key": "C", "text": "Training staff not to hold doors open", "rationale": "Helps with piggybacking, but these staff never notice anyone.", "role": "related"},
+        {"key": "D", "text": "Privacy screens on the reception PCs", "rationale": "Privacy screens stop shoulder surfing.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Tailgating is following an authorized person through a secured entry without their knowledge or consent. Because the employee doesn't notice, training can't help; a mantrap or one-person turnstile physically enforces one entry per badge.",
+      "discriminator_tested": "Tailgating: unknowing victim; enforce one entry per badge."
+    },
+    {
+      "objectives": ["C01-47", "C01-46"], "type": "single", "angle": "attack-to-mitigation", "difficulty": 2,
+      "stem": "Staff often hold the server-room door open for colleagues and visitors who say they forgot their badges. Which control BEST addresses this behaviour?",
+      "options": [
+        {"key": "A", "text": "Policy: each person badges in", "rationale": "Correct: staff are choosing to let people in, so change the behaviour.", "role": "best"},
+        {"key": "B", "text": "Cameras that record who enters the room", "rationale": "Creates a record but doesn't change what staff do.", "role": "partial"},
+        {"key": "C", "text": "Shielded keypads at the server-room door", "rationale": "Shielded keypads stop shoulder surfing.", "role": "related"},
+        {"key": "D", "text": "Stronger encryption on the badge cards", "rationale": "The people let in aren't using badges at all.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Piggybacking is entry with an authorized person's knowledge or consent, such as holding the door. Because the employee chooses to let someone in, the fix is policy and training that make each person badge in; a turnstile also helps.",
+      "discriminator_tested": "Piggybacking: knowing, willing insider."
+    },
+    {
+      "objectives": ["C01-48", "C01-25"], "type": "single", "angle": "symptom-to-attack", "difficulty": 2,
+      "stem": "A user's banking password is used fraudulently. The user never typed it on a shared device, no malware is found, and the password wasn't reused, but the user often signs in on a laptop on a crowded commuter train. What is the MOST likely cause?",
+      "options": [
+        {"key": "A", "text": "Someone watched the password being typed", "rationale": "Correct: a crowded train is ideal for observation.", "role": "best"},
+        {"key": "B", "text": "A keylogger recorded the keystrokes", "rationale": "No malware was found on the laptop.", "role": "related"},
+        {"key": "C", "text": "A dictionary attack guessed the password", "rationale": "A unique, unreused password is unlikely to be on a guess list.", "role": "related"},
+        {"key": "D", "text": "A smishing text tricked the user into sharing it", "rationale": "The user would remember sending it in reply to a text.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Shoulder surfing is observing screens or keypads to capture information. It is visual observation with no technical exploit, which fits a clean laptop used in a crowded place.",
+      "discriminator_tested": "Shoulder surfing is visual observation; no technical exploit."
+    }
+  ]
+}

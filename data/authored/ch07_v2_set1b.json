@@ -1,0 +1,281 @@
+{
+  "questions": [
+    {
+      "objectives": ["C07-22", "C07-21"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes using a drive wipe tool from overwriting a drive by hand?",
+      "options": [
+        {"key": "A", "text": "Automated, verified, and reportable", "rationale": "Correct: the tool erases the whole drive and documents it.", "role": "best"},
+        {"key": "B", "text": "It supports reusing the drive", "rationale": "Both approaches allow reuse.", "role": "partial"},
+        {"key": "C", "text": "It physically destroys the drive", "rationale": "Wiping leaves the drive usable.", "role": "related"},
+        {"key": "D", "text": "It leaves the data recoverable", "rationale": "A proper wipe makes data unrecoverable.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "A drive wipe is a tool-driven erase of the whole drive (wipe utilities, firmware secure erase, cryptographic erase), often with verification. It is automated and reportable, supports reuse, and typically applies overwrite.",
+      "discriminator_tested": "Drive wipe: automated and reportable."
+    },
+    {
+      "objectives": ["C07-23", "C07-22"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two are physical destruction methods for drives? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "Shredding the drive", "rationale": "Correct.", "role": "best"},
+        {"key": "B", "text": "Degaussing a hard disk", "rationale": "Correct: it destroys magnetic media (not SSDs).", "role": "best"},
+        {"key": "C", "text": "A seven-pass overwrite", "rationale": "An overwrite leaves the drive reusable.", "role": "related"},
+        {"key": "D", "text": "A firmware secure erase", "rationale": "A wipe method; the drive survives.", "role": "related"},
+        {"key": "E", "text": "Deleting the partitions", "rationale": "Leaves data recoverable.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Physical destruction means shredding, crushing, incineration, or degaussing (magnetic media). It is the most certain method and leaves the drive unusable; degaussing doesn't work on SSDs.",
+      "discriminator_tested": "Destruction is most certain; degaussing doesn't work on SSDs."
+    },
+    {
+      "objectives": ["C07-24", "C07-31"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "Ransomware encrypted a file server and also the backup share mapped on that server, and restores now fail. What was the MAIN weakness?",
+      "options": [
+        {"key": "A", "text": "No offline or offsite backup copy", "rationale": "Correct: the ransomware could reach every copy.", "role": "best"},
+        {"key": "B", "text": "Backups weren't tested regularly", "rationale": "A real gap, but even tested backups were reachable here.", "role": "partial"},
+        {"key": "C", "text": "The antivirus definitions were old", "rationale": "Might explain the infection, not the failed recovery.", "role": "related"},
+        {"key": "D", "text": "The backups were too large", "rationale": "Size isn't why they failed.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Data backups are copies of data for recovery after loss, failure, or ransomware. An untested backup is unproven, and offline or offsite copies resist ransomware.",
+      "discriminator_tested": "Offline or offsite copies resist ransomware."
+    },
+    {
+      "objectives": ["C07-25"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes regulatory compliance from internal security policy?",
+      "options": [
+        {"key": "A", "text": "Compliance requirements are imposed from outside", "rationale": "Correct: laws and industry rules such as HIPAA and PCI DSS.", "role": "best"},
+        {"key": "B", "text": "Compliance usually involves audits", "rationale": "True, but internal policies are audited too.", "role": "partial"},
+        {"key": "C", "text": "Policy is enforced by law; compliance is optional", "rationale": "This is reversed.", "role": "related"},
+        {"key": "D", "text": "They are the same thing with different names", "rationale": "One is external, the other internal.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Regulatory compliance means meeting external legal and industry requirements for handling data (for example HIPAA, PCI DSS, GDPR). It is externally imposed, unlike internal policy.",
+      "discriminator_tested": "Compliance is externally imposed."
+    },
+    {
+      "objectives": ["C07-26", "C07-27"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A company wants to fully wipe any lost phone remotely, with no staff privacy concerns. Which device model BEST fits?",
+      "options": [
+        {"key": "A", "text": "Organization-owned devices", "rationale": "Correct: full organizational control, no personal data at stake.", "role": "best"},
+        {"key": "B", "text": "BYOD phones enrolled in MDM", "rationale": "Possible, but wiping personal phones raises privacy issues.", "role": "partial"},
+        {"key": "C", "text": "BYOD phones with a screen-lock rule", "rationale": "A screen lock doesn't allow remote wiping.", "role": "related"},
+        {"key": "D", "text": "Personal phones with no enrollment", "rationale": "No control at all.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "BYOD means employee-owned devices; organization-owned devices are under full organizational control. Ownership drives how much control and privacy there is.",
+      "discriminator_tested": "Ownership drives control and privacy."
+    },
+    {
+      "objectives": ["C07-27", "C07-29"], "type": "single", "angle": "choose-tool", "difficulty": 1,
+      "stem": "A company needs to enroll 500 phones, push Wi-Fi and email settings to them, and remotely lock lost ones. What BEST fits?",
+      "options": [
+        {"key": "A", "text": "An MDM platform", "rationale": "Correct: enroll, configure, and enforce policy centrally.", "role": "best"},
+        {"key": "B", "text": "An asset tag on each phone", "rationale": "Tags identify devices; they don't manage them.", "role": "related"},
+        {"key": "C", "text": "A captive portal", "rationale": "A portal gates network access; it doesn't manage phones.", "role": "related"},
+        {"key": "D", "text": "A SIEM dashboard", "rationale": "A SIEM analyzes logs.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "MDM is a central platform to enroll, configure, and enforce policy on mobile devices, including remote lock and wipe. Configuration management, app distribution, and encryption are things it manages.",
+      "discriminator_tested": "MDM is the platform."
+    },
+    {
+      "objectives": ["C07-28"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "A management tool produces the report below. What BEST describes what it shows?",
+      "exhibit": "Baseline: WIN11-STD v4 (approved 2026-09-01)\nHost      Setting                     Baseline   Actual\nLT-0112   SMBv1                       Disabled   Enabled\nLT-0112   Firewall (Public profile)   On         Off\nLT-0157   (no deviations)",
+      "options": [
+        {"key": "A", "text": "Drift from the baseline", "rationale": "Correct: LT-0112 no longer matches the approved configuration.", "role": "best"},
+        {"key": "B", "text": "LT-0112 has two settings changed", "rationale": "True, but it doesn't name what the report detects.", "role": "partial"},
+        {"key": "C", "text": "A failed patch deployment", "rationale": "Nothing here is about patches.", "role": "related"},
+        {"key": "D", "text": "Malware detected on LT-0157", "rationale": "LT-0157 has no deviations at all.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Configuration management maintains consistent, documented, approved configurations (baselines) under change control, which lets it detect configuration drift.",
+      "discriminator_tested": "Baseline plus change control detects drift."
+    },
+    {
+      "objectives": ["C07-29", "C07-27"], "type": "single", "angle": "classify-element", "difficulty": 1,
+      "stem": "Managed phones may install apps from a company-approved catalog and nowhere else. Which MDM capability does this describe?",
+      "options": [
+        {"key": "A", "text": "App distribution controls", "rationale": "Correct: governs software sources on managed devices.", "role": "best"},
+        {"key": "B", "text": "Data encryption", "rationale": "Protects stored data, not app sources.", "role": "related"},
+        {"key": "C", "text": "Configuration baselines", "rationale": "Settings consistency, not app sources.", "role": "related"},
+        {"key": "D", "text": "Remote wipe", "rationale": "Erases a lost device.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "App distribution controls which apps are installed and from where (a managed app store, allow and block lists). It governs software sources on managed devices.",
+      "discriminator_tested": "App distribution governs software sources."
+    },
+    {
+      "objectives": ["C07-30"], "type": "single", "angle": "mitigation-to-threat", "difficulty": 1,
+      "stem": "A managed laptop has full-disk encryption. Which risk does this MOST directly reduce?",
+      "options": [
+        {"key": "A", "text": "Data exposure if the device is lost", "rationale": "Correct: the disk is unreadable without the key.", "role": "best"},
+        {"key": "B", "text": "Malware infection while it is in use", "rationale": "While running, the disk is unlocked.", "role": "related"},
+        {"key": "C", "text": "Phishing emails reaching the user", "rationale": "Email filtering and training address that.", "role": "related"},
+        {"key": "D", "text": "Network eavesdropping on its traffic", "rationale": "Disk encryption doesn't touch network traffic.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Data encryption protects data on the device, for example with full-disk encryption. A lost or stolen device doesn't expose readable data.",
+      "discriminator_tested": "Lost or stolen device doesn't expose readable data."
+    },
+    {
+      "objectives": ["C07-31", "C07-32"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST distinguishes endpoint recovery from endpoint protection?",
+      "options": [
+        {"key": "A", "text": "Recovery restores; protection prevents", "rationale": "Correct: after a problem vs before it.", "role": "best"},
+        {"key": "B", "text": "Recovery uses backups or reimaging", "rationale": "True of recovery, but it doesn't contrast it with protection.", "role": "partial"},
+        {"key": "C", "text": "Recovery runs antimalware scans continuously", "rationale": "Continuous scanning is protection.", "role": "related"},
+        {"key": "D", "text": "They are two names for EDR", "rationale": "EDR is one protection control.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Endpoint recovery restores an endpoint to a known-good state (restore from backup, reimage, rebuild) after a problem; endpoint protection tries to prevent the problem.",
+      "discriminator_tested": "Recovery after a problem; protection tries to prevent it."
+    },
+    {
+      "objectives": ["C07-32", "C07-31"], "type": "multi", "angle": "classify-element", "difficulty": 1,
+      "stem": "Which two are endpoint protection controls? (Choose two.)",
+      "options": [
+        {"key": "A", "text": "EDR agent on the laptop", "rationale": "Correct: detective and responsive control on the device.", "role": "best"},
+        {"key": "B", "text": "Host-based firewall", "rationale": "Correct: preventive control on the device.", "role": "best"},
+        {"key": "C", "text": "Nightly backups to tape", "rationale": "Supports recovery, not protection.", "role": "related"},
+        {"key": "D", "text": "An IP scanner on the subnet", "rationale": "A network discovery tool.", "role": "related"},
+        {"key": "E", "text": "A drive shredder", "rationale": "A disposal tool.", "role": "wrong"}
+      ],
+      "answer": ["A", "B"],
+      "explanation": "Endpoint protection is the controls on the device itself: antimalware, host-based firewall, host intrusion detection, and EDR. They are preventive and detective controls on the endpoint.",
+      "discriminator_tested": "Preventive and detective controls on the endpoint itself."
+    },
+    {
+      "objectives": ["C07-33", "C07-32"], "type": "single", "angle": "assess-risk", "difficulty": 2,
+      "stem": "What is the MAIN trade-off of cloud-based endpoint protection?",
+      "options": [
+        {"key": "A", "text": "Fast updates, but it needs internet", "rationale": "Correct: fast and works off-network, but relies on connectivity.", "role": "best"},
+        {"key": "B", "text": "Signatures are updated quickly", "rationale": "The benefit, without the trade-off.", "role": "partial"},
+        {"key": "C", "text": "It replaces the need for local agents", "rationale": "It still relies on an agent on each endpoint.", "role": "related"},
+        {"key": "D", "text": "It works on the office network alone", "rationale": "It covers devices off-network too.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Cloud-based protection delivers or analyzes endpoint security through the cloud (cloud signatures, threat intelligence, a central console). It gives fast updates and off-network coverage but needs connectivity.",
+      "discriminator_tested": "Fast updates and off-network coverage; needs connectivity."
+    },
+    {
+      "objectives": ["C07-34", "C07-24"], "type": "single", "angle": "interpret-output", "difficulty": 2,
+      "stem": "An analyst reviews the scan history below for one laptop. What do these logs MOST importantly show?",
+      "exhibit": "Scheduled scan  LT-0201  2026-10-14 02:00  Completed  0 threats  Defs: 2026-07-30\nScheduled scan  LT-0201  2026-10-15 02:00  Failed     service stopped\nScheduled scan  LT-0201  2026-10-16 02:00  Failed     service stopped",
+      "options": [
+        {"key": "A", "text": "Failed scans, stale definitions", "rationale": "Correct: scans aren't running, and definitions are months old.", "role": "best"},
+        {"key": "B", "text": "No threats were found on 14 October", "rationale": "True, but meaningless with outdated definitions.", "role": "partial"},
+        {"key": "C", "text": "The laptop is free of malware", "rationale": "A clean log doesn't prove safety.", "role": "related"},
+        {"key": "D", "text": "Scans are running too often", "rationale": "They are failing, not too frequent.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Reviewing scan logs means examining antimalware and vulnerability scan results for detections, failures, and patterns. A clean log doesn't prove safety; check that scans ran and definitions were current.",
+      "discriminator_tested": "A clean log doesn't prove safety."
+    },
+    {
+      "objectives": ["C07-35"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 3,
+      "stem": "Which sequence matches the malware remediation process?",
+      "options": [
+        {"key": "A", "text": "Identify, quarantine, disable Restore, remediate, update, enable Restore, educate", "rationale": "Correct: the seven steps in order.", "role": "best"},
+        {"key": "B", "text": "Quarantine, identify, remediate, disable Restore, update, enable Restore, educate", "rationale": "Symptoms are confirmed first, and Restore is disabled before cleaning.", "role": "related"},
+        {"key": "C", "text": "Identify, quarantine, remediate, disable Restore, enable Restore, update, educate", "rationale": "Restore must be off before cleaning, and updates come before re-enabling it.", "role": "related"},
+        {"key": "D", "text": "Identify, remediate, quarantine, educate, disable Restore, update, enable Restore", "rationale": "Quarantine must come before cleaning.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "The malware remediation process has seven ordered steps: identify and verify symptoms; quarantine; disable System Restore; remediate; schedule scans and run updates; re-enable System Restore and create restore points; educate users.",
+      "discriminator_tested": "Sequence matters."
+    },
+    {
+      "objectives": ["C07-36", "C07-37"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "A user reports pop-ups, a changed browser home page, and antivirus that won't start. Following the malware remediation process, what is the FIRST step?",
+      "options": [
+        {"key": "A", "text": "Verify it's malware", "rationale": "Correct: confirm the symptoms before acting.", "role": "best"},
+        {"key": "B", "text": "Disconnect the PC from the network", "rationale": "Quarantine is the second step.", "role": "related"},
+        {"key": "C", "text": "Run a full antivirus scan", "rationale": "Scanning is part of remediation, step four.", "role": "related"},
+        {"key": "D", "text": "Reinstall the operating system", "rationale": "Premature, and not the first step.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Identifying and verifying malware symptoms means gathering the signs (slowness, pop-ups, redirects, disabled antivirus, unknown processes) and confirming malware. It is the first step: confirm before acting.",
+      "discriminator_tested": "First step: confirm before acting."
+    },
+    {
+      "objectives": ["C07-37", "C07-38"], "type": "single", "angle": "choose-response", "difficulty": 2,
+      "stem": "A PC is confirmed infected with a worm. Per the malware remediation process, what should the technician do NEXT?",
+      "options": [
+        {"key": "A", "text": "Isolate it from the network", "rationale": "Correct: quarantine stops the spread before cleaning.", "role": "best"},
+        {"key": "B", "text": "Scan it with updated antimalware", "rationale": "Cleaning comes after quarantine and disabling Restore.", "role": "related"},
+        {"key": "C", "text": "Disable System Restore", "rationale": "That is the step after quarantine.", "role": "related"},
+        {"key": "D", "text": "Teach the user about phishing", "rationale": "Education is the last step.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Quarantining an infected system means isolating it from the network (disconnecting it or moving it to an isolated VLAN). It stops the spread before cleaning.",
+      "discriminator_tested": "Quarantine stops spread before cleaning."
+    },
+    {
+      "objectives": ["C07-38", "C07-41"], "type": "single", "angle": "neighbor-discrimination", "difficulty": 2,
+      "stem": "What BEST explains why System Restore is turned off before cleaning an infected Windows PC?",
+      "options": [
+        {"key": "A", "text": "Restore points may hold copies of the malware", "rationale": "Correct: they could reintroduce it later.", "role": "best"},
+        {"key": "B", "text": "It is a required step in the process", "rationale": "True, but it doesn't say why.", "role": "partial"},
+        {"key": "C", "text": "It frees disk space for the scan", "rationale": "Space isn't the reason.", "role": "related"},
+        {"key": "D", "text": "It stops the malware spreading on the network", "rationale": "Quarantine does that.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Disabling System Restore before cleaning keeps malware in old restore points from being preserved, because restore points can hold malware.",
+      "discriminator_tested": "Restore points can hold malware."
+    },
+    {
+      "objectives": ["C07-39", "C07-32"], "type": "single", "angle": "choose-response", "difficulty": 3,
+      "stem": "A rootkit hides from the antivirus while Windows is running. Which approach BEST removes it?",
+      "options": [
+        {"key": "A", "text": "Scan from bootable rescue media", "rationale": "Correct: the rootkit can't hide when its OS isn't running.", "role": "best"},
+        {"key": "B", "text": "Update definitions and rescan normally", "rationale": "Necessary, but the rootkit still hides from a scan run inside Windows.", "role": "partial"},
+        {"key": "C", "text": "Disable UAC and rescan", "rationale": "UAC has nothing to do with detection.", "role": "related"},
+        {"key": "D", "text": "Delete the System32 folder", "rationale": "That destroys Windows.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Remediating infected systems means updating antimalware, scanning, and removing the malware, using safe mode or rescue media when needed. Use current definitions; rescue media helps with stealthy malware such as rootkits.",
+      "discriminator_tested": "Rescue media helps with stealthy malware such as rootkits."
+    },
+    {
+      "objectives": ["C07-40", "C07-39"], "type": "single", "angle": "root-cause-vs-symptom", "difficulty": 2,
+      "stem": "Malware got in through an unpatched browser plug-in and has now been removed. What BEST explains why the process still requires patching and scheduled scans?",
+      "options": [
+        {"key": "A", "text": "To close the hole that let it in", "rationale": "Correct: otherwise the same flaw lets it straight back in.", "role": "best"},
+        {"key": "B", "text": "To keep the antivirus definitions current", "rationale": "Part of it, but patching the entry point matters most.", "role": "partial"},
+        {"key": "C", "text": "To restore the files the malware deleted", "rationale": "Patches don't restore files.", "role": "related"},
+        {"key": "D", "text": "To re-enable System Restore", "rationale": "That is the next step, not this one's purpose.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Scheduling scans and running updates means patching the OS and applications, updating signatures, and scheduling recurring scans. It closes the hole that let the malware in.",
+      "discriminator_tested": "Closes the hole that let the malware in."
+    },
+    {
+      "objectives": ["C07-41", "C07-38"], "type": "single", "angle": "cause-and-effect-ordering", "difficulty": 2,
+      "stem": "When should System Restore be turned back on and a new restore point created?",
+      "options": [
+        {"key": "A", "text": "After the system is verified clean", "rationale": "Correct: so the restore point captures a clean state.", "role": "best"},
+        {"key": "B", "text": "Right after quarantining the PC", "rationale": "The PC is still infected then.", "role": "related"},
+        {"key": "C", "text": "Before running the malware scan", "rationale": "A restore point then would capture the malware.", "role": "related"},
+        {"key": "D", "text": "It stays off on a previously infected PC", "rationale": "It should be re-enabled once the PC is clean.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Turn System Restore back on and create a fresh restore point only after the system is verified clean.",
+      "discriminator_tested": "Only after the system is verified clean."
+    },
+    {
+      "objectives": ["C07-42", "C07-35"], "type": "single", "angle": "find-missing-element", "difficulty": 2,
+      "stem": "A user's PC was cleaned of malware that arrived in a phishing email. A week later it is reinfected the same way. Which step was MOST likely skipped?",
+      "options": [
+        {"key": "A", "text": "Security awareness training", "rationale": "Correct: the final step prevents a repeat.", "role": "best"},
+        {"key": "B", "text": "Scheduling scans and updates", "rationale": "Scans can't stop a user clicking a link.", "role": "related"},
+        {"key": "C", "text": "Disabling System Restore", "rationale": "That affects cleanup, not how the user got phished again.", "role": "related"},
+        {"key": "D", "text": "Quarantining the PC", "rationale": "Quarantine contains spread during cleaning.", "role": "wrong"}
+      ],
+      "answer": ["A"],
+      "explanation": "Educating end users (phishing, safe downloads, reporting) is the final step of the malware remediation process, and it prevents recurrence.",
+      "discriminator_tested": "Education is the final step; prevents recurrence."
+    }
+  ]
+}

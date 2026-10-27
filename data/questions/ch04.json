@@ -1,0 +1,5047 @@
+{
+  "chapter": 4,
+  "questions": [
+    {
+      "objectives": [
+        "C04-01"
+      ],
+      "type": "single",
+      "angle": "interpret-config",
+      "difficulty": 2,
+      "stem": "A switch has this configuration:\n\nusername admin privilege 15 secret Str0ng!Pass\nline vty 0 4\n login local\n\nWhat does it do?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Remote logins need only a line password, with no username",
+          "rationale": "That would be 'login' with a line password; 'login local' requires a username.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Remote logins are sent to a RADIUS server for checking",
+          "rationale": "Nothing here configures AAA or a RADIUS server.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Remote (VTY) logins are checked against the username and password stored on the switch itself",
+          "rationale": "Correct: 'login local' uses the switch's own account database.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "The password is stored in cleartext because it was set with 'secret'",
+          "rationale": "'secret' stores a hash; it is the 'password' keyword that leaves it readable.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Local authentication stores accounts on the device itself ('username ... secret ...'), and 'login local' applies them to the lines. Because each device holds its own credentials, it doesn't scale.",
+      "discriminator_tested": "Local authentication keeps credentials on each device; 'secret' is hashed.",
+      "id": "Q-C04-0001",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-01",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-02"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 1,
+      "stem": "Which sequence correctly orders the steps of the iAAA model?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Identification, authentication, authorization, accounting",
+          "rationale": "Correct: who are you, prove it, what may you do, what did you do.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Authentication, identification, accounting, authorization",
+          "rationale": "You must claim an identity before proving it, and accounting comes last.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Accounting, identification, authentication, authorization",
+          "rationale": "Accounting records what happened, so it comes last.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Identification, authorization, authentication, accounting",
+          "rationale": "Permissions can't be decided before identity is proven.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "The iAAA model runs identification (who are you?), authentication (prove it), authorization (what may you do?), then accounting (what did you do?).",
+      "discriminator_tested": "Who are you? Prove it. What may you do? What did you do?",
+      "id": "Q-C04-0002",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-02",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-03",
+        "C04-06"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "A user enters a username and the correct password and passes the login check. What has been established at this point?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Accounting for the session is complete",
+          "rationale": "Accounting records activity over the session; it is not finished at login.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Their identity has been authenticated; nothing yet determines what they may access",
+          "rationale": "Correct: authentication proves identity only.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "They are authorized to use every resource on the network",
+          "rationale": "Permissions are decided separately, by authorization.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "They have completed multifactor authentication",
+          "rationale": "A password is a single factor.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Authentication verifies a claimed identity using one or more factors (something you know, have, or are). It proves who you are but says nothing yet about permissions.",
+      "discriminator_tested": "Authentication proves identity; it does not grant permissions.",
+      "id": "Q-C04-0003",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-03",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-04",
+        "C04-03"
+      ],
+      "type": "multi",
+      "angle": "classify-factor",
+      "difficulty": 2,
+      "stem": "Which two login methods count as MFA? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A smart card plus a PIN",
+          "rationale": "Correct: something you have plus something you know.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "A fingerprint plus a face scan",
+          "rationale": "Both are something you are, so it is one category.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "A password plus a code from a hardware token",
+          "rationale": "Correct: something you know plus something you have.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "A password plus the answer to a security question",
+          "rationale": "Both are something you know.",
+          "role": null
+        },
+        {
+          "key": "E",
+          "text": "A password plus a second, different password",
+          "rationale": "Both are something you know, so it is one category.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A",
+        "C"
+      ],
+      "explanation": "MFA requires two or more different factor categories: something you know, have, or are. Two items from the same category, such as two passwords, are not MFA.",
+      "discriminator_tested": "MFA needs different factor categories; two of the same kind is not MFA.",
+      "id": "Q-C04-0004",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-04",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-05"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "A company is choosing a second factor for remote access. Which MFA method is generally strongest against interception and redirection?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A code read out in an automated voice call",
+          "rationale": "Voice calls can be redirected through call forwarding or a hijacked number.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "A code sent by email",
+          "rationale": "An emailed code is only as safe as the email account.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "A code sent by SMS",
+          "rationale": "SMS codes can be intercepted or redirected, for example through SIM swapping.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "A time-based code from an authenticator app or hardware token",
+          "rationale": "Correct: the code is generated on the device and isn't sent over a channel an attacker can redirect.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Common MFA methods include email, SMS, voice call, and time-based hardware or software tokens. Time-based tokens are generally stronger; codes sent by SMS, voice, or email can be intercepted or redirected.",
+      "discriminator_tested": "Time-based tokens are stronger; SMS, voice, and email codes can be intercepted.",
+      "id": "Q-C04-0005",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-05",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-06",
+        "C04-03"
+      ],
+      "type": "single",
+      "angle": "symptom-to-attack",
+      "difficulty": 2,
+      "stem": "An employee logs in successfully but gets 'Access denied' when opening the payroll folder. Which iAAA function denied the request?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Identification",
+          "rationale": "The employee's identity was already claimed and proven.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Authentication",
+          "rationale": "Authentication succeeded; the login worked.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Accounting",
+          "rationale": "Accounting records activity; it doesn't allow or deny anything.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Authorization",
+          "rationale": "Correct: it decides what an authenticated user may access.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Authorization determines what an authenticated user may access or do, and it happens after authentication. Here, identity was proven, but the permission was refused.",
+      "discriminator_tested": "Authorization happens after authentication and decides access.",
+      "id": "Q-C04-0006",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-06",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-07"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 3,
+      "stem": "How does identity and access management (IAM) relate to AAA?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "AAA is the umbrella program; IAM is a protocol inside it",
+          "rationale": "This reverses the relationship.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "IAM is a newer protocol that replaces RADIUS",
+          "rationale": "IAM is a set of processes and tools, not a network protocol.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "They are two names for the same thing",
+          "rationale": "IAM is broader than the authentication, authorization, and accounting mechanisms.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "IAM is the umbrella program that manages identities and their access across their whole lifecycle; AAA is one mechanism inside it",
+          "rationale": "Correct: IAM covers joining, changing roles, and leaving; AAA enforces access at login and use.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Identity and access management is the set of processes and tools that manage identities and their access throughout their lifecycle. AAA is one mechanism within that program.",
+      "discriminator_tested": "IAM is the umbrella program; AAA is one mechanism inside it.",
+      "id": "Q-C04-0007",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-07",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-08"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 2,
+      "stem": "A marketing intern's account was given domain administrator rights 'to avoid permission tickets.' Later, malware on the intern's laptop runs with the intern's rights. Which principle was violated, and what was the consequence?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Accounting; no logs were kept",
+          "rationale": "Nothing in the scenario concerns logging.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Defense in depth; the network had only one firewall",
+          "rationale": "Layering is a separate principle; the problem described is excess rights on one account.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "MFA; the intern used only a password",
+          "rationale": "MFA protects the login; it does not limit what malware running as the user can do.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Least privilege; the malware inherited administrator rights and could do far more damage",
+          "rationale": "Correct: the account had much more access than the job needed.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Least privilege grants only the access needed for the job. It limits the damage from mistakes, malware, and insiders, because anything running as the user gets only the user's rights.",
+      "discriminator_tested": "Least privilege limits damage from mistakes, malware, and insiders.",
+      "id": "Q-C04-0008",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-08",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-09",
+        "C04-08"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 1,
+      "stem": "A hospital has 300 nurses whose access changes whenever their duties change. Administrators want to assign permissions once to a 'Nurse' group and then simply add or remove people. Which access model is this?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "RBAC (role-based access control)",
+          "rationale": "Correct: permissions attach to the role, and people get access through it.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Accounting",
+          "rationale": "Accounting records activity; it doesn't assign permissions.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Least privilege",
+          "rationale": "Least privilege is a principle about how much access to give, not a way of assigning it.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Assigning permissions to each individual user",
+          "rationale": "That is the opposite of what the administrators want.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "In RBAC, permissions attach to roles and users get access through their role, rather than through permissions assigned to each individual.",
+      "discriminator_tested": "RBAC: permissions attach to roles, not individuals.",
+      "id": "Q-C04-0009",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-09",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-10"
+      ],
+      "type": "single",
+      "angle": "symptom-to-attack",
+      "difficulty": 1,
+      "stem": "After an outage, investigators need to know which administrator ran the command that changed the core switch's routing, and when. Which iAAA function provides this?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Accounting",
+          "rationale": "Correct: it records who did what and when.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Authorization",
+          "rationale": "Authorization decided whether the command was allowed; it doesn't keep a history.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Identification",
+          "rationale": "Identification is the initial identity claim.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Authentication",
+          "rationale": "Authentication proved who logged in, but it doesn't record their commands.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Accounting records who did what and when, such as logins, commands, and session data. It is the after-the-fact audit trail that makes actions traceable.",
+      "discriminator_tested": "Accounting is the after-the-fact audit trail.",
+      "id": "Q-C04-0010",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-10",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-11",
+        "C04-12"
+      ],
+      "type": "single",
+      "angle": "identify-from-port",
+      "difficulty": 2,
+      "stem": "A firewall log shows a wireless controller sending authentication requests to a server on UDP 1812 and accounting records on UDP 1813. Which protocol is this?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "RADIUS",
+          "rationale": "Correct: RADIUS uses UDP 1812 for authentication and 1813 for accounting.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "TACACS+",
+          "rationale": "TACACS+ uses TCP 49.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "SNMP",
+          "rationale": "SNMP uses UDP 161 and 162 for device monitoring.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "TFTP",
+          "rationale": "TFTP uses UDP 69 for file transfer.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "RADIUS is centralized AAA over UDP (1812 for authentication, 1813 for accounting). It is an open standard, typical for network access such as 802.1X, Wi-Fi, and VPN.",
+      "discriminator_tested": "RADIUS: UDP 1812/1813, typical for network access.",
+      "id": "Q-C04-0011",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-11",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-12",
+        "C04-11"
+      ],
+      "type": "single",
+      "angle": "choose-protocol",
+      "difficulty": 2,
+      "stem": "A network team wants a central AAA server for administrators logging in to routers and switches. They want each command authorized separately and the whole session payload encrypted. Which protocol fits?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Local authentication",
+          "rationale": "Local accounts aren't central and don't scale across many devices.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "SNMPv3",
+          "rationale": "SNMPv3 secures device monitoring; it isn't an AAA protocol.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "RADIUS",
+          "rationale": "RADIUS combines authentication and authorization and encrypts only the password.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "TACACS+",
+          "rationale": "Correct: it separates authentication, authorization, and accounting, and it encrypts the entire payload.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "TACACS+ is centralized AAA over TCP 49 that encrypts the entire payload and separates authentication, authorization, and accounting. That makes it typical for device administration.",
+      "discriminator_tested": "TACACS+: TCP 49, full encryption, separate A/A/A; for device administration.",
+      "id": "Q-C04-0012",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-12",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-13",
+        "C04-01"
+      ],
+      "type": "single",
+      "angle": "interpret-config",
+      "difficulty": 3,
+      "stem": "A router has the login method list:\n\naaa authentication login default group tacacs+ local\n\nAn administrator mistypes their password, and the TACACS+ server rejects it. What happens next?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The router falls back to its local account and checks the password again",
+          "rationale": "Fallback happens only when the server is unreachable.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "The router disables AAA until it is rebooted",
+          "rationale": "A rejected login doesn't change the AAA configuration.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "The login fails; the local account is tried only when the TACACS+ server can't be reached",
+          "rationale": "Correct: a rejection is a final answer, not a reason to fall back.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "The administrator is logged in with limited privileges",
+          "rationale": "A rejected login gets no access at all.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Configuring iAAA means enabling AAA, defining the server, and building method lists applied to lines. The order in a method list matters, and the next method is used only when a server is unreachable, not when it rejects the user.",
+      "discriminator_tested": "Fallback to local happens on server unreachable, not on reject.",
+      "id": "Q-C04-0013",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-13",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-14",
+        "C04-11"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 2,
+      "stem": "Which sequence correctly describes a RADIUS login on a wireless network?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The RADIUS server sends Access-Accept first, and then the user enters credentials",
+          "rationale": "The server can't accept credentials it hasn't received.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "The user's laptop sends an Access-Request straight to the RADIUS server, which then tells the access point",
+          "rationale": "The user's endpoint is not the RADIUS client; the access device is.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "The user enters credentials; the access point sends an Access-Request to the RADIUS server; the server answers Access-Accept, Access-Reject, or Access-Challenge; the access point acts on the answer",
+          "rationale": "Correct: the access device is the RADIUS client.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "The access point sends Access-Accept to the RADIUS server",
+          "rationale": "Accept, Reject, and Challenge come from the server, not the access device.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "In the RADIUS login process, credentials go to the access device (switch or access point), which sends an Access-Request to the RADIUS server and acts on the Accept, Reject, or Challenge it gets back.",
+      "discriminator_tested": "The access device is the RADIUS client, not the user's endpoint.",
+      "id": "Q-C04-0014",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-14",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-15"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 3,
+      "stem": "Which change to the password policy adds the most resistance to guessing?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Raising the minimum length from 8 to 16 characters",
+          "rationale": "Correct: each added character multiplies the number of possible passwords.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Allowing users to reuse their previous password",
+          "rationale": "Reuse weakens the policy.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Requiring one symbol in an 8-character password",
+          "rationale": "Complexity alone adds less strength than length, and users tend to add symbols predictably.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Forcing a password change every 30 days",
+          "rationale": "Frequent changes don't make each password harder to guess.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Longer passwords with mixed character types resist guessing, but password length adds more strength than complexity alone.",
+      "discriminator_tested": "Length adds more strength than complexity alone.",
+      "id": "Q-C04-0015",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-15",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-16"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 3,
+      "stem": "A strict policy now locks any account after three failed attempts. Every morning, an attacker deliberately enters wrong passwords for every executive's account. What is the attacker achieving?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Abusing the password lockout to keep the executives out of their own accounts",
+          "rationale": "Correct: lockout can itself be used as a denial-of-service tool.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Cracking the executives' passwords through the lockout",
+          "rationale": "Locked accounts can't be guessed further.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Nothing harmful, because lockout stops the brute force attempt",
+          "rationale": "The guessing is stopped, but the legitimate users are locked out every day.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Disabling the accounting logs",
+          "rationale": "Failed attempts are logged; nothing here affects accounting.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Password lockout locks an account after a set number of failed attempts, which counters online brute force. The same mechanism can be abused to lock out legitimate users.",
+      "discriminator_tested": "Lockout counters online brute force but can be abused to lock out legitimate users.",
+      "id": "Q-C04-0016",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-16",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-17"
+      ],
+      "type": "single",
+      "angle": "symptom-to-attack",
+      "difficulty": 2,
+      "stem": "A PC is plugged into a switch port configured for 802.1X but has not authenticated yet. By default, what traffic can it send through the port?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Nothing at all, not even authentication traffic",
+          "rationale": "Then the device could never authenticate.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "All traffic, because 802.1X only logs connections",
+          "rationale": "802.1X enforces access; it doesn't just log.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Only web traffic to the internet",
+          "rationale": "Nothing but authentication traffic passes before success.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Only authentication traffic, until it authenticates successfully",
+          "rationale": "Correct: the port stays blocked for everything else until success.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "802.1X is port-based access control: a port passes only authentication traffic until the device authenticates, and stays blocked for everything else until then.",
+      "discriminator_tested": "802.1X keeps the port blocked until authentication succeeds.",
+      "id": "Q-C04-0017",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-17",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-18",
+        "C04-17"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "Which pair of 802.1X components correctly identifies who enforces the access decision at the port and who makes that decision?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The RADIUS server enforces; the supplicant decides",
+          "rationale": "The device asking for access can't decide its own access.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "The client (supplicant) enforces; the switch decides",
+          "rationale": "The supplicant is the device asking for access.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "The switch both enforces and decides, with no server",
+          "rationale": "In 802.1X the decision comes from the authentication server.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "The switch (authenticator) enforces; the RADIUS server (authentication server) decides",
+          "rationale": "Correct: the authenticator enforces and the server decides.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "802.1X components: the supplicant is the client, the authenticator is the switch or WAP, and the authentication server is RADIUS. The authenticator enforces; the server decides.",
+      "discriminator_tested": "The authenticator enforces; the authentication server decides.",
+      "id": "Q-C04-0018",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-18",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-19",
+        "C04-21"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 2,
+      "stem": "Which sequence best describes the NAC process?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The device connects; it is identified and assessed; policy then sets its access level (full, restricted, quarantine, or deny)",
+          "rationale": "Correct: identify and assess first, then apply policy.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "The device is denied, then identified, then granted access whatever the result",
+          "rationale": "Access depends on the result of the checks.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "The device is assessed only after the user logs out",
+          "rationale": "Assessment happens at or during connection.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "The device gets full access first and is assessed later if problems appear",
+          "rationale": "NAC checks before granting access.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "In the NAC process, a device connects, is identified and assessed, and then policy sets its access level. The outcome is policy-driven and need not be all-or-nothing.",
+      "discriminator_tested": "NAC outcome is policy-driven and need not be all-or-nothing.",
+      "id": "Q-C04-0019",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-19",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-20",
+        "C04-21"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 2,
+      "stem": "A hospital's NAC system must recognize infusion pumps and printers, which can't run 802.1X client software, and place each kind in the right network segment. Which NAC capability identifies what each device is?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Posturing",
+          "rationale": "Posturing checks a device's health, not what kind of device it is.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Accounting",
+          "rationale": "Accounting records activity; it doesn't identify device types.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "A captive portal",
+          "rationale": "A portal needs a person at a browser, which pumps and printers don't have.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Profiling",
+          "rationale": "Correct: it identifies a device's type or class from observed attributes.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Profiling identifies what a device is (its type or class) from observed attributes. It is especially useful for devices that can't run a supplicant, such as printers and IoT devices.",
+      "discriminator_tested": "Profiling identifies device type; useful when a device can't run a supplicant.",
+      "id": "Q-C04-0020",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-20",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-21",
+        "C04-20"
+      ],
+      "type": "multi",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "Which two checks are examples of posturing (posture assessment)? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Who is the user logging in?",
+          "rationale": "Proving the user's identity is authentication.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Is the antivirus running with current definitions?",
+          "rationale": "Correct: a device health check.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Are the latest operating system patches installed?",
+          "rationale": "Correct: a compliance check.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Is this device a printer, a phone, or a PC?",
+          "rationale": "Working out the device type is profiling.",
+          "role": null
+        },
+        {
+          "key": "E",
+          "text": "Which network segments does this user's role allow?",
+          "rationale": "Deciding permitted access is authorization.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "B",
+        "C"
+      ],
+      "explanation": "Posturing checks a device's health and compliance, such as patches, antivirus, and configuration. That is different from identity (authentication) and from device type (profiling).",
+      "discriminator_tested": "Posturing checks health, not identity or device type.",
+      "id": "Q-C04-0021",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-21",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-22"
+      ],
+      "type": "single",
+      "angle": "root-cause-vs-symptom",
+      "difficulty": 2,
+      "stem": "Why does BYOD need NAC, posture checks, and segmentation more than company-owned laptops do?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Personal devices are always infected",
+          "rationale": "They aren't always infected; their state is simply unknown.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Personal devices are unmanaged and varied, so their patch level and configuration can't be assumed",
+          "rationale": "Correct: the organization didn't set up these devices.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "BYOD devices don't need any extra controls",
+          "rationale": "Their unmanaged state is exactly why they do.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Personal devices can't connect to Wi-Fi without these controls",
+          "rationale": "They can connect; the controls exist to manage the risk.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "BYOD means personally owned devices accessing organizational resources. Because they are unmanaged and varied, they need NAC, posture checks, and segmentation.",
+      "discriminator_tested": "BYOD devices are unmanaged and varied.",
+      "id": "Q-C04-0022",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-22",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-23"
+      ],
+      "type": "single",
+      "angle": "attack-to-mitigation",
+      "difficulty": 2,
+      "stem": "A conference center offers Wi-Fi to visitors. One visitor's infected laptop starts scanning for other devices to attack. Which design keeps that scan away from the center's internal systems?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Visitors and staff on the same network, with a captive portal for visitors",
+          "rationale": "A portal controls who gets on, but visitors would still share the internal network.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "WPA3-Personal on a network shared by staff and visitors",
+          "rationale": "Encryption protects traffic in the air; it doesn't separate visitors from internal systems.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Device profiling for every visitor",
+          "rationale": "Profiling identifies device types; on its own it doesn't isolate them.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Guest network isolation: a separate segment with internet-only access and no route to internal resources",
+          "rationale": "Correct: the scan can't reach what the segment can't route to.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Guest network isolation places guests on a separate segment with internet-only access, isolated from internal resources. Isolation is the control that contains a compromised guest device.",
+      "discriminator_tested": "Guest isolation separates guests from internal resources.",
+      "id": "Q-C04-0023",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-23",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-24",
+        "C04-23"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 3,
+      "stem": "A hotel's open Wi-Fi shows a login page asking for a room number and surname before any browsing works. A guest assumes that once logged in, their wireless traffic is encrypted. Is the guest right?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "No: the captive portal is only a gate for getting on the network; it doesn't encrypt wireless traffic",
+          "rationale": "Correct: an open network stays unencrypted after the portal login.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Yes: logging in through the portal turns on WPA3",
+          "rationale": "A portal doesn't change the wireless security mode.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Yes: if the login page uses HTTPS, all later traffic is encrypted too",
+          "rationale": "HTTPS protects only that page's connection, not the rest of the guest's traffic.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "No: captive portals only work on wired networks",
+          "rationale": "Captive portals are common on wireless networks.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "A captive portal intercepts a new user's first web request and requires a login or acceptance before granting access. It is a gate for guest and BYOD onboarding, not encryption of wireless traffic.",
+      "discriminator_tested": "A captive portal is an onboarding gate, not encryption.",
+      "id": "Q-C04-0024",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-24",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:19:47+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-01",
+        "C04-11"
+      ],
+      "type": "single",
+      "angle": "root-cause-vs-symptom",
+      "difficulty": 2,
+      "stem": "A company has 200 switches, each with its own local admin accounts. Whenever an administrator leaves, someone has to log in to every switch to remove that account. What is the underlying limitation?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "'login local' disables SSH",
+          "rationale": "'login local' works with SSH and Telnet alike.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "The accounts were created with 'secret' instead of 'password'",
+          "rationale": "'secret' is the better choice, and it has nothing to do with scaling.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Local authentication stores credentials on each device, so it doesn't scale; central AAA such as RADIUS or TACACS+ solves this",
+          "rationale": "Correct: one central account store replaces 200 separate ones.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Local accounts can't be given privilege level 15",
+          "rationale": "They can; 'privilege 15' is set on local accounts all the time.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "With local authentication, credentials live on each device, so every change must be repeated everywhere. That doesn't scale, which is why larger networks move to central AAA.",
+      "discriminator_tested": "Local authentication doesn't scale; credentials live on each device.",
+      "id": "Q-C04-0025",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-01",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-02"
+      ],
+      "type": "multi",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "Which two pairings of an iAAA step with the question it answers are correct? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Authentication: 'Prove it.'",
+          "rationale": "Correct: it verifies the claimed identity.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Accounting: 'What did you do?'",
+          "rationale": "Correct: it records activity.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Authentication: 'What did you do?'",
+          "rationale": "'What did you do?' is accounting.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Authorization: 'Who are you?'",
+          "rationale": "'Who are you?' is identification.",
+          "role": null
+        },
+        {
+          "key": "E",
+          "text": "Identification: 'What may you do?'",
+          "rationale": "'What may you do?' is authorization.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "The iAAA model: identification asks who are you, authentication says prove it, authorization asks what may you do, and accounting asks what did you do.",
+      "discriminator_tested": "Who are you? Prove it. What may you do? What did you do?",
+      "id": "Q-C04-0026",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-02",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-03",
+        "C04-04"
+      ],
+      "type": "multi",
+      "angle": "classify-factor",
+      "difficulty": 1,
+      "stem": "Which two are 'something you have' authentication factors? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A smart card",
+          "rationale": "Correct: a physical object the user possesses.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "A hardware security token",
+          "rationale": "Correct: a physical object the user possesses.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "A PIN",
+          "rationale": "A PIN is something you know.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "A password",
+          "rationale": "A password is something you know.",
+          "role": null
+        },
+        {
+          "key": "E",
+          "text": "A fingerprint",
+          "rationale": "A fingerprint is something you are.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "Authentication verifies a claimed identity using factors from three categories: something you know (password, PIN), something you have (token, smart card), and something you are (biometrics).",
+      "discriminator_tested": "Factor categories: know, have, are.",
+      "id": "Q-C04-0027",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-03",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-04"
+      ],
+      "type": "single",
+      "angle": "which-is-not",
+      "difficulty": 2,
+      "stem": "Which of these is NOT MFA?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A fingerprint plus a password",
+          "rationale": "MFA: something you are plus something you know.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "A smart card plus a PIN",
+          "rationale": "MFA: something you have plus something you know.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "A password plus a code from an authenticator app",
+          "rationale": "MFA: something you know plus something you have.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "A password plus the answer to a security question",
+          "rationale": "Correct choice: both are something you know, so it is one category.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "MFA requires two or more different factor categories. Two items of the same kind, such as a password and a security answer, are still a single factor category.",
+      "discriminator_tested": "MFA factors must come from different categories.",
+      "id": "Q-C04-0028",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-04",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-05"
+      ],
+      "type": "single",
+      "angle": "which-is-not",
+      "difficulty": 2,
+      "stem": "Which statement about MFA methods is NOT true?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Codes delivered by voice call can be redirected",
+          "rationale": "True: through call forwarding or a hijacked number.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "SMS codes can't be intercepted, because they travel over the phone network",
+          "rationale": "Correct choice because it is false: SMS codes can be intercepted or redirected, for example through SIM swapping.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "An emailed code is only as safe as the email account",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Time-based hardware or software tokens are generally stronger",
+          "rationale": "True: codes are generated locally.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "MFA methods include email, SMS, voice call, and time-based tokens. Time-based tokens are generally stronger; codes sent by SMS, voice, or email can be intercepted or redirected.",
+      "discriminator_tested": "SMS, voice, and email codes can be intercepted; time-based tokens are stronger.",
+      "id": "Q-C04-0029",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-05",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-06",
+        "C04-03"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "When does authorization happen relative to authentication, and what does it decide?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Only when the user logs out",
+          "rationale": "Authorization decisions are made while the user is working.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "After authentication; it decides what the authenticated user may access or do",
+          "rationale": "Correct.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Before authentication; it decides who the user is",
+          "rationale": "Identity is established first, by identification and authentication.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "At the same time as accounting; it records what the user did",
+          "rationale": "Recording activity is accounting.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Authorization determines what an authenticated user may access or do, so it can only happen after authentication has proven who they are.",
+      "discriminator_tested": "Authorization happens after authentication.",
+      "id": "Q-C04-0030",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-06",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-07"
+      ],
+      "type": "single",
+      "angle": "which-is-not",
+      "difficulty": 1,
+      "stem": "Which of these is NOT part of identity and access management (IAM)?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Choosing nonoverlapping Wi-Fi channels for the access points",
+          "rationale": "Correct choice: that is wireless network design, not identity management.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Removing access when people leave",
+          "rationale": "Part of IAM: the end of the lifecycle.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Changing access when people move to a new role",
+          "rationale": "Part of IAM.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Creating accounts when people join the organization",
+          "rationale": "Part of IAM: the start of the identity lifecycle.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Identity and access management covers the processes and tools that manage identities and their access across their lifecycle: joining, changing roles, and leaving. AAA is one mechanism inside it.",
+      "discriminator_tested": "IAM manages identities and access across their lifecycle.",
+      "id": "Q-C04-0031",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-07",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-08"
+      ],
+      "type": "single",
+      "angle": "mitigation-to-threat",
+      "difficulty": 2,
+      "stem": "An organization applies least privilege to every account. Which harm does this most directly reduce?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Phishing emails reaching users' inboxes",
+          "rationale": "Least privilege limits what happens after a compromise; it doesn't filter email.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Wi-Fi interference from microwave ovens",
+          "rationale": "That is a radio problem, not an access problem.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Port scans from the internet",
+          "rationale": "Scans are handled by firewalls and IDS/IPS.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "The damage that a compromised account, a mistake, or a malicious insider can cause",
+          "rationale": "Correct: each account can only do what its job needs.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Least privilege grants only the access needed for the job. It limits the damage from mistakes, malware, and insiders, because no account holds more power than it needs.",
+      "discriminator_tested": "Least privilege limits damage from mistakes, malware, and insiders.",
+      "id": "Q-C04-0032",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-08",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-09"
+      ],
+      "type": "single",
+      "angle": "which-is-not",
+      "difficulty": 2,
+      "stem": "Which statement about RBAC is NOT true?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Each permission is assigned directly to individual users, one by one",
+          "rationale": "Correct choice because it is false: in RBAC, permissions attach to roles.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Users get access through the roles they hold",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Permissions attach to roles",
+          "rationale": "True: this defines RBAC.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "When someone changes jobs, their role membership is what changes",
+          "rationale": "True: that is what makes RBAC easy to manage.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "In role-based access control (RBAC), permissions attach to roles, and users get access through their role rather than through individual assignment.",
+      "discriminator_tested": "RBAC is role-based, not per-individual.",
+      "id": "Q-C04-0033",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-09",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-10",
+        "C04-03",
+        "C04-06"
+      ],
+      "type": "multi",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "Which two are examples of accounting? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Records of each user's login and logout times and session data",
+          "rationale": "Correct: an audit trail of sessions.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Deciding that a user may read a file but not change it",
+          "rationale": "That is authorization.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Checking a user's password at login",
+          "rationale": "That is authentication.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "A log of every command an administrator ran on a router, with timestamps",
+          "rationale": "Correct: a record of what was done and when.",
+          "role": null
+        },
+        {
+          "key": "E",
+          "text": "Asking the user for a username",
+          "rationale": "That is identification.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A",
+        "D"
+      ],
+      "explanation": "Accounting records who did what and when, such as logins, commands, and session data. It is the after-the-fact audit trail, distinct from proving identity or granting access.",
+      "discriminator_tested": "Accounting is the after-the-fact audit trail.",
+      "id": "Q-C04-0034",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-10",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-11"
+      ],
+      "type": "single",
+      "angle": "which-is-not",
+      "difficulty": 2,
+      "stem": "Which statement about RADIUS is NOT true?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It encrypts the entire packet payload",
+          "rationale": "Correct choice because it is false: RADIUS encrypts only the password in the request.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "It is typical for network access such as 802.1X, Wi-Fi, and VPN",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "It uses UDP 1812 for authentication and 1813 for accounting",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "It is an open standard",
+          "rationale": "True.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "RADIUS is open-standard, centralized AAA over UDP 1812/1813. It combines authentication and authorization, encrypts only the password, and is typical for network access.",
+      "discriminator_tested": "RADIUS encrypts only the password; TACACS+ encrypts the whole payload.",
+      "id": "Q-C04-0035",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-11",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-12",
+        "C04-11"
+      ],
+      "type": "multi",
+      "angle": "neighbor-discrimination",
+      "difficulty": 3,
+      "stem": "Which two statements correctly distinguish TACACS+ from RADIUS? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "TACACS+ combines authentication and authorization; RADIUS separates them",
+          "rationale": "This is reversed: TACACS+ separates them and RADIUS combines them.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "TACACS+ uses TCP 49; RADIUS uses UDP",
+          "rationale": "Correct.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "RADIUS was originated by Cisco",
+          "rationale": "TACACS+ is the Cisco-originated protocol; RADIUS is an open standard.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "TACACS+ encrypts the entire payload; RADIUS encrypts only the password",
+          "rationale": "Correct.",
+          "role": null
+        },
+        {
+          "key": "E",
+          "text": "TACACS+ is mainly used for user Wi-Fi access",
+          "rationale": "RADIUS is typical for network access; TACACS+ is typical for device administration.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "B",
+        "D"
+      ],
+      "explanation": "TACACS+ runs over TCP 49, encrypts the entire payload, and separates authentication, authorization, and accounting, which suits device administration. RADIUS uses UDP, encrypts only the password, and suits network access.",
+      "discriminator_tested": "TACACS+: TCP 49, full encryption, separate A/A/A; RADIUS: UDP, password only.",
+      "id": "Q-C04-0036",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-12",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-13"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 2,
+      "stem": "Which order of steps is correct when configuring iAAA on a Cisco device?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Define the server, apply the lists to the lines, enable AAA, then build the lists",
+          "rationale": "AAA comes on last here, and lists are applied before they are built.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Enable AAA, define the AAA server, build the method lists, then apply the lists to the lines",
+          "rationale": "Correct: AAA must be on, and a list must exist before it can be applied.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Build the lists, apply them, define the server, and never enable AAA",
+          "rationale": "Nothing takes effect until AAA is enabled.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Apply the method lists to the lines, enable AAA, then build the lists",
+          "rationale": "You can't apply lists that don't exist yet.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Configuring iAAA means enabling AAA, defining the server, building method lists for authentication, authorization, and accounting, and applying them to lines. The order within each method list also matters.",
+      "discriminator_tested": "Enable AAA, define the server, build method lists, apply to lines.",
+      "id": "Q-C04-0037",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-13",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-14"
+      ],
+      "type": "single",
+      "angle": "which-is-not",
+      "difficulty": 3,
+      "stem": "Which statement about the RADIUS login process is NOT true?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The access device sends an Access-Request to the RADIUS server",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "An Access-Challenge asks for more information, such as an MFA code",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "The user's laptop is the RADIUS client and sends the Access-Request to the server",
+          "rationale": "Correct choice because it is false: the access device (switch or AP) is the RADIUS client.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "An Access-Reject tells the access device to deny the user",
+          "rationale": "True.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "In the RADIUS login process, the user's credentials go to the access device, which sends an Access-Request to the server. The server answers Accept, Reject, or Challenge, and the access device acts on it.",
+      "discriminator_tested": "The access device is the RADIUS client, not the user's endpoint.",
+      "id": "Q-C04-0038",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-14",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-15"
+      ],
+      "type": "single",
+      "angle": "which-is-not",
+      "difficulty": 2,
+      "stem": "Which password policy rule does NOT make passwords harder to guess?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A minimum length of 14 characters",
+          "rationale": "Length is the strongest single improvement.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Blocking common and previously leaked passwords",
+          "rationale": "This removes the easiest guesses.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Allowing users to reuse their previous password",
+          "rationale": "Correct choice: reuse weakens the policy.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Allowing long passphrases that include spaces",
+          "rationale": "This makes long passwords easier to use.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Password length and complexity make passwords resist guessing, and length adds more strength than complexity alone. Allowing reuse undoes those gains.",
+      "discriminator_tested": "Length adds more strength than complexity alone.",
+      "id": "Q-C04-0039",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-15",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-16"
+      ],
+      "type": "single",
+      "angle": "mitigation-to-threat",
+      "difficulty": 3,
+      "stem": "An account locks for 15 minutes after five failed login attempts. Which attack does this password lockout most directly slow down?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Offline cracking of a stolen password hash",
+          "rationale": "Offline guessing never touches the login page, so lockout never triggers.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Phishing for credentials",
+          "rationale": "The user hands over the real password; there are no failed attempts.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Online brute force against the login page",
+          "rationale": "Correct: the attacker can make only a few guesses per lockout period.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Shoulder surfing",
+          "rationale": "The watcher sees the real password; no guessing is involved.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Password lockout locks an account after a set number of failed attempts, which counters online brute force. It does nothing against attacks that obtain the real password or guess offline.",
+      "discriminator_tested": "Lockout counters online brute force.",
+      "id": "Q-C04-0040",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-16",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-17"
+      ],
+      "type": "single",
+      "angle": "which-is-not",
+      "difficulty": 2,
+      "stem": "Which statement about 802.1X is NOT true?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It encrypts all traffic on the switch port after the user logs in",
+          "rationale": "Correct choice because it is false: 802.1X controls access to the port; it doesn't encrypt the traffic.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "It typically uses a RADIUS server as the authentication server",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "The port stays blocked for normal traffic until the device authenticates",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "It is port-based access control",
+          "rationale": "True.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "802.1X is port-based access control: the port passes only authentication traffic until the device authenticates. It decides access; it doesn't encrypt the traffic that follows.",
+      "discriminator_tested": "802.1X keeps the port blocked until success; it controls access, not encryption.",
+      "id": "Q-C04-0041",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-17",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-18"
+      ],
+      "type": "single",
+      "angle": "symptom-to-attack",
+      "difficulty": 1,
+      "stem": "In an 802.1X deployment, software built into a laptop sends the user's credentials as soon as the laptop is plugged into a switch port. Which 802.1X component is that software?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Authenticator",
+          "rationale": "The authenticator is the switch or WAP that enforces the decision.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Supplicant",
+          "rationale": "Correct: the client side that requests access.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Captive portal",
+          "rationale": "A captive portal is a web login page, not an 802.1X component.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Authentication server",
+          "rationale": "The authentication server is the RADIUS server that makes the decision.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "The 802.1X components are the supplicant (client), the authenticator (switch or WAP), and the authentication server (RADIUS). The authenticator enforces; the server decides.",
+      "discriminator_tested": "Supplicant = client; authenticator = switch or WAP; server = RADIUS.",
+      "id": "Q-C04-0042",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-18",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-19",
+        "C04-21"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 3,
+      "stem": "A laptop passes authentication, but its posture check finds missing patches. The NAC policy places it on a remediation network that can reach only the update server. What does this show about the NAC process?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "NAC can only allow or deny a device",
+          "rationale": "Quarantine and restricted access are also possible outcomes.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "The quarantine was caused by a failed authentication",
+          "rationale": "Authentication succeeded; the posture check failed.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Its outcomes are policy-driven and need not be all-or-nothing: full, restricted, quarantine, or deny",
+          "rationale": "Correct: the device got restricted access, not a simple yes or no.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "The quarantine turned the laptop into a honeypot",
+          "rationale": "A honeypot is a decoy system, unrelated to quarantine.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "In the NAC process, a device connects, is identified and assessed, and policy then sets its access level. The outcome is policy-driven and need not be all-or-nothing.",
+      "discriminator_tested": "NAC outcomes are policy-driven, not all-or-nothing.",
+      "id": "Q-C04-0043",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-19",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-20",
+        "C04-21"
+      ],
+      "type": "multi",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "Which two statements correctly separate profiling from posturing? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Profiling checks whether the antivirus definitions are current",
+          "rationale": "Checking health is posturing.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Both verify the user's password",
+          "rationale": "Checking passwords is authentication.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Posturing works out whether a device is a printer or a phone",
+          "rationale": "Working out device type is profiling.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "Profiling identifies what a device is, such as its type or class",
+          "rationale": "Correct.",
+          "role": null
+        },
+        {
+          "key": "E",
+          "text": "Posturing checks a device's health and compliance",
+          "rationale": "Correct.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D",
+        "E"
+      ],
+      "explanation": "Profiling identifies what a device is from observed attributes. Posturing checks its health and compliance. Neither one verifies the user's identity.",
+      "discriminator_tested": "Profiling = device type; posturing = device health.",
+      "id": "Q-C04-0044",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-20",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-21",
+        "C04-06"
+      ],
+      "type": "single",
+      "angle": "root-cause-vs-symptom",
+      "difficulty": 3,
+      "stem": "One laptop, with valid credentials, is quarantined every time it connects, while a colleague's laptop gets full access. Both users hold the same role. What is the most likely reason?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The laptop fails its posture assessment, for example because of missing patches or disabled antivirus",
+          "rationale": "Correct: same identity checks and same role, but a different device health result.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "The user is typing the wrong password",
+          "rationale": "The user authenticates successfully.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "The laptop is being profiled as a printer",
+          "rationale": "Nothing suggests a profiling error; quarantine points to device health.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "The user's role isn't authorized for network access",
+          "rationale": "The colleague with the same role gets full access.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Posturing checks a device's health and compliance, such as patches, antivirus, and configuration. It is separate from identity and role, which is why two users with the same role can get different results.",
+      "discriminator_tested": "Posture is about device health, not identity or role.",
+      "id": "Q-C04-0045",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-21",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-22"
+      ],
+      "type": "single",
+      "angle": "which-is-not",
+      "difficulty": 1,
+      "stem": "Which statement about BYOD is NOT true?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It calls for NAC, posture checks, and segmentation",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "The devices are varied and unmanaged",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "Personal devices can be trusted as much as managed company laptops, since employees own them",
+          "rationale": "Correct choice because it is false: they are unmanaged, so their state is unknown.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "It means personally owned devices accessing organizational resources",
+          "rationale": "True.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "BYOD means personally owned devices accessing organizational resources. Because they are unmanaged and varied, they need NAC, posture checks, and segmentation.",
+      "discriminator_tested": "BYOD devices are unmanaged, so they need extra controls.",
+      "id": "Q-C04-0046",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-22",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-23",
+        "C04-22"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 3,
+      "stem": "What separates guest network isolation from BYOD onboarding?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Guest isolation keeps visitors on a separate, internet-only segment; BYOD onboarding gives employees' own devices controlled access to some organizational resources",
+          "rationale": "Correct: guests get the internet only, while BYOD devices reach some internal resources under controls.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "Guest isolation requires a persistent agent on every visitor's device",
+          "rationale": "Guests are simply segmented; no permanent agent is needed.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "BYOD devices always get internet-only access",
+          "rationale": "The point of BYOD is to reach organizational resources, under controls.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "They are the same thing",
+          "rationale": "They serve different users and grant different access.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Guest network isolation places visitors on a separate segment with internet-only access. BYOD gives personal devices controlled access to organizational resources through NAC and posture checks.",
+      "discriminator_tested": "Guest isolation = internet only; BYOD = controlled access to internal resources.",
+      "id": "Q-C04-0047",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-23",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-24"
+      ],
+      "type": "single",
+      "angle": "which-is-not",
+      "difficulty": 2,
+      "stem": "Which statement about a captive portal is NOT true?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It is commonly used for guest and BYOD onboarding",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "B",
+          "text": "It intercepts a new user's first web request",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "C",
+          "text": "It requires a login or acceptance of terms before granting access",
+          "rationale": "True.",
+          "role": null
+        },
+        {
+          "key": "D",
+          "text": "It encrypts the wireless traffic once the user logs in",
+          "rationale": "Correct choice because it is false: a captive portal is a gate, not encryption.",
+          "role": null
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "A captive portal intercepts a new user's first request and requires a login or acceptance before granting access. It gates onboarding; it doesn't encrypt wireless traffic.",
+      "discriminator_tested": "A captive portal is an onboarding gate, not encryption.",
+      "id": "Q-C04-0048",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-24",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "retired",
+      "created_at": "2026-10-19T20:20:03+00:00",
+      "verified_at": null,
+      "retired_reason": "Superseded by the v2 pool (cue-free rewrite, 2026-10-21)"
+    },
+    {
+      "objectives": [
+        "C04-01"
+      ],
+      "type": "single",
+      "angle": "interpret-config",
+      "difficulty": 2,
+      "stem": "An auditor reviews the switch configuration below. Which finding is MOST important?",
+      "exhibit": "username netadmin privilege 15 secret 9 $9$h3YpQ0vXbN2kLs$Wq...\nusername backup privilege 1 password 0 Backup2026\n!\nline vty 0 4\n login local\n transport input ssh",
+      "options": [
+        {
+          "key": "A",
+          "text": "Accounts live on this one device, so managing them doesn't scale",
+          "rationale": "A real limitation of local accounts, but not the security finding here.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "SSH logins on the VTY lines are checked locally",
+          "rationale": "True, and acceptable; that is what 'login local' does.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "The backup account's password is stored in plain text",
+          "rationale": "Correct: 'password 0' keeps it readable in the config; 'secret' would hash it.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "The netadmin secret can be read back as plain text",
+          "rationale": "Type 9 secrets are hashed.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Local authentication stores accounts on the device itself, created with 'username NAME privilege 15 secret PASS' and applied to lines with 'login local'. 'secret' is stored hashed; 'password' is not, and type 0 is plain text. Local accounts also don't scale, because each device holds its own.",
+      "discriminator_tested": "'secret' is hashed; 'password' is not; local accounts don't scale.",
+      "id": "Q-C04-0049",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-01",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-02",
+        "C04-03",
+        "C04-06"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 2,
+      "stem": "A user types a username, enters a password and a token code, is allowed into the finance share but not the HR share, and each file opened is logged. Which sequence names these four steps?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Identification, authorization, authentication, accounting",
+          "rationale": "Permissions are decided only after identity is proven.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Identification, authentication, authorization, accounting",
+          "rationale": "Correct: claim, prove, permit, record.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Authentication, identification, authorization, accounting",
+          "rationale": "The identity is claimed before it can be proven.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Identification, authentication, accounting, authorization",
+          "rationale": "Logging what was done comes after access is decided.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "The iAAA model is identification (who are you?), authentication (prove it), authorization (what may you do?), and accounting (what did you do?).",
+      "discriminator_tested": "iAAA: who are you, prove it, what may you do, what did you do.",
+      "id": "Q-C04-0050",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-02",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-03",
+        "C04-06",
+        "C04-10"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "At a secure door, a user's badge, PIN, and fingerprint are checked, and the door then opens to the lobby but not to the lab. Which part of that process was authentication?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Checking the badge, PIN, and fingerprint",
+          "rationale": "Correct: verifying the claimed identity with factors.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Printing the user's name on the badge",
+          "rationale": "Issuing a badge isn't verifying anyone.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "Deciding the lobby is allowed but the lab is not",
+          "rationale": "That is authorization.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Logging the time the user entered the lobby",
+          "rationale": "That is accounting.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Authentication verifies a claimed identity using one or more factors (something you know, have, or are). It proves identity but says nothing yet about permissions; that is authorization.",
+      "discriminator_tested": "Authentication proves identity; it says nothing about permissions.",
+      "id": "Q-C04-0051",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-03",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-04",
+        "C04-03"
+      ],
+      "type": "multi",
+      "angle": "classify-factor",
+      "difficulty": 2,
+      "stem": "Which two sign-in methods count as MFA? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A smart card plus a PIN",
+          "rationale": "Correct: something you have plus something you know.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "A password plus a code from an authenticator app",
+          "rationale": "Correct: something you know plus something you have.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Two different passwords",
+          "rationale": "Still a single category.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "A fingerprint plus a face scan",
+          "rationale": "Both are things you are: one category.",
+          "role": "wrong"
+        },
+        {
+          "key": "E",
+          "text": "A password plus a security question",
+          "rationale": "Both are things you know: one category.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "MFA requires two or more different factor categories: something you know, have, or are. Two passwords, a password plus a security question, or two biometrics all stay within one category.",
+      "discriminator_tested": "MFA needs different factor categories.",
+      "id": "Q-C04-0052",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-04",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-05",
+        "C04-04"
+      ],
+      "type": "single",
+      "angle": "secure-replacement",
+      "difficulty": 2,
+      "stem": "A bank's administrators receive their one-time sign-in codes by SMS. Which change BEST strengthens this second factor?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A second password entered after the first",
+          "rationale": "Two passwords isn't MFA at all.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "Longer SMS codes that expire sooner",
+          "rationale": "Slightly better, but SMS can still be intercepted or redirected.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "A time-based code from an authenticator app or token",
+          "rationale": "Correct: generated on the device, so it can't be intercepted in transit or redirected.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "A voice call that reads out the code",
+          "rationale": "Voice codes can be redirected just like SMS.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "MFA methods include email, SMS, voice calls, and time-based hardware or software tokens. Time-based tokens are generally stronger; SMS, voice, and email codes can be intercepted or redirected, for example by SIM swapping.",
+      "discriminator_tested": "Time-based tokens are stronger than SMS, voice, or email codes.",
+      "id": "Q-C04-0053",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-05",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-06",
+        "C04-12"
+      ],
+      "type": "single",
+      "angle": "interpret-output",
+      "difficulty": 2,
+      "stem": "User jtan is logged in to a router but can't enter configuration mode. The AAA server's log is below. Which AAA function stopped the command?",
+      "exhibit": "10:14:02  user=jtan  cmd=\"show running-config\"   author=PASS\n10:14:20  user=jtan  cmd=\"configure terminal\"     author=FAIL\n10:14:20  user=jtan  session still active",
+      "options": [
+        {
+          "key": "A",
+          "text": "Accounting",
+          "rationale": "Accounting records commands; it doesn't block them.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Authorization",
+          "rationale": "Correct: the per-command check decided what jtan may do.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Authentication",
+          "rationale": "jtan's login already succeeded.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Identification",
+          "rationale": "The user was already identified as jtan.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Authorization determines what an authenticated user may access or do, and it happens after authentication. jtan's login succeeded; the per-command check denied configuration mode.",
+      "discriminator_tested": "Authorization happens after authentication.",
+      "id": "Q-C04-0054",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-06",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-07",
+        "C04-09"
+      ],
+      "type": "single",
+      "angle": "classify-element",
+      "difficulty": 2,
+      "stem": "An HR-driven system creates accounts when people are hired, changes their access when they transfer, and disables everything when they leave, across 40 applications. What BEST describes this program?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Identity and access management over the account lifecycle",
+          "rationale": "Correct: managing identities and access from joiner to leaver.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Accounting of what users did in each application",
+          "rationale": "Accounting records activity; it doesn't create or remove access.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "Centralized AAA through a RADIUS server",
+          "rationale": "One mechanism IAM might use, not the program itself.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "Role-based access control for each application",
+          "rationale": "Roles may be part of it, but the lifecycle program is broader.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Identity and Access Management (IAM) is the processes and tools that manage identities and their access across their lifecycle. It is the umbrella program; AAA is one mechanism inside it.",
+      "discriminator_tested": "IAM is the umbrella program; AAA is one mechanism inside it.",
+      "id": "Q-C04-0055",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-07",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-08"
+      ],
+      "type": "single",
+      "angle": "choose-response",
+      "difficulty": 2,
+      "stem": "A help-desk technician needs to reset users' passwords. Which access BEST follows least privilege?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Account operator rights over the whole directory",
+          "rationale": "Would work, but grants far more than password resets.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "The admin's shared password for emergencies",
+          "rationale": "Shared admin credentials violate least privilege and accountability.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "Domain admin rights with full activity logging",
+          "rationale": "Logging records misuse but doesn't limit the access.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "A delegated role scoped to that one task",
+          "rationale": "Correct: exactly the access the job needs.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Least privilege grants only the access needed to do the job. It limits the damage from mistakes, malware, and insiders; logging records misuse but doesn't limit it.",
+      "discriminator_tested": "Grant only the access needed to do the job.",
+      "id": "Q-C04-0056",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-08",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-09",
+        "C04-08"
+      ],
+      "type": "single",
+      "angle": "interpret-config",
+      "difficulty": 2,
+      "stem": "A hospital system manages access as shown below. User amorales moves from a nursing position to a physician position. What is the BEST change?",
+      "exhibit": "Role Nurse      -> read: patient-chart   write: vitals\nRole Physician  -> read: patient-chart   write: orders, prescriptions\nUser amorales   -> roles: Nurse\nUser bpatel     -> roles: Physician, Nurse",
+      "options": [
+        {
+          "key": "A",
+          "text": "Assign amorales the Physician role",
+          "rationale": "Correct: access follows the role.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Edit the Nurse role to include prescriptions",
+          "rationale": "That changes access for every nurse.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Grant amorales write access to orders directly",
+          "rationale": "Would work, but bypasses the role model and drifts out of sync.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "Create a second account for amorales as a physician",
+          "rationale": "Duplicate accounts weaken accountability.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "In RBAC, permissions attach to roles and users get access through their role, not through per-individual assignment. Changing jobs means changing roles; editing a role changes everyone who holds it.",
+      "discriminator_tested": "RBAC is role-based, not per-individual.",
+      "id": "Q-C04-0057",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-09",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-10"
+      ],
+      "type": "single",
+      "angle": "classify-element",
+      "difficulty": 1,
+      "stem": "After an outage, the team needs to know which administrator changed a router's routing table, and when. Which AAA function provides this?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Authorization",
+          "rationale": "Authorization decided whether the change was allowed; it doesn't record it.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Accounting",
+          "rationale": "Correct: the record of who did what and when.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Authentication",
+          "rationale": "Authentication proved who logged in, not what they changed.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Identification",
+          "rationale": "Identification is the claim of identity at login.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Accounting records who did what and when (logins, commands, session data). It is the after-the-fact audit trail that enables traceability.",
+      "discriminator_tested": "Accounting is the after-the-fact audit trail.",
+      "id": "Q-C04-0058",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-10",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-11",
+        "C04-12"
+      ],
+      "type": "single",
+      "angle": "choose-protocol",
+      "difficulty": 2,
+      "stem": "A company needs open-standard, centralized authentication for 2,000 users on 802.1X Wi-Fi and its VPN. Which AAA protocol BEST fits?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Kerberos",
+          "rationale": "A ticket system for domain logins, not 802.1X Wi-Fi authentication.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "TACACS+",
+          "rationale": "Cisco-originated and typical for device administration, not user network access.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "RADIUS",
+          "rationale": "Correct: the open standard for network access.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "Local accounts on each AP",
+          "rationale": "Not centralized; doesn't scale to 2,000 users.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "RADIUS provides centralized AAA over UDP 1812 (authentication) and 1813 (accounting). It is an open standard that combines authentication and authorization, typical for network access: 802.1X, Wi-Fi, and VPN.",
+      "discriminator_tested": "RADIUS: open standard, typical for network access.",
+      "id": "Q-C04-0059",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-11",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-12",
+        "C04-11"
+      ],
+      "type": "single",
+      "angle": "interpret-output",
+      "difficulty": 3,
+      "stem": "A capture shows two AAA sessions, summarized below. The security team prefers the protocol in session B for administering switches. What BEST explains why?",
+      "exhibit": "Session A:  UDP 1812  Access-Request  User-Name=jtan  User-Password=<hidden>\n            NAS-IP-Address=10.1.1.2  (other attributes readable)\nSession B:  TCP 49    TACACS+ packet   body=<encrypted>",
+      "options": [
+        {
+          "key": "A",
+          "text": "It runs over TCP, so delivery is reliable",
+          "rationale": "True, but reliability isn't the security reason.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "It encrypts just the password, like RADIUS",
+          "rationale": "That describes session A; session B hides the whole body.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "It encrypts the whole payload and splits the three As",
+          "rationale": "Correct: full encryption and separate authorization allow per-command control.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "It is an open standard used for Wi-Fi access",
+          "rationale": "That describes RADIUS.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "TACACS+ is Cisco-originated AAA over TCP 49 that encrypts the entire payload and separates authentication, authorization, and accounting, allowing per-command control, so it is typical for device administration. RADIUS encrypts only the password.",
+      "discriminator_tested": "TACACS+ encrypts the whole payload and separates the three As.",
+      "id": "Q-C04-0060",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-12",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-13",
+        "C04-01"
+      ],
+      "type": "single",
+      "angle": "interpret-config",
+      "difficulty": 3,
+      "stem": "A router is configured as shown below. The TACACS+ server is reachable but rejects an admin's password. What BEST describes what happens?",
+      "exhibit": "aaa new-model\ntacacs server TAC1\n address ipv4 10.1.9.20\n key 7 0822455D0A16\naaa authentication login VTY-LOGIN group tacacs+ local\n!\nline vty 0 4\n login authentication VTY-LOGIN",
+      "options": [
+        {
+          "key": "A",
+          "text": "The admin's login attempt is denied",
+          "rationale": "True, but it misses why the local accounts aren't tried.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "The router retries with the local accounts",
+          "rationale": "A rejection isn't an error, so the next method isn't tried.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "The router prompts for the enable password instead",
+          "rationale": "Enable isn't in this method list.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "Login fails; local is used when the server is down",
+          "rationale": "Correct: a rejection ends the list; fallback is for an unreachable server.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Configuring iAAA means enabling AAA, defining the server, building method lists, and applying them to lines. Method-list order matters: fallback to local happens when the server is unreachable (an error), not when it rejects the credentials.",
+      "discriminator_tested": "Fallback to local happens when the server is unreachable, not when it rejects.",
+      "id": "Q-C04-0061",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-13",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-14",
+        "C04-18"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 2,
+      "stem": "A laptop joins an 802.1X Wi-Fi network that uses RADIUS. Which sequence of messages is correct?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "User to AP, AP to RADIUS, RADIUS reply to AP",
+          "rationale": "Correct: the AP is the RADIUS client.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "User to RADIUS, RADIUS to AP, AP reply to user",
+          "rationale": "The laptop doesn't talk to RADIUS directly.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "User to RADIUS, RADIUS reply to user, then AP",
+          "rationale": "The user's device isn't a RADIUS client.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "AP to RADIUS, RADIUS to user, user reply to AP",
+          "rationale": "RADIUS replies to the AP, not the user.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "In the RADIUS login process, the user's credentials go to the access device, which sends an Access-Request to the RADIUS server and acts on the Access-Accept, Access-Reject, or Access-Challenge. The access device (switch or AP) is the RADIUS client, not the user's endpoint.",
+      "discriminator_tested": "The access device is the RADIUS client.",
+      "id": "Q-C04-0062",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-14",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-15"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "Which password approach BEST resists guessing?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A 10-character password mixing four character types",
+          "rationale": "Complexity helps, but length adds more strength.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "An 8-character password changed monthly",
+          "rationale": "Frequent changes don't make a short password hard to guess.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "A random 20-character passphrase of words",
+          "rationale": "Correct: length multiplies the search space.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "A dictionary word with a number and symbol added",
+          "rationale": "Predictable substitutions are in every cracking list.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Longer passwords with mixed character types resist guessing, and length adds more strength than complexity alone: each extra character multiplies the search space, while predictable substitutions add little.",
+      "discriminator_tested": "Length adds more strength than complexity alone.",
+      "id": "Q-C04-0063",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-15",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-16"
+      ],
+      "type": "single",
+      "angle": "assess-risk",
+      "difficulty": 2,
+      "stem": "An attacker deliberately enters wrong passwords against each executive's account. With a lockout policy of five attempts, what is the MOST likely effect?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The lockout policy is disabled automatically",
+          "rationale": "Policies don't switch themselves off.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "The attacker's guessing is stopped after five tries",
+          "rationale": "True, but the attacker wasn't trying to guess.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "The executives are locked out, denying them service",
+          "rationale": "Correct: the lockout itself becomes the attack.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "The attacker learns the executives' passwords",
+          "rationale": "Wrong guesses reveal nothing.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Password lockout locks an account after a set number of failed attempts. It counters online brute force but can itself be abused to lock out legitimate users.",
+      "discriminator_tested": "Lockout counters brute force but can be abused to lock out users.",
+      "id": "Q-C04-0064",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-16",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-17",
+        "C04-18"
+      ],
+      "type": "single",
+      "angle": "interpret-output",
+      "difficulty": 2,
+      "stem": "A user's PC on port Gi1/0/9 gets no network access. The switch shows the status below. What BEST explains it?",
+      "exhibit": "Interface:   Gi1/0/9\nStatus:      Unauthorized\nAllowed:     EAPOL only\nLast event:  EAP timeout (no supplicant response)",
+      "options": [
+        {
+          "key": "A",
+          "text": "The port is blocking the PC's traffic",
+          "rationale": "True, but it doesn't say why.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "The switch port is administratively shut down",
+          "rationale": "A shut port wouldn't show EAPOL activity.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "The port passes only EAPOL until the PC authenticates",
+          "rationale": "Correct: the PC never answered, so the port stays blocked.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "The PC was given a 169.254 address by the switch",
+          "rationale": "Switches don't assign APIPA addresses.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "802.1X is port-based access control: a port passes only authentication traffic (EAPOL) until the device authenticates. Here the PC never answered, so the port stays unauthorized.",
+      "discriminator_tested": "The port stays blocked until authentication succeeds.",
+      "id": "Q-C04-0065",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-17",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-18",
+        "C04-14"
+      ],
+      "type": "single",
+      "angle": "classify-element",
+      "difficulty": 2,
+      "stem": "In an 802.1X deployment, which component decides whether the user is allowed on, and which enforces that decision at the port?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The switch decides and enforces; RADIUS logs",
+          "rationale": "The decision comes from the authentication server.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "The supplicant decides; the switch enforces",
+          "rationale": "The supplicant is the client asking for access.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "The switch decides; the RADIUS server enforces",
+          "rationale": "This is reversed.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "The RADIUS server decides; the switch enforces",
+          "rationale": "Correct: authentication server decides, authenticator enforces.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "802.1X components are the supplicant (client), the authenticator (switch or WAP), and the authentication server (RADIUS). The authenticator enforces; the server decides.",
+      "discriminator_tested": "The authenticator enforces; the server decides.",
+      "id": "Q-C04-0066",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-18",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-19",
+        "C04-21"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 2,
+      "stem": "Which order BEST describes the NAC process for a device joining the network?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Connect, apply policy access, identify and assess",
+          "rationale": "Access is set before anything is known about the device.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Identify and assess, connect, apply policy access",
+          "rationale": "The device must connect before it can be assessed.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Connect, identify and assess, apply policy access",
+          "rationale": "Correct: policy can only act on what was learned.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "Apply policy access, connect, identify and assess",
+          "rationale": "Policy can't apply to a device that hasn't connected.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "In the NAC process, a device connects, is identified and assessed, and then policy sets its access level: full, restricted, quarantine, or deny. The outcome need not be all-or-nothing.",
+      "discriminator_tested": "NAC outcome is policy-driven and need not be all-or-nothing.",
+      "id": "Q-C04-0067",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-19",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-20",
+        "C04-21"
+      ],
+      "type": "single",
+      "angle": "interpret-output",
+      "difficulty": 2,
+      "stem": "A NAC system shows the result below for a device that can't run an 802.1X client. Which NAC function produced it?",
+      "exhibit": "MAC 00:1b:a9:3e:7c:11     OUI: Brother Industries\nDHCP option 55: 1,3,6,15,44,47     hostname: BRN001BA93E7C11\nOpen ports: 515, 631, 9100\nResult: Printer (confidence 92%)  -> policy: PRINTERS VLAN",
+      "options": [
+        {
+          "key": "A",
+          "text": "802.1X authentication",
+          "rationale": "The device can't run a supplicant.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Guest isolation",
+          "rationale": "Isolation is a placement decision, not identification.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "Posture assessment",
+          "rationale": "Posture checks health such as patches and antivirus, not device type.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Profiling",
+          "rationale": "Correct: it worked out what the device is from observed attributes.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Profiling identifies what a device is (its type or class) from observed attributes such as MAC vendor, DHCP options, and open ports. It suits devices that can't run a supplicant, such as printers and IoT devices.",
+      "discriminator_tested": "Profiling identifies device type; suits devices without a supplicant.",
+      "id": "Q-C04-0068",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-20",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-21",
+        "C04-20"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "Profiling, posture assessment, and 802.1X authentication each answer a different question about a device. Which question does posture assessment answer?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Who is the user or device?",
+          "rationale": "That is authentication.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Which VLAN did DHCP assign it?",
+          "rationale": "DHCP doesn't assign VLANs.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "What kind of device is it?",
+          "rationale": "That is profiling.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Is the device healthy and compliant?",
+          "rationale": "Correct: patches, antivirus, configuration.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Posture assessment checks a device's health and compliance (patches, antivirus, configuration). It answers health, while authentication answers identity and profiling answers type.",
+      "discriminator_tested": "Health vs identity vs type.",
+      "id": "Q-C04-0069",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-21",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-22",
+        "C04-21",
+        "C04-23"
+      ],
+      "type": "multi",
+      "angle": "choose-response",
+      "difficulty": 2,
+      "stem": "A hospital will let staff use personal phones for email and the scheduling app. Which two controls BEST address the risk? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Training staff on phishing",
+          "rationale": "Useful, but it doesn't address unmanaged devices on the network.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Posture checks before granting access",
+          "rationale": "Correct: unmanaged devices must meet a health baseline.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Allowing personal devices on the clinical VLAN",
+          "rationale": "The opposite of segmentation.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "A segment that limits personal devices to approved apps",
+          "rationale": "Correct: segmentation keeps them away from clinical systems.",
+          "role": "best"
+        },
+        {
+          "key": "E",
+          "text": "A captive portal that encrypts their Wi-Fi traffic",
+          "rationale": "A portal is a gate, not encryption.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "B",
+        "D"
+      ],
+      "explanation": "BYOD means personally owned devices accessing organizational resources. Because they are unmanaged and varied, BYOD needs NAC, posture checks, and segmentation.",
+      "discriminator_tested": "BYOD is unmanaged and varied: needs NAC, posture, segmentation.",
+      "id": "Q-C04-0070",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-22",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-23",
+        "C04-24"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 2,
+      "stem": "A hotel offers Wi-Fi to conference attendees. Which design BEST meets the goal of guest network isolation?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A captive portal on the staff network",
+          "rationale": "A portal gates entry but doesn't isolate guests.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "The staff network with a separate password",
+          "rationale": "A different password still puts guests on the staff network.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "WPA3 on the staff network to stop snooping",
+          "rationale": "Encryption doesn't separate guests from internal systems.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "A separate segment with internet-only access",
+          "rationale": "Correct: guests can't reach internal resources.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Guest network isolation places guests on a separate segment with internet-only access, isolated from internal resources.",
+      "discriminator_tested": "Guest isolation = separate segment, internet-only.",
+      "id": "Q-C04-0071",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-23",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-24",
+        "C04-23"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 2,
+      "stem": "A cafe's Wi-Fi shows a terms page before allowing internet access. A customer assumes the page means their traffic is now encrypted. What BEST describes the page?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A WPA3 handshake shown as a web page",
+          "rationale": "Wi-Fi encryption happens before any web page.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "A gate for access, not encryption of traffic",
+          "rationale": "Correct: it controls entry; the network may still be open.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "A VPN that starts when terms are accepted",
+          "rationale": "Accepting terms doesn't start a VPN.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "A login page that records who accepted the terms",
+          "rationale": "Often true, but it doesn't address the encryption assumption.",
+          "role": "partial"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "A captive portal intercepts a new user's first request and requires login or acceptance before granting access. It is a gate for guest and BYOD onboarding, not encryption of wireless traffic.",
+      "discriminator_tested": "Captive portal is a gate, not encryption.",
+      "id": "Q-C04-0072",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-24",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-01"
+      ],
+      "type": "single",
+      "angle": "complete-config",
+      "difficulty": 2,
+      "stem": "Which change BEST ensures that the local account below has its password stored as a hash?",
+      "exhibit": "username backup privilege 1 password 0 Backup2026",
+      "options": [
+        {
+          "key": "A",
+          "text": "Enable 'service password-encryption'",
+          "rationale": "Hides it from casual view, but type 7 encoding is weak and reversible.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "Raise the account to privilege 15",
+          "rationale": "Privilege level has nothing to do with how the password is stored.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "Add 'login local' to the VTY lines",
+          "rationale": "That applies local accounts to logins; it doesn't change storage.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Recreate it with 'secret' instead of 'password'",
+          "rationale": "Correct: 'secret' stores a one-way hash.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Local authentication stores accounts on the device. 'secret' stores a one-way hash; 'password' stores the text, and 'service password-encryption' applies only weak, reversible type 7 encoding.",
+      "discriminator_tested": "'secret' is hashed; 'password' is not.",
+      "id": "Q-C04-0073",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-01",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-02",
+        "C04-10",
+        "C04-06"
+      ],
+      "type": "multi",
+      "angle": "classify-element",
+      "difficulty": 2,
+      "stem": "Which two of these records are produced by the accounting part of the iAAA model? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "TACACS+: 'configure terminal' denied for jtan",
+          "rationale": "That is an authorization decision.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Login prompt: user typed 'cwong'",
+          "rationale": "Claiming an identity is identification.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "VPN: asmith's session lasted 2 h 11 min, 340 MB",
+          "rationale": "Correct: session data is accounting.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "Router1: jtan ran 'reload' at 02:14",
+          "rationale": "Correct: a record of what was done and when.",
+          "role": "best"
+        },
+        {
+          "key": "E",
+          "text": "RADIUS: Access-Reject for bjones",
+          "rationale": "That is an authentication result.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "C",
+        "D"
+      ],
+      "explanation": "The iAAA model is identification, authentication, authorization, and accounting. Accounting records who did what and when, such as commands and session data.",
+      "discriminator_tested": "Accounting = what did you do.",
+      "id": "Q-C04-0074",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-02",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-03",
+        "C04-04"
+      ],
+      "type": "single",
+      "angle": "classify-factor",
+      "difficulty": 2,
+      "stem": "A user signs in with a password and then approves a push prompt on their registered phone. Which factor categories were used?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Something you know, used twice",
+          "rationale": "Approving the push proves possession of the phone, not knowledge.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Something you are and somewhere you are",
+          "rationale": "Neither a biometric nor location was checked.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "Something known plus something held",
+          "rationale": "Correct: the password is knowledge; the registered phone is possession.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "Something you have and something you are",
+          "rationale": "No biometric was used.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Authentication verifies a claimed identity using factors: something you know (the password), have (the registered phone), or are (biometrics). Approving the push proves possession of the phone.",
+      "discriminator_tested": "Factor categories: know, have, are.",
+      "id": "Q-C04-0075",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-03",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-04",
+        "C04-03"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 2,
+      "stem": "A website asks for a password and then for the user's mother's maiden name, and calls this 'two-factor authentication'. Which answer is BEST?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Not MFA; the second answer is easy to research",
+          "rationale": "True, but the reason it isn't MFA is the shared category.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "It is MFA; the question is something the user is",
+          "rationale": "A remembered fact is knowledge, not inherence.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "It is MFA; there are two separate checks",
+          "rationale": "Two checks aren't enough; they must be different categories.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Not MFA; both are things the user knows",
+          "rationale": "Correct: two checks from one category.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "MFA requires two or more different factor categories. A password plus a security question are both knowledge, so this is single-factor authentication done twice.",
+      "discriminator_tested": "Factors must come from different categories.",
+      "id": "Q-C04-0076",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-04",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-05"
+      ],
+      "type": "single",
+      "angle": "assess-risk",
+      "difficulty": 2,
+      "stem": "An attacker convinces a mobile carrier to move a victim's phone number to a new SIM card. Which MFA method does this MOST directly defeat?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Codes from an authenticator app",
+          "rationale": "App codes are generated on the device, not delivered to the number.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "A hardware token's rotating code",
+          "rationale": "The token works without a phone number.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "A fingerprint reader on the laptop",
+          "rationale": "Moving a phone number has no effect on a biometric.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "One-time codes sent by SMS",
+          "rationale": "Correct: the codes now arrive on the attacker's SIM.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "MFA methods include email, SMS, voice calls, and time-based hardware or software tokens. Time-based tokens are generally stronger, because SMS, voice, and email codes can be intercepted or redirected.",
+      "discriminator_tested": "SMS/voice/email codes can be intercepted or redirected.",
+      "id": "Q-C04-0077",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-05",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-06",
+        "C04-03"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "What BEST distinguishes authorization from authentication?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It records what the user did afterward",
+          "rationale": "That is accounting.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "It decides what a verified user may do",
+          "rationale": "Correct: permissions, not identity.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "It happens after the user has logged in",
+          "rationale": "True of the order, but not what it does.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "It checks the user's password or token",
+          "rationale": "That is authentication.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Authorization determines what an authenticated user may access or do, and it happens after authentication.",
+      "discriminator_tested": "Authorization = what may you do; after authentication.",
+      "id": "Q-C04-0078",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-06",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-07"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "Which statement BEST describes how IAM relates to AAA?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "They are two names for the same thing",
+          "rationale": "IAM covers the whole identity lifecycle, not just AAA.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "IAM is the overall program; AAA is one mechanism in it",
+          "rationale": "Correct: IAM is the umbrella.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "AAA is the overall program; IAM is one part of it",
+          "rationale": "This is reversed.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Both control access to systems",
+          "rationale": "True, but it doesn't describe how they relate.",
+          "role": "partial"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Identity and Access Management (IAM) is the processes and tools that manage identities and their access across their lifecycle. It is the umbrella program; AAA is one mechanism inside it.",
+      "discriminator_tested": "IAM is the umbrella; AAA is one mechanism inside it.",
+      "id": "Q-C04-0079",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-07",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-08"
+      ],
+      "type": "single",
+      "angle": "root-cause-vs-symptom",
+      "difficulty": 2,
+      "stem": "Malware on a developer's laptop encrypted the company's production database server. The developer needed read access to one test database and nothing more. What BEST explains why the damage was so large?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The developer's password was too short",
+          "rationale": "The malware ran under the developer's logged-in account; no password was guessed.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "The account had excess access",
+          "rationale": "Correct: the malware could do whatever the developer's account could.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "The production server had no recent backups",
+          "rationale": "That affects recovery, not how much was damaged.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "The malware wasn't detected by antivirus",
+          "rationale": "Detection failed, but the reach came from the account's access.",
+          "role": "partial"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Least privilege grants only the access needed to do the job. It limits the damage from mistakes, malware, and insiders: had the account held only read access to the test database, the malware could have reached only that.",
+      "discriminator_tested": "Least privilege limits damage from malware.",
+      "id": "Q-C04-0080",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-08",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-09",
+        "C04-07"
+      ],
+      "type": "single",
+      "angle": "choose-tool",
+      "difficulty": 2,
+      "stem": "A company has 3,000 staff in 25 job functions, and IT spends days editing individual users' permissions. Which access model BEST reduces this work?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Per-user permissions managed by a script",
+          "rationale": "Faster, but still per-individual assignment.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "Discretionary access set by file owners",
+          "rationale": "Spreads the work around instead of reducing it.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "RBAC, assigning permissions to job roles",
+          "rationale": "Correct: change 25 roles instead of 3,000 users.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "One shared admin account per department",
+          "rationale": "Removes accountability and grants too much.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "In RBAC, permissions attach to roles and users get access through their role, not through per-individual assignment.",
+      "discriminator_tested": "RBAC is role-based, not per-individual.",
+      "id": "Q-C04-0081",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-09",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-10",
+        "C04-12"
+      ],
+      "type": "single",
+      "angle": "interpret-output",
+      "difficulty": 2,
+      "stem": "A core link went down at 02:14. The AAA server holds the record below. What does it BEST establish?",
+      "exhibit": "02:14:07 router1 jtan tty1 10.1.9.40 start  task_id=811\n02:14:31 router1 jtan cmd=\"interface Gi0/1\"\n02:14:40 router1 jtan cmd=\"shutdown\"\n02:15:02 router1 jtan stop   task_id=811 elapsed=55s",
+      "options": [
+        {
+          "key": "A",
+          "text": "jtan's account was locked after the change",
+          "rationale": "Nothing in the record shows a lockout.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "jtan shut down Gi0/1 at 02:14:40",
+          "rationale": "Correct: the accounting trail ties the command to the user and time.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "jtan was logged in to router1 at the time",
+          "rationale": "True, but the record shows much more: the exact command.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "The link failed because of a hardware fault",
+          "rationale": "The record shows a deliberate shutdown command.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Accounting records who did what and when (logins, commands, session data). It is the after-the-fact audit trail that enables traceability.",
+      "discriminator_tested": "Accounting enables traceability.",
+      "id": "Q-C04-0082",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-10",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-11",
+        "C04-12"
+      ],
+      "type": "single",
+      "angle": "interpret-output",
+      "difficulty": 3,
+      "stem": "An analyst captures the packet below. What does it show about how RADIUS protects the request?",
+      "exhibit": "UDP 10.1.1.2:51515 -> 10.1.9.30:1812  Access-Request\n  User-Name          = \"asmith\"\n  User-Password      = <hidden>\n  NAS-IP-Address     = 10.1.1.2\n  Called-Station-Id  = \"AP-2F:CorpNet\"",
+      "options": [
+        {
+          "key": "A",
+          "text": "The whole request body is encrypted",
+          "rationale": "That is TACACS+; here the other attributes are readable.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Just the password is hidden; the rest is readable",
+          "rationale": "Correct: RADIUS hides only the password attribute.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Nothing is hidden; RADIUS is cleartext",
+          "rationale": "The password attribute is hidden.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "The request is protected by TLS on port 1812",
+          "rationale": "Standard RADIUS runs over plain UDP, not TLS.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "RADIUS provides centralized AAA over UDP 1812 (authentication) and 1813 (accounting) and hides only the password in the request. It is an open standard, typical for network access.",
+      "discriminator_tested": "RADIUS encrypts only the password.",
+      "id": "Q-C04-0083",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-11",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-12",
+        "C04-11"
+      ],
+      "type": "single",
+      "angle": "choose-protocol",
+      "difficulty": 2,
+      "stem": "A company wants each command its network administrators type on 500 routers checked against their role and logged. Which AAA protocol BEST fits?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Local accounts",
+          "rationale": "Not centralized across 500 routers.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "SNMPv3",
+          "rationale": "A management protocol, not AAA.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "RADIUS",
+          "rationale": "Combines authentication and authorization; suited to network access, not per-command control.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "TACACS+",
+          "rationale": "Correct: separate authorization allows per-command control.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "TACACS+ is Cisco-originated AAA over TCP 49 that encrypts the entire payload and separates authentication, authorization, and accounting. That separation makes it typical for device administration.",
+      "discriminator_tested": "TACACS+ separates the three As; typical for device administration.",
+      "id": "Q-C04-0084",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-12",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-13"
+      ],
+      "type": "single",
+      "angle": "find-config-error",
+      "difficulty": 3,
+      "stem": "Administrators report that their TACACS+ accounts don't work on the router below, although local accounts do. What is the MOST likely cause?",
+      "exhibit": "aaa new-model\ntacacs server TAC1\n address ipv4 10.1.9.20\n key 7 0822455D0A16\naaa authentication login VTY-LOGIN group tacacs+ local\n!\nline vty 0 4\n login local",
+      "options": [
+        {
+          "key": "A",
+          "text": "The list isn't applied to the lines",
+          "rationale": "Correct: the VTY lines still say 'login local' instead of 'login authentication VTY-LOGIN'.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The method list tries local before TACACS+",
+          "rationale": "The list puts TACACS+ first.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "TACACS+ needs UDP 1812 opened on the firewall",
+          "rationale": "TACACS+ uses TCP 49; 1812 is RADIUS.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "The VTY lines are using local authentication",
+          "rationale": "True, but that is the symptom; the method list was never applied.",
+          "role": "partial"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Configuring iAAA means enabling AAA, defining the server, building method lists, and applying them to lines. A method list does nothing until it is applied, here with 'login authentication VTY-LOGIN'.",
+      "discriminator_tested": "Method lists must be applied to lines.",
+      "id": "Q-C04-0085",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-13",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-14",
+        "C04-04"
+      ],
+      "type": "single",
+      "angle": "interpret-output",
+      "difficulty": 2,
+      "stem": "A RADIUS server logs the exchange below. What does the Access-Challenge BEST indicate?",
+      "exhibit": "10.1.1.2  -> 10.1.9.30  Access-Request    User-Name=asmith\n10.1.9.30 -> 10.1.1.2   Access-Challenge  (enter one-time code)\n10.1.1.2  -> 10.1.9.30  Access-Request    User-Name=asmith (with code)\n10.1.9.30 -> 10.1.1.2   Access-Accept",
+      "options": [
+        {
+          "key": "A",
+          "text": "The server wants more proof before deciding",
+          "rationale": "Correct: here, a one-time code.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The user's login was rejected outright",
+          "rationale": "A rejection would be Access-Reject.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "The first request wasn't accepted yet",
+          "rationale": "True, but it misses what the challenge asks for.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "The AP is challenging the server's identity",
+          "rationale": "The challenge comes from the server to the access device.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "In the RADIUS login process, the access device sends an Access-Request and acts on Access-Accept, Access-Reject, or Access-Challenge. A challenge asks for more information, here a one-time code, before the server decides. The access device (10.1.1.2) is the RADIUS client.",
+      "discriminator_tested": "Accept, Reject, or Challenge; the access device is the RADIUS client.",
+      "id": "Q-C04-0086",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-14",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-15"
+      ],
+      "type": "single",
+      "angle": "attack-to-mitigation",
+      "difficulty": 2,
+      "stem": "Policy requires 8 characters including uppercase, lowercase, a number, and a symbol, yet most passwords look like 'Spring26!'. Which change BEST improves resistance to guessing?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Allow users to reuse their last password",
+          "rationale": "That weakens policy further.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "Require 15+ character passphrases",
+          "rationale": "Correct: length adds far more strength than extra symbols.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Add a requirement for two symbols",
+          "rationale": "More complexity helps a little, but 'Spring26!!' is still easy.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "Force a password change each month",
+          "rationale": "Frequent changes push people toward predictable patterns.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Longer passwords with mixed character types resist guessing, and length adds more strength than complexity alone.",
+      "discriminator_tested": "Length adds more strength than complexity alone.",
+      "id": "Q-C04-0087",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-15",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-16",
+        "C04-15"
+      ],
+      "type": "single",
+      "angle": "attack-to-mitigation",
+      "difficulty": 1,
+      "stem": "An attacker tries thousands of passwords against one VPN account. Which control MOST directly stops this?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Require longer passwords",
+          "rationale": "Makes guessing slower, but the attempts continue.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "Lock it after a few failed attempts",
+          "rationale": "Correct: caps the number of online guesses.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Encrypt the VPN with a stronger cipher",
+          "rationale": "Encryption doesn't limit login attempts.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "Block passwords on breach lists",
+          "rationale": "Helps against list-based guessing, but the attempts still continue.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Password lockout locks an account after a set number of failed attempts, which counters online brute force. It can itself be abused to lock out legitimate users.",
+      "discriminator_tested": "Lockout counters online brute force.",
+      "id": "Q-C04-0088",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-16",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-17",
+        "C04-24"
+      ],
+      "type": "single",
+      "angle": "attack-to-mitigation",
+      "difficulty": 2,
+      "stem": "Visitors keep plugging laptops into empty conference-room wall jacks and getting full network access. Which control BEST stops this?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Shutting down unused wall jacks",
+          "rationale": "Helps, but a visitor can unplug a desk phone or PC and use that jack.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "WPA3 on the company's Wi-Fi",
+          "rationale": "The visitors are on wired ports.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "802.1X port authentication",
+          "rationale": "Correct: the port passes nothing but authentication traffic until the device proves itself.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "A captive portal on the wired network",
+          "rationale": "A portal can be accepted by anyone; it isn't port authentication.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "802.1X is port-based access control: a port passes only authentication traffic until the device authenticates, so an unknown laptop gets nothing.",
+      "discriminator_tested": "802.1X: the port stays blocked until success.",
+      "id": "Q-C04-0089",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-17",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-18",
+        "C04-17"
+      ],
+      "type": "multi",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "Which two pairings of 802.1X role and device are correct? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Authentication server: the access switch",
+          "rationale": "The authentication server is RADIUS.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Supplicant: the RADIUS server",
+          "rationale": "The supplicant is the client device.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "Supplicant: the laptop's 802.1X client",
+          "rationale": "Correct: the client asking for access.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "Authenticator: the RADIUS server",
+          "rationale": "RADIUS is the authentication server, which decides.",
+          "role": "related"
+        },
+        {
+          "key": "E",
+          "text": "Authenticator: the access switch",
+          "rationale": "Correct: it enforces at the port.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "C",
+        "E"
+      ],
+      "explanation": "802.1X components are the supplicant (client), the authenticator (switch or WAP), and the authentication server (RADIUS). The authenticator enforces; the server decides.",
+      "discriminator_tested": "Supplicant, authenticator, authentication server.",
+      "id": "Q-C04-0090",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-18",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-19",
+        "C04-21"
+      ],
+      "type": "single",
+      "angle": "choose-response",
+      "difficulty": 2,
+      "stem": "A laptop passes identity checks but fails posture because its antivirus is out of date. Under a typical NAC policy, what happens next?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It is quarantined for remediation, then rechecked",
+          "rationale": "Correct: a restricted, fix-and-retry outcome.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "It is blocked from the network for good",
+          "rationale": "NAC outcomes need not be all-or-nothing.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "It gets full access, since identity passed",
+          "rationale": "Posture failure overrides a good identity.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Its user is asked to re-enter their password",
+          "rationale": "Identity already passed; the problem is device health.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "In the NAC process, a device connects, is identified and assessed, and policy sets its access level: full, restricted, quarantine, or deny. The outcome is policy-driven and need not be all-or-nothing.",
+      "discriminator_tested": "NAC outcome need not be all-or-nothing.",
+      "id": "Q-C04-0091",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-19",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-20",
+        "C04-17"
+      ],
+      "type": "single",
+      "angle": "choose-tool",
+      "difficulty": 2,
+      "stem": "A hospital has hundreds of infusion pumps and badge readers that can't run 802.1X software. Which NAC capability BEST lets it place them in the right segment automatically?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Captive portal login",
+          "rationale": "A pump can't fill in a web form.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Posture assessment",
+          "rationale": "Posture checks health, and these devices can't run an agent.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Device profiling",
+          "rationale": "Correct: it identifies the device type from observed attributes.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "SMS-based MFA",
+          "rationale": "Devices don't receive text messages.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Profiling identifies what a device is (its type or class) from observed attributes. It suits devices that can't run a supplicant, such as printers, medical equipment, and IoT.",
+      "discriminator_tested": "Profiling suits devices that can't run a supplicant.",
+      "id": "Q-C04-0092",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-20",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-21",
+        "C04-20"
+      ],
+      "type": "multi",
+      "angle": "classify-element",
+      "difficulty": 2,
+      "stem": "Which two checks are part of posture assessment? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The user's password is correct",
+          "rationale": "That is authentication.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "The device is a printer, by its MAC vendor",
+          "rationale": "Identifying the device type is profiling.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "The device's SSID is hidden",
+          "rationale": "Not a device health check.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "Antivirus is installed and current",
+          "rationale": "Correct: a health check.",
+          "role": "best"
+        },
+        {
+          "key": "E",
+          "text": "Critical OS patches are applied",
+          "rationale": "Correct: a compliance check.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D",
+        "E"
+      ],
+      "explanation": "Posture assessment checks a device's health and compliance (patches, antivirus, configuration). It is about health, as distinct from identity (authentication) and type (profiling).",
+      "discriminator_tested": "Posture = health; profiling = type; authentication = identity.",
+      "id": "Q-C04-0093",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-21",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-22"
+      ],
+      "type": "single",
+      "angle": "neighbor-discrimination",
+      "difficulty": 2,
+      "stem": "What BEST distinguishes the risk of BYOD from that of company-owned laptops?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The devices are often newer models",
+          "rationale": "Age isn't the issue.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "The devices need a different Wi-Fi band",
+          "rationale": "Personal devices use the same bands.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "The devices are unmanaged and vary widely",
+          "rationale": "Correct: IT doesn't control their configuration, patching, or apps.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "The devices may carry personal apps and data",
+          "rationale": "Part of the risk, but it stems from their being unmanaged.",
+          "role": "partial"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "BYOD means personally owned devices accessing organizational resources. Because they are unmanaged and varied, BYOD needs NAC, posture checks, and segmentation.",
+      "discriminator_tested": "BYOD devices are unmanaged and varied.",
+      "id": "Q-C04-0094",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-22",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-23"
+      ],
+      "type": "single",
+      "angle": "find-missing-element",
+      "difficulty": 3,
+      "stem": "Guests on the Wi-Fi below can reach the internal intranet server at 10.1.9.80 over HTTPS. What BEST describes what is missing?",
+      "exhibit": "VLAN 60 (Guest-WiFi) inbound ACL\n permit udp any host 198.51.100.53 eq 53\n permit tcp any any eq 443\n permit tcp any any eq 80",
+      "options": [
+        {
+          "key": "A",
+          "text": "A rule limiting guests to the internet",
+          "rationale": "Right goal, but it doesn't say how or where in the list.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "A captive portal before the permits",
+          "rationale": "A portal gates entry; it doesn't stop internal access.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Internal ranges denied before the web rules",
+          "rationale": "Correct: 'any any eq 443' includes internal servers.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "WPA3 on the guest SSID",
+          "rationale": "Encryption doesn't restrict where guests can go.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Guest network isolation places guests on a separate segment with internet-only access. Here the 'any any' permits include internal addresses, so the internal ranges must be denied first.",
+      "discriminator_tested": "Guest isolation means no access to internal resources.",
+      "id": "Q-C04-0095",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-23",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    },
+    {
+      "objectives": [
+        "C04-24",
+        "C04-17"
+      ],
+      "type": "single",
+      "angle": "choose-tool",
+      "difficulty": 1,
+      "stem": "A conference venue wants attendees to accept terms and enter an event code before using its Wi-Fi. Which feature BEST fits?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Device profiling",
+          "rationale": "Profiling identifies device types; it doesn't interact with users.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "A captive portal",
+          "rationale": "Correct: a web gate for guest onboarding.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "WPA3-Personal",
+          "rationale": "A shared passphrase can't show terms or collect a code.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "802.1X with RADIUS",
+          "rationale": "Possible, but heavy for one-day guests who need individual accounts.",
+          "role": "partial"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "A captive portal intercepts a new user's first request and requires login or acceptance before granting access. It is a gate for guest and BYOD onboarding, not encryption.",
+      "discriminator_tested": "Captive portal is a gate for guest onboarding.",
+      "id": "Q-C04-0096",
+      "chapter": 4,
+      "domain": null,
+      "source_ref": "CCST_Ch04.md#C04-24",
+      "provider": "claude",
+      "model": "claude-opus-5-5",
+      "status": "draft",
+      "created_at": "2026-10-21T19:29:37+00:00",
+      "verified_at": null,
+      "retired_reason": null
+    }
+  ]
+}
