@@ -12,11 +12,11 @@ from pathlib import Path
 from typing import Annotated, Literal
 
 from fastapi import FastAPI, HTTPException, Path as PathParam, Query
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, StrictBool, StrictInt, field_validator
 
-from . import certs, importer, pool, prompts, security, sessions, tracker
+from . import certs, history, importer, pool, prompts, security, sessions, tracker
 from .config import APP_NAME
 from .objectives import UnknownObjective, load_section, load_sections, objective_names
 from .schema import SERVED_STATUSES, STATUSES
@@ -24,6 +24,9 @@ from .schema import SERVED_STATUSES, STATUSES
 STATIC = Path(__file__).parent / "static"
 QuestionId = Annotated[str, Field(pattern=certs.QUESTION_ID)]
 ObjectiveId = Annotated[str, Field(pattern=certs.OBJECTIVE_ID)]
+ObjectiveIdPath = Annotated[str, PathParam(pattern=certs.OBJECTIVE_ID)]
+BackupName = Annotated[str, Field(pattern=tracker.BACKUP_NAME, max_length=120)]
+BackupNamePath = Annotated[str, PathParam(pattern=tracker.BACKUP_NAME, max_length=120)]
 QuestionIdPath = Annotated[str, PathParam(pattern=certs.QUESTION_ID)]
 CertIdPath = Annotated[str, PathParam(pattern=certs.CERT_ID)]
 SectionCode = Annotated[str, Field(pattern=certs.SECTION_CODE)]
@@ -38,9 +41,13 @@ EXAM_GRACE_S = 30
 async def lifespan(_app: FastAPI):
     """On start: make question statuses agree with recorded answers (after a migration or a
     progress restore, an answered question may still read Unreviewed)."""
+    _sync_statuses()
+    yield
+
+
+def _sync_statuses() -> None:
     for cert in certs.list_certs():
         pool.mark_seen_many(cert.id, tracker.first_answered(cert.id))
-    yield
 
 
 app = FastAPI(title=APP_NAME, docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
@@ -139,9 +146,9 @@ def _prompt_or_422(build):
 
 @app.get("/api/certs/{cert_id}/prompts/questions")
 def question_prompt(cert_id: CertIdPath, objective: ObjectiveQuery,
-                    per_objective: Annotated[int, Query(ge=1, le=3)] = 1):
+                    per_objective: Annotated[int, Query(ge=1, le=3)] = 1, harder: bool = False):
     cert = _cert_or_404(cert_id)
-    return _prompt_or_422(lambda: prompts.question_prompt(cert.id, objective, per_objective))
+    return _prompt_or_422(lambda: prompts.question_prompt(cert.id, objective, per_objective, harder=harder))
 
 
 @app.get("/api/certs/{cert_id}/prompts/study")
@@ -461,3 +468,70 @@ def reset(cert_id: CertIdPath, req: ResetRequest):
     cert = _cert_or_404(cert_id)
     tracker.reset(cert.id)
     return {"ok": True}
+
+
+# ---- progress over time and suggestions (v2 plan 8.3, V11) ------------------
+
+@app.get("/api/certs/{cert_id}/progress/overview")
+def progress_overview(cert_id: CertIdPath):
+    cert = _cert_or_404(cert_id)
+    return history.overview(cert.id)
+
+
+@app.get("/api/certs/{cert_id}/progress/objectives/{objective_id}")
+def objective_history(cert_id: CertIdPath, objective_id: ObjectiveIdPath):
+    cert = _cert_or_404(cert_id)
+    try:
+        return history.objective_history(cert.id, objective_id)
+    except UnknownObjective:
+        raise HTTPException(404, f"{objective_id} isn't an objective of {cert.short_name}") from None
+
+
+@app.get("/api/certs/{cert_id}/recommendations")
+def recommendations(cert_id: CertIdPath):
+    cert = _cert_or_404(cert_id)
+    return history.recommendations(cert.id)
+
+
+# ---- progress backups (every certification at once; v2 plan 8.1) ---------------
+
+def _backup_or_404(name: str):
+    try:
+        return tracker.backup_file(name)
+    except FileNotFoundError:
+        raise HTTPException(404, "no backup by that name") from None
+
+
+@app.get("/api/progress/backups")
+def list_backups():
+    return tracker.list_backups()
+
+
+@app.post("/api/progress/backups")
+def make_backup():
+    if not tracker.settings.progress_db.exists():
+        raise HTTPException(409, "there's no progress to back up yet")
+    return {"name": tracker.backup("manual").name}
+
+
+@app.get("/api/progress/backups/{name}")
+def download_backup(name: BackupNamePath):
+    path = _backup_or_404(name)
+    return FileResponse(path, media_type="application/vnd.sqlite3", filename=path.name)
+
+
+class RestoreRequest(BaseModel):
+    name: BackupName
+    confirm: Literal["RESTORE"]
+
+
+@app.post("/api/progress/restore")
+def restore_backup(req: RestoreRequest):
+    """Replace all progress with a backup; the current progress is backed up first."""
+    _backup_or_404(req.name)
+    try:
+        result = tracker.restore(req.name)
+    except tracker.ProgressError as e:
+        raise HTTPException(422, str(e)) from None
+    _sync_statuses()
+    return result

@@ -374,3 +374,67 @@ Each phase ends with the tests passing, a commit, and a short note in this docum
     - a report confirmed from the Disputed questions page;
     - the tracker.
     No console errors.
+- **P6 done (2026-10-27):** progress over time, charts, backup and restore, suggestions.
+  - **Objective score (8.3), the formula fixed here:**
+    - Each answer scores 0-100: right is 50 at 1 Guessing rising to 100 at 5 Certain; wrong is 25 at 1 falling to 0 at 5 (the overconfidence penalty).
+    - An objective's score is the recency-weighted average of its answers: each older answer counts 0.75 times as much as the next (`SCORE_DECAY`).
+    - It is explained on the Progress page now and goes on the help page in P9. Status rules are unchanged.
+    - `ObjectiveStats.add` folds in one answer at a time; the batch function now uses it and gives the same results.
+  - **`history.py`:**
+    - totals;
+    - scores and status counts by section and by domain;
+    - calibration (answers and % right at each confidence level);
+    - status counts and average score after each session;
+    - one objective's score after each answer.
+    Answers to reported questions are left out, as everywhere else.
+  - **Suggestions (V11):** an objective is suggested when it is Weak after 3+ answers, too easy (its latest 3 answers right at Certain), or out of unseen questions. They are grouped and ranked in that order.
+    - One click opens the Claude workspace with the objectives picked and the question prompt built; the prompt already includes the learner's recent wrong choices.
+    - Too-easy objectives get a new `harder` prompt option that asks for difficulty 3 throughout.
+    - Home shows a link with the number of suggestions.
+  - **Backups (8.1):**
+    - A Backups page lists `data/backups` (server-built index, names pattern-checked), with Back up now, Restore and Download.
+    - Restore reads the backup into memory, saves the current progress as `progress-before-restore-*` (so a restore can be undone), writes the backup, upgrades an older schema, and re-syncs question statuses.
+    - It refuses newer, damaged or unlisted backups, and needs `confirm: "RESTORE"`.
+  - **Charts:**
+    - `static/charts.js` draws SVG through DOM calls only (CSP-safe): line, horizontal bars and columns, each with a crosshair or per-mark tooltip, arrow-key reading, and a "Show as a table" view.
+    - All charts are single-series in the dataviz reference blue, which the palette validator passes on both card colors.
+    - The status palette failed the colour-blindness check (red vs green ΔE 4.1 for deuteranopia), so status counts over time are four small charts named by their titles instead of four colored lines.
+  - **Progress page:**
+    - summary tiles;
+    - suggestions;
+    - average score and status counts after each session;
+    - score by section and by domain;
+    - calibration;
+    - one objective over time (picker, or click an ID in the tracker);
+    - the tracker, now with a Score column;
+    - too-easy questions.
+  - **Fixed along the way:**
+    - `[hidden]` did not hide elements whose class sets `display` (the empty disputes row on home, the exam navigator in practice), a P5 bug. `style.css` now makes `[hidden]` always win, and a test checks it.
+    - Selects are capped at the page width (a long objective list widened the page on phones).
+  - **History shows the v1 answers:** on a copy of the real data the timeline runs from the first v1 session (2026-10-07) to the latest. It shows 315 counted answers, 212 of 459 objectives practised, an average score of 78, and 44 suggestions (6 weak, 10 too easy, 28 every question seen).
+  - **Tests:** 205 pytest pass, 18 of them new: 16 in `test_history.py`, plus 2 UI checks in the security tests (the `charts.js` scan and the `[hidden]` rule). The `test_history.py` tests cover:
+    - the score formula and recency;
+    - incremental and batch stats agreeing;
+    - per-session snapshots, calibration, totals;
+    - reported answers left out;
+    - the objective history API and bad IDs;
+    - suggestion reasons and order;
+    - the harder prompt;
+    - backup listing (junk and damaged files);
+    - restore round trip and undo;
+    - restore of a schema-1 backup;
+    - refusal of newer, damaged and unlisted backups;
+    - a restore whose source is pruned by its own safety backup;
+    - download;
+    - status sync after a restore;
+    - the token on backup routes.
+    The security scan now covers `charts.js`.
+  - **Verified by hand** (scratch copy of the real data, in the browser):
+    - every chart rendered;
+    - tooltips, crosshair and arrow keys worked, with no CSP violations;
+    - a suggestion group built a 10-objective harder prompt;
+    - a restore round trip through the UI: after a reset and a restore, the overview was identical to before;
+    - the download was a valid SQLite file;
+    - at 375px nothing overflows or overlaps;
+    - practice and exam still show and hide the right controls.
+    - Some screenshots came back blank because the browser pane was hidden; those layouts were checked by measuring the rendered elements instead.

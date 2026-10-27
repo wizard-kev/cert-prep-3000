@@ -7,6 +7,7 @@ progress.db, and the original file is moved into `data/backups/` untouched (v2 s
 
 import json
 import os
+import re
 import sqlite3
 import threading
 from collections import Counter
@@ -32,6 +33,8 @@ REVISIT_DAYS = (3, 7, 14)
 # probably too easy to teach anything; it is listed for the user to keep or retire.
 TOO_EASY_STREAK = 3
 DISPUTE_DECISIONS = ("confirmed", "withdrawn")
+# Objective score (v2 plan 8.3): each older answer counts this much as much as the one after it.
+SCORE_DECAY = 0.75
 
 SCHEMA_VERSION = 2
 # The v1 app was CCST-only, so its sessions and answers belong to this certification.
@@ -149,6 +152,93 @@ def backup(reason: str) -> Path:
     _sqlite_copy(settings.progress_db, dst)
     _prune(f"progress-{reason}")
     return dst
+
+
+BACKUP_NAME = r"^progress-[a-z0-9]+(?:-[a-z0-9]+)*-\d{8}T\d{6}-\d{6}Z\.db$"
+_BACKUP_PARTS = re.compile(r"^progress-(?P<kind>[a-z0-9-]+)-(?P<stamp>\d{8}T\d{6}-\d{6}Z)\.db$")
+
+
+def _read_info(path: Path, full_check: bool = False) -> dict:
+    """Schema version and counts of a progress database, opened read-only."""
+    try:
+        conn = sqlite3.connect(f"file:{path.as_posix()}?mode=ro", uri=True)
+        try:
+            if full_check and conn.execute("PRAGMA quick_check").fetchone()[0] != "ok":
+                raise ProgressError(f"{path.name} is damaged")
+            tables = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")}
+            if not {"meta", "sessions", "attempts"} <= tables:
+                raise ProgressError(f"{path.name} isn't a progress backup")
+            row = conn.execute("SELECT value FROM meta WHERE key = 'schema_version'").fetchone()
+            sessions, answers = _counts(conn)
+            last = conn.execute("SELECT MAX(answered_at) FROM attempts").fetchone()[0]
+        finally:
+            conn.close()
+    except sqlite3.DatabaseError as e:
+        raise ProgressError(f"{path.name} isn't a readable progress database") from e
+    return {"schema": int(row[0]) if row else 0, "sessions": sessions, "answers": answers, "last_answer": last}
+
+
+def list_backups() -> list[dict]:
+    """Progress backups in data/backups, newest first. The server builds this list; a backup is only
+    ever reached through it (v2 SR-3)."""
+    out = []
+    folder = settings.backups_dir
+    for p in folder.glob("progress-*.db") if folder.is_dir() else []:
+        m = _BACKUP_PARTS.match(p.name)
+        if not m or not re.match(BACKUP_NAME, p.name) or not p.is_file():
+            continue
+        try:
+            created = datetime.strptime(m["stamp"], "%Y%m%dT%H%M%S-%fZ").replace(tzinfo=timezone.utc)
+        except ValueError:  # an impossible date: not one of ours
+            continue
+        item = {"name": p.name, "kind": m["kind"], "created_at": created.isoformat(timespec="seconds"),
+                "size": p.stat().st_size}
+        try:
+            item.update(_read_info(p))
+            item["restorable"] = 0 < item["schema"] <= SCHEMA_VERSION
+        except ProgressError as e:
+            item.update(restorable=False, problem=str(e))
+        out.append(item)
+    return sorted(out, key=lambda b: (b["created_at"], b["name"]), reverse=True)
+
+
+def backup_file(name: str) -> Path:
+    """A listed backup, by its exact name."""
+    for b in list_backups():
+        if b["name"] == name:
+            return settings.backups_dir / b["name"]
+    raise FileNotFoundError(name)
+
+
+def restore(name: str) -> dict:
+    """Replace progress.db (every certification) with a listed backup. The current progress is
+    backed up first, and a backup from an older version is upgraded on the way in. Question
+    statuses live in the pool files and are not changed."""
+    src = backup_file(name)
+    info = _read_info(src, full_check=True)
+    if not 0 < info["schema"] <= SCHEMA_VERSION:
+        raise ProgressError(f"{src.name} was written by a newer version of the app")
+    # Read the backup into memory first: the safety backup below may prune the file being restored.
+    held = sqlite3.connect(":memory:")
+    source = sqlite3.connect(f"file:{src.as_posix()}?mode=ro", uri=True)
+    try:
+        source.backup(held)
+    finally:
+        source.close()
+    try:
+        safety = backup("before-restore") if settings.progress_db.exists() else None
+        with _prepare_lock:
+            settings.progress_db.parent.mkdir(parents=True, exist_ok=True)
+            target = sqlite3.connect(settings.progress_db)
+            try:
+                held.backup(target)
+            finally:
+                target.close()
+            _prepared.discard(settings.progress_db)
+    finally:
+        held.close()
+    _prepare()  # upgrades an older schema (after its own backup)
+    return {**info, "restored": src.name, "safety_backup": safety.name if safety else None}
 
 
 def _counts(conn: sqlite3.Connection) -> tuple[int, int]:
@@ -374,6 +464,12 @@ def decide_held_dispute(session_id: str, question_id: str, decision: str) -> boo
     return cur.rowcount == 1
 
 
+def session_modes(cert_id: str) -> dict[str, str]:
+    with connect() as c:
+        rows = c.execute("SELECT id, mode FROM sessions WHERE cert_id = ?", (cert_id,)).fetchall()
+    return {r["id"]: r["mode"] for r in rows}
+
+
 def reset(cert_id: str) -> None:
     """Delete one certification's sessions and answers (a backup is taken first)."""
     if settings.progress_db.exists():
@@ -385,10 +481,21 @@ def reset(cert_id: str) -> None:
 
 # ---- derived per-objective status ----------------------------------------
 
+def answer_score(correct: bool, confidence: int) -> float:
+    """One answer's score, 0-100 (v2 plan 8.3). A correct answer is worth more the surer you were
+    (50 at Guessing up to 100 at Certain); a wrong one scores lower the surer you were (25 at
+    Guessing down to 0 at Certain), which penalises overconfidence."""
+    step = confidence - 1
+    return 50 + 12.5 * step if correct else 25 - 6.25 * step
+
+
 @dataclass
 class ObjectiveStats:
     """`correct`, `last5`, and the Solid evidence count only credited answers: correct and not
-    marked Guessing (1). A lucky guess is recorded (and scored in the session) but proves nothing."""
+    marked Guessing (1). A lucky guess is recorded (and scored in the session) but proves nothing.
+
+    `score` (0-100) is a recency-weighted average of `answer_score`: each older answer counts
+    SCORE_DECAY times as much as the one after it."""
     objective: str
     attempts: int = 0
     correct: int = 0
@@ -404,6 +511,41 @@ class ObjectiveStats:
     angles_correct: set = field(default_factory=set)
     last_angle: str | None = None
     recent_questions: list[str] = field(default_factory=list)
+    certain_streak: int = 0  # latest answers in a row that were correct at Certain
+    _sure_wrong: list[bool] = field(default_factory=list, repr=False)  # last five: wrong at Confident+
+    _score_sum: float = 0.0
+    _score_weight: float = 0.0
+
+    def add(self, a: dict) -> None:
+        """Fold in one answer; answers must arrive oldest first."""
+        right = bool(a["correct"])
+        ok = right and a["confidence"] > GUESSING  # credited toward mastery
+        self.attempts += 1
+        self.correct += ok
+        self.guessed_correct += right and not ok
+        self.last5 = (self.last5 + [ok])[-5:]
+        self.last5_marks = (self.last5_marks + ["right" if ok else "guess" if right else "wrong"])[-5:]
+        self.calibration[a["confidence"]][0] += 1
+        self.calibration[a["confidence"]][1] += right
+        if a["error_type"]:
+            self.errors[a["error_type"]] += 1
+        self.last_seen = a["answered_at"]
+        self.angles_seen.add(a["angle"])
+        self.last_angle = a["angle"]
+        self.recent_questions = (self.recent_questions + [a["question_id"]])[-3:]
+        if ok:
+            self.sessions_correct.add(a["session_id"])
+            self.angles_correct.add(a["angle"])
+        # Wrong while Confident or Certain, within the last five answers, keeps an objective Weak.
+        self._sure_wrong = (self._sure_wrong + [a["confidence"] >= SURE and not right])[-5:]
+        self.sure_wrong_recent = sum(self._sure_wrong)
+        self.certain_streak = self.certain_streak + 1 if right and a["confidence"] == CERTAIN else 0
+        self._score_sum = self._score_sum * SCORE_DECAY + answer_score(right, a["confidence"])
+        self._score_weight = self._score_weight * SCORE_DECAY + 1
+
+    @property
+    def score(self) -> int | None:
+        return round(self._score_sum / self._score_weight) if self._score_weight else None
 
     @property
     def last5_accuracy(self) -> float | None:
@@ -430,7 +572,8 @@ class ObjectiveStats:
 
     def as_dict(self) -> dict:
         return {
-            "objective": self.objective, "status": self.status, "attempts": self.attempts, "correct": self.correct,
+            "objective": self.objective, "status": self.status, "score": self.score, "attempts": self.attempts,
+            "correct": self.correct,
             "guessed_correct": self.guessed_correct,
             "last5": [int(x) for x in self.last5], "last5_marks": self.last5_marks, "last5_accuracy": self.last5_accuracy,
             "sure_wrong_recent": self.sure_wrong_recent, "calibration": self.calibration,
@@ -444,31 +587,7 @@ def objective_stats(attempts: list[dict]) -> dict[str, ObjectiveStats]:
     """`attempts` must be in answer order (oldest first)."""
     out: dict[str, ObjectiveStats] = {}
     for a in attempts:
-        s = out.setdefault(a["objective"], ObjectiveStats(a["objective"]))
-        right = bool(a["correct"])
-        ok = right and a["confidence"] > GUESSING  # credited toward mastery
-        s.attempts += 1
-        s.correct += ok
-        s.guessed_correct += right and not ok
-        s.last5 = (s.last5 + [ok])[-5:]
-        s.last5_marks = (s.last5_marks + ["right" if ok else "guess" if right else "wrong"])[-5:]
-        s.calibration[a["confidence"]][0] += 1
-        s.calibration[a["confidence"]][1] += right
-        if a["error_type"]:
-            s.errors[a["error_type"]] += 1
-        s.last_seen = a["answered_at"]
-        s.angles_seen.add(a["angle"])
-        s.last_angle = a["angle"]
-        s.recent_questions = (s.recent_questions + [a["question_id"]])[-3:]
-        if ok:
-            s.sessions_correct.add(a["session_id"])
-            s.angles_correct.add(a["angle"])
-    # Wrong while Confident or Certain, within the last five answers, keeps an objective Weak.
-    recent: dict[str, list[dict]] = {}
-    for a in attempts:
-        recent.setdefault(a["objective"], []).append(a)
-    for obj, rows in recent.items():
-        out[obj].sure_wrong_recent = sum(1 for a in rows[-5:] if a["confidence"] >= SURE and not a["correct"])
+        out.setdefault(a["objective"], ObjectiveStats(a["objective"])).add(a)
     return out
 
 

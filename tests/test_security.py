@@ -138,16 +138,23 @@ def test_api_schema_and_docs_are_not_served(client):
         assert client.get(path).status_code == 404
 
 
-def test_ui_never_builds_html_from_strings():
-    js = (STATIC / "app.js").read_text(encoding="utf-8")
+@pytest.mark.parametrize("name", ["app.js", "charts.js"])
+def test_ui_never_builds_html_from_strings(name):
+    js = (STATIC / name).read_text(encoding="utf-8")
     for bad in ("innerHTML", "outerHTML", "insertAdjacentHTML", "document.write", "eval(", "new Function", "setTimeout(\"",
-                "setTimeout('"):
+                "setTimeout('", "setAttribute(\"style\"", "setAttribute('style'", "cssText"):
         assert bad not in js.replace("never innerHTML", ""), bad
+
+
+def test_hidden_attribute_always_hides():
+    """The UI shows and hides elements with `hidden`; a class that sets `display` must not undo it."""
+    css = (STATIC / "style.css").read_text(encoding="utf-8")
+    assert re.search(r"\[hidden\]\s*\{\s*display:\s*none\s*!important;?\s*\}", css)
 
 
 def test_page_has_no_inline_script_style_or_handlers():
     page = (STATIC / "index.html").read_text(encoding="utf-8")
-    assert re.findall(r"<script\b[^>]*>", page) == ['<script src="/static/app.js">']
+    assert re.findall(r"<script\b[^>]*>", page) == ['<script src="/static/charts.js">', '<script src="/static/app.js">']
     assert not re.search(r"\sstyle\s*=", page) and not re.search(r"<style\b", page)
     assert not re.search(r"\son[a-z]+\s*=", page)
 

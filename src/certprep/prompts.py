@@ -126,8 +126,9 @@ def learner_notes(cert_id: str, objective_ids: list[str]) -> list[str]:
 
 
 def question_prompt(cert_id: str, objective_ids: list[str], per_objective: int = 1,
-                    rng: random.Random | None = None) -> dict:
-    """Prompt asking Claude for new questions on the chosen objectives, on angles they lack."""
+                    rng: random.Random | None = None, harder: bool = False) -> dict:
+    """Prompt asking Claude for new questions on the chosen objectives, on angles they lack.
+    `harder` asks for difficulty 3 throughout (for objectives the learner finds too easy)."""
     cert = certs.get_cert(cert_id)
     if not 1 <= per_objective <= 3:
         raise PromptError("questions per objective must be 1 to 3")
@@ -145,7 +146,7 @@ def question_prompt(cert_id: str, objective_ids: list[str], per_objective: int =
     example = {
         "format": QUESTIONS_FORMAT, "format_version": QUESTIONS_FORMAT_VERSION, "cert": cert.id,
         "questions": [{
-            "objectives": [first.objective], "type": first.type, "angle": first.angle, "difficulty": 2,
+            "objectives": [first.objective], "type": first.type, "angle": first.angle, "difficulty": 3 if harder else 2,
             "stem": "...", "exhibit": None,
             "options": [{"key": k, "text": "...", "rationale": "...", "role": r}
                         for k, r in zip("ABCD", ("best", "partial", "related", "wrong"))],
@@ -163,7 +164,11 @@ def question_prompt(cert_id: str, objective_ids: list[str], per_objective: int =
         "Each line gives the objective the question must test (its ID goes first in \"objectives\"), the angle "
         "(how the question approaches it), and the type.",
         *[f"{i}. {t.objective} {names[t.objective]} | angle: {t.angle} | type: {t.type}"
+          + (" | difficulty: 3" if harder else "")
           for i, t in enumerate(targets, 1)],
+        *(["", "The learner already answers these objectives correctly and with full confidence, so make every "
+               "question difficulty 3: choosing the best of several valid options, or a scenario that needs two "
+               "steps of reasoning. Harder means subtler distinctions, not obscure trivia."] if harder else []),
         "",
         "## The objectives (your source of truth)",
         "ID | objective | core idea | discriminator (the one fact that separates it from look-alike concepts):",

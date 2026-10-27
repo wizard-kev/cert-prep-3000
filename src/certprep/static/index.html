@@ -69,9 +69,11 @@
     <div class="row"><button type="button" id="claude-btn">Open the Claude workspace</button></div>
 
     <h2>Progress</h2>
+    <p id="suggest-note" hidden><button type="button" class="id-link" id="suggest-link"></button></p>
     <div class="row">
-      <button type="button" id="progress-btn">View objective tracker</button>
+      <button type="button" id="progress-btn">View progress</button>
       <button type="button" id="export-btn" class="secondary">Export summary for chat</button>
+      <button type="button" id="backups-btn" class="secondary">Backups</button>
       <button type="button" id="reset-btn" class="secondary danger">Reset progress for this certification</button>
     </div>
     <div id="export-box" hidden>
@@ -202,9 +204,54 @@
     <button type="button" class="back-btn secondary">Back to home</button>
   </section>
 
-  <!-- Tracker -->
+  <!-- Progress -->
   <section id="v-progress" class="view" hidden aria-labelledby="p-h">
-    <h2 id="p-h">Objective tracker</h2>
+    <h2 id="p-h">Progress</h2>
+    <div id="p-tiles" class="tiles"></div>
+    <details class="explain">
+      <summary>How the objective score works</summary>
+      <p class="muted">Each answer scores 0 to 100 depending on whether it was right and how sure you were:</p>
+      <ul class="muted">
+        <li>Right: 50 at 1 Guessing, rising to 100 at 5 Certain.</li>
+        <li>Wrong: 25 at 1 Guessing, falling to 0 at 5 Certain. Being sure and wrong costs the most.</li>
+      </ul>
+      <p class="muted">An objective's score is the average of its answers, weighted toward recent ones: each older
+        answer counts three quarters as much as the one after it. Status (Weak, Improving, Solid) is decided separately,
+        by the rules in the tracker below.</p>
+    </details>
+
+    <h3 id="p-suggest-h">Suggested: generate more questions</h3>
+    <p class="muted">Objectives where new questions would help most. A button opens the Claude workspace with the prompt
+      already built, including the wrong options you tend to pick, so the new questions target those mix-ups.</p>
+    <div id="p-suggest"></div>
+
+    <h3>Average objective score after each session</h3>
+    <p class="muted">The average score of the objectives you'd practised by then.</p>
+    <div id="p-score-chart"></div>
+
+    <h3>Objectives by status after each session</h3>
+    <p class="muted">How many objectives were in each status after each session. Each chart has its own scale.</p>
+    <div id="p-status-charts" class="multiples"></div>
+
+    <h3>Score by section</h3>
+    <div id="p-sections"></div>
+    <h3>Score by domain</h3>
+    <div id="p-domains"></div>
+
+    <h3>How sure you were, and how often you were right</h3>
+    <p class="muted">If your confidence is well judged, the columns rise from left to right: Certain answers should be
+      right almost every time.</p>
+    <div id="p-calibration"></div>
+
+    <h3 id="p-obj-h">One objective over time</h3>
+    <div class="row">
+      <label for="p-obj">Objective</label>
+      <select id="p-obj"></select>
+    </div>
+    <p class="muted">Its score after each answer. A filled dot is a right answer; an open dot is a wrong one.</p>
+    <div id="p-obj-chart"></div>
+
+    <h3>Objective tracker</h3>
     <p id="p-summary" class="muted"></p>
     <div class="table-wrap"><table id="p-table"></table></div>
     <h3>Possibly too easy</h3>
@@ -213,8 +260,26 @@
     <div id="p-easy"></div>
     <button type="button" class="back-btn">Back to home</button>
   </section>
+
+  <!-- Backups -->
+  <section id="v-backups" class="view" hidden aria-labelledby="b-h">
+    <h2 id="b-h">Progress backups</h2>
+    <p class="muted">Backups hold your sessions and answers for every certification. The app makes one before every
+      upgrade, reset and restore, and keeps the newest 10 of each kind in the <strong>data\backups</strong> folder.</p>
+    <div class="row">
+      <button type="button" id="backup-now">Back up now</button>
+      <span id="b-msg" class="muted" aria-live="polite"></span>
+    </div>
+    <div class="table-wrap"><table id="b-table"></table></div>
+    <p class="muted"><strong>Restore</strong> replaces all progress with the backup's. Your current progress is backed up
+      first, so you can undo a restore by restoring that copy. Question statuses (validated, reported, retired) stay as
+      they are now. <strong>Download</strong> saves a copy elsewhere; to restore it later, put it back in data\backups
+      under the same name.</p>
+    <button type="button" class="back-btn">Back to home</button>
+  </section>
 </main>
 
+<script src="/static/charts.js"></script>
 <script src="/static/app.js"></script>
 </body>
 </html>

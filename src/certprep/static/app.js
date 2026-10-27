@@ -134,9 +134,11 @@ async function loadHome() {
     return label;
   }));
 
-  const disputed = await api(certPath("/disputes"));
+  const [disputed, recs] = await Promise.all([api(certPath("/disputes")), api(certPath("/recommendations"))]);
   $("dispute-count").textContent = String(disputed.length);
   $("dispute-row").hidden = disputed.length === 0;
+  $("suggest-note").hidden = recs.length === 0;
+  $("suggest-link").textContent = `Suggested: ${recs.length} objective${recs.length === 1 ? " could" : "s could"} use more questions`;
 
   const nameRows = sections.length ? await api(certPath(`/tracker?${sectionQuery(sections.map((s) => s.code))}`)) : [];
   names = Object.fromEntries(nameRows.map((r) => [r.objective, r.name]));
@@ -720,7 +722,7 @@ function pickWhere(test, label) {
   renderObjectiveList();
 }
 
-async function buildPrompt(kind) {
+async function buildPrompt(kind, { harder = false } = {}) {
   $("claude-msg").textContent = "";
   const ids = [...CL.picked].sort();
   if (!ids.length) { $("claude-msg").textContent = "Choose at least one objective first."; return; }
@@ -728,8 +730,8 @@ async function buildPrompt(kind) {
   const q = ids.map((id) => `objective=${encodeURIComponent(id)}`).join("&");
   try {
     if (kind === "questions") {
-      const r = await api(certPath(`/prompts/questions?${q}&per_objective=${$("per-objective").value}`));
-      $("prompt-box").replaceChildren(promptWidget(`Question prompt (${r.targets.length} question${r.targets.length === 1 ? "" : "s"})`, r.prompt,
+      const r = await api(certPath(`/prompts/questions?${q}&per_objective=${$("per-objective").value}${harder ? "&harder=true" : ""}`));
+      $("prompt-box").replaceChildren(promptWidget(`${harder ? "Harder-question" : "Question"} prompt (${plural(r.targets.length, "question")})`, r.prompt,
         "Paste it into a new chat at claude.ai, then import Claude's reply in step 3."));
     } else {
       const r = await api(certPath(`/prompts/study?${q}`));
@@ -790,23 +792,266 @@ async function runImport() {
   }
 }
 
-// ---- tracker, export, reset ----------------------------------------------
+// ---- progress over time (v2 plan 8.3) and suggestions (V11) -----------------
 
-async function openProgress() {
+// [title, explanation, ask for harder questions]
+const REASON = {
+  weak: ["Still weak after several tries",
+    "These stay Weak despite practice. New questions from fresh angles, aimed at the options you keep picking, usually help.", false],
+  "too-easy": ["Too easy now",
+    "Your latest answers were all right at 5 Certain. Harder questions (difficulty 3) will teach you more.", true],
+  "no-unseen": ["You've seen every question",
+    "You've answered every question on these at least once, so repeats start testing your memory of the question rather than the objective.", false],
+};
+const STATUS_TITLE = { Weak: "Weak", Improving: "Improving", Solid: "Solid", New: "Not practised yet" };
+const ERROR_LABEL = Object.fromEntries(ERROR_TYPES);
+const when = (iso) => new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" });
+const day = (iso) => new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+
+async function openProgress(scrollTo) {
   const codes = sections.filter((s) => s.served > 0).map((s) => s.code);
   if (!codes.length) { $("home-msg").textContent = "No questions yet, so there's no progress to show."; return; }
-  const rows = await api(certPath(`/tracker?${sectionQuery(codes)}`));
+  const [overview, rows, recs] = await Promise.all([
+    api(certPath("/progress/overview")), api(certPath(`/tracker?${sectionQuery(codes)}`)), api(certPath("/recommendations"))]);
+  show("progress");  // charts measure their width, so the page must be showing first
+  renderTiles(overview.totals);
+  renderSuggestions(recs);
+  renderTimeline(overview.timeline);
+  renderTotals(overview);
+  renderCalibration(overview.calibration);
+  renderTracker(rows);
+  await Promise.all([renderObjectivePicker(rows, recs), renderTooEasy(codes)]);
+  if (scrollTo) $(scrollTo).scrollIntoView({ block: "start" });
+}
+
+function renderTiles(t) {
+  const tile = (label, value, note) => { const d = el("div", "tile"); d.append(el("span", null, label), el("strong", null, value), el("small", null, note)); return d; };
+  $("p-tiles").replaceChildren(
+    tile("Average objective score", t.score === null ? "none yet" : String(t.score),
+      t.practised ? `over ${plural(t.practised, "practised objective")}` : "practise to get a score"),
+    tile("Objectives practised", `${t.practised} of ${t.objectives}`, `${Math.round((100 * t.practised) / Math.max(1, t.objectives))}% of the list`),
+    tile("Solid", String(t.Solid), `${t.Improving} improving · ${t.Weak} weak`),
+    tile("Answers counted", String(t.answers), "answers to reported questions are left out"));
+}
+
+function renderSuggestions(recs) {
+  const box = $("p-suggest");
+  if (!recs.length) { box.replaceChildren(el("p", "muted", "Nothing to suggest right now. Suggestions appear as you practise.")); return; }
+  const SHOWN = 8;
+  const item = (x) => {
+    const li = el("li");
+    const bits = [x.status, `score ${x.score}`, plural(x.attempts, "answer"), plural(x.questions, "question")];
+    if (x.dominant_error) bits.push(`main error: ${ERROR_LABEL[x.dominant_error] ?? x.dominant_error}`);
+    const also = x.reasons.slice(1).map((r) => REASON[r][0].toLowerCase());
+    if (also.length) bits.push(`also: ${also.join("; ")}`);
+    const go = el("button", "secondary small", "Generate");
+    go.type = "button";
+    go.title = "Open the Claude workspace with a question prompt for this objective";
+    go.addEventListener("click", () => openClaudeWith([x.objective], REASON[x.reasons[0]][2]));
+    li.append(idLink(x.objective), el("span", null, x.name), el("small", null, bits.join(" · ")), go);
+    return li;
+  };
+  box.replaceChildren(...Object.keys(REASON).map((reason) => {
+    const items = recs.filter((x) => x.reasons[0] === reason);
+    if (!items.length) return null;
+    const [title, help, harder] = REASON[reason];
+    const ids = items.map((x) => x.objective).slice(0, MAX_PROMPT_OBJECTIVES);
+    const all = el("button", "small", items.length > MAX_PROMPT_OBJECTIVES ? `Build a prompt for the first ${MAX_PROMPT_OBJECTIVES}`
+      : items.length === 1 ? "Build a prompt for it" : `Build a prompt for all ${items.length}`);
+    all.type = "button";
+    all.addEventListener("click", () => openClaudeWith(ids, harder));
+    const head = el("div", "row");
+    head.append(el("strong", null, `${title} (${items.length})`), all);
+    const list = el("ul", "suggest-list");
+    list.append(...items.slice(0, SHOWN).map(item));
+    const group = el("div", "suggest-group");
+    group.append(head, el("p", "muted", help), list);
+    if (items.length > SHOWN) {
+      const more = el("details");
+      const rest = el("ul", "suggest-list");
+      rest.append(...items.slice(SHOWN).map(item));
+      more.append(el("summary", null, `Show ${items.length - SHOWN} more`), rest);
+      group.append(more);
+    }
+    return group;
+  }).filter(Boolean));
+}
+
+async function openClaudeWith(ids, harder) {
+  await openClaude();
+  CL.picked = new Set(ids);
+  $("obj-section").value = ids[0].split("-")[0];
+  renderObjectiveList();
+  await buildPrompt("questions", { harder });
+  $("prompt-box").scrollIntoView({ block: "start" });
+}
+
+function renderTimeline(tl) {
+  if (!tl.length) {
+    $("p-score-chart").replaceChildren(el("p", "muted", "No sessions yet."));
+    $("p-status-charts").replaceChildren();
+    return;
+  }
+  const mode = (p) => MODE_LABEL[p.mode] ?? p.mode;
+  const point = (p, y, detail) => ({ y, tick: day(p.at), when: `${when(p.at)} · ${mode(p)}`, detail });
+  const scoreBox = el("div");
+  $("p-score-chart").replaceChildren(scoreBox, Charts.tableView(
+    ["After the session of", "Mode", "Average score", "Weak", "Improving", "Solid", "Not practised"],
+    tl.map((p) => [when(p.at), mode(p), p.score ?? "", p.Weak, p.Improving, p.Solid, p.New].map(String))));
+  Charts.line(scoreBox, {
+    points: tl.map((p) => point(p, p.score, [`${p.Solid} solid · ${p.Improving} improving · ${p.Weak} weak`])),
+    yMax: 100, name: "Average objective score after each session", xTitle: "Sessions, oldest to newest" });
+
+  // One small chart per status: identity comes from each chart's title, never from color.
+  const cells = ["Weak", "Improving", "Solid", "New"].map((st) => {
+    const first = tl[0][st];
+    const last = tl[tl.length - 1][st];
+    const change = last - first;
+    const h = el("h4", null, `${STATUS_TITLE[st]}: ${last} `);
+    h.append(el("small", null, `(${change >= 0 ? "+" : ""}${change} since the first session)`));
+    const box = el("div");
+    const cell = el("div");
+    cell.append(h, box);
+    return [st, cell, box];
+  });
+  $("p-status-charts").replaceChildren(...cells.map(([, cell]) => cell));
+  for (const [st, , box] of cells) {
+    Charts.line(box, { points: tl.map((p) => point(p, p[st], [`${STATUS_TITLE[st]}: ${p[st]} objectives`])),
+      height: 130, name: `${STATUS_TITLE[st]} objectives after each session` });
+  }
+}
+
+function renderTotals(o) {
+  const bar = (s, name) => ({
+    label: `${name} (${s.practised} of ${s.objectives} practised)`, value: s.score, empty: "not practised yet",
+    valueText: s.score === null ? null : String(s.score), detail: [`${s.Solid} solid · ${s.Improving} improving · ${s.Weak} weak`] });
+  const parts = [
+    ["p-sections", o.by_section.map((s) => bar(s, s.name)), o.by_section, "Section", "Score by section"],
+    ["p-domains", o.by_domain.map((d) => bar(d, d.id === "untagged" ? d.name : `${d.id} ${d.name}`)), o.by_domain, "Domain", "Score by domain"],
+  ];
+  for (const [id, rows, raw, kind, name] of parts) {
+    const box = el("div");
+    $(id).replaceChildren(box, Charts.tableView([kind, "Score", "Practised", "Objectives", "Weak", "Improving", "Solid"],
+      raw.map((s, i) => [rows[i].label.replace(/ \(.*\)$/, ""), s.score ?? "", s.practised, s.objectives, s.Weak, s.Improving, s.Solid].map(String))));
+    Charts.bars(box, { rows, max: 100, name });
+  }
+}
+
+function renderCalibration(cal) {
+  const box = el("div");
+  $("p-calibration").replaceChildren(box, Charts.tableView(["How sure", "Answers", "Right", "% right"],
+    cal.map((c) => [`${c.confidence} ${c.label}`, String(c.answered), String(c.correct), c.percent === null ? "" : `${c.percent}%`])));
+  Charts.columns(box, {
+    cols: cal.map((c) => ({ label: `${c.confidence} ${c.label}`, short: String(c.confidence), sub: plural(c.answered, "answer"), subShort: `n=${c.answered}`,
+      value: c.percent, valueText: c.percent === null ? null : `${Math.round(c.percent)}%`, detail: [`${c.correct} of ${c.answered} right`] })),
+    max: 100, format: (v) => `${v}%`, name: "Percent right at each confidence level" });
+}
+
+function idLink(id) {
+  const b = el("button", "id-link", id);
+  b.type = "button";
+  b.title = "Show this objective's score over time";
+  b.addEventListener("click", () => showObjective(id, true).catch((e) => { $("p-obj-chart").replaceChildren(el("p", "msg", e.message)); }));
+  return b;
+}
+
+async function renderObjectivePicker(rows, recs) {
+  const practised = rows.filter((r) => r.attempts > 0);
+  if (!practised.length) { $("p-obj").replaceChildren(); $("p-obj-chart").replaceChildren(el("p", "muted", "Nothing practised yet.")); return; }
+  $("p-obj").replaceChildren(...sections.map((s) => {
+    const mine = practised.filter((r) => r.section === s.code);
+    if (!mine.length) return null;
+    const g = el("optgroup");
+    g.label = s.name;
+    g.append(...mine.map((r) => { const o = el("option", null, `${r.objective} ${r.name} (${r.status}, score ${r.score})`); o.value = r.objective; return o; }));
+    return g;
+  }).filter(Boolean));
+  const lowest = [...practised].sort((a, b) => a.score - b.score)[0];
+  await showObjective(recs[0]?.objective ?? lowest.objective);
+}
+
+async function showObjective(id, scroll = false) {
+  if ([...$("p-obj").options].some((o) => o.value === id)) $("p-obj").value = id;
+  const h = await api(certPath(`/progress/objectives/${encodeURIComponent(id)}`));
+  if (scroll) $("p-obj-h").scrollIntoView({ block: "start" });
+  if (!h.points.length) { $("p-obj-chart").replaceChildren(el("p", "muted", `${h.objective} hasn't been practised yet.`)); return; }
+  const box = el("div");
+  $("p-obj-chart").replaceChildren(box, Charts.tableView(
+    ["Answer", "When", "Question", "Result", "How sure", "Answer score", "Objective score", "Status"],
+    h.points.map((p, i) => [i + 1, when(p.at), p.question_id, p.correct ? "Right" : "Wrong", `${p.confidence} ${CONF_LABEL[p.confidence]}`,
+      p.answer_score, p.score, p.status].map(String))));
+  Charts.line(box, {
+    points: h.points.map((p, i) => ({ y: p.score, tick: day(p.at), hollow: !p.correct, when: `Answer ${i + 1} · ${when(p.at)}`,
+      detail: [`${p.correct ? "Right" : "Wrong"} at ${p.confidence} ${CONF_LABEL[p.confidence]} · ${p.question_id}`, `Status after it: ${p.status}`] })),
+    yMax: 100, height: 180, name: `${h.objective} ${h.name}: score after each answer`, xTitle: "Answers, oldest to newest" });
+}
+
+function renderTracker(rows) {
   const counts = rows.reduce((m, r) => ((m[r.status] = (m[r.status] || 0) + 1), m), {});
   $("p-summary").textContent = ["Weak", "Improving", "Solid", "New"].map((s) => `${s}: ${counts[s] || 0}`).join(" · ") +
     ". Solid needs 3 correct across 2+ sessions and 2+ angles with the last five at 80% or better." +
-    " Correct answers rated 1 Guessing don't count toward mastery (shown as ?).";
-  table($("p-table"), ["ID", "Objective", "Status", "Tries", "Last five", "Wrong while sure", "Main error", "Revisit"],
-    rows.map((r) => [r.objective, r.name, el("span", `status-${r.status}`, r.status), String(r.attempts),
+    " Correct answers rated 1 Guessing don't count toward mastery (shown as ?). Choose an ID to see its score over time.";
+  table($("p-table"), ["ID", "Objective", "Status", "Score", "Tries", "Last five", "Wrong while sure", "Main error", "Revisit"],
+    rows.map((r) => [r.attempts ? idLink(r.objective) : r.objective, r.name, el("span", `status-${r.status}`, r.status),
+      r.score === null ? "" : String(r.score), String(r.attempts),
       r.last5_marks.map((m) => LAST5_MARK[m]).join(" "), r.sure_wrong_recent ? String(r.sure_wrong_recent) : "",
       r.dominant_error ?? "", r.revisit_due ? "due" : ""]));
-  await renderTooEasy(codes);
-  show("progress");
 }
+
+// ---- progress backups ------------------------------------------------------
+
+const BACKUP_KIND = { manual: "Made by you", "before-restore": "Before a restore", upgrade: "Before an app upgrade", reset: "Before a reset" };
+
+async function openBackups() {
+  $("b-msg").textContent = "";
+  await renderBackups();
+  show("backups");
+}
+
+async function renderBackups() {
+  const list = await api("/api/progress/backups");
+  if (!list.length) { $("b-table").replaceChildren(); $("b-msg").textContent = "No backups yet."; return; }
+  table($("b-table"), ["Made", "Kind", "Sessions", "Answers", "Latest answer", ""], list.map((b) => {
+    const actions = el("span", "pool-actions");
+    if (b.restorable) {
+      const go = el("button", "secondary small", "Restore");
+      go.type = "button";
+      go.addEventListener("click", () => restoreBackup(b));
+      actions.append(go);
+    } else {
+      actions.append(el("span", "muted", b.problem ?? "Made by a newer version of the app"));
+    }
+    const dl = el("a", null, "Download");
+    dl.href = `/api/progress/backups/${encodeURIComponent(b.name)}`;
+    dl.download = b.name;
+    actions.append(dl);
+    return [when(b.created_at), BACKUP_KIND[b.kind] ?? b.kind, String(b.sessions ?? ""), String(b.answers ?? ""),
+      b.last_answer ? when(b.last_answer) : "", actions];
+  }));
+}
+
+async function backupNow() {
+  try {
+    await post("/api/progress/backups");
+    await renderBackups();
+    $("b-msg").textContent = "Backed up.";
+  } catch (e) { $("b-msg").textContent = e.message; }
+}
+
+async function restoreBackup(b) {
+  if (!confirm(`Replace all your progress (every certification) with the backup made ${when(b.created_at)}? ` +
+    `It holds ${plural(b.sessions, "session")} and ${plural(b.answers, "answer")}. Your current progress is backed up first.`)) return;
+  try {
+    const r = await post("/api/progress/restore", { name: b.name, confirm: "RESTORE" });
+    S = null;
+    await renderBackups();
+    $("b-msg").textContent = `Restored ${plural(r.sessions, "session")} and ${plural(r.answers, "answer")}.` +
+      (r.safety_backup ? " What you had before is saved as the newest \"Before a restore\" backup." : "");
+  } catch (e) { $("b-msg").textContent = e.message; }
+}
+
+// ---- export, reset --------------------------------------------------------
 
 // Questions answered correctly at 5 Certain every recent time. "Keep" is remembered in this browser only.
 async function renderTooEasy(codes) {
@@ -913,7 +1158,12 @@ document.addEventListener("keydown", (e) => {
   }
 });
 $("disputes-btn").addEventListener("click", () => openDisputes().catch((e) => { $("home-msg").textContent = e.message; }));
-$("progress-btn").addEventListener("click", openProgress);
+const failHome = (e) => { $("home-msg").textContent = e.message; };
+$("progress-btn").addEventListener("click", () => openProgress().catch(failHome));
+$("suggest-link").addEventListener("click", () => openProgress("p-suggest-h").catch(failHome));
+$("p-obj").addEventListener("change", () => showObjective($("p-obj").value).catch((e) => { $("p-obj-chart").replaceChildren(el("p", "msg", e.message)); }));
+$("backups-btn").addEventListener("click", () => openBackups().catch(failHome));
+$("backup-now").addEventListener("click", backupNow);
 $("export-btn").addEventListener("click", exportSummary);
 $("copy-btn").addEventListener("click", () => navigator.clipboard?.writeText($("export-text").value));
 $("reset-btn").addEventListener("click", resetProgress);
