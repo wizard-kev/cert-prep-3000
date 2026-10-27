@@ -1,5 +1,7 @@
 # CCST Cybersecurity (100-160) Exam Prep: Project Scope and Plan
 
+> **Superseded for new work (2026-10-27):** the app is being generalized into *Kevin's Super Cert Prep 3000*. See `v2_Scope_and_Plan.md`, which overrides this plan wherever they differ. This document remains the record of the CCST build (git tag `v1`).
+
 **Purpose of this document:** master scope and plan for the CCST Cybersecurity exam-prep platform. It captures goals, decisions, current status, the app specification, security requirements, and the build plan, so work can continue without the original conversations. Read it fully before building anything.
 
 **Doc version:** v2 (2026-10-07) | **Supersedes:** v1 (free-tier planning conversation)

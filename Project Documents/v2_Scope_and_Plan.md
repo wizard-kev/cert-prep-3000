@@ -1,0 +1,241 @@
+# Kevin's Super Cert Prep 3000: v2 Scope and Plan
+
+**Status:** draft for the user's sign-off (2026-10-27).
+**Baseline:** git tag `v1` (commit 5de21fe) and `C:\Claude\CCST Snapshots\CCST_v1_snapshot_2026-10-27.zip`. v1 is the CCST-only app; this document supersedes `CCST_Project_Scope_and_Plan.md` wherever they differ. The v1 plan stays as the record of how the CCST pool was built.
+
+---
+
+## 1. Goal
+
+A local study app that works for **any certification**. The user brings their own certification; pre-built Claude prompts do the heavy lifting of turning official exam information into the app's formats; the app then serves targeted questions, simulates the exam, and tracks comprehension per objective across sessions. CCST Cybersecurity (100-160) ships pre-built. Everything must be intuitive for a non-technical user, with instructions and descriptions built into the app.
+
+## 2. Decisions
+
+| # | Decision | Source |
+|---|---|---|
+| V1 | The app supports any certification. CCST ships pre-built; other certifications are set up through a guided wizard or imported as a certification pack. | User |
+| V2 | No AI model runs inside the app and the app makes no network calls. It builds prompts that the user copies into a Claude web chat; Claude's output is imported back as a file or pasted text. The app holds no API keys. | User |
+| V3 | Local model infrastructure (Ollama provider, generation and explanation jobs) and Docker are removed. The app installs natively (Python virtual environment plus a start shortcut). | User |
+| V4 | Questions are validated passively: answered without dispute = **Passively-Validated**. Questions that pass the import checks are assumed valid until disputed. The separate review queue is removed. | User |
+| V5 | Three modes: **Practice** (adaptive, includes re-serving missed questions), **Focus** (pasted objective list), **Exam** (simulation). Diagnostic and Review modes are retired. | User |
+| V6 | Confidence is a 1-5 scale (stars or slider), recorded per answer and used for per-objective progress over time. | User |
+| V7 | Progress persists across sessions and survives upgrades; it can be backed up and restored from the app. Essential priority. | User |
+| V8 | A dispute raised during an exam is held until the end-of-exam report, where the user confirms or withdraws it. | User (recommendation accepted) |
+| V9 | App name: **Kevin's Super Cert Prep 3000**. All explicit CCST references outside the CCST certification data are generalized. | User |
+| V10 | Certifications can be exported and imported as packs. | User |
+| V11 | Struggling objectives produce a recommendation to generate more questions, with a ready-made prompt. | User |
+
+**Carried from v1 (unchanged):** objective IDs are frozen within a certification (retire, never rename); questions are retired, never edited in place; never use real exam questions (brain dumps); all content is rendered as plain text (`textContent`); the authoring rules for cue-free questions (four option roles, no surface cues, exhibits, angle rotation) and the import cue checks stay in force for every certification.
+
+## 3. Certification model
+
+### 3.1 Layout
+
+```
+data/
+  certs/
+    ccst-cyber/                 # one folder per certification; folder name = certification id
+      cert.json                 # exam facts and structure (3.2)
+      objectives/S01.md ...     # one objective file per section
+      questions/S01.json ...    # question pool per section
+      imports/                  # archived copies of every imported Claude file
+  progress.db                   # all learner progress, every certification (section 8)
+  backups/                      # automatic and manual progress backups
+```
+
+- The certification id is a slug matching `^[a-z0-9][a-z0-9-]{1,31}$` and must be one of the folders found at startup. Section codes come from `cert.json` and match `^[A-Z]{1,3}\d{2}$`.
+- Objective IDs are `<section code>-<NN>`; question IDs are `Q-<section code>-<NNNN>`, unique within a certification. Every stored record carries the certification id.
+- **CCST keeps its existing IDs** (sections C01-C13, objectives `C01-01`, questions `Q-C01-0195`), so the 917 active questions and all recorded answers carry over unchanged.
+
+### 3.2 `cert.json`
+
+Exam facts used to replicate the test environment, each with a source and a confidence label (official / estimate / unknown), as the v1 plan did for CCST:
+
+- name, vendor, exam code, exam version and objective-list date;
+- question count, time limit (minutes), passing score (and its scale, e.g. 700/1000 or 70%);
+- question formats used on the real exam (multiple choice, multiple response, ordering, matching/drag-and-drop, simulations) and which of them the app can serve (section 7.4);
+- domains with official weights; sections (chapters or domains) with title, section code, and domain mapping;
+- sources (official URLs) and the date the facts were gathered.
+
+### 3.3 Setting up a certification
+
+The **certification wizard** walks the user step by step; it can be saved and resumed:
+
+1. **Name the certification** (name, vendor, exam code).
+2. **Exam facts:** the app builds a prompt asking Claude to gather the official exam facts (3.2), cite sources, and mark anything it can't confirm. The user pastes or uploads Claude's JSON; the app validates it and shows a preview to confirm or edit.
+3. **Objectives:** the user pastes the vendor's published objective list into a second prompt. Claude returns objective files in the app's format (ID, objective, core idea, discriminator, official reference number such as `4.2`). The app validates and previews them.
+4. **First questions:** the app builds question-generation prompts in batches until every objective has at least two questions, with a progress bar.
+5. **Done:** start a Practice session.
+
+## 4. Startup and onboarding
+
+- **First start:** a dialog asks "Which certification are you studying?" with three choices: **CCST Cybersecurity** (loads the pre-built certification), **Something else** (starts the wizard), **Import a certification pack**.
+- A certification selector in the top bar switches between installed certifications.
+- Every screen has a short "What is this?" description; empty screens say what to do next (for example "No questions for this objective yet: generate some").
+- A help page and a glossary explain statuses (Unreviewed, Passively-Validated, Validated, Disputed, Retired), objective levels (New, Weak, Improving, Solid), the confidence scale, and how scores are calculated.
+
+## 5. Prompt builder (replaces the local model)
+
+### 5.1 Prompt types
+
+| Prompt | Built from | Claude returns |
+|---|---|---|
+| Exam facts | Certification name and exam code | `cert.json` content |
+| Objective builder | Pasted official objective list | Objective files |
+| Question generation | Chosen objectives (coverage gaps, struggling objectives, Focus bullets, or a manual pick), their rows, the authoring rules, angles already used, and the learner's common wrong choices | Question JSON file |
+| Repair | Rejected questions plus the reasons | Corrected question JSON |
+| Study dialogue | Chosen objectives plus the learner's progress (weak objectives, wrong options chosen, error types) | A guided tutoring conversation |
+| Ask about this question | One question, its answer, rationales, and objective rows | A focused explanation |
+
+Every prompt states Claude's role and context, the exact output format with an example, the rules the import will enforce, and a prompt-format version that the import checks. Prompts are built only from stored data and text the user pasted on purpose; the app never sends them anywhere (the user copies them).
+
+### 5.2 Import
+
+- **Input:** upload a `.json` file or paste text, up to 1 MB.
+- **Checks:**
+  - strict JSON parse and schema validation (unknown fields rejected);
+  - objective IDs must belong to the active certification;
+  - the per-question cue checks and near-duplicate check from v1.
+- **Results:** a table of accepted and rejected questions with the reason for each. One click copies a **repair prompt** for the rejected questions.
+- **After import:** accepted questions enter as **Unreviewed**, and the source file is archived in `imports/`.
+- **Pool balance:** shown on a question-bank health page (answer-length bands, coverage per objective, angles), replacing the CLI-only `audit` and `coverage`. The CLI stays for power users.
+
+## 6. Question lifecycle and validation (replaces v1 D7)
+
+| Status | Meaning | Served in |
+|---|---|---|
+| Unreviewed | Passed the import checks; not yet answered | Practice, Focus, Exam |
+| Passively-Validated | Answered at least once, in any mode, and not disputed | Practice, Focus, Exam |
+| Validated | Explicitly confirmed by the user ("Looks right"); v1 `verified` questions map here | Practice, Focus, Exam |
+| Disputed | Reported by the user, awaiting confirmation; excluded from selection and scoring | None |
+| Retired | Dispute confirmed, superseded, or flawed | None |
+
+- **Disputing** ("Report a problem", with a reason) is available in every mode.
+  - **Practice and Focus:** the question becomes Disputed immediately. The session summary lists disputed questions to confirm (they are retired) or undo.
+  - **Exam:** the dispute is held. The end-of-exam report shows the question with its answer, and the user confirms or withdraws (V8).
+- **"Mark for review"** (exam navigation) is separate from "Report a problem".
+- **Migration from v1:** draft questions that have been answered become Passively-Validated; unanswered drafts become Unreviewed; retired questions stay retired with their reasons.
+
+## 7. Modes
+
+### 7.1 Practice
+Adaptive selection weighted toward Weak objectives, then Improving and due Solid ones. Objectives never attempted are guaranteed regular appearances (they were previously introduced by the diagnostic), and recently missed questions are re-served on a spaced schedule (replacing Review mode). Immediate feedback after each answer.
+
+### 7.2 Focus (pasted objectives)
+1. The user pastes an objective list (bullets; designed for 5 or more, no hard minimum).
+2. The app splits it into bullets and matches each against the active certification's objectives using plain text matching. It matches on official reference numbers or objective IDs when present, otherwise on word overlap with the objective name and core idea. No AI model is involved.
+3. A **match preview** shows each bullet's best match and confidence, and lets the user accept or change the match before starting.
+4. Bullets that don't match get the message "This objective is not in the objective list for (certification)."
+5. A matched objective with no questions gets "No questions exist for this objective yet." The user is offered a ready-made generation prompt for that bullet.
+6. The session serves questions only from the confirmed objectives.
+
+Security requirements for this mode are in section 10 (SR-2, SR-3, SR-7).
+
+### 7.3 Exam
+- **Settings:** question count, time limit, domain weights and passing score come from `cert.json`.
+- **Selection:** prefers questions the user hasn't seen.
+- **Feedback:** deferred until the end. "Mark for review" and held disputes are available during the exam.
+- **Report:**
+  - **Score (all questions):** correct out of all exam questions, excluding confirmed disputes. This includes Unreviewed, Passively-Validated and Validated questions.
+  - **Score (validated questions only):** the same, counting only questions that were Passively-Validated or Validated when the exam started.
+  - Pass or fail against the certification's passing score, per-domain results, and a new-versus-repeat breakdown.
+
+### 7.4 Question formats
+v2 serves multiple choice (single answer) and multiple response (choose N). `cert.json` records the real exam's other formats. Ordering and matching are optional later work (phase P10), to be built if a certification the user studies relies on them.
+
+## 8. Progress tracking (essential, V6, V7)
+
+### 8.1 Storage and safety
+- **Storage:** all progress lives in `data/progress.db` (SQLite), keyed by certification. It persists across sessions and app restarts. Unfinished sessions can be resumed.
+- **Migration:** the v1 `tracker.db` (17 sessions, 318 answers) is migrated to `progress.db`. Confidence maps guess → 1, unsure → 2, sure → 5. Diagnostic and drill sessions keep their history under their original mode names.
+- **Automatic backup** before every migration or app upgrade, keeping the last 10.
+- **Manual backup:** "Back up progress" and "Restore progress" on the settings page.
+- Progress is never stored in git; certification packs never include it unless the user exports it separately.
+
+### 8.2 Confidence scale (1-5)
+| Rating | Label |
+|---|---|
+| 1 | Guessing |
+| 2 | Unsure |
+| 3 | Leaning |
+| 4 | Confident |
+| 5 | Certain |
+
+- Answers are entered by clicking or with the keyboard: letters for options, 1-5 for confidence.
+- **Mastery credit:** a correct answer at confidence 1 counts as a guess, not mastery (the v1 guess rule).
+- **Overconfidence:** a wrong answer at confidence 4-5 keeps the objective Weak (the v1 "sure but wrong" rule).
+
+### 8.3 Progress over time
+- **Objective score (0-100):** a recency-weighted average of answer scores. Correct answers score higher at higher confidence, and wrong answers score lower at higher confidence (an overconfidence penalty). The exact formula is fixed in phase P6 and explained on the help page.
+- **Charts:**
+  - each objective's score over time;
+  - section and domain totals;
+  - a calibration chart (accuracy at each confidence level);
+  - New/Weak/Improving/Solid counts over time.
+- **Recommendations (V11):** a "Generate more questions" card appears for objectives that are:
+  - Weak after several attempts;
+  - out of unseen questions;
+  - consistently answered correctly at confidence 5 (too easy).
+  One click builds the prompt, including the wrong options the learner tends to pick, so the new questions target those misconceptions.
+
+## 9. Certification packs (V10)
+
+- **Export:** a `.zip` containing `cert.json`, objective files, active questions (retired ones optional) and a manifest with file hashes and a pack-format version. Progress is not included.
+- **Import:** see SR-5. The pack is imported under a new certification id; an existing certification is never overwritten without confirmation.
+- **Copyright:** packs built from published vendor objective lists are fine for personal use. CCST's objective files were derived from a study guide, so its pack should not be shared publicly.
+
+## 10. Security requirements (v2)
+
+| # | Requirement |
+|---|---|
+| SR-1 | The server listens on 127.0.0.1 only. Requests must carry an allowed `Host` header (`127.0.0.1`/`localhost` with the app's port) to block DNS rebinding. Every state-changing request needs a matching `Origin` and a per-launch CSRF token, so other websites can't drive the app. |
+| SR-2 | All user-supplied text (Focus pastes, wizard pastes, imported files) is data only. Limits: Focus 8,000 characters, 60 bullets, 300 characters per bullet; imports 1 MB. Text is decoded strictly as UTF-8, normalized with Unicode NFKC, and stripped of control characters. It is never used in file paths, SQL strings (parameterized queries only), regular expressions, shell commands, or `eval`. |
+| SR-3 | Files are reached only through indexes the server builds from the allowlisted folders (`data/certs/<id>/objectives`, `.../questions`). Certification ids and section codes are regex-checked and must exist in that index. Stored file names are generated by the server; names supplied by the user are never used on disk. |
+| SR-4 | The UI renders content with `textContent` only, never `innerHTML` with data. A Content-Security-Policy header limits scripts and styles to the app itself. |
+| SR-5 | **Uploads:** only `.json`, `.md`, `.txt`, and `.zip` (packs) are accepted, with size caps. **Packs:** at most 20 MB and 2,000 entries. Only expected paths are allowed: no absolute paths, `..`, links, or duplicate names. Each file has a size cap and a compression-ratio limit to stop zip bombs. Every file is fully validated before anything is written. |
+| SR-6 | The app holds no secrets and makes no outbound network calls. |
+| SR-7 | Focus results reveal only matched objective IDs, objective names, and questions, never raw file contents or paths. |
+| SR-8 | Imported content is validated against the schema. Unknown fields are rejected, and every ID must belong to the target certification. |
+
+Security tests (unit tests plus fuzzed inputs for SR-2, SR-3, SR-5, and SR-7) are part of each phase's exit criteria.
+
+## 11. Removals
+
+- Ollama provider and the provider abstraction.
+- The generation and explanation endpoints, job queue, model lock, and cooldowns.
+- The Claude API stub.
+- Docker files: `Dockerfile`, `docker-compose*.yml`, `.dockerignore`.
+- Installer logic for Docker and models, and the offline model bundle (`make-bundle.ps1`).
+- The CLI `generate` command.
+- Diagnostic and Review modes.
+- The review queue and its Verify flow.
+
+## 12. Install and run
+
+- **Install:** a native installer checks for Python (3.12 or newer), creates the virtual environment, installs pinned requirements, and adds a desktop and Start-menu shortcut named "Kevin's Super Cert Prep 3000". The shortcut starts the server and opens the browser.
+- **Uninstall:** keeps progress unless the user asks to remove it.
+- **Rename:** the Python package is renamed from `ccst` to `certprep`. Renaming the project folder (`CCST Testing Program`) is optional and left to the user, since tools reference that path.
+
+## 13. Build plan
+
+Each phase ends with the tests passing, a commit, and a short note in this document. The `v1` tag remains the fallback.
+
+| Phase | Work | Exit criteria |
+|---|---|---|
+| P1 | Remove the local model and Docker (section 11); native run and installer | No Ollama or Docker references remain; the app runs natively; tests pass |
+| P2 | Certification data model; move CCST into `data/certs/ccst-cyber`; rename the app and package; `progress.db` migration with automatic backup | CCST works as before; question and objective IDs unchanged; all 318 recorded answers still counted; backup created |
+| P3 | Security baseline (SR-1 to SR-4) before any new input surfaces | Host, Origin, CSRF, and CSP checks tested |
+| P4 | Prompt builder (question generation, repair, study dialogue, ask-about-question) and in-app import | A Claude-made file imports end to end (first use: a replacement for reported Q-C09-0100) |
+| P5 | Question statuses and dispute flow; Practice and Exam modes; 1-5 confidence; scoring (7.3) | v1 statuses migrated; both exam scores correct in tests |
+| P6 | Progress over time: objective scores, charts, backup and restore, struggle recommendations | History charts show v1 answers; restore round-trip tested |
+| P7 | Focus mode with match preview | Matching and the messages tested; SR-2, SR-3, and SR-7 fuzz tests pass |
+| P8 | Certification wizard, exam-facts and objective-builder prompts, first-start dialog | A second certification can be set up end to end through the UI only |
+| P9 | Certification pack export and import; help page, glossary, and in-app guidance; usability pass | A CCST pack round-trips; SR-5 tests pass |
+| P10 | Optional: ordering and matching question formats | Only if a target certification needs them |
+
+## 14. Open points and risks
+
+- **Matching quality (Focus):** official wording can differ from objective-file wording. Mitigation: the match preview, plus official reference numbers in objective files.
+- **Claude output conformance:** first drafts often fail the cue checks. Mitigation: the repair-prompt loop, and prompts that state the checks explicitly.
+- **Exam facts accuracy:** vendors don't always publish weights or passing scores. Mitigation: per-fact confidence labels and user review in the wizard.
+- **Passive validation is weak evidence:** a wrong answer key is most convincing right after the learner gets the question wrong. Mitigation: a one-click "Disagree with this answer?" on the feedback after every wrong answer.

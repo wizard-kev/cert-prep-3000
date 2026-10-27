@@ -2,7 +2,9 @@
 
 Local web app that generates CCST (100-160) practice questions from per-chapter objective files using a local Ollama model (Claude API is Phase 2), stores them in a reviewed pool, and serves drills.
 
-Read `Project Documents/CCST_Project_Scope_and_Plan.md` before changing scope, schema, or phases. `Project Documents/CCST_Project_Instructions.md` holds the tutoring rules; `Project Documents/CCST_Official_Blueprint.md` holds Cisco's official topics.
+**v2 in progress (2026-10-27):** the app is being generalized into *Kevin's Super Cert Prep 3000* (any certification, prompts for Claude web chat instead of a local model, no Docker). `Project Documents/v2_Scope_and_Plan.md` is the governing plan; read it before changing anything and follow its phase order. Until a phase lands, the sections below describe the v1 app as it still exists in the code.
+
+Read `Project Documents/CCST_Project_Scope_and_Plan.md` for the v1 history and CCST content decisions. `Project Documents/CCST_Project_Instructions.md` holds the tutoring rules; `Project Documents/CCST_Official_Blueprint.md` holds Cisco's official topics.
 
 ## Map
 - `Objective Documents/CCST_ChXX.md` (01-13): source of truth. Objective IDs `Cxx-yy` are frozen: never rename, retire instead.
