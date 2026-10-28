@@ -365,6 +365,24 @@ def get_session(session_id: str) -> dict | None:
     return s
 
 
+def open_sessions(cert_id: str, modes: tuple[str, ...] = MODES, limit: int = 5) -> list[dict]:
+    """Unfinished sessions in the current modes, newest first, with how many questions were answered.
+    Sessions left open in the retired v1 modes stay as history and aren't offered."""
+    marks = ",".join("?" for _ in modes)
+    with connect() as c:
+        rows = c.execute(
+            f"""SELECT s.*, (SELECT COUNT(*) FROM attempts a WHERE a.session_id = s.id) AS answered
+                FROM sessions s WHERE s.cert_id = ? AND s.finished_at IS NULL AND s.mode IN ({marks})
+                ORDER BY s.started_at DESC, s.rowid DESC LIMIT ?""", (cert_id, *modes, limit)).fetchall()
+    out = []
+    for r in rows:
+        s = dict(r)
+        s["sections"] = json.loads(s["sections"])
+        s["question_ids"] = json.loads(s["question_ids"])
+        out.append(s)
+    return out
+
+
 def finish_session(session_id: str) -> None:
     with connect() as c:
         c.execute("UPDATE sessions SET finished_at = ? WHERE id = ? AND finished_at IS NULL", (now_iso(), session_id))

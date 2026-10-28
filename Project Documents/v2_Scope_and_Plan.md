@@ -1,6 +1,6 @@
 # Kevin's Super Cert Prep 3000: v2 Scope and Plan
 
-**Status:** draft for the user's sign-off (2026-10-27).
+**Status:** complete. Signed off 2026-10-27; all phases landed by 2026-10-28 and tagged `v2` (see section 15).
 **Baseline:** git tag `v1` (commit 5de21fe) and `C:\Claude\CCST Snapshots\CCST_v1_snapshot_2026-10-27.zip`. v1 is the CCST-only app; this document supersedes `CCST_Project_Scope_and_Plan.md` wherever they differ. The v1 plan stays as the record of how the CCST pool was built.
 
 ---
@@ -232,6 +232,7 @@ Each phase ends with the tests passing, a commit, and a short note in this docum
 | P8 | Certification wizard, exam-facts and objective-builder prompts, first-start dialog | A second certification can be set up end to end through the UI only |
 | P9 | Certification pack export and import; help page, glossary, and in-app guidance; usability pass | A CCST pack round-trips; SR-5 tests pass |
 | P10 | Optional: ordering and matching question formats | Only if a target certification needs them |
+| P11 | Finish v2 (added 2026-10-28): resume unfinished sessions (8.1), a check of the real app on the real data, docs, `v2` tag | Resume tested; real data unchanged by the check; tests pass |
 
 ## 14. Open points and risks
 
@@ -570,3 +571,26 @@ Each phase ends with the tests passing, a commit, and a short note in this docum
     - a focus session and report;
     - prompts asking for the formats only when the exam uses them;
     - the formats travelling in packs.
+- **P11 done (2026-10-28):** finish v2 (phase added at the user's request: the plan ended at P10).
+  - **Resume unfinished sessions (8.1, the last open plan item):** home shows "Continue where you left off" with the newest 5 unfinished practice, focus or exam sessions: mode, sections, answered count, start time, and whether an exam's time ran out.
+    - **Continue** reopens at the first unanswered question. Feedback already given comes back (practice, focus), and so do reports still held (exam). An exam's clock keeps running from its start, so one whose time ran out goes straight to its results.
+    - **Finish now** closes it and shows the results so far.
+    - The 11 sessions left open in the retired v1 modes (Diagnostic, Targeted drill) stay as history and aren't offered.
+    - `GET /api/sessions/{id}` now includes `revealed` and `held`, and the new route is `/api/certs/{cert}/sessions/open`. The "Leave this session?" prompt now says the session can be picked up again. Help explains resuming.
+  - **Real app on the real data:** started with `run.ps1 -NoBrowser`, the same path as the desktop shortcut. A safety backup was made with "Back up now" (18 sessions, 318 answers); after it the check was read-only:
+    - no first-start dialog and no resume note (only v1 sessions are open);
+    - Progress: 78 average, 212 of 459 practised, 9 charts, 44 suggestions, 459 tracker rows;
+    - question-bank health: 13 of 13 sections covered, all five bands OK;
+    - Help: 12 topics;
+    - Focus matched names and IDs and reported an unknown line;
+    - the pack downloaded (327 KB);
+    - the Claude workspace showed 0 gaps and 41 weak objectives;
+    - a request for another host name and a token-less change were both refused (403).
+    Answers stayed at 318 and the pool files were unchanged.
+  - **Docs:** a `README.md` for people (install, run, features, data, development); `CLAUDE.md` gains the resume notes, the line-ending note (pool JSON, imports and `app.js` are CRLF; Git Bash `sed -i` converts them, which happened to `app.js` once and was put back), and the v2 status; this plan's status set to complete.
+  - **Tests:** 304 pytest pass (6 new in `test_resume.py`): current-mode open sessions newest first, v1 and finished ones left out, the limit of 5, feedback restored for practice, exams kept secret with held reports restored, time ran out, unknown certification.
+  - **Verified in the browser** (scratch copy):
+    - practice resumed at question 2, with question 1's feedback kept;
+    - an exam resumed with its held report and running clock;
+    - "Finish now" opened the results with the report to decide;
+    - no console errors.

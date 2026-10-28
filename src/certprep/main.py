@@ -273,6 +273,19 @@ class SessionRequest(BaseModel):
 PRACTICE_COUNT = 10
 
 
+@app.get("/api/certs/{cert_id}/sessions/open")
+def open_sessions(cert_id: CertIdPath):
+    """Unfinished practice, focus and exam sessions to pick up again (v2 plan 8.1)."""
+    cert = _cert_or_404(cert_id)
+    out = []
+    for s in tracker.open_sessions(cert.id):
+        left = _time_left(s)
+        out.append({"id": s["id"], "mode": s["mode"], "sections": s["sections"], "started_at": s["started_at"],
+                    "questions": len(s["question_ids"]), "answered": s["answered"],
+                    "time_up": left is not None and left <= 0})
+    return out
+
+
 @app.post("/api/certs/{cert_id}/sessions", status_code=201)
 def create_session(cert_id: CertIdPath, req: SessionRequest):
     cert = _cert_or_404(cert_id)
@@ -309,12 +322,16 @@ def _session_view(s: dict) -> dict:
     for qid, a in attempts.items():
         answers[qid] = {"selected": a["selected"], "confidence": a["confidence"], "flagged": bool(a["flagged"]),
                         **({} if deferred else {"correct": bool(a["correct"])})}
+    # What a resumed session needs: the feedback already given (practice, focus), and reports still held (exam).
+    revealed = {} if deferred else {qid: {"correct": bool(a["correct"]), "question": sessions.question_full(qs[qid])}
+                                    for qid, a in attempts.items() if qid in qs}
+    held = {qid: True for qid, h in tracker.held_disputes(s["id"]).items() if h["decision"] is None} if deferred else {}
     return {
         "id": s["id"], "cert_id": s["cert_id"], "mode": s["mode"], "sections": s["sections"],
         "started_at": s["started_at"], "finished_at": s["finished_at"], "time_limit_s": s["time_limit_s"],
         "deferred": s["mode"] in sessions.DEFERRED_FEEDBACK,
         "questions": [sessions.question_public(qs[qid]) for qid in s["question_ids"] if qid in qs],
-        "answers": answers,
+        "answers": answers, "revealed": revealed, "held": held,
     }
 
 

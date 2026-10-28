@@ -117,6 +117,7 @@ async function loadHome() {
   }
   sections = await api(certPath("/sections"));
   updatePackLink();
+  await renderResumeNote();
   const withQuestions = sections.filter((s) => s.served > 0);
   const saved = new Set(store.get(sectionsKey(), withQuestions.slice(0, 1).map((s) => s.code)));
   const empty = sections.filter((s) => s.served === 0);
@@ -174,6 +175,44 @@ async function startSession(mode, objectives = null) {
   } catch (e) {
     msg.textContent = e.message;
   }
+}
+
+// ---- picking up an unfinished session (v2 plan 8.1) -----------------------------
+
+async function renderResumeNote() {
+  const open = await api(certPath("/sessions/open"));
+  const note = $("resume-note");
+  note.hidden = open.length === 0;
+  const fail = (e) => { $("home-msg").textContent = e.message; };
+  note.replaceChildren(el("strong", null, "Continue where you left off"), ...open.map((o) => {
+    const go = el("button", "small", o.time_up ? "See results" : "Continue");
+    go.type = "button";
+    go.addEventListener("click", () => resumeSession(o.id).catch(fail));
+    const where = o.sections.length > 3 ? plural(o.sections.length, "section") : o.sections.join(", ");
+    const p = el("p", "row");
+    p.append(el("span", null, `${MODE_LABEL[o.mode] ?? o.mode} · ${where} · ${o.answered} of ${plural(o.questions, "question")} ` +
+      `answered · started ${when(o.started_at)}${o.time_up ? " · time ran out" : ""}`), go);
+    if (!o.time_up) {
+      const done = el("button", "secondary small", "Finish now");
+      done.type = "button";
+      done.title = "Close it and see the results so far";
+      done.addEventListener("click", () => resumeSession(o.id, true).catch(fail));
+      p.append(done);
+    }
+    return p;
+  }));
+}
+
+// Back into a session at its first unanswered question, with earlier feedback and held exam reports restored.
+async function resumeSession(id, finishNow = false) {
+  const s = await api(`/api/sessions/${encodeURIComponent(id)}`);
+  const first = s.questions.findIndex((q) => !s.answers[q.id]);
+  S = { ...s, i: first < 0 ? s.questions.length - 1 : first, revealed: s.revealed ?? {}, shown: {}, notes: {},
+    held: s.held ?? {}, recall: $("recall-first").checked && s.mode !== "exam" };
+  show("session");
+  renderQuestion();
+  startTimer();  // an exam whose time ran out while away finishes at once
+  if (finishNow) await finishSession();
 }
 
 function startTimer() {
@@ -1918,7 +1957,7 @@ document.addEventListener("keydown", (e) => {
 $("disputes-btn").addEventListener("click", () => openDisputes().catch((e) => { $("home-msg").textContent = e.message; }));
 $("focus-btn").addEventListener("click", () => openFocus().catch((e) => { $("home-msg").textContent = e.message; }));
 $("add-cert").addEventListener("click", () => {
-  if (S && !confirm("Leave this session?")) return;
+  if (S && !confirm("Leave this session? You can pick it up again from the home page.")) return;
   clearInterval(timerHandle);
   S = null;
   openWizard().catch((e) => { $("home-msg").textContent = e.message; });
@@ -1966,7 +2005,7 @@ $("build-questions").addEventListener("click", () => buildPrompt("questions"));
 $("build-study").addEventListener("click", () => buildPrompt("study"));
 $("import-file").addEventListener("change", loadImportFile);
 $("import-btn").addEventListener("click", runImport);
-$("home-link").addEventListener("click", (e) => { e.preventDefault(); if (!S || confirm("Leave this session?")) { clearInterval(timerHandle); S = null; loadHome(); } });
+$("home-link").addEventListener("click", (e) => { e.preventDefault(); if (!S || confirm("Leave this session? You can pick it up again from the home page.")) { clearInterval(timerHandle); S = null; loadHome(); } });
 for (const b of document.querySelectorAll(".back-btn")) b.addEventListener("click", loadHome);
 
 loadHome().then(maybeWelcome).catch((e) => { $("home-msg").textContent = e.message; });
