@@ -464,6 +464,13 @@ def decide_held_dispute(session_id: str, question_id: str, decision: str) -> boo
     return cur.rowcount == 1
 
 
+def answer_counts() -> dict[str, int]:
+    """Answers recorded per certification (the first-start dialog shows only when there are none)."""
+    with connect() as c:
+        rows = c.execute("SELECT cert_id, COUNT(*) AS n FROM attempts GROUP BY cert_id").fetchall()
+    return {r["cert_id"]: r["n"] for r in rows}
+
+
 def session_modes(cert_id: str) -> dict[str, str]:
     with connect() as c:
         rows = c.execute("SELECT id, mode FROM sessions WHERE cert_id = ?", (cert_id,)).fetchall()

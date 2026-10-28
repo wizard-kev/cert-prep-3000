@@ -16,7 +16,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, StrictBool, StrictInt, field_validator
 
-from . import certs, focus, history, importer, pool, prompts, security, sessions, tracker
+from . import certs, focus, history, importer, pool, prompts, security, sessions, tracker, wizard
 from .config import APP_NAME
 from .objectives import UnknownObjective, load_section, load_sections, objective_names
 from .schema import SERVED_STATUSES, STATUSES
@@ -92,8 +92,10 @@ def index():
 
 @app.get("/api/certs")
 def list_certs():
+    answers = tracker.answer_counts()
     return [{"id": c.id, "name": c.name, "short_name": c.short_name, "vendor": c.vendor,
-             "exam_code": c.exam_code, "sections": len(c.sections)} for c in certs.list_certs()]
+             "exam_code": c.exam_code, "sections": len(c.sections), "answers": answers.get(c.id, 0)}
+            for c in certs.list_certs()]
 
 
 @app.get("/api/certs/{cert_id}")
@@ -498,6 +500,125 @@ class ResetRequest(BaseModel):
 def reset(cert_id: CertIdPath, req: ResetRequest):
     cert = _cert_or_404(cert_id)
     tracker.reset(cert.id)
+    return {"ok": True}
+
+
+# ---- certification wizard (v2 plan 3.3) --------------------------------------
+
+DraftIdPath = Annotated[str, PathParam(pattern=certs.CERT_ID)]
+
+
+def _draft_or_404(draft_id: str) -> dict:
+    try:
+        return wizard.get(draft_id)
+    except KeyError:
+        raise HTTPException(404, "no certification set-up by that id") from None
+
+
+def _wizard_call(fn):
+    try:
+        return fn()
+    except wizard.WizardError as e:
+        raise HTTPException(422, str(e)) from None
+
+
+class DraftRequest(BaseModel):
+    name: Annotated[str, Field(min_length=1, max_length=200)]
+    short_name: Annotated[str, Field(max_length=60)] = ""
+    vendor: Annotated[str, Field(max_length=100)] = ""
+    exam_code: Annotated[str, Field(max_length=40)] = ""
+
+
+class ReplyRequest(BaseModel):
+    text: Annotated[str, Field(min_length=1, max_length=importer.MAX_TEXT_CHARS)]
+
+
+class OfficialListRequest(BaseModel):
+    text: Annotated[str, Field(min_length=1, max_length=wizard.MAX_OFFICIAL_LIST)]
+
+
+class FactEdit(BaseModel):
+    value: StrictInt | float | Annotated[str, Field(max_length=40)] | None = None
+    confidence: Literal[wizard.CONFIDENCES]  # type: ignore[valid-type]
+
+
+class FactsEditRequest(BaseModel):
+    minutes: FactEdit | None = None
+    question_count: FactEdit | None = None
+    passing_score: FactEdit | None = None
+    weights: dict[Annotated[str, Field(pattern=r"^[A-Za-z0-9.]{1,10}$")], Annotated[float, Field(gt=0, le=1000)]] | None = None
+
+
+class DiscardRequest(BaseModel):
+    confirm: Literal["DISCARD"]
+
+
+@app.get("/api/wizard")
+def list_drafts():
+    return [{k: d.get(k) for k in ("id", "name", "short_name", "step", "installed", "updated")} for d in wizard.list_drafts()]
+
+
+@app.post("/api/wizard", status_code=201)
+def create_draft(req: DraftRequest):
+    return _wizard_call(lambda: wizard.create(req.name, req.short_name, req.vendor, req.exam_code))
+
+
+@app.get("/api/wizard/{draft_id}")
+def get_draft(draft_id: DraftIdPath):
+    return _draft_or_404(draft_id)
+
+
+@app.get("/api/wizard/{draft_id}/prompts/facts")
+def facts_prompt(draft_id: DraftIdPath):
+    _draft_or_404(draft_id)
+    return {"prompt": wizard.facts_prompt(draft_id)}
+
+
+@app.post("/api/wizard/{draft_id}/facts")
+def import_facts(draft_id: DraftIdPath, req: ReplyRequest):
+    _draft_or_404(draft_id)
+    return _wizard_call(lambda: wizard.import_facts(draft_id, req.text))
+
+
+@app.post("/api/wizard/{draft_id}/facts/edit")
+def edit_facts(draft_id: DraftIdPath, req: FactsEditRequest):
+    _draft_or_404(draft_id)
+    return _wizard_call(lambda: wizard.edit_facts(draft_id, req.model_dump(exclude_none=True)))
+
+
+@app.post("/api/wizard/{draft_id}/prompts/objectives")
+def objectives_prompt(draft_id: DraftIdPath, req: OfficialListRequest):
+    """A POST: the pasted official list goes into the prompt (on purpose, v2 plan 5.1) and is kept in the draft."""
+    _draft_or_404(draft_id)
+    return {"prompt": _wizard_call(lambda: wizard.objectives_prompt(draft_id, req.text))}
+
+
+@app.post("/api/wizard/{draft_id}/objectives")
+def import_objectives(draft_id: DraftIdPath, req: ReplyRequest):
+    _draft_or_404(draft_id)
+    return _wizard_call(lambda: wizard.import_objectives(draft_id, req.text))
+
+
+@app.post("/api/wizard/{draft_id}/install")
+def install_cert(draft_id: DraftIdPath):
+    _draft_or_404(draft_id)
+    return {"cert": _wizard_call(lambda: wizard.install(draft_id))}
+
+
+@app.post("/api/wizard/{draft_id}/finish")
+def finish_draft(draft_id: DraftIdPath):
+    """Done with the wizard: the draft goes; an installed certification stays."""
+    d = _draft_or_404(draft_id)
+    if not d.get("installed"):
+        raise HTTPException(409, "install the certification first, or discard this set-up")
+    wizard.finish(draft_id)
+    return {"cert": draft_id}
+
+
+@app.post("/api/wizard/{draft_id}/discard")
+def discard_draft(draft_id: DraftIdPath, req: DiscardRequest):
+    _draft_or_404(draft_id)
+    wizard.finish(draft_id)
     return {"ok": True}
 
 

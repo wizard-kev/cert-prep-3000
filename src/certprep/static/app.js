@@ -107,9 +107,11 @@ async function loadCert() {
 // ---- home ---------------------------------------------------------------
 
 async function loadHome() {
+  drafts = await api("/api/wizard");
+  renderDraftNote();
   if (!(await loadCert())) {
     $("section-list").replaceChildren();
-    $("section-empty").textContent = "No certifications are installed yet.";
+    $("section-empty").textContent = "No certifications are installed yet. Use \"Add a certification\" at the top to set one up.";
     show("home");
     return;
   }
@@ -129,7 +131,7 @@ async function loadHome() {
     const text = el("span");
     const checked = s.passive + s.validated;
     text.append(el("span", null, s.name),
-      el("small", null, `${s.served} questions · ${checked} answered or validated · ${s.unreviewed} unreviewed`));
+      el("small", null, `${plural(s.served, "question")} · ${checked} answered or validated · ${s.unreviewed} unreviewed`));
     label.append(box, text);
     return label;
   }));
@@ -888,14 +890,45 @@ async function buildPrompt(kind, { harder = false } = {}) {
   } catch (e) { $("claude-msg").textContent = e.message; }
 }
 
-function loadImportFile() {
-  const file = $("import-file").files[0];
+// What an import did: questions added, questions rejected with their problems and a repair prompt.
+function importResultParts(r) {
+  const parts = [];
+  if (r.accepted.length) {
+    parts.push(el("p", "ok-list", `Added ${r.accepted.length === 1 ? "1 question" : `${r.accepted.length} questions`} as Unreviewed: ` +
+      r.accepted.map((a) => `${a.id} (${a.objective})`).join(", ")));
+  }
+  if (r.rejected.length) {
+    parts.push(el("p", "msg", `${r.rejected.length} question${r.rejected.length === 1 ? " was" : "s were"} not added:`));
+    for (const x of r.rejected) {
+      const item = el("div", "item");
+      item.append(el("strong", null, `Question ${x.index + 1}${x.objective ? ` (${x.objective})` : ""}`));
+      if (x.stem) item.append(el("p", "muted", x.stem));
+      const ul = el("ul", "problems");
+      for (const p of x.problems) ul.append(el("li", null, p));
+      item.append(ul);
+      parts.push(item);
+    }
+    parts.push(promptWidget("Repair prompt", r.repair_prompt,
+      "Paste it into the same Claude chat, then import the corrected questions here."));
+  }
+  for (const w of r.warnings) parts.push(el("p", "muted", w));
+  parts.push(el("p", "muted", `Saved a copy of this reply as ${r.archive}.`));
+  return parts;
+}
+
+// Fill a textarea from a chosen .json/.txt file (read in the browser; nothing is uploaded).
+function readFileInto(input, area, msg) {
+  const file = input.files[0];
   if (!file) return;
-  if (file.size > MAX_IMPORT_CHARS) { $("claude-msg").textContent = "That file is too large to import."; $("import-file").value = ""; return; }
+  if (file.size > MAX_IMPORT_CHARS) { msg.textContent = "That file is too large to import."; input.value = ""; return; }
   const reader = new FileReader();
-  reader.onload = () => { $("import-text").value = String(reader.result); };
-  reader.onerror = () => { $("claude-msg").textContent = "Couldn't read that file."; };
+  reader.onload = () => { area.value = String(reader.result); };
+  reader.onerror = () => { msg.textContent = "Couldn't read that file."; };
   reader.readAsText(file);
+}
+
+function loadImportFile() {
+  readFileInto($("import-file"), $("import-text"), $("claude-msg"));
 }
 
 async function runImport() {
@@ -906,28 +939,7 @@ async function runImport() {
   $("import-btn").disabled = true;
   try {
     const r = await post(certPath("/imports"), { text });
-    const parts = [];
-    if (r.accepted.length) {
-      parts.push(el("p", "ok-list", `Added ${r.accepted.length === 1 ? "1 question" : `${r.accepted.length} questions`} as Unreviewed: ` +
-        r.accepted.map((a) => `${a.id} (${a.objective})`).join(", ")));
-    }
-    if (r.rejected.length) {
-      parts.push(el("p", "msg", `${r.rejected.length} question${r.rejected.length === 1 ? " was" : "s were"} not added:`));
-      for (const x of r.rejected) {
-        const item = el("div", "item");
-        item.append(el("strong", null, `Question ${x.index + 1}${x.objective ? ` (${x.objective})` : ""}`));
-        if (x.stem) item.append(el("p", "muted", x.stem));
-        const ul = el("ul", "problems");
-        for (const p of x.problems) ul.append(el("li", null, p));
-        item.append(ul);
-        parts.push(item);
-      }
-      parts.push(promptWidget("Repair prompt", r.repair_prompt,
-        "Paste it into the same Claude chat, then import the corrected questions here."));
-    }
-    for (const w of r.warnings) parts.push(el("p", "muted", w));
-    parts.push(el("p", "muted", `Saved a copy of this reply as ${r.archive}.`));
-    out.replaceChildren(...parts);
+    out.replaceChildren(...importResultParts(r));
     if (r.accepted.length) $("import-text").value = "";
     $("import-file").value = "";
     await openClaude();
@@ -1145,6 +1157,378 @@ function renderTracker(rows) {
       r.dominant_error ?? "", r.revisit_due ? "due" : ""]));
 }
 
+// ---- certification wizard (v2 plan 3.3) and first start (plan 4) ------------
+
+const W_STEPS = [["name", "Name"], ["facts", "Exam facts"], ["objectives", "Objectives"], ["questions", "First questions"]];
+const W_ORDER = W_STEPS.map(([k]) => k);
+const FACT_ROWS = [["minutes", "Time limit (minutes)"], ["question_count", "Number of questions"], ["passing_score", "Passing score"]];
+// The draft being set up. W.step is how far it has got (server); W.view is the step on screen.
+let W = null;
+let drafts = [];
+const wizPath = (rest = "") => `/api/wizard/${encodeURIComponent(W.id)}${rest}`;
+const rowOf = (...kids) => { const r = el("div", "row"); r.append(...kids); return r; };
+
+async function openWizard(draftId = null) {
+  W = draftId ? await api(`/api/wizard/${encodeURIComponent(draftId)}`) : null;
+  if (W) W.view = W.step;
+  $("w-msg").textContent = "";
+  show("wizard");
+  await renderWizard();
+}
+
+async function renderWizard() {
+  const view = W ? W.view : "name";
+  const reached = W ? W_ORDER.indexOf(W.step) : 0;
+  $("w-steps").replaceChildren(...W_STEPS.map(([key, label], i) => {
+    const li = el("li", key === view ? "current" : i < reached ? "done" : "");
+    // Earlier steps can be revisited until the certification is installed (then its objectives are fixed).
+    const open = W && !W.installed && i >= 1 && i <= reached && key !== view;
+    const item = el(open ? "button" : "span", null, label);
+    if (open) {
+      item.type = "button";
+      item.addEventListener("click", () => { W.view = key; $("w-msg").textContent = ""; renderWizard(); });
+    }
+    if (key === view) item.setAttribute("aria-current", "step");
+    li.append(item);
+    return li;
+  }));
+  $("w-discard").hidden = !W || W.installed;
+  $("w-h").textContent = W ? `Set up ${W.short_name}` : "Set up a certification";
+  const body = $("w-body");
+  body.replaceChildren();
+  await { name: wizardName, facts: wizardFacts, objectives: wizardObjectives, questions: wizardQuestions }[view](body);
+}
+
+function wizStep(title, ...children) {
+  const s = el("div", "wiz-step");
+  s.append(el("h3", null, title), ...children);
+  return s;
+}
+
+// A button that builds a prompt and shows it, ready to copy.
+function promptStep(label, getPrompt, hint) {
+  const out = el("div");
+  const b = el("button", null, label);
+  b.type = "button";
+  b.addEventListener("click", async () => {
+    b.disabled = true;
+    $("w-msg").textContent = "";
+    try { out.replaceChildren(promptWidget(label.replace(/^Build the /, "The "), await getPrompt(), hint)); }
+    catch (e) { $("w-msg").textContent = e.message; }
+    finally { b.disabled = false; }
+  });
+  const box = el("div");
+  box.append(rowOf(b), out);
+  return box;
+}
+
+// Paste Claude's reply (or choose its file) and send it with onSubmit(text, outputArea, textarea).
+function replyBox(label, button, onSubmit) {
+  const area = el("textarea");
+  area.rows = 6;
+  area.placeholder = "Paste Claude's whole reply here";
+  area.setAttribute("aria-label", label);
+  const file = el("input");
+  file.type = "file";
+  file.accept = ".json,.txt,application/json,text/plain";
+  file.setAttribute("aria-label", `${label}: choose a file instead`);
+  file.addEventListener("change", () => readFileInto(file, area, $("w-msg")));
+  const go = el("button", null, button);
+  go.type = "button";
+  const out = el("div");
+  out.setAttribute("aria-live", "polite");
+  go.addEventListener("click", async () => {
+    $("w-msg").textContent = "";
+    if (!area.value.trim()) { $("w-msg").textContent = "Paste Claude's reply first."; return; }
+    if (area.value.length > MAX_IMPORT_CHARS) { $("w-msg").textContent = "That reply is too long to import at once."; return; }
+    go.disabled = true;
+    try { await onSubmit(area.value, out, area); }
+    catch (e) { out.replaceChildren(el("p", "msg", e.message)); }
+    finally { go.disabled = false; }
+  });
+  const box = el("div");
+  box.append(area, rowOf(el("span", "muted", "or choose the file Claude gave you:"), file), rowOf(go), out);
+  return box;
+}
+
+function problemParts(r) {
+  const ul = el("ul", "problems");
+  for (const p of r.problems) ul.append(el("li", null, p));
+  return [el("p", "msg", "Claude's reply has problems, so nothing was saved:"), ul,
+    promptWidget("Repair prompt", r.repair_prompt, "Paste it into the same Claude chat, then paste Claude's corrected reply here.")];
+}
+
+function wizardName(body) {
+  const grid = el("div", "form-grid");
+  const inputs = {};
+  for (const [key, label, max, hint] of [["name", "Certification name", 200, "e.g. CompTIA Security+"],
+    ["short_name", "Short name (optional)", 60, "shown in the top bar"], ["vendor", "Vendor (optional)", 100, "e.g. CompTIA"],
+    ["exam_code", "Exam code (optional)", 40, "e.g. SY0-701"]]) {
+    const input = el("input");
+    input.type = "text";
+    input.id = `w-${key}`;
+    input.maxLength = max;
+    input.placeholder = hint;
+    const lab = el("label", null, label);
+    lab.htmlFor = input.id;
+    inputs[key] = input;
+    grid.append(lab, input);
+  }
+  const go = el("button", null, "Save and continue");
+  go.type = "button";
+  go.addEventListener("click", async () => {
+    $("w-msg").textContent = "";
+    if (!inputs.name.value.trim()) { $("w-msg").textContent = "Give the certification a name."; inputs.name.focus(); return; }
+    go.disabled = true;
+    try {
+      W = await post("/api/wizard", Object.fromEntries(Object.entries(inputs).map(([k, i]) => [k, i.value])));
+      W.view = "facts";
+      await renderWizard();
+    } catch (e) { $("w-msg").textContent = e.message; go.disabled = false; }
+  });
+  body.append(wizStep("1. Name the certification",
+    el("p", "muted", "Use the name the vendor uses. Claude checks it and fills in the official details in the next step."),
+    grid, rowOf(go)));
+  inputs.name.focus();
+}
+
+function wizardFacts(body) {
+  const ask = wizStep("2a. Ask Claude for the exam facts",
+    el("p", "muted", "Claude gathers the official facts: time limit, number of questions, passing score, question formats, " +
+      "and the exam's domains with their weights. It says how sure it is of each one, so nothing is guessed silently. " +
+      "A chat where Claude can search the web works best."),
+    promptStep("Build the exam-facts prompt", async () => (await api(wizPath("/prompts/facts"))).prompt,
+      "Paste it into a new chat at claude.ai, then paste Claude's reply below."));
+  const reply = wizStep("2b. Paste Claude's reply", replyBox("Claude's exam-facts reply", "Check Claude's reply", async (text, out) => {
+    const r = await post(wizPath("/facts"), { text });
+    if (!r.ok) { out.replaceChildren(...problemParts(r)); return; }
+    W = { ...r.draft, view: "facts" };
+    await renderWizard();
+  }));
+  if (!W.facts) { body.append(ask, reply); return; }
+  const redo = el("details");
+  redo.append(el("summary", null, "Ask Claude again"), ask, reply);
+  body.append(factsPreview(), redo);
+}
+
+function factsPreview() {
+  const f = W.facts;
+  const inputs = {};
+  const factRows = FACT_ROWS.map(([key, label]) => {
+    const fact = f.exam[key];
+    const value = el("input");
+    value.type = "text";
+    value.value = fact.value ?? "";
+    value.setAttribute("aria-label", `${label}: value`);
+    const sure = el("select");
+    for (const c of ["official", "estimate", "unknown"]) { const o = el("option", null, c); o.value = c; sure.append(o); }
+    sure.value = fact.confidence;
+    sure.setAttribute("aria-label", `${label}: how sure`);
+    inputs[key] = [value, sure];
+    return [label, value, sure, fact.note || ""];
+  });
+  const facts = el("table", "wiz-table");
+  table(facts, ["Fact", "Value", "How sure", "Where it comes from"], factRows);
+  const weights = {};
+  const domains = el("table", "wiz-table");
+  table(domains, ["Domain", "Name", "Weight"], f.domains.map((d) => {
+    const w = el("input");
+    w.type = "number";
+    w.min = "0.1";
+    w.step = "any";
+    w.value = String(d.weight);
+    w.setAttribute("aria-label", `Weight of ${d.id}`);
+    weights[d.id] = w;
+    return [d.id, d.name, w];
+  }));
+  const sources = el("ul");
+  for (const s of f.sources) {
+    const a = el("a", null, s.title);
+    a.href = s.url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    const li = el("li");
+    li.append(a, el("small", "muted", ` ${s.url}`));
+    sources.append(li);
+  }
+  const formats = f.exam.question_formats.map((x) => `${x.format}${x.served ? "" : " (this app can't serve it)"}`).join(", ");
+  const go = el("button", null, "Save and continue");
+  go.type = "button";
+  go.addEventListener("click", async () => {
+    $("w-msg").textContent = "";
+    const edits = {};
+    for (const [key, label] of FACT_ROWS) {
+      const [value, sure] = inputs[key];
+      const raw = value.value.trim();
+      const n = Number(raw);
+      if (key !== "passing_score" && raw && !Number.isInteger(n)) { $("w-msg").textContent = `${label} must be a whole number (or empty).`; value.focus(); return; }
+      edits[key] = { value: raw === "" ? null : Number.isFinite(n) ? n : raw, confidence: sure.value };
+    }
+    edits.weights = Object.fromEntries(Object.entries(weights).map(([id, w]) => [id, Number(w.value)]));
+    go.disabled = true;
+    try {
+      W = { ...(await post(wizPath("/facts/edit"), edits)), view: "objectives" };
+      await renderWizard();
+    } catch (e) { $("w-msg").textContent = e.message; go.disabled = false; }
+  });
+  const wrap = (t) => { const d = el("div", "table-wrap"); d.append(t); return d; };
+  return wizStep(`Exam facts for ${W.name}`,
+    el("p", "muted", "Check these against the vendor's pages, and correct anything that's off. \"How sure\" matters: " +
+      "the exam simulation only shows pass or fail when the passing score is a known percentage."),
+    wrap(facts), el("p", null, `Question formats: ${formats || "not given"}.`),
+    el("h3", null, `Domains (weights: ${f.weights.confidence}${f.weights.note ? `, ${f.weights.note}` : ""})`), wrap(domains),
+    el("h3", null, "Sources"), f.sources.length ? sources : el("p", "muted", "None given."), rowOf(go));
+}
+
+function wizardObjectives(body) {
+  const list = el("textarea");
+  list.rows = 8;
+  list.maxLength = 30000;
+  list.value = W.official_list || "";
+  list.placeholder = "Paste the vendor's official exam objectives here (exam topics, blueprint or syllabus), all of it";
+  list.setAttribute("aria-label", "The official objective list");
+  const build = wizStep("3a. Paste the official objective list",
+    el("p", "muted", "Copy the vendor's published exam objectives (often called exam topics, blueprint or syllabus) and " +
+      "paste them here. The app puts them in a prompt; Claude turns them into objectives, one testable idea each, " +
+      "each with the fact that tells it apart from look-alikes."),
+    list, promptStep("Build the objective-builder prompt", async () => (await post(wizPath("/prompts/objectives"), { text: list.value })).prompt,
+      "Paste it into a chat at claude.ai (the one you used for the exam facts is fine), then paste Claude's reply below."));
+  const reply = wizStep("3b. Paste Claude's reply", replyBox("Claude's objectives reply", "Check Claude's reply", async (text, out) => {
+    const r = await post(wizPath("/objectives"), { text });
+    if (!r.ok) { out.replaceChildren(...problemParts(r)); return; }
+    W = { ...r.draft, view: "objectives" };
+    await renderWizard();
+  }));
+  if (!W.sections) { body.append(build, reply); return; }
+  const redo = el("details");
+  redo.append(el("summary", null, "Ask Claude again"), build, reply);
+  body.append(objectivesPreview(), redo);
+}
+
+function objectivesPreview() {
+  const total = W.sections.reduce((n, s) => n + s.objectives.length, 0);
+  const domainName = Object.fromEntries((W.facts?.domains ?? []).map((d) => [d.id, d.name]));
+  const box = wizStep(`Objectives: ${plural(total, "objective")} in ${plural(W.sections.length, "section")}`,
+    el("p", "muted", "Open each section to check it. If something's off, ask Claude to fix it in the same chat and paste " +
+      "the new reply below. Objective IDs can't change once the certification is created."));
+  for (const s of W.sections) {
+    const d = el("details");
+    d.append(el("summary", null, `${s.code} ${s.name} · ${plural(s.objectives.length, "objective")}` +
+      (s.domain ? ` · domain ${s.domain} ${domainName[s.domain] ?? ""}` : "")));
+    const t = el("table");
+    table(t, ["ID", "Objective", "Tells it apart", "Ref"], s.objectives.map((o) => [o.id, o.objective, o.discriminator, o.ref]));
+    const wrap = el("div", "table-wrap");
+    wrap.append(t);
+    d.append(wrap);
+    box.append(d);
+  }
+  const go = el("button", null, "Create the certification");
+  go.type = "button";
+  go.addEventListener("click", async () => {
+    $("w-msg").textContent = "";
+    go.disabled = true;
+    try {
+      await post(wizPath("/install"));
+      W = { ...(await api(wizPath())), view: "questions" };
+      certs = [];
+      await renderWizard();
+    } catch (e) { $("w-msg").textContent = e.message; go.disabled = false; }
+  });
+  box.append(rowOf(go));
+  return box;
+}
+
+async function wizardQuestions(body) {
+  const certUrl = `/api/certs/${encodeURIComponent(W.id)}`;
+  const rows = await api(`${certUrl}/objectives`);
+  const covered = rows.filter((o) => o.questions >= 2).length;
+  const bar = el("progress");
+  bar.max = Math.max(1, rows.length);
+  bar.value = covered;
+  bar.setAttribute("aria-label", "Objectives with at least two questions");
+  const zero = rows.filter((o) => o.questions === 0);
+  const batch = zero.length ? { list: zero.slice(0, 15), per: 2 } : { list: rows.filter((o) => o.questions === 1).slice(0, 30), per: 1 };
+  const parts = [bar, el("p", null, `${covered} of ${plural(rows.length, "objective")} have at least two questions.`)];
+  if (batch.list.length) {
+    const first = batch.list[0].id;
+    const last = batch.list[batch.list.length - 1].id;
+    const query = batch.list.map((o) => `objective=${encodeURIComponent(o.id)}`).join("&");
+    parts.push(el("p", "muted", `Next batch: ${plural(batch.list.length, "objective")} (${first}${first === last ? "" : ` to ${last}`}), ` +
+      `${plural(batch.list.length * batch.per, "question")}.`),
+    promptStep("Build the next question prompt", async () => (await api(`${certUrl}/prompts/questions?${query}&per_objective=${batch.per}`)).prompt,
+      "Paste it into a new chat at claude.ai, then paste Claude's reply below."));
+  } else {
+    parts.push(el("p", "ok-list", "Every objective has at least two questions."));
+  }
+  body.append(wizStep("4. Write the first questions",
+    el("p", "muted", "The app asks Claude for questions in batches until every objective has at least two. You can stop " +
+      "whenever you like and carry on later, here or in the Claude workspace."), ...parts));
+  if (W.lastImport) body.append(wizStep("Last import", ...W.lastImport));
+  body.append(wizStep("Paste Claude's questions", replyBox("Claude's questions reply", "Import", async (text) => {
+    W.lastImport = importResultParts(await post(`${certUrl}/imports`, { text }));
+    await renderWizard();
+  })));
+  const done = el("button", null, covered === rows.length ? "Finish and start studying" : "Finish for now and start studying");
+  done.type = "button";
+  done.addEventListener("click", finishWizard);
+  body.append(rowOf(done));
+}
+
+async function finishWizard() {
+  try {
+    await post(wizPath("/finish"));
+    const name = W.short_name;
+    store.set("certprep.cert", W.id);
+    store.set("certprep.welcomed", true);
+    W = null;
+    certs = [];
+    await loadHome();
+    const note = $("draft-note");
+    note.replaceChildren(el("p", "ok-list", `${name} is ready. Choose its sections below and start practising.`));
+    note.hidden = false;
+  } catch (e) { $("w-msg").textContent = e.message; }
+}
+
+async function discardWizard() {
+  if (!W || !confirm(`Discard the set-up of ${W.name}? Nothing has been installed yet, so this removes the work done in the wizard.`)) return;
+  try {
+    await post(wizPath("/discard"), { confirm: "DISCARD" });
+    W = null;
+    await loadHome();
+  } catch (e) { $("w-msg").textContent = e.message; }
+}
+
+function renderDraftNote() {
+  const note = $("draft-note");
+  note.hidden = drafts.length === 0;
+  note.replaceChildren(...drafts.map((d) => {
+    const b = el("button", "id-link", `Continue setting up ${d.name}`);
+    b.type = "button";
+    b.addEventListener("click", () => openWizard(d.id).catch((e) => { $("home-msg").textContent = e.message; }));
+    const step = d.installed ? "installed; first questions next" : `next: ${W_STEPS.find(([k]) => k === d.step)?.[1] ?? d.step}`;
+    const p = el("p");
+    p.append(b, el("span", "muted", ` · ${step}`));
+    return p;
+  }));
+}
+
+// First start (plan 4): ask which certification, unless the learner has already begun somewhere.
+function maybeWelcome() {
+  if (store.get("certprep.welcomed", false) || drafts.length || certs.some((c) => c.answers > 0)) return;
+  $("welcome-choices").replaceChildren(...certs.map((c) => {
+    const b = el("button", null, c.short_name);
+    b.type = "button";
+    b.append(el("small", null, `${c.name}: ready to use`));
+    b.addEventListener("click", () => {
+      store.set("certprep.cert", c.id);
+      $("welcome").close();
+      loadHome();
+    });
+    return b;
+  }));
+  $("welcome").showModal();
+}
+
 // ---- progress backups ------------------------------------------------------
 
 const BACKUP_KIND = { manual: "Made by you", "before-restore": "Before a restore", upgrade: "Before an app upgrade", reset: "Before a reset" };
@@ -1305,6 +1689,18 @@ document.addEventListener("keydown", (e) => {
 });
 $("disputes-btn").addEventListener("click", () => openDisputes().catch((e) => { $("home-msg").textContent = e.message; }));
 $("focus-btn").addEventListener("click", () => openFocus().catch((e) => { $("home-msg").textContent = e.message; }));
+$("add-cert").addEventListener("click", () => {
+  if (S && !confirm("Leave this session?")) return;
+  clearInterval(timerHandle);
+  S = null;
+  openWizard().catch((e) => { $("home-msg").textContent = e.message; });
+});
+$("w-discard").addEventListener("click", discardWizard);
+$("welcome-other").addEventListener("click", () => {
+  $("welcome").close();
+  openWizard().catch((e) => { $("home-msg").textContent = e.message; });
+});
+$("welcome").addEventListener("close", () => store.set("certprep.welcomed", true));  // any way out counts as answered
 $("f-text").addEventListener("input", updateFocusCount);
 $("f-text").addEventListener("keydown", (e) => { if (e.key === "Enter" && e.ctrlKey) { e.preventDefault(); runFocusMatch(); } });
 $("f-match").addEventListener("click", runFocusMatch);
@@ -1334,4 +1730,4 @@ $("import-btn").addEventListener("click", runImport);
 $("home-link").addEventListener("click", (e) => { e.preventDefault(); if (!S || confirm("Leave this session?")) { clearInterval(timerHandle); S = null; loadHome(); } });
 for (const b of document.querySelectorAll(".back-btn")) b.addEventListener("click", loadHome);
 
-loadHome();
+loadHome().then(maybeWelcome).catch((e) => { $("home-msg").textContent = e.message; });

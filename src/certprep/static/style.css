@@ -150,6 +150,30 @@ th, td { text-align: left; padding: .3rem .4rem; border-bottom: 1px solid var(--
 .conf-badge.low { color: var(--warn-fg); border-color: var(--warn-fg); }
 .start-box { position: sticky; bottom: 0; background: var(--card); border-top: 1px solid var(--line); padding: .4rem 0; margin-top: .5rem; }
 
+/* first-start dialog and wizard */
+dialog { max-width: min(36rem, calc(100vw - 32px)); border: 1px solid var(--line); border-radius: 10px;
+  background: var(--card); color: var(--fg); padding: 1.2rem; }
+dialog::backdrop { background: rgba(0, 0, 0, .5); }
+.welcome-choices { display: grid; gap: .5rem; margin: .8rem 0; }
+.welcome-choices button { text-align: left; }
+.welcome-choices small { display: block; opacity: .85; }
+.draft-note { border: 1px dashed var(--accent); border-radius: 8px; padding: .5rem .7rem; margin-bottom: .8rem; }
+.stepper { display: flex; flex-wrap: wrap; gap: .3rem; list-style: none; padding: 0; margin: .3rem 0 .6rem; counter-reset: step; }
+.stepper li { counter-increment: step; }
+.stepper li > * { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: .2rem .7rem; font-size: .9rem;
+  background: transparent; color: var(--muted); }
+.stepper li > *::before { content: counter(step) ". "; }
+.stepper li.done > * { color: var(--fg); border-color: var(--ok); }
+.stepper li.current > * { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+.stepper button { cursor: pointer; }
+.wiz-step { border: 1px solid var(--line); border-radius: 8px; padding: .7rem; margin: .6rem 0; }
+.wiz-step h3 { margin-top: 0; }
+.form-grid { display: grid; grid-template-columns: minmax(8rem, max-content) minmax(0, 1fr); gap: .4rem .7rem; align-items: center; }
+.form-grid input, .wiz-step input[type=text] { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: .35rem .5rem; width: 100%; }
+.wiz-table input, .wiz-table select { width: 100%; min-width: 4.5rem; }
+progress { width: 100%; height: 1rem; accent-color: var(--accent); }
+@media (max-width: 600px) { .form-grid { grid-template-columns: minmax(0, 1fr); } }
+
 /* charts (charts.js): series color on marks only; text stays in text colors */
 .chart { position: relative; margin: .3rem 0 .2rem; }
 .chart svg { display: block; overflow: visible; }

@@ -14,6 +14,9 @@ data/*.db
 data/*.db.migrating
 data/backups/
 data/certs/*/questions/*.tmp
+# Certification set-ups still in the wizard, and any half-written install
+data/drafts/
+data/certs/.installing-*
 
 # Installer output
 install/install.log

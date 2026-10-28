@@ -14,12 +14,21 @@
     <label for="cert-select" class="muted">Studying</label>
     <select id="cert-select" hidden></select>
     <span id="cert-name" class="badge"></span>
+    <button type="button" id="add-cert" class="secondary small">Add a certification</button>
   </div>
 </header>
+
+<dialog id="welcome" aria-labelledby="welcome-h">
+  <h2 id="welcome-h">Which certification are you studying?</h2>
+  <p class="muted">Pick one to start. You can add others later with "Add a certification" at the top of the page.</p>
+  <div id="welcome-choices" class="welcome-choices"></div>
+  <button type="button" id="welcome-other" class="secondary">Something else: set it up step by step</button>
+</dialog>
 
 <main>
   <!-- Home -->
   <section id="v-home" class="view" aria-labelledby="home-h">
+    <div id="draft-note" class="draft-note" hidden></div>
     <h2 id="home-h">Sections</h2>
     <p class="muted">Pick the parts of the exam to practice. Each section has its own list of objectives.</p>
     <div id="section-list" class="section-list" role="group" aria-label="Sections"></div>
@@ -293,6 +302,21 @@
       with them. Keep the ones that still make you think; report the ones you can answer without engaging.</p>
     <div id="p-easy"></div>
     <button type="button" class="back-btn">Back to home</button>
+  </section>
+
+  <!-- Certification wizard -->
+  <section id="v-wizard" class="view" hidden aria-labelledby="w-h">
+    <h2 id="w-h">Set up a certification</h2>
+    <ol id="w-steps" class="stepper" aria-label="Steps"></ol>
+    <p class="muted">Claude does the heavy lifting: the app writes each prompt, you paste it into a chat at
+      claude.ai, then paste Claude's reply back here. You can leave at any step; "Continue setting up" on the home
+      page brings you back.</p>
+    <div id="w-body"></div>
+    <p id="w-msg" class="msg" aria-live="polite"></p>
+    <div class="row">
+      <button type="button" class="back-btn secondary">Back to home</button>
+      <button type="button" id="w-discard" class="secondary danger small" hidden>Discard this set-up</button>
+    </div>
   </section>
 
   <!-- Backups -->
