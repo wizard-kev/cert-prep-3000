@@ -510,3 +510,29 @@ Each phase ends with the tests passing, a commit, and a short note in this docum
     - finish and discard;
     - refusals (unfinished, id taken);
     - the token.
+- **P9 done (2026-10-27):** certification packs, help page, glossary and in-app guidance, question-bank health page, usability pass.
+  - **Packs (`packs.py`):**
+    - **Export:** a zip with `manifest.json` (format, version, certification, created, file list with SHA-256 and size), `cert.json`, objective files and served questions; retired questions on request.
+    - **What doesn't travel:** answered-by-me status goes back to Unreviewed, first-seen times are dropped, and disputed questions stay behind, so a pack carries no progress.
+    - **Import:** the zip is checked completely in memory, then written as a new certification through a shared `certs.install` (hidden folder renamed into place), which the wizard now uses too. Nothing is overwritten: an existing id is refused and a free one suggested (`ccst-cyber-2`), plus "(copy)" on a short name already in use.
+    - **The import checks (SR-5):** at most 20 MB and 2,000 entries; names only `manifest.json`, `cert.json`, `objectives/<CODE>.md`, `questions/<CODE>.json` (so no absolute paths, `..`, backslash tricks, folders or other files); no links, encryption or duplicates; per-file size caps; compression ratio at most 100:1; at most 100 MB unpacked; manifest hashes and sizes; strict UTF-8; `cert.json` against the registry's model; objective rows with clean, capped cells; questions against the schema, in the right file, with known objectives and no disputes.
+    - **Upload route:** `/api/packs/import` is the one POST that takes `application/zip` (20 MB). The origin and token checks now run before the size and type checks, so an unauthenticated change always gets 403.
+  - **Question-bank health page:** coverage per section (at least two questions from two angles per objective, with a "build a prompt" button for the gaps) and the five answer-pattern bands with measured share, allowed range and status, plus the option-role and difficulty mix. `audit.coverage`/`audit.bands` now back both the CLI and the page.
+  - **Help:** a Help page (top bar) covering:
+    - getting started and the study modes;
+    - answering (confidence, keyboard, recall first);
+    - glossaries of question statuses and objective levels;
+    - session scores and the objective score formula;
+    - working with Claude, Focus, certifications and packs, question-bank health, progress and backups, privacy.
+    "?" buttons by the Study, Question pool, confidence, Focus, Claude workspace, Progress, health and Backups headings open it at the matching topic, and Back returns to the same screen, mid-session included.
+  - **First-start dialog:** gains "Import a certification pack". The wizard's first step offers "Import a certification pack instead".
+  - **Usability pass:** the top bar wraps on phones (with two certifications it pushed the page to 465px), and "1 questions" is fixed.
+  - **Round trip on a copy of the real data, through the UI:** downloaded the CCST pack from home (327 KB) and imported it from the wizard's pack link. The summary showed 13 sections, 459 objectives and 918 questions, with the suggested id `ccst-cyber-2` and short name "CCST Cybersecurity (copy)". The import selected the copy: the same questions per section, all Unreviewed, no answers. The health page matched the CLI audit (13 of 13 sections covered, all bands OK). Help opened at each topic; at 375px nothing overflows; no console errors.
+  - **Tests:** 275 pytest pass, 32 new in `test_packs.py`. They cover:
+    - a CCST round trip (cert.json and objective files identical, questions identical apart from the stripped learner fields, retired and disputed left out, the copy is studyable with no progress);
+    - retired questions on request;
+    - never overwriting (taken ids, bad ids);
+    - the upload route (token, content types both ways, size limits);
+    - **SR-5:** 11 bad names, a link, an encrypted entry, a duplicate, a 1000:1 zip bomb, an oversized file, 2,100 entries, non-zips, the manifest format, version and extra fields, a tampered file, a missing file, and 11 per-file validation failures; nothing is written in any refused case;
+    - 60 randomly corrupted packs (one of which found an uncaught `zlib.error`, now handled);
+    - the health endpoint.

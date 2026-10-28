@@ -11,12 +11,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Annotated, Literal
 
-from fastapi import FastAPI, HTTPException, Path as PathParam, Query
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi import FastAPI, HTTPException, Path as PathParam, Query, Request
+from fastapi.responses import FileResponse, HTMLResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, StrictBool, StrictInt, field_validator
 
-from . import certs, focus, history, importer, pool, prompts, security, sessions, tracker, wizard
+from . import audit, certs, focus, history, importer, packs, pool, prompts, security, sessions, tracker, wizard
 from .config import APP_NAME
 from .objectives import UnknownObjective, load_section, load_sections, objective_names
 from .schema import SERVED_STATUSES, STATUSES
@@ -501,6 +501,49 @@ def reset(cert_id: CertIdPath, req: ResetRequest):
     cert = _cert_or_404(cert_id)
     tracker.reset(cert.id)
     return {"ok": True}
+
+
+# ---- question-bank health (v2 plan 5.2) and certification packs (section 9, SR-5) ----
+
+@app.get("/api/certs/{cert_id}/health")
+def pool_health(cert_id: CertIdPath):
+    """Coverage per section and the surface-cue bands: the CLI's coverage and audit, in the app."""
+    cert = _cert_or_404(cert_id)
+    codes = [s.code for s in load_sections(cert.id)]
+    r = audit.audit(cert.id, codes)
+    return {"minimum": 2, "sections": audit.coverage(cert.id, codes, 2), "audit": r, "bands": audit.bands(r)}
+
+
+@app.get("/api/certs/{cert_id}/pack")
+def export_pack(cert_id: CertIdPath, retired: bool = False):
+    cert = _cert_or_404(cert_id)
+    body = packs.export_pack(cert.id, include_retired=retired)
+    name = f"{cert.id}-pack-{datetime.now(timezone.utc).date().isoformat()}.zip"
+    return Response(body, media_type="application/zip", headers={"Content-Disposition": f'attachment; filename="{name}"'})
+
+
+@app.post(security.PACK_UPLOAD_PATH)
+async def import_pack(request: Request, check: bool = True,
+                      id: Annotated[str | None, Query(pattern=certs.CERT_ID)] = None,
+                      short_name: Annotated[str | None, Query(max_length=60)] = None):
+    """The body is the pack itself (application/zip, at most 20 MB: the middleware checks both). With
+    check=true nothing is written: the pack is validated and summarised. Then the learner chooses the id."""
+    data = await request.body()
+    try:
+        pack = packs.check_pack(data)
+        if check:
+            taken = {c.short_name for c in certs.list_certs()}
+            short = pack.cert.short_name
+            return {"pack": pack.summary(), "suggested_id": packs.suggest_id(pack.cert.id),
+                    "suggested_short_name": short if short not in taken else f"{short[:53]} (copy)"}
+        if id is None:
+            raise HTTPException(422, "choose an id for the new certification")
+        name = security.clean_text(short_name, 60) if short_name else None
+        return {"cert": packs.install_pack(pack, id, name)}
+    except packs.PackError as e:
+        raise HTTPException(422, str(e)) from None
+    except ValueError:
+        raise HTTPException(422, "That short name isn't valid.") from None
 
 
 # ---- certification wizard (v2 plan 3.3) --------------------------------------

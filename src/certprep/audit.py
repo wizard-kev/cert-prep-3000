@@ -56,6 +56,27 @@ def audit(cert_id: str, sections: list[str]) -> dict:
     }
 
 
+def coverage(cert_id: str, sections: list[str], minimum: int = 2) -> list[dict]:
+    """Per section: does every objective have at least `minimum` active questions on two or more angles,
+    and does every question point at an objective in the file?"""
+    out = []
+    for code in sections:
+        objs = list(load_section(cert_id, code).objectives)
+        active = pool.active(cert_id, [code])
+        prim = Counter(q.objectives[0] for q in active)
+        angles: dict[str, set] = {}
+        for q in active:
+            angles.setdefault(q.objectives[0], set()).add(q.angle)
+        short = [o for o in objs if prim[o] < minimum]
+        one_angle = [o for o in objs if prim[o] >= 2 and len(angles.get(o, ())) < 2]
+        stray = sorted(set(prim) - set(objs))
+        out.append({"code": code, "objectives": len(objs), "active": len(active),
+                    "fewest": min((prim[o] for o in objs), default=0), "most": max((prim[o] for o in objs), default=0),
+                    "below_minimum": short, "single_angle": one_angle, "unknown_ids": stray,
+                    "ok": bool(active) and not short and not one_angle and not stray})
+    return out
+
+
 def _pct(n: int, d: int) -> str:
     return f"{n} ({n / d:.0%})" if d else "0"
 
@@ -71,16 +92,19 @@ BANDS = {
 }
 
 
-def cue_failures(r: dict) -> list[str]:
+def bands(r: dict) -> list[dict]:
+    """Each pool-level band: the share measured, the allowed range, and whether it is inside."""
     out = []
     for key, (lo, hi) in BANDS.items():
         denom = r["multi"] if key.startswith("multi") else r["single"]
-        if not denom:
-            continue
-        share = r[key] / denom
-        if not lo <= share <= hi:
-            out.append(f"{key} {share:.0%} outside {lo:.0%}-{hi:.0%}")
+        share = r[key] / denom if denom else None
+        out.append({"key": key, "count": r[key], "of": denom, "share": share, "low": lo, "high": hi,
+                    "ok": share is None or lo <= share <= hi})
     return out
+
+
+def cue_failures(r: dict) -> list[str]:
+    return [f"{b['key']} {b['share']:.0%} outside {b['low']:.0%}-{b['high']:.0%}" for b in bands(r) if not b["ok"]]
 
 
 def print_audit(cert_id: str, sections: list[str]) -> bool:

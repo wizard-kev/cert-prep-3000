@@ -15,6 +15,7 @@
     <select id="cert-select" hidden></select>
     <span id="cert-name" class="badge"></span>
     <button type="button" id="add-cert" class="secondary small">Add a certification</button>
+    <button type="button" id="help-btn" class="secondary small">Help</button>
   </div>
 </header>
 
@@ -22,7 +23,10 @@
   <h2 id="welcome-h">Which certification are you studying?</h2>
   <p class="muted">Pick one to start. You can add others later with "Add a certification" at the top of the page.</p>
   <div id="welcome-choices" class="welcome-choices"></div>
-  <button type="button" id="welcome-other" class="secondary">Something else: set it up step by step</button>
+  <div class="row">
+    <button type="button" id="welcome-other" class="secondary">Something else: set it up step by step</button>
+    <button type="button" id="welcome-pack" class="secondary">Import a certification pack</button>
+  </div>
 </dialog>
 
 <main>
@@ -38,7 +42,7 @@
       <button type="button" class="secondary small" id="sel-none">Clear</button>
     </div>
 
-    <h2>Study</h2>
+    <h2>Study <button type="button" class="help-link" data-help="modes" aria-label="Help: study modes">?</button></h2>
     <div class="modes">
       <div class="mode">
         <h3>Practice</h3>
@@ -66,7 +70,7 @@
       <span>Recall first: hide the options until I've worked out my answer <small class="muted">(practice and focus)</small></span></label>
     <p id="home-msg" class="msg" aria-live="polite"></p>
 
-    <h2>Question pool</h2>
+    <h2>Question pool <button type="button" class="help-link" data-help="statuses" aria-label="Help: question statuses">?</button></h2>
     <details class="explain">
       <summary>How questions are checked</summary>
       <p class="muted">New questions are <strong>Unreviewed</strong>: they passed the app's quality checks. Once you answer
@@ -77,6 +81,17 @@
     <div class="row" id="dispute-row" hidden>
       <button type="button" class="secondary" id="disputes-btn">Disputed questions waiting for you (<span id="dispute-count">0</span>)</button>
     </div>
+    <div class="row">
+      <button type="button" class="secondary" id="health-btn">Question bank health</button>
+    </div>
+    <details class="explain">
+      <summary>Export this certification as a pack</summary>
+      <p class="muted">A pack is a .zip holding the certification's exam facts, objectives and questions: a copy for
+        safekeeping or for another computer. Your progress isn't included. Packs built from a copyrighted study
+        guide's content (the CCST objectives are) are for your own use: don't share them publicly.</p>
+      <label class="recall-pref"><input type="checkbox" id="pack-retired"> <span>Include retired questions</span></label>
+      <div class="row"><a id="pack-link" class="button-link" href="#" download>Download the pack</a></div>
+    </details>
 
     <h2>Work with Claude</h2>
     <p class="muted">Get new questions, or a guided study session, from Claude in a web chat. The app writes the
@@ -124,7 +139,7 @@
         <div id="s-options"></div>
       </fieldset>
       <fieldset class="confidence" id="s-conf">
-        <legend>How sure are you?</legend>
+        <legend>How sure are you? <button type="button" class="help-link" data-help="answering" aria-label="Help: answering and confidence">?</button></legend>
         <div class="conf-scale">
           <label><input type="radio" name="conf" value="1"><span><b>1</b> Guessing</span></label>
           <label><input type="radio" name="conf" value="2"><span><b>2</b> Unsure</span></label>
@@ -165,7 +180,7 @@
 
   <!-- Focus: pasted objective list -->
   <section id="v-focus" class="view" hidden aria-labelledby="f-h">
-    <h2 id="f-h">Focus on chosen objectives</h2>
+    <h2 id="f-h">Focus on chosen objectives <button type="button" class="help-link" data-help="focus" aria-label="Help: Focus">?</button></h2>
     <ol class="steps">
       <li>Paste your list, one objective per line (up to 60 lines). Numbers, bullets and objective IDs are fine.</li>
       <li>Check the matches. Untick any that are wrong, or add a better one.</li>
@@ -202,7 +217,7 @@
 
   <!-- Work with Claude: prompts and imports -->
   <section id="v-claude" class="view" hidden aria-labelledby="c-h">
-    <h2 id="c-h">Work with Claude</h2>
+    <h2 id="c-h">Work with Claude <button type="button" class="help-link" data-help="claude" aria-label="Help: working with Claude">?</button></h2>
     <ol class="steps">
       <li>Choose the objectives you want questions on, or want to study.</li>
       <li>Build a prompt and copy it.</li>
@@ -249,7 +264,7 @@
 
   <!-- Progress -->
   <section id="v-progress" class="view" hidden aria-labelledby="p-h">
-    <h2 id="p-h">Progress</h2>
+    <h2 id="p-h">Progress <button type="button" class="help-link" data-help="scores" aria-label="Help: scores and levels">?</button></h2>
     <div id="p-tiles" class="tiles"></div>
     <details class="explain">
       <summary>How the objective score works</summary>
@@ -319,9 +334,170 @@
     </div>
   </section>
 
+  <!-- Question-bank health -->
+  <section id="v-health" class="view" hidden aria-labelledby="h-h">
+    <h2 id="h-h">Question bank health <button type="button" class="help-link" data-help="health" aria-label="Help: question bank health">?</button></h2>
+    <p class="muted">Two checks on the questions you study from. <strong>Coverage:</strong> every objective should have
+      at least two questions, approaching it from two different angles. <strong>Answer patterns:</strong> across the
+      pool, the right answer shouldn't give itself away (by being the longest option, say), or you'd learn the habit
+      instead of the material.</p>
+    <h3>Coverage</h3>
+    <p id="h-summary"></p>
+    <div class="table-wrap"><table id="h-sections"></table></div>
+    <div id="h-gaps"></div>
+    <h3>Answer patterns</h3>
+    <p class="muted">Measured on the active questions. Each share should sit inside its range.</p>
+    <div class="table-wrap"><table id="h-bands"></table></div>
+    <p id="h-mix" class="muted"></p>
+    <button type="button" class="back-btn">Back to home</button>
+  </section>
+
+  <!-- Import a certification pack -->
+  <section id="v-pack" class="view" hidden aria-labelledby="pk-h">
+    <h2 id="pk-h">Import a certification pack</h2>
+    <p class="muted">A pack is a .zip exported from this app (on this computer or another): a certification's exam facts,
+      objectives and questions, without anyone's progress. It's checked completely before anything is saved. Only import
+      packs from people you trust: their objective text ends up in the prompts you give Claude.</p>
+    <div class="row">
+      <label for="pk-file">Pack file</label>
+      <input type="file" id="pk-file" accept=".zip,application/zip">
+    </div>
+    <p id="pk-msg" class="msg" aria-live="polite"></p>
+    <div id="pk-result" hidden>
+      <div class="table-wrap"><table id="pk-table"></table></div>
+      <div class="form-grid">
+        <label for="pk-id">Folder name (id)</label>
+        <input type="text" id="pk-id" maxlength="32" spellcheck="false">
+        <label for="pk-short">Short name</label>
+        <input type="text" id="pk-short" maxlength="60">
+      </div>
+      <p class="muted">The pack becomes a new certification; nothing you already have is changed or overwritten.</p>
+      <div class="row"><button type="button" id="pk-import">Import this certification</button></div>
+    </div>
+    <button type="button" class="back-btn secondary">Back to home</button>
+  </section>
+
+  <!-- Help -->
+  <section id="v-help" class="view help" hidden aria-labelledby="help-h">
+    <h2 id="help-h">Help</h2>
+    <nav class="help-toc" aria-label="Help topics">
+      <a href="#help-start">Getting started</a> · <a href="#help-modes">Study modes</a> · <a href="#help-answering">Answering</a> ·
+      <a href="#help-statuses">Question statuses</a> · <a href="#help-levels">Objective levels</a> · <a href="#help-scores">Scores</a> ·
+      <a href="#help-claude">Working with Claude</a> · <a href="#help-focus">Focus</a> · <a href="#help-certs">Certifications</a> ·
+      <a href="#help-health">Question bank health</a> · <a href="#help-backups">Progress and backups</a> · <a href="#help-privacy">Privacy</a>
+    </nav>
+
+    <h3 id="help-start">Getting started</h3>
+    <ol>
+      <li>Pick the certification you're studying (top of the page). CCST Cybersecurity comes ready to use; set up others
+        with <strong>Add a certification</strong>.</li>
+      <li>Tick the sections to study, then start <strong>Practice</strong>. Answer, rate how sure you were, and read the
+        feedback.</li>
+      <li>Come back regularly. Practice brings back what you missed, and <strong>View progress</strong> shows how each
+        objective is going and suggests where new questions would help.</li>
+    </ol>
+
+    <h3 id="help-modes">Study modes</h3>
+    <dl>
+      <dt>Practice</dt><dd>Feedback after every answer. Leans toward your weak objectives, brings back questions you
+        missed (after 1, 3, then 7 days), and keeps introducing objectives you haven't tried.</dd>
+      <dt>Focus</dt><dd>Paste a list of objectives; the app matches it to the certification's objectives and asks
+        questions on those only. See <a href="#help-focus">Focus</a>.</dd>
+      <dt>Exam simulation</dt><dd>Timed, sized and weighted like the real exam (from the certification's exam facts),
+        with no feedback until the end. Prefers questions you haven't seen. Mark questions to come back to; reports are
+        held until the results page.</dd>
+    </dl>
+
+    <h3 id="help-answering">Answering</h3>
+    <p>After choosing, rate <strong>how sure you are</strong>: 1 Guessing, 2 Unsure, 3 Leaning, 4 Confident, 5 Certain.
+      There's no default, because honest ratings are what make progress tracking work: a right answer at 1 counts as a
+      lucky guess, and a wrong answer at 4 or 5 keeps the objective Weak.</p>
+    <p><strong>Keyboard:</strong> letters A to F choose options, 1 to 5 set how sure you are, Enter submits or moves on.
+      <strong>Recall first</strong> (home page) hides the options until you've worked out an answer, which makes you
+      retrieve the idea rather than recognise it.</p>
+    <p>After an answer: <strong>Looks right</strong> marks the question Validated; <strong>Report a problem</strong> (or
+      <strong>Disagree with this answer?</strong> after a miss) takes it out of play; <strong>Ask Claude about this</strong>
+      builds a prompt that explains it.</p>
+
+    <h3 id="help-statuses">Question statuses</h3>
+    <dl>
+      <dt>Unreviewed</dt><dd>Passed the app's import checks; nobody has answered it yet.</dd>
+      <dt>Passively-Validated</dt><dd>You've answered it and didn't report a problem.</dd>
+      <dt>Validated</dt><dd>You marked it <strong>Looks right</strong>.</dd>
+      <dt>Disputed</dt><dd>You reported it. It's out of play until you confirm the report (it's retired) or undo it, on the
+        results page or under <strong>Disputed questions</strong> on home.</dd>
+      <dt>Retired</dt><dd>Taken out for good: a confirmed report, or replaced by a better question. Answers to reported
+        questions stop counting toward your progress; answers to replaced ones still count.</dd>
+    </dl>
+
+    <h3 id="help-levels">Objective levels</h3>
+    <dl>
+      <dt>New</dt><dd>Not practised yet.</dd>
+      <dt>Weak</dt><dd>Fewer than 60% of the last five answers right, or a recent wrong answer while Confident or Certain.</dd>
+      <dt>Improving</dt><dd>Getting there, but not yet Solid.</dd>
+      <dt>Solid</dt><dd>At least three right answers (not guesses) across two or more sessions and two or more angles, with
+        the last five at 80% or better. Solid objectives come back for a check after 3, 7, then 14 days.</dd>
+    </dl>
+
+    <h3 id="help-scores">Scores</h3>
+    <p><strong>Session scores.</strong> Results show your score on all questions, on validated questions only (questions
+      you'd answered or marked Looks right before the session), and on questions new to you versus repeats. Reported
+      questions are left out. In an exam, unanswered questions count as wrong. Pass or fail is shown only when the
+      certification publishes its passing score as a percentage.</p>
+    <p><strong>Objective score (0 to 100).</strong> Each answer scores by whether it was right and how sure you were: right
+      is 50 at Guessing rising to 100 at Certain; wrong is 25 at Guessing falling to 0 at Certain. An objective's score
+      averages its answers, with each older answer counting three quarters as much as the next, so recent answers matter
+      most.</p>
+
+    <h3 id="help-claude">Working with Claude</h3>
+    <p>The app runs no AI itself. Instead it writes prompts for you to paste into a chat at claude.ai, and imports what
+      Claude sends back. Prompts carry the objectives, the rules the import enforces, and (when it helps) the wrong options
+      you tend to pick, so new questions target your actual mix-ups.</p>
+    <ul>
+      <li><strong>Question prompt:</strong> choose objectives in the Claude workspace (or use a suggestion on the Progress
+        page), build the prompt, paste it into Claude, then paste Claude's reply under Import.</li>
+      <li><strong>Repair prompt:</strong> if some questions fail the checks, the app lists why and gives a prompt asking
+        Claude to fix just those.</li>
+      <li><strong>Study-session prompt:</strong> a tutoring conversation on the objectives you choose, using your progress.</li>
+      <li><strong>Ask Claude about this:</strong> an explanation of one question, including your answer.</li>
+    </ul>
+
+    <h3 id="help-focus">Focus</h3>
+    <p>Paste up to 60 lines: objective names, topics, IDs such as C01-09, or lines copied from an official exam guide
+      ("1.2 Explain common threats: malware, ransomware, DoS"). Each line is matched to the certification's objectives;
+      topic lists are matched topic by topic. The preview shows every match with how sure the match is. Weak matches start
+      unticked, and you can add any objective by searching. Lines that match nothing are reported as not in the
+      objective list; objectives with no questions offer a prompt to write some.</p>
+
+    <h3 id="help-certs">Certifications</h3>
+    <p><strong>Add a certification</strong> walks you through four steps: name it; ask Claude for the official exam facts
+      (time, number of questions, passing score, domains and weights, each marked official, estimate or unknown);
+      paste the vendor's objective list so Claude turns it into objectives; then build the first questions in batches. You
+      can stop at any step and continue later from home.</p>
+    <p><strong>Packs</strong> move a certification between computers or keep a copy: export one from the home page
+      (Question pool), import one with <strong>Add a certification</strong>. A pack never includes progress, and importing
+      never overwrites anything.</p>
+
+    <h3 id="help-health">Question bank health</h3>
+    <p>Shows whether every objective has at least two questions from two angles, and whether the right answers give
+      themselves away across the pool (for example by usually being the longest option). Gaps come with a button that
+      builds the prompt to fill them.</p>
+
+    <h3 id="help-backups">Progress and backups</h3>
+    <p>Your sessions and answers are saved on this computer and survive restarts and updates. The app backs them up
+      before every upgrade, reset and restore; <strong>Backups</strong> on home lets you make one yourself, restore one, or
+      download a copy.</p>
+
+    <h3 id="help-privacy">Privacy</h3>
+    <p>Everything stays on this computer. The app makes no network connections, holds no passwords or API keys, and only
+      answers requests from this computer. Prompts go to Claude only when you copy and paste them yourself.</p>
+
+    <button type="button" id="help-back" class="secondary">Back</button>
+  </section>
+
   <!-- Backups -->
   <section id="v-backups" class="view" hidden aria-labelledby="b-h">
-    <h2 id="b-h">Progress backups</h2>
+    <h2 id="b-h">Progress backups <button type="button" class="help-link" data-help="backups" aria-label="Help: progress and backups">?</button></h2>
     <p class="muted">Backups hold your sessions and answers for every certification. The app makes one before every
       upgrade, reset and restore, and keeps the newest 10 of each kind in the <strong>data\backups</strong> folder.</p>
     <div class="row">

@@ -4,13 +4,13 @@ python -m certprep.cli import --section C01 --file data\\certs\\ccst-cyber\\impo
 --cert defaults to the only installed certification; give it when there are several."""
 
 import argparse
-import collections
 import json
 from pathlib import Path
 
 from pydantic import ValidationError
 
 from . import certs, pool
+from .audit import coverage
 from .generator import Target, check, content_words, import_items, parse_items, repair
 from .objectives import load_section
 from .schema import GeneratedQuestion
@@ -20,24 +20,15 @@ def coverage_report(cert_id: str, sections: list[str], minimum: int) -> bool:
     """Check each objective in the objective files has >= minimum active questions on
     >= 2 distinct angles, and that no question points at an ID missing from the file."""
     all_ok = True
-    for code in sections:
-        objs = list(load_section(cert_id, code).objectives)
-        active = pool.active(cert_id, [code])
-        if not active:
-            print(f"{code}: no questions yet")
+    for r in coverage(cert_id, sections, minimum):
+        if not r["active"]:
+            print(f"{r['code']}: no questions yet")
             continue
-        prim = collections.Counter(q.objectives[0] for q in active)
-        angles = collections.defaultdict(set)
-        for q in active:
-            angles[q.objectives[0]].add(q.angle)
-        short = [o for o in objs if prim[o] < minimum]
-        one_angle = [o for o in objs if prim[o] >= 2 and len(angles[o]) < 2]
-        stray = sorted(set(prim) - set(objs))
-        ok = not short and not one_angle and not stray
-        all_ok &= ok
-        print(f"{code}: {len(objs)} objectives, {len(active)} active | per objective "
-              f"{min(prim[o] for o in objs)}-{max(prim[o] for o in objs)} | below {minimum}: {short or 'none'} | "
-              f"single angle: {one_angle or 'none'} | unknown IDs: {stray or 'none'} -> {'PASS' if ok else 'FAIL'}")
+        all_ok &= r["ok"]
+        print(f"{r['code']}: {r['objectives']} objectives, {r['active']} active | per objective "
+              f"{r['fewest']}-{r['most']} | below {minimum}: {r['below_minimum'] or 'none'} | "
+              f"single angle: {r['single_angle'] or 'none'} | unknown IDs: {r['unknown_ids'] or 'none'} -> "
+              f"{'PASS' if r['ok'] else 'FAIL'}")
     return all_ok
 
 

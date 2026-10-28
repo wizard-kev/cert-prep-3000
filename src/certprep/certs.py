@@ -5,7 +5,10 @@ against a pattern and must exist in the registry read from disk, so nothing the 
 is ever used to build a file path (v2 SR-3)."""
 
 import json
+import os
 import re
+import secrets
+import shutil
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
@@ -174,6 +177,42 @@ def section_of(question_id: str) -> str:
     if not m:
         raise ValueError(f"not a question id: {question_id!r}")
     return m.group(1)
+
+
+_RELATIVE = re.compile(r"^(cert\.json|objectives/[A-Z]{1,3}\d{2}\.md|questions/[A-Z]{1,3}\d{2}\.json)$")
+
+
+def install(cert_id: str, files: dict[str, str]) -> Path:
+    """Create a certification folder from {relative path: text} in one step: written under a hidden
+    name, then renamed into place, so a half-written certification never appears. Paths must be
+    cert.json, objectives/<CODE>.md or questions/<CODE>.json."""
+    if not isinstance(cert_id, str) or not _CERT_ID.match(cert_id):
+        raise ValueError(f"not a certification id: {cert_id!r}")
+    if cert_id in cert_ids() or (settings.certs_dir / cert_id).exists():
+        raise FileExistsError(cert_id)
+    bad = [p for p in files if not _RELATIVE.match(p)]
+    if bad:
+        raise ValueError(f"unexpected paths: {bad}")
+    root = settings.certs_dir
+    tmp = root / f".installing-{cert_id}-{secrets.token_hex(4)}"
+    final = root / cert_id
+    try:
+        for sub in ("objectives", "questions", "imports"):
+            (tmp / sub).mkdir(parents=True)
+        for rel, text in files.items():
+            (tmp / rel).write_text(text, encoding="utf-8")
+        os.rename(tmp, final)
+    finally:
+        if tmp.exists():
+            shutil.rmtree(tmp)
+    reload()
+    return final
+
+
+def remove(cert_id: str) -> None:
+    """Delete an installed certification folder (used to undo an install that didn't read back)."""
+    shutil.rmtree(cert_dir(cert_id))
+    reload()
 
 
 def reload() -> None:

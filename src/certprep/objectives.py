@@ -38,12 +38,10 @@ def objectives_path(cert_id: str, code: str) -> Path:
     return certs.cert_dir(cert_id) / "objectives" / f"{cert.section(code).code}.md"
 
 
-@lru_cache(maxsize=None)
-def load_section(cert_id: str, code: str) -> Section:
-    info = certs.get_cert(cert_id).section(code)
-    path = objectives_path(cert_id, code)
-    text = path.read_text(encoding="utf-8")
-    row = re.compile(rf"^\|\s*({re.escape(info.code)}-\d{{2}})\s*\|(.+)\|\s*$")
+def parse_objectives(text: str, code: str) -> dict[str, Objective]:
+    """The objective rows of one section's file: `| ID | Objective | Core idea | Discriminator | Ref? |`
+    under `## group` headings. `code` must already be a checked section code."""
+    row = re.compile(rf"^\|\s*({re.escape(code)}-\d{{2}})\s*\|(.+)\|\s*$")
     objectives: dict[str, Objective] = {}
     group = ""
     for line in text.splitlines():
@@ -56,6 +54,15 @@ def load_section(cert_id: str, code: str) -> Section:
         cells = [c.strip() for c in m.group(2).split("|")]
         cells += [""] * (4 - len(cells))
         objectives[m.group(1)] = Objective(m.group(1), group, cells[0], cells[1], cells[2], cells[3])
+    return objectives
+
+
+@lru_cache(maxsize=None)
+def load_section(cert_id: str, code: str) -> Section:
+    info = certs.get_cert(cert_id).section(code)
+    path = objectives_path(cert_id, code)
+    text = path.read_text(encoding="utf-8")
+    objectives = parse_objectives(text, info.code)
     if not objectives:
         raise ValueError(f"no objectives parsed from {path.name}")
     return Section(cert_id, info.code, info.name, info.domain, text, objectives)

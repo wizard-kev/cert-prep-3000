@@ -10,8 +10,6 @@ text never becomes part of a path (SR-3)."""
 import json
 import os
 import re
-import secrets
-import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -542,25 +540,16 @@ def install(draft_id: str) -> str:
         cert = certs.Cert.model_validate(_cert_json(d))
     except ValidationError as e:
         raise WizardError(f"The certification doesn't validate: {e.errors()[0]['msg']}") from None
-    root = settings.certs_dir
-    tmp = root / f".installing-{d['id']}-{secrets.token_hex(4)}"
-    final = root / d["id"]
+    files = {"cert.json": json.dumps(cert.model_dump(), indent=2, ensure_ascii=False),
+             **{f"objectives/{s['code']}.md": _objective_file(d, s) for s in d["sections"]}}
     try:
-        for sub in ("objectives", "questions", "imports"):
-            (tmp / sub).mkdir(parents=True)
-        (tmp / "cert.json").write_text(json.dumps(cert.model_dump(), indent=2, ensure_ascii=False), encoding="utf-8")
-        for s in d["sections"]:
-            (tmp / "objectives" / f"{s['code']}.md").write_text(_objective_file(d, s), encoding="utf-8")
-        os.rename(tmp, final)
-    finally:
-        if tmp.exists():
-            shutil.rmtree(tmp)
-    certs.reload()
+        certs.install(d["id"], files)
+    except FileExistsError:
+        raise WizardError(f"A folder named {d['id']} already exists in the certifications folder.") from None
     loaded = {s.code: set(s.objectives) for s in load_sections(d["id"])}
     wanted = {s["code"]: {o["id"] for o in s["objectives"]} for s in d["sections"]}
     if loaded != wanted:
-        shutil.rmtree(final)
-        certs.reload()
+        certs.remove(d["id"])
         raise WizardError("The objective files didn't read back correctly, so nothing was installed.")
     d["installed"] = True
     d["step"] = "questions"

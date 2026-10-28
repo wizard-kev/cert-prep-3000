@@ -116,6 +116,7 @@ async function loadHome() {
     return;
   }
   sections = await api(certPath("/sections"));
+  updatePackLink();
   const withQuestions = sections.filter((s) => s.served > 0);
   const saved = new Set(store.get(sectionsKey(), withQuestions.slice(0, 1).map((s) => s.code)));
   const empty = sections.filter((s) => s.served === 0);
@@ -1286,9 +1287,14 @@ function wizardName(body) {
       await renderWizard();
     } catch (e) { $("w-msg").textContent = e.message; go.disabled = false; }
   });
+  const pack = el("button", "id-link", "Import a certification pack instead");
+  pack.type = "button";
+  pack.addEventListener("click", openPackImport);
+  const instead = el("p", "muted", "Already have this certification as a pack (exported from this app)? ");
+  instead.append(pack);
   body.append(wizStep("1. Name the certification",
     el("p", "muted", "Use the name the vendor uses. Claude checks it and fills in the official details in the next step."),
-    grid, rowOf(go)));
+    grid, rowOf(go)), instead);
   inputs.name.focus();
 }
 
@@ -1529,6 +1535,128 @@ function maybeWelcome() {
   $("welcome").showModal();
 }
 
+// ---- help (v2 plan 4), question-bank health (5.2), packs (9) ----------------
+
+let helpReturn = "home";
+
+function openHelp(topic) {
+  const current = [...document.querySelectorAll(".view")].find((v) => !v.hidden)?.id.replace(/^v-/, "") ?? "home";
+  if (current !== "help") helpReturn = current;
+  show("help");
+  if (topic) document.getElementById(`help-${topic}`)?.scrollIntoView({ block: "start" });
+}
+
+const BAND_LABEL = {
+  answer_longest: ["The answer is the longest option", "single-answer questions"],
+  answer_shortest: ["The answer is the shortest option", "single-answer questions"],
+  multi_answers_are_longest: ["The answers are the longest options", "multi-select questions"],
+  absolute_only_in_distractors: ["Only wrong options say always, never, only...", "single-answer questions"],
+  answer_echoes_stem_most: ["The answer repeats the question's wording most", "single-answer questions"],
+};
+const pct = (x) => `${Math.round(x * 100)}%`;
+
+async function openHealth() {
+  const h = await api(certPath("/health"));
+  const names = Object.fromEntries(sections.map((s) => [s.code, s.name]));
+  const covered = h.sections.filter((s) => s.ok).length;
+  $("h-summary").textContent = `${covered} of ${plural(h.sections.length, "section")} fully covered: every objective has at ` +
+    `least ${h.minimum} questions, from two or more angles.`;
+  table($("h-sections"), ["Section", "Objectives", "Questions", "Per objective", `Fewer than ${h.minimum}`, "One angle only", "Status"],
+    h.sections.map((s) => [names[s.code] ?? s.code, String(s.objectives), String(s.active), s.active ? `${s.fewest} to ${s.most}` : "",
+      String(s.below_minimum.length), String(s.single_angle.length),
+      el("span", s.ok ? "verdict-ok" : "verdict-bad", s.ok ? "OK" : s.active ? "Needs questions" : "No questions yet")]));
+  const short = h.sections.flatMap((s) => s.below_minimum);
+  const oneAngle = h.sections.flatMap((s) => s.single_angle);
+  const stray = h.sections.flatMap((s) => s.unknown_ids);
+  const gaps = [];
+  if (short.length) {
+    const b = el("button", null, `Build a prompt for ${short.length > MAX_PROMPT_OBJECTIVES ? `the first ${MAX_PROMPT_OBJECTIVES} of ` : ""}` +
+      `${plural(short.length, "objective")} with fewer than ${h.minimum} questions`);
+    b.type = "button";
+    b.addEventListener("click", () => openClaudeWith(short.slice(0, MAX_PROMPT_OBJECTIVES), false));
+    gaps.push(rowOf(b));
+  } else {
+    gaps.push(el("p", "ok-list", `Every objective has at least ${h.minimum} questions.`));
+  }
+  if (oneAngle.length) gaps.push(el("p", "muted", `Asked from one angle only: ${oneAngle.slice(0, 20).join(", ")}${oneAngle.length > 20 ? "..." : ""}. ` +
+    "A new question on these takes a different approach automatically."));
+  if (stray.length) gaps.push(el("p", "msg", `Questions point at objectives that aren't in the objective files: ${stray.join(", ")}.`));
+  $("h-gaps").replaceChildren(...gaps);
+  table($("h-bands"), ["Check", "Measured", "Allowed", "Status"], h.bands.map((b) => {
+    const [label, kind] = BAND_LABEL[b.key] ?? [b.key, "questions"];
+    return [label, b.share === null ? `no ${kind} yet` : `${pct(b.share)} (${b.count} of ${b.of} ${kind})`, `${pct(b.low)} to ${pct(b.high)}`,
+      b.share === null ? "" : el("span", b.ok ? "verdict-ok" : "verdict-bad", b.ok ? "OK" : "Outside the range")];
+  }));
+  const a = h.audit;
+  const roles = Object.entries(a.roles).map(([r, n]) => `${ROLE_LABEL[r]?.toLowerCase() ?? r} ${n}`).join(", ");
+  const levels = Object.entries(a.difficulty).map(([d, n]) => `level ${d}: ${n}`).join(", ");
+  $("h-mix").textContent = a.questions ? `${plural(a.questions, "active question")}: ${a.single} single answer, ${a.multi} multi-select, ` +
+    `${a.exhibits} with an exhibit. Option roles: ${roles}. Difficulty: ${levels}.` : "No active questions yet.";
+  show("health");
+}
+
+function updatePackLink() {
+  $("pack-link").href = certPath(`/pack${$("pack-retired").checked ? "?retired=true" : ""}`);
+}
+
+let PK = null;  // the pack file being imported
+
+function openPackImport() {
+  PK = null;
+  $("pk-file").value = "";
+  $("pk-msg").textContent = "";
+  $("pk-result").hidden = true;
+  show("pack");
+}
+
+// The pack goes up as the request body itself (application/zip), not as JSON.
+async function sendPack(params) {
+  const r = await fetch(`/api/packs/import?${new URLSearchParams(params)}`, {
+    method: "POST", headers: { "Content-Type": "application/zip", "X-CSRF-Token": CSRF_TOKEN }, body: PK });
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(typeof body.detail === "string" ? body.detail : `HTTP ${r.status}`);
+  return body;
+}
+
+async function checkPack() {
+  const file = $("pk-file").files[0];
+  $("pk-msg").textContent = "";
+  $("pk-result").hidden = true;
+  if (!file) return;
+  if (file.size > 20_000_000) { $("pk-msg").textContent = "That file is larger than 20 MB, the limit for a pack."; return; }
+  PK = file;
+  try {
+    const r = await sendPack({ check: "true" });
+    const p = r.pack;
+    table($("pk-table"), ["In this pack", ""], [["Certification", p.name], ["Vendor and exam", [p.vendor, p.exam_code].filter(Boolean).join(" ") || "not given"],
+      ["Sections", String(p.sections)], ["Objectives", String(p.objectives)],
+      ["Questions", `${p.questions}${p.retired ? ` (plus ${p.retired} retired)` : ""}`], ["Exported", p.created ? when(p.created) : "unknown"]]);
+    $("pk-id").value = r.suggested_id;
+    $("pk-short").value = r.suggested_short_name;
+    $("pk-result").hidden = false;
+  } catch (e) { $("pk-msg").textContent = e.message; }
+}
+
+async function importPack() {
+  const id = $("pk-id").value.trim();
+  if (!/^[a-z0-9][a-z0-9-]{1,31}$/.test(id)) {
+    $("pk-msg").textContent = "The id must be 2 to 32 lowercase letters, digits or dashes, starting with a letter or digit.";
+    return;
+  }
+  const short = $("pk-short").value.trim();
+  $("pk-import").disabled = true;
+  try {
+    const r = await sendPack({ check: "false", id, ...(short ? { short_name: short } : {}) });
+    store.set("certprep.cert", r.cert);
+    store.set("certprep.welcomed", true);
+    certs = [];
+    await loadHome();
+    $("draft-note").replaceChildren(el("p", "ok-list", `${cert.short_name} is installed. Choose its sections below and start practising.`));
+    $("draft-note").hidden = false;
+  } catch (e) { $("pk-msg").textContent = e.message; }
+  finally { $("pk-import").disabled = false; }
+}
+
 // ---- progress backups ------------------------------------------------------
 
 const BACKUP_KIND = { manual: "Made by you", "before-restore": "Before a restore", upgrade: "Before an app upgrade", reset: "Before a reset" };
@@ -1701,6 +1829,17 @@ $("welcome-other").addEventListener("click", () => {
   openWizard().catch((e) => { $("home-msg").textContent = e.message; });
 });
 $("welcome").addEventListener("close", () => store.set("certprep.welcomed", true));  // any way out counts as answered
+$("welcome-pack").addEventListener("click", () => { $("welcome").close(); openPackImport(); });
+$("help-btn").addEventListener("click", () => openHelp());
+$("help-back").addEventListener("click", () => show(helpReturn));
+document.addEventListener("click", (e) => {
+  const link = e.target.closest?.(".help-link");
+  if (link) { e.preventDefault(); openHelp(link.dataset.help); }
+});
+$("health-btn").addEventListener("click", () => openHealth().catch((e) => { $("home-msg").textContent = e.message; }));
+$("pack-retired").addEventListener("change", updatePackLink);
+$("pk-file").addEventListener("change", checkPack);
+$("pk-import").addEventListener("click", importPack);
 $("f-text").addEventListener("input", updateFocusCount);
 $("f-text").addEventListener("keydown", (e) => { if (e.key === "Enter" && e.ctrlKey) { e.preventDefault(); runFocusMatch(); } });
 $("f-match").addEventListener("click", runFocusMatch);

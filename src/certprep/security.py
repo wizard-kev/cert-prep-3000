@@ -17,6 +17,8 @@ from starlette.responses import JSONResponse
 ALLOWED_HOSTNAMES = {"127.0.0.1", "localhost"}
 UNSAFE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 MAX_BODY_BYTES = 1_000_000
+MAX_PACK_BYTES = 20_000_000  # certification packs (SR-5)
+PACK_UPLOAD_PATH = "/api/packs/import"
 CSRF_HEADER = "x-csrf-token"
 # New on every start of the app: a page from an earlier run must be reloaded to get it.
 CSRF_TOKEN = secrets.token_urlsafe(32)
@@ -45,7 +47,7 @@ def host_allowed(host: str | None) -> bool:
     return bool(m) and m.group("name").lower() in ALLOWED_HOSTNAMES and int(m.group("port") or 80) <= 65535
 
 
-def request_problem(method: str, headers: Headers) -> tuple[int, str] | None:
+def request_problem(method: str, headers: Headers, path: str = "") -> tuple[int, str] | None:
     """Why a request must be refused, as (status, message), or None if it may proceed."""
     host = headers.get("host")
     if not host_allowed(host):
@@ -56,10 +58,6 @@ def request_problem(method: str, headers: Headers) -> tuple[int, str] | None:
         length = headers.get("content-length", "0")
         if not length.isdigit():
             return 400, "Invalid Content-Length."
-        if int(length) > MAX_BODY_BYTES:
-            return 413, f"The request is too large (limit {MAX_BODY_BYTES // 1000} KB)."
-        if int(length) > 0 and headers.get("content-type", "").split(";")[0].strip().lower() != "application/json":
-            return 415, "Requests must be sent as JSON."
         origin = headers.get("origin")
         if origin is None or origin.lower() != f"http://{host}".lower():
             return 403, "Requests that change data must come from this app's own page."
@@ -67,6 +65,12 @@ def request_problem(method: str, headers: Headers) -> tuple[int, str] | None:
             return 403, "Requests that change data must come from this app's own page."
         if not secrets.compare_digest(headers.get(CSRF_HEADER, ""), CSRF_TOKEN):
             return 403, STALE_PAGE
+        # One route takes a zip file (a certification pack, SR-5); every other change is JSON.
+        kind, limit = ("application/zip", MAX_PACK_BYTES) if path == PACK_UPLOAD_PATH else ("application/json", MAX_BODY_BYTES)
+        if int(length) > limit:
+            return 413, f"The request is too large (limit {limit // 1_000_000} MB)."
+        if int(length) > 0 and headers.get("content-type", "").split(";")[0].strip().lower() != kind:
+            return 415, "Requests must be sent as JSON." if kind == "application/json" else "Send the pack as a .zip file."
     return None
 
 
@@ -81,7 +85,7 @@ class SecurityMiddleware:
         if scope["type"] != "http":
             await self.app(scope, receive, send)
             return
-        problem = request_problem(scope["method"], Headers(scope=scope))
+        problem = request_problem(scope["method"], Headers(scope=scope), scope["path"])
         if problem:
             status, message = problem
             await JSONResponse({"detail": message}, status_code=status,
