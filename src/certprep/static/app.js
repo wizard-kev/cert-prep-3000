@@ -147,11 +147,18 @@ async function loadHome() {
 
 // ---- sessions -----------------------------------------------------------
 
-async function startSession(mode) {
-  $("home-msg").textContent = "";
-  const secs = selectedSections();
-  if (!secs.length) { $("home-msg").textContent = "Select at least one section."; return; }
-  const body = { mode, sections: secs };
+// Practice and exam use the sections ticked on home; focus passes its chosen objectives.
+async function startSession(mode, objectives = null) {
+  const msg = mode === "focus" ? $("f-msg") : $("home-msg");
+  msg.textContent = "";
+  const body = { mode };
+  if (mode === "focus") {
+    Object.assign(body, { objectives, count: Number($("f-qcount").value) });
+  } else {
+    const secs = selectedSections();
+    if (!secs.length) { msg.textContent = "Select at least one section."; return; }
+    body.sections = secs;
+  }
   if (mode === "practice") body.count = Number($("practice-count").value);
   if (mode === "exam") { body.count = Number($("exam-count").value); body.minutes = Number($("exam-minutes").value); }
   try {
@@ -162,7 +169,7 @@ async function startSession(mode) {
     startTimer();
     renderQuestion();
   } catch (e) {
-    $("home-msg").textContent = e.message;
+    msg.textContent = e.message;
   }
 }
 
@@ -665,6 +672,145 @@ async function openDisputes() {
   show("disputes");
 }
 
+// ---- Focus: match a pasted objective list (v2 plan 7.2) ---------------------
+
+const FOCUS_MAX_CHARS = 8000;
+const CONFIDENCE_LABEL = { exact: "Exact ID", high: "Strong match", medium: "Likely match", low: "Weak match", chosen: "Added by you" };
+// lines: the server's per-line results; each match carries `keep` (ticked). all: every objective, for adding by hand.
+let F = { lines: [], all: [] };
+
+async function openFocus() {
+  F.all = await api(certPath("/objectives"));
+  $("f-all").replaceChildren(...F.all.map((o) => { const opt = el("option"); opt.value = `${o.id} ${o.name}`; return opt; }));
+  const sample = F.all[0];
+  $("f-text").placeholder = `One objective per line, for example:\n${sample ? `${sample.name}\n${sample.id}\n` : ""}` +
+    "1.2 Explain common threats: malware, phishing, denial of service";
+  $("f-msg").textContent = "";
+  updateFocusCount();
+  show("focus");
+  $("f-text").focus();
+}
+
+function updateFocusCount() {
+  const n = $("f-text").value.length;
+  $("f-count").textContent = `${n.toLocaleString()} of ${FOCUS_MAX_CHARS.toLocaleString()} characters`;
+}
+
+async function runFocusMatch() {
+  const text = $("f-text").value;
+  $("f-msg").textContent = "";
+  if (!text.trim()) { $("f-msg").textContent = "Paste at least one objective, one per line."; return; }
+  $("f-match").disabled = true;
+  try {
+    const r = await post(certPath("/focus/match"), { text });
+    F.lines = r.lines.map((l) => ({ ...l, matches: l.matches.map((m) => ({ ...m, keep: m.confidence !== "low" })) }));
+    renderFocus();
+  } catch (e) {
+    $("f-msg").textContent = e.message;
+  } finally {
+    $("f-match").disabled = false;
+  }
+}
+
+function focusMatchRow(line, m) {
+  const row = el("label", "focus-match");
+  const box = el("input");
+  box.type = "checkbox";
+  box.checked = m.keep;
+  box.addEventListener("change", () => { m.keep = box.checked; renderFocusSummary(); });
+  const how = m.via && m.how === "words" ? ` · matched "${m.via}"` : "";
+  row.append(box, el("strong", null, m.objective), el("span", null, m.name),
+    el("span", `conf-badge ${m.confidence}`, CONFIDENCE_LABEL[m.confidence] ?? m.confidence),
+    el("small", null, `${plural(m.questions, "question")}${how}`));
+  const wrap = el("div");
+  wrap.append(row);
+  if (m.questions === 0) {
+    const note = el("div", "focus-note");
+    const ask = el("button", "secondary small", "Yes, give me a prompt");
+    ask.type = "button";
+    const out = el("div");
+    ask.addEventListener("click", () => focusPrompt(m.objective, out, ask));
+    note.append(el("span", "msg", `${m.note ?? "No questions exist for this objective yet."} Would you like a prompt to generate some? `), ask, out);
+    wrap.append(note);
+  }
+  return wrap;
+}
+
+async function focusPrompt(objective, out, button) {
+  button.disabled = true;
+  try {
+    const r = await api(certPath(`/prompts/questions?objective=${encodeURIComponent(objective)}&per_objective=2`));
+    out.replaceChildren(promptWidget(`Question prompt for ${objective}`, r.prompt,
+      "Paste it into a new chat at claude.ai, then import Claude's reply in the Claude workspace (home page)."));
+  } catch (e) { out.replaceChildren(el("p", "msg", e.message)); }
+  finally { button.disabled = false; }
+}
+
+function focusAdd(line, id, how = "chosen") {
+  const o = F.all.find((x) => x.id === id);
+  if (!o) return false;
+  const have = line.matches.find((m) => m.objective === id);
+  if (have) have.keep = true;
+  else line.matches.push({ objective: o.id, name: o.name, section: o.section, questions: o.questions, how, confidence: "chosen", via: null, keep: true,
+    ...(o.questions === 0 ? { note: "No questions exist for this objective yet." } : {}) });
+  line.status = "matched";
+  return true;
+}
+
+function renderFocus() {
+  $("f-results").replaceChildren(...F.lines.map((line) => {
+    const box = el("div", "item focus-line");
+    const head = el("p", "line-text");
+    head.append(el("strong", null, `Line ${line.line}: `), el("span", null, line.text));
+    box.append(head);
+    if (line.message && line.status !== "matched") box.append(el("p", line.status === "heading" ? "muted" : "msg", line.message));
+    for (const m of line.matches) box.append(focusMatchRow(line, m));
+    if (line.status === "too-long" || line.status === "heading") return box;
+
+    const add = el("div", "focus-add");
+    const sure = line.matches.some((m) => ["exact", "high", "chosen"].includes(m.confidence));
+    const alternatives = sure ? [] : line.candidates.filter((c) => !line.matches.some((m) => m.objective === c.objective));
+    for (const c of alternatives.slice(0, 3)) {
+      const b = el("button", "secondary small", `+ ${c.objective} ${c.name}`);
+      b.type = "button";
+      b.title = plural(c.questions, "question");
+      b.addEventListener("click", () => { focusAdd(line, c.objective); renderFocus(); });
+      add.append(b);
+    }
+    const pick = el("input");
+    pick.setAttribute("list", "f-all");
+    pick.placeholder = line.matches.length ? "Add another objective (type to search)" : "Pick an objective yourself (type to search)";
+    pick.setAttribute("aria-label", `Add an objective to line ${line.line}`);
+    pick.addEventListener("change", () => {
+      const id = /^([A-Z]{1,3}\d{2}-\d{2})\b/.exec(pick.value.trim())?.[1];
+      if (id && focusAdd(line, id)) renderFocus();
+      else pick.value = "";
+    });
+    add.append(pick);
+    box.append(add);
+    return box;
+  }));
+  renderFocusSummary();
+}
+
+function focusChosen() {
+  const out = new Map();
+  for (const line of F.lines) for (const m of line.matches) if (m.keep && !out.has(m.objective)) out.set(m.objective, m);
+  return [...out.values()];
+}
+
+function renderFocusSummary() {
+  const chosen = focusChosen();
+  const questions = chosen.reduce((n, m) => n + m.questions, 0);
+  const unknown = F.lines.filter((l) => l.status === "not-known").length;
+  $("f-start-box").hidden = F.lines.length === 0;
+  $("f-summary").textContent = `${plural(chosen.length, "objective")} chosen · ${plural(questions, "question")} available` +
+    (unknown ? ` · ${plural(unknown, "line")} not in the objective list` : "") + ".";
+  $("f-start").disabled = questions === 0;
+  $("f-qcount").max = String(Math.max(1, Math.min(200, questions)));
+  if (Number($("f-qcount").value) > questions && questions > 0) $("f-qcount").value = String(Math.min(questions, 200));
+}
+
 // ---- work with Claude: choose objectives, build prompts, import ------------
 
 const MAX_PROMPT_OBJECTIVES = 30;
@@ -1158,6 +1304,15 @@ document.addEventListener("keydown", (e) => {
   }
 });
 $("disputes-btn").addEventListener("click", () => openDisputes().catch((e) => { $("home-msg").textContent = e.message; }));
+$("focus-btn").addEventListener("click", () => openFocus().catch((e) => { $("home-msg").textContent = e.message; }));
+$("f-text").addEventListener("input", updateFocusCount);
+$("f-text").addEventListener("keydown", (e) => { if (e.key === "Enter" && e.ctrlKey) { e.preventDefault(); runFocusMatch(); } });
+$("f-match").addEventListener("click", runFocusMatch);
+$("f-start").addEventListener("click", () => {
+  const ids = focusChosen().filter((m) => m.questions > 0).map((m) => m.objective);
+  if (!ids.length) { $("f-msg").textContent = "Keep at least one objective that has questions."; return; }
+  startSession("focus", ids);
+});
 const failHome = (e) => { $("home-msg").textContent = e.message; };
 $("progress-btn").addEventListener("click", () => openProgress().catch(failHome));
 $("suggest-link").addEventListener("click", () => openProgress("p-suggest-h").catch(failHome));

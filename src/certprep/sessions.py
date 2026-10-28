@@ -84,6 +84,34 @@ def _due_misses(cert_id: str, served: dict[str, Question], now: datetime) -> lis
     return [q for _, q in sorted(due, key=lambda x: x[0])]
 
 
+FOCUS_ORDER = {"Weak": 0, "New": 1, "Improving": 2, "Solid": 3}
+
+
+def select_focus(cert_id: str, objective_ids: list[str], count: int, rng: random.Random | None = None) -> list[Question]:
+    """Questions on the chosen objectives only (plan 7.2): taken in turns across the objectives, weakest
+    first and preferring questions not yet answered, so a short session still covers the weak ones.
+    More than one question per objective when the count allows."""
+    rng = rng or random.Random()
+    wanted = set(objective_ids)
+    left = _by_objective([q for q in pool.active(cert_id) if q.objectives[0] in wanted])
+    stats = current_stats(cert_id)
+
+    def rank(o: str):
+        s = stats.get(o)
+        return (FOCUS_ORDER[s.status if s else "New"], s.score if s and s.score is not None else 0, rng.random())
+
+    order = sorted(left, key=rank)
+    picked: list[Question] = []
+    while len(picked) < count and any(left.values()):
+        for o in order:
+            if len(picked) < count and left[o]:
+                q = _pick_for_objective(left[o], stats.get(o), rng)
+                left[o].remove(q)
+                picked.append(q)
+    rng.shuffle(picked)
+    return picked
+
+
 def select(cert_id: str, mode: str, sections: list[str], count: int,
            rng: random.Random | None = None, now: datetime | None = None) -> list[Question]:
     rng = rng or random.Random()

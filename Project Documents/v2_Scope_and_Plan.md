@@ -438,3 +438,42 @@ Each phase ends with the tests passing, a commit, and a short note in this docum
     - at 375px nothing overflows or overlaps;
     - practice and exam still show and hide the right controls.
     - Some screenshots came back blank because the browser pane was hidden; those layouts were checked by measuring the rendered elements instead.
+- **P7 done (2026-10-27):** Focus mode with match preview.
+  - **`focus.py`:**
+    - **Splitting:** the pasted text goes through `clean_text` (NFKC, control and invisible characters removed) and is capped at 8,000 characters and 60 lines; lines over 300 characters are reported, not matched. List markers are removed (`-`, `*`, `•`, `1.`, `a)`, `[ ]`, `#`), and several bullets on one line are split. A dotted reference like `1.2` is kept, not mistaken for a list number.
+    - **Matching, in order:**
+      1. Objective IDs exactly; an unknown ID is "not known".
+      2. A domain heading (`1.0 ...`) is skipped with a note.
+      3. A reference number matches every objective whose new optional `Ref` column equals it or sits under it (4.2 → 4.2, 4.2.1). CCST's files have no Ref column yet; the phase 8 objective builder adds one.
+      4. Otherwise words: rarer words count more, with crude stemming, near-prefixes (encrypt/encryption, not power/PowerShell) and acronyms the objective files write in capitals (man in the middle → MitM, Multi-factor authentication → MFA). A "heading: a, b (c, d)" line is matched topic by topic; values in parentheses need a strong match.
+    - **Scoring:** how much of the line the objective explains × how much of the objective's name the line covers. Labels: strong ≥ 0.6, likely ≥ 0.4, weak ≥ 0.25; below that the line is not known.
+    - **Messages:** "This objective is not in the objective list for (certification)." for unmatched lines, and "No questions exist for this objective yet." on a matched objective with no questions.
+  - **API:**
+    - `POST /api/certs/{cert}/focus/match`: a POST so the list never appears in a URL. Results carry only objective IDs, names, section codes and question counts (SR-7).
+    - `POST .../sessions` now takes `mode: "focus"` with `objectives`.
+    - `sessions.select_focus` serves only those objectives, taking turns across them (weakest first, unseen questions first) before doubling up.
+  - **UI:** a Focus card on home opens a page with three steps:
+    1. Paste the list (character counter, Ctrl+Enter).
+    2. Check the preview: each line shows its matches as checkboxes with a confidence label and the topic that matched. Weak matches start unticked. Unsure lines offer up to three alternatives, and every line has a search box over all objectives. An objective without questions asks "Would you like a prompt to generate some?" and builds the prompt in place.
+    3. Start: a sticky bar shows the objectives chosen and questions available, with the question count.
+    Recall-first now applies to focus sessions too.
+  - **Tried on the real objectives (read-only):** Cisco's official CCST topic list (28 lines including the domain headings) matched in 0.5 s, and most topics landed on the right objectives (TCP, UDP, HTTP, ARP, ICMP, DHCP, DNS; SIEM, SOAR; Cyber Kill Chain, MITRE ATT&CK, Diamond Model...). The misses come in as weak or likely matches for the preview to catch, for example "MAC addresses" → Mac App Store (weak) and "controls" → Command and Control (likely).
+  - **Tests:** 228 pytest pass (23 new in `test_focus.py`). They cover:
+    - splitting and markers;
+    - cleaning and caps;
+    - IDs, names and both messages;
+    - topic lists and the parentheses rule;
+    - acronyms;
+    - headings and long lines;
+    - reference numbers (with a second, temporary certification);
+    - focus sessions (only the chosen objectives, spread, weakest first) and bad requests;
+    - the token and limits on the match route;
+    - **SR-2 fuzz:** 200 random pastes (control, bidi and zero-width characters, NFKC-expanding characters, CJK, traversal strings, ReDoS patterns, injection strings), always 200 or 422 within 3 s, with clean line text;
+    - **SR-3:** a spy on file reads shows only the certification's `cert.json`, `objectives/` and `questions/` are read, whatever the text says;
+    - **SR-7:** response keys are whitelisted, and no core idea, discriminator, file name or data path appears in results.
+  - **Verified by hand** (scratch copy of the real data):
+    - the preview for mixed input (names, IDs, junk, a domain heading, a topic list, weak matches);
+    - adding an objective by search;
+    - the no-questions prompt;
+    - a focus session through to "Focus results";
+    - no console errors.

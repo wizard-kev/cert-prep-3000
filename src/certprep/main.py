@@ -16,7 +16,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, StrictBool, StrictInt, field_validator
 
-from . import certs, history, importer, pool, prompts, security, sessions, tracker
+from . import certs, focus, history, importer, pool, prompts, security, sessions, tracker
 from .config import APP_NAME
 from .objectives import UnknownObjective, load_section, load_sections, objective_names
 from .schema import SERVED_STATUSES, STATUSES
@@ -178,6 +178,23 @@ def import_questions(cert_id: CertIdPath, req: ImportRequest):
         raise HTTPException(422, str(e)) from None
 
 
+# ---- Focus: match a pasted objective list (v2 plan 7.2, SR-2, SR-3, SR-7) ----
+
+class FocusRequest(BaseModel):
+    text: Annotated[str, Field(min_length=1, max_length=focus.MAX_CHARS)]
+
+
+@app.post("/api/certs/{cert_id}/focus/match")
+def focus_match(cert_id: CertIdPath, req: FocusRequest):
+    """Sent as a POST so the pasted list never appears in a URL or a log line."""
+    cert = _cert_or_404(cert_id)
+    try:
+        return focus.match(cert.id, req.text)
+    except ValueError as e:  # FocusError, or clean_text's length check after normalizing
+        raise HTTPException(422, str(e) if isinstance(e, focus.FocusError)
+                            else f"That's too long: paste at most {focus.MAX_CHARS} characters.") from None
+
+
 # ---- question statuses: Looks right, report, disputes (v2 section 6) -------
 
 @app.post("/api/certs/{cert_id}/questions/{question_id}/validate")
@@ -244,8 +261,9 @@ def decide_dispute(cert_id: CertIdPath, question_id: QuestionIdPath, req: Disput
 # ---- sessions (Practice, Exam; Focus arrives in P7) ------------------------
 
 class SessionRequest(BaseModel):
-    mode: Literal["practice", "exam"]
-    sections: Annotated[list[SectionCode], Field(min_length=1, max_length=200)]
+    mode: Literal["practice", "exam", "focus"]
+    sections: Annotated[list[SectionCode], Field(min_length=1, max_length=200)] | None = None
+    objectives: Annotated[list[ObjectiveId], Field(min_length=1, max_length=focus.MAX_OBJECTIVES)] | None = None
     count: Annotated[StrictInt, Field(ge=1, le=200)] | None = None
     minutes: Annotated[StrictInt, Field(ge=5, le=300)] | None = None
 
@@ -256,12 +274,25 @@ PRACTICE_COUNT = 10
 @app.post("/api/certs/{cert_id}/sessions", status_code=201)
 def create_session(cert_id: CertIdPath, req: SessionRequest):
     cert = _cert_or_404(cert_id)
-    codes = _sections_or_404(cert, req.sections)
     defaults = sessions.exam_defaults(cert)
     count = req.count or (defaults["questions"] if req.mode == "exam" else PRACTICE_COUNT)
-    picked = sessions.select(cert.id, req.mode, codes, count)
-    if not picked:
-        raise HTTPException(409, "There are no questions in these sections yet. Add some in the Claude workspace.")
+    if req.mode == "focus":
+        if not req.objectives:
+            raise HTTPException(422, "choose at least one objective for a focus session")
+        try:
+            codes = focus.objective_sections(cert.id, req.objectives)
+        except KeyError as e:
+            raise HTTPException(422, f"{e.args[0]} isn't an objective of {cert.short_name}") from None
+        picked = sessions.select_focus(cert.id, list(dict.fromkeys(req.objectives)), count)
+        if not picked:
+            raise HTTPException(409, "None of these objectives has questions yet. Get a prompt to generate some.")
+    else:
+        if not req.sections:
+            raise HTTPException(422, "choose at least one section")
+        codes = _sections_or_404(cert, req.sections)
+        picked = sessions.select(cert.id, req.mode, codes, count)
+        if not picked:
+            raise HTTPException(409, "There are no questions in these sections yet. Add some in the Claude workspace.")
     limit = (req.minutes or defaults["minutes"]) * 60 if req.mode == "exam" else None
     s = tracker.create_session(uuid.uuid4().hex[:16], cert.id, req.mode, codes, [q.id for q in picked], limit)
     return _session_view(s)

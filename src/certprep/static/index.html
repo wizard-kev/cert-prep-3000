@@ -46,9 +46,15 @@
         <label>Minutes <input id="exam-minutes" type="number" min="5" max="300" value="60"></label>
         <button type="button" data-mode="exam">Start exam</button>
       </div>
+      <div class="mode">
+        <h3>Focus</h3>
+        <p class="muted">Paste a list of objectives: from an exam guide, a course outline, or your own notes. The app
+          finds the matching objectives and asks questions on those only. Ignores the sections chosen above.</p>
+        <button type="button" id="focus-btn">Choose objectives</button>
+      </div>
     </div>
     <label class="recall-pref"><input type="checkbox" id="recall-first">
-      <span>Recall first: hide the options until I've worked out my answer <small class="muted">(practice only)</small></span></label>
+      <span>Recall first: hide the options until I've worked out my answer <small class="muted">(practice and focus)</small></span></label>
     <p id="home-msg" class="msg" aria-live="polite"></p>
 
     <h2>Question pool</h2>
@@ -146,6 +152,34 @@
     <h3>Questions</h3>
     <div id="r-items"></div>
     <button type="button" class="back-btn">Back to home</button>
+  </section>
+
+  <!-- Focus: pasted objective list -->
+  <section id="v-focus" class="view" hidden aria-labelledby="f-h">
+    <h2 id="f-h">Focus on chosen objectives</h2>
+    <ol class="steps">
+      <li>Paste your list, one objective per line (up to 60 lines). Numbers, bullets and objective IDs are fine.</li>
+      <li>Check the matches. Untick any that are wrong, or add a better one.</li>
+      <li>Start the session. Questions come only from the objectives you kept.</li>
+    </ol>
+    <label for="f-text">Your objective list</label>
+    <textarea id="f-text" rows="8" maxlength="8000" spellcheck="false"></textarea>
+    <div class="row">
+      <button type="button" id="f-match">Find matching objectives</button>
+      <span id="f-count" class="muted" aria-live="polite"></span>
+    </div>
+    <p id="f-msg" class="msg" aria-live="polite"></p>
+    <div id="f-results"></div>
+    <datalist id="f-all"></datalist>
+    <div id="f-start-box" class="start-box" hidden>
+      <p id="f-summary"></p>
+      <div class="row">
+        <label for="f-qcount">Questions</label>
+        <input id="f-qcount" type="number" min="1" max="200" value="10">
+        <button type="button" id="f-start">Start focus session</button>
+      </div>
+    </div>
+    <button type="button" class="back-btn secondary">Back to home</button>
   </section>
 
   <!-- Disputed questions -->
