@@ -14,7 +14,11 @@ Local web app for certification exam practice. Each certification has objective 
 - `data/progress.db`: sessions and attempts for every certification (gitignored). `data/backups/`: automatic backups (gitignored); the v1 `tracker.db` was moved here when it was migrated (2026-10-27).
 - `src/certprep/certs.py`: certification registry; ids and section codes are pattern-checked and must exist on disk before they touch a path.
 - `src/certprep/objectives.py`: section objective files and table parser.
-- `src/certprep/schema.py`: question schema (plan 8.3).
+- `src/certprep/schema.py`: question schema (plan 8.3). Types:
+  - **single, multi:** the answer is option keys.
+  - **ordering** (v2 P10): the answer is every key, first step first.
+  - **matching** (v2 P10): `match_targets` holds 3 to 8 descriptions, and the answer is one `<key><number>` pair per option, e.g. `A2`.
+  `Question.stored()` writes `match_targets` only on matching questions.
 - `src/certprep/generator.py`: question import, automated checks (plan 10.2) and surface-cue checks, option shuffle; `targets_for` assigns each chosen objective the angles it has used least (retired questions count, so a replacement takes a new approach).
 - `src/certprep/prompts.py`: prompts for a Claude chat (questions, repair, study session, ask about a question); `RULES` mirrors the import checks, `PROMPT_ANGLES` the angles offered. Reply format `certprep-questions` version 1.
 - `src/certprep/importer.py`: imports a pasted reply: envelope and field checks (unknown fields rejected), `clean_text` on every text field, per-question checks via `generator.import_items`, a dry run of the full checks on early rejects, a repair prompt for anything rejected, and an archive copy in the certification's `imports/` (`claude-<time>-<hash>.json`).
@@ -63,6 +67,10 @@ Local web app for certification exam practice. Each certification has objective 
 - Spread answer lengths across the pool: the answer should be the longest option about a quarter of the time and the shortest about a quarter (`audit` enforces bands).
 - Describe situations instead of naming the concept in the stem; avoid "which is NOT". Use `exhibit` (log, config, command output, max 30 lines) where it fits.
 - About 20-25% multi-select (5 options, 2 answers, stem ends "(Choose two.)"). Difficulty: 1 recall in context, 2 apply to a scenario, 3 best-of-valid or two-step.
+- Ordering and matching questions are asked for only when the certification's `cert.json` lists those formats (`ordering`; `matching` or `drag-and-drop`), about 10% each (`prompts.extra_types`). CCST lists neither.
+  - **Ordering:** 3 to 6 steps, the answer lists every key in order, and the stem asks for the order.
+  - **Matching:** 3 to 6 items, at least as many descriptions (extras allowed), each description used at most once, and the stem asks to match.
+  - **Both:** no option roles, and the surface-cue checks don't apply. The import shuffles them (an ordering question never shows its steps already in order), and they are scored all-or-nothing.
 - Name the objective's key term somewhere in the question (the explanation counts).
 - Don't refer to option letters in rationales or the explanation; options are shuffled.
 - Use only the section's own objective IDs, at most 3 per question. Never use specific-looking CVE IDs.

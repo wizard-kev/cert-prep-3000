@@ -13,6 +13,7 @@ def audit(cert_id: str, sections: list[str]) -> dict:
     singles = longest = shortest = abs_only = echo_top = 0
     ratios = []
     multi = multi_longest = 0
+    other_types: Counter = Counter()  # ordering and matching: no distractors, so no cue statistics
     which_not = exhibits = names_term = 0
     roles, difficulty = Counter(), Counter()
     total = 0
@@ -23,6 +24,9 @@ def audit(cert_id: str, sections: list[str]) -> dict:
             difficulty[q.difficulty] += 1
             which_not += q.angle == "which-is-not"
             exhibits += bool(q.exhibit)
+            if q.type not in ("single", "multi"):
+                other_types[q.type] += 1
+                continue
             roles.update(o.role or "untagged" for o in q.options)
             # The stem names the primary objective, so the learner never has to recognise it.
             terms = objective_terms(names.get(q.objectives[0], ""))
@@ -48,6 +52,7 @@ def audit(cert_id: str, sections: list[str]) -> dict:
                 multi_longest += set(q.answer) == set(ranked[:len(q.answer)])
     return {
         "questions": total, "single": singles, "multi": multi,
+        "ordering": other_types["ordering"], "matching": other_types["matching"],
         "answer_longest": longest, "answer_shortest": shortest,
         "length_ratio": round(mean(ratios), 2) if ratios else None,
         "absolute_only_in_distractors": abs_only, "answer_echoes_stem_most": echo_top,

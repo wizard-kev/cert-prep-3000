@@ -536,3 +536,37 @@ Each phase ends with the tests passing, a commit, and a short note in this docum
     - **SR-5:** 11 bad names, a link, an encrypted entry, a duplicate, a 1000:1 zip bomb, an oversized file, 2,100 entries, non-zips, the manifest format, version and extra fields, a tampered file, a missing file, and 11 per-file validation failures; nothing is written in any refused case;
     - 60 randomly corrupted packs (one of which found an uncaught `zlib.error`, now handled);
     - the health endpoint.
+- **P10 done (2026-10-28):** ordering and matching question formats (built at the user's request; the plan made them optional).
+  - **Schema:** `type` gains "ordering" and "matching".
+    - **Ordering:** the answer is every option key in the correct order.
+    - **Matching:** a new optional `match_targets` (3 to 8 descriptions, extras allowed), and the answer is one `<key><number>` pair per option (`["A2", "B1", "C3"]`).
+    - Answers are pattern-checked (`^[A-F][1-8]?$`). Single and multi questions are unchanged, including their 4-option minimum, now an import check. `Question.stored()` writes `match_targets` only on matching questions, so existing pool files keep their shape.
+  - **Import checks:**
+    - ordering: 3 to 6 steps, every key exactly once, a stem that asks for the order, no roles;
+    - matching: at least as many descriptions as items, no duplicate descriptions, every item paired once, each description number used at most once and in range, a stem that asks to match, no roles.
+    - The surface-cue checks apply to single and multi only. Shuffling keeps the meaning: an ordering question's answer is remapped and never shown already in order, and a matching question's items and descriptions are both shuffled, with the pairs remapped.
+  - **Prompts:** `prompts.extra_types` gives about 10% ordering for certifications whose `cert.json` lists "ordering", and about 10% matching for "matching" or "drag-and-drop". Each gets a suited angle (cause-and-effect-ordering, classify-element), a format rule, and a template example. CCST lists neither, so its prompts are unchanged. The wizard now marks ordering and matching as formats the app can serve. The ask-about-this prompt shows the correct order or pairs.
+  - **Answering:**
+    - **Ordering:** ↑/↓ buttons (focus follows the moved step, so it works by keyboard).
+    - **Matching:** the numbered descriptions, then a picker per item.
+    - **Server:** `sessions.answer_problem` refuses malformed answers with 422 for every type. Ordering answers are stored in the learner's order. Scoring is all-or-nothing.
+    - **Feedback and results:** show the correct order or pairs, with the learner's misplacements in words ("you put it 3rd", "you chose 2. ...") and descriptions that match nothing.
+    - **Shared view:** `answerView` now draws options everywhere (feedback, results, disputes, too-easy), replacing four copies of the same code.
+  - **Audit:** ordering and matching questions are counted separately and kept out of the single/multi answer-pattern statistics.
+  - **Help:** the Answering topic explains the two formats.
+  - **Verified in the browser** (fresh scratch folder, Example Net certification):
+    - imported one question of each format through the Claude workspace;
+    - answered the ordering question with real clicks and Enter on the ↑ buttons: "Correct";
+    - answered the matching question with one pair wrong: per-pair feedback, plus the description that matches nothing;
+    - an exam kept a saved order when returning to the question, and its results drew all three types.
+    The real CCST pools still load, `coverage` passes for all 13 sections, and `audit` passes.
+  - **Tests:** 298 pytest pass (23 new in `test_formats.py`). They cover:
+    - shuffling that keeps the sequence or pairs;
+    - 5 ordering and 8 matching rejection rules;
+    - single and multi rules unchanged;
+    - pool shape and audit counts;
+    - answering and scoring both formats, with malformed answers refused;
+    - the ask prompt;
+    - a focus session and report;
+    - prompts asking for the formats only when the exam uses them;
+    - the formats travelling in packs.

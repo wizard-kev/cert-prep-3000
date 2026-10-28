@@ -66,11 +66,26 @@ def plan_targets(section: Section, existing: list[Question], n: int, rng: random
     return targets
 
 
+EXTRA_TYPE_ANGLES = {"ordering": "cause-and-effect-ordering", "matching": "classify-element"}
+
+
+def _pick_type(rng: random.Random, extra_types: dict[str, float]) -> str:
+    """single or multi; ordering and matching only for certifications whose exam uses them."""
+    if extra_types:
+        r, total = rng.random(), 0.0
+        for qtype, share in extra_types.items():
+            total += share
+            if r < total:
+                return qtype
+    return "multi" if rng.random() < MULTI_SHARE else "single"
+
+
 def targets_for(objective_ids: list[str], existing: list[Question], per_objective: int, angles: list[str],
-                rng: random.Random) -> list[Target]:
+                rng: random.Random, extra_types: dict[str, float] | None = None) -> list[Target]:
     """Targets for chosen objectives: `per_objective` each, every one on the angle the objective's
     questions have used least (never the newest active one), so new questions add variety. Retired
-    questions count as used too: a replacement for a reported question takes a different approach."""
+    questions count as used too: a replacement for a reported question takes a different approach.
+    An ordering or matching target takes the angle that suits its format."""
     active = [q for q in existing if q.served]
     last = pool.last_angle(active)
     used: dict[str, Counter] = {}
@@ -83,8 +98,10 @@ def targets_for(objective_ids: list[str], existing: list[Question], per_objectiv
             choices = [a for a in angles if a != last.get(obj_id)] or list(angles)
             fewest = min(counts[a] for a in choices)
             angle = rng.choice([a for a in choices if counts[a] == fewest])
+            qtype = _pick_type(rng, extra_types or {})
+            if qtype in EXTRA_TYPE_ANGLES and EXTRA_TYPE_ANGLES[qtype] in angles:
+                angle = EXTRA_TYPE_ANGLES[qtype]
             counts[angle] += 1
-            qtype = "multi" if rng.random() < MULTI_SHARE else "single"
             targets.append(Target(obj_id, angle, qtype))
     return targets
 
@@ -119,7 +136,7 @@ def _similar(a: set[str], b: set[str]) -> float:
 def content_words(q) -> set[str]:
     """Stem plus option texts: short templated stems ("Which statement about X is NOT true?")
     differ only in their options, so duplicates are judged on both."""
-    return _words(" ".join([q.stem] + [o.text for o in q.options]))
+    return _words(" ".join([q.stem] + [o.text for o in q.options] + list(q.match_targets or [])))
 
 
 def _echo_words(s: str) -> set[str]:
@@ -177,8 +194,6 @@ def check(q: GeneratedQuestion, target: Target, section: Section, seen_stems: li
     keys = [o.key for o in q.options]
     if keys != [chr(ord("A") + i) for i in range(len(keys))]:
         problems.append(f"option keys not sequential from A: {keys}")
-    if len(set(q.answer)) != len(q.answer) or not set(q.answer) <= set(keys):
-        problems.append(f"answer keys {q.answer} not a subset of options {keys}")
     texts = [o.text.strip().lower() for o in q.options]
     if len(set(texts)) != len(texts):
         problems.append("duplicate option text")
@@ -186,6 +201,13 @@ def check(q: GeneratedQuestion, target: Target, section: Section, seen_stems: li
         problems.append("all/none of the above")
     if any(not o.rationale.strip() for o in q.options):
         problems.append("missing rationale")
+    if q.type != "matching" and q.match_targets is not None:
+        problems.append("match_targets belongs to matching questions only")
+    if q.type in ("single", "multi"):
+        if len(set(q.answer)) != len(q.answer) or not set(q.answer) <= set(keys):
+            problems.append(f"answer keys {q.answer} not a subset of options {keys}")
+        if len(q.options) < 4:
+            problems.append("single and multi-select questions need at least 4 options")
     if q.type == "single" and len(q.answer) != 1:
         problems.append("single-answer question must have exactly 1 answer")
     if q.type == "multi":
@@ -196,6 +218,10 @@ def check(q: GeneratedQuestion, target: Target, section: Section, seen_stems: li
             problems.append("multi-select count in stem does not match answer count")
         if len(q.answer) < 2:
             problems.append("multi-select needs at least 2 answers")
+    if q.type == "ordering":
+        problems += _ordering_problems(q, keys)
+    if q.type == "matching":
+        problems += _matching_problems(q, keys)
     prose = " ".join([q.explanation] + [o.rationale for o in q.options])
     if _LETTER_REF.search(prose):
         problems.append("rationale/explanation refers to an option letter")
@@ -205,14 +231,53 @@ def check(q: GeneratedQuestion, target: Target, section: Section, seen_stems: li
         problems.append("discriminator_tested just repeats the explanation")
     if q.objectives[0] in section.objectives:
         terms = objective_terms(section.objectives[q.objectives[0]].objective)
-        body = _words(" ".join([q.stem, q.explanation, q.discriminator_tested] + [o.text for o in q.options]))
+        body = _words(" ".join([q.stem, q.explanation, q.discriminator_tested] + [o.text for o in q.options]
+                               + list(q.match_targets or [])))
         if terms and not terms & body:
             problems.append(f"never mentions its objective ({', '.join(sorted(terms))}); likely tests a different concept")
     words = content_words(q)
     if any(_similar(words, s) >= NEAR_DUPLICATE for s in seen_stems):
         problems.append("near-duplicate question")
-    if strict:
+    if strict and q.type in ("single", "multi"):  # ordering and matching have no distractors to compare
         problems += cue_problems(q)
+    return problems
+
+
+_ORDER_WORDS = re.compile(r"\b(?:order|sequence|arrange|chronolog\w*|first to last|earliest|steps?)\b", re.I)
+_MATCH_WORDS = re.compile(r"\bmatch(?:es|ing)?\b|\bpair\b", re.I)
+
+
+def _ordering_problems(q: GeneratedQuestion, keys: list[str]) -> list[str]:
+    """Every option is a step; the answer lists every key once, first step first."""
+    problems = []
+    if len(q.options) > 6:
+        problems.append("an ordering question has 3 to 6 steps")
+    if sorted(q.answer) != sorted(keys) or len(q.answer) != len(keys):
+        problems.append("an ordering answer must list every option key exactly once, in the correct order")
+    if not _ORDER_WORDS.search(q.stem):
+        problems.append("an ordering stem must ask for the order or sequence")
+    if any(o.role not in (None, "best") for o in q.options):
+        problems.append("ordering steps take no roles (every step is part of the answer)")
+    return problems
+
+
+def _matching_problems(q: GeneratedQuestion, keys: list[str]) -> list[str]:
+    """Each option is paired with exactly one of match_targets; a target is used at most once."""
+    problems = []
+    targets = q.match_targets or []
+    if len(targets) < len(keys):
+        problems.append("a matching question needs at least as many match_targets as options")
+    if len({t.strip().lower() for t in targets}) != len(targets):
+        problems.append("duplicate match_targets text")
+    pairs = [(a[0], int(a[1:])) for a in q.answer if len(a) == 2]
+    if len(pairs) != len(q.answer) or sorted(k for k, _ in pairs) != sorted(keys):
+        problems.append('a matching answer pairs every option key once with a target number, like "A2"')
+    elif any(not 1 <= n <= len(targets) for _, n in pairs) or len({n for _, n in pairs}) != len(pairs):
+        problems.append("each matching answer must use a different target number from match_targets")
+    if not _MATCH_WORDS.search(q.stem):
+        problems.append("a matching stem must ask to match the items")
+    if any(o.role not in (None, "best") for o in q.options):
+        problems.append("matching items take no roles (every item is part of the answer)")
     return problems
 
 
@@ -234,12 +299,24 @@ def repair(q: GeneratedQuestion) -> GeneratedQuestion:
 
 
 def shuffle_options(q: GeneratedQuestion, rng: random.Random) -> GeneratedQuestion:
-    """Authors favour early answer positions; reshuffle and relabel A, B, C...
-    Ordering questions are shuffled too: each option is a complete sequence."""
-    opts = list(q.options)
-    rng.shuffle(opts)
-    relabel = {o.key: chr(ord("A") + i) for i, o in enumerate(opts)}
+    """Authors favour early answer positions; reshuffle and relabel A, B, C... An ordering question's
+    steps are never left in the right order; a matching question's targets are shuffled too."""
+    for _ in range(20):
+        opts = list(q.options)
+        rng.shuffle(opts)
+        relabel = {o.key: chr(ord("A") + i) for i, o in enumerate(opts)}
+        if q.type != "ordering" or [relabel[a] for a in q.answer] != sorted(relabel.values()):
+            break
     new_opts = [o.model_copy(update={"key": relabel[o.key]}) for o in opts]
+    if q.type == "ordering":
+        return q.model_copy(update={"options": new_opts, "answer": [relabel[a] for a in q.answer]})
+    if q.type == "matching":
+        order = list(range(len(q.match_targets)))
+        rng.shuffle(order)  # order[new position] = old index
+        renumber = {old + 1: new + 1 for new, old in enumerate(order)}
+        return q.model_copy(update={
+            "options": new_opts, "match_targets": [q.match_targets[old] for old in order],
+            "answer": sorted(f"{relabel[a[0]]}{renumber[int(a[1:])]}" for a in q.answer)})
     return q.model_copy(update={"options": new_opts, "answer": sorted(relabel[a] for a in q.answer)})
 
 

@@ -54,7 +54,7 @@ def _sha(body: bytes) -> str:
 
 def _exported(q: Question) -> dict:
     """A question as it travels: the learner's own traces removed."""
-    data = q.model_dump()
+    data = q.stored()
     if q.status == "passive":
         data["status"] = "unreviewed"
     data["seen_at"] = None
@@ -281,7 +281,7 @@ def install_pack(pack: Pack, new_id: str, short_name: str | None = None) -> str:
         raise PackError("That short name isn't valid (1 to 60 characters).") from None
     files = {"cert.json": json.dumps(cert.model_dump(), indent=2, ensure_ascii=False),
              **{f"objectives/{code}.md": text for code, text in pack.objective_texts.items()},
-             **{f"questions/{code}.json": json.dumps({"section": code, "questions": [q.model_dump() for q in qs]},
+             **{f"questions/{code}.json": json.dumps({"section": code, "questions": [q.stored() for q in qs]},
                                                      indent=2, ensure_ascii=False)
                 for code, qs in pack.questions.items() if qs}}
     try:

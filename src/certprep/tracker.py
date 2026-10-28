@@ -381,8 +381,14 @@ def last_finished_session(cert_id: str) -> dict | None:
 
 def record_attempt(session_id: str, cert_id: str, question, selected: list[str], confidence: int,
                    flagged: bool) -> bool:
-    """Upsert: in exam mode the user may change an answer before finishing."""
-    correct = sorted(set(selected)) == sorted(question.answer)
+    """Upsert: in exam mode the user may change an answer before finishing. An ordering answer keeps its
+    order; any other answer is a set (stored sorted)."""
+    if question.type == "ordering":
+        stored = list(selected)
+        correct = stored == list(question.answer)
+    else:
+        stored = sorted(set(selected))
+        correct = stored == sorted(question.answer)
     with connect() as c:
         c.execute(
             """INSERT INTO attempts (session_id, cert_id, question_id, section, objective, domain, angle, selected,
@@ -392,7 +398,7 @@ def record_attempt(session_id: str, cert_id: str, question, selected: list[str],
                  selected = excluded.selected, correct = excluded.correct, confidence = excluded.confidence,
                  flagged = excluded.flagged, answered_at = excluded.answered_at, error_type = NULL""",
             (session_id, cert_id, question.id, question.section, question.objectives[0], question.domain,
-             question.angle, json.dumps(sorted(set(selected))), int(correct), confidence, int(flagged), now_iso()))
+             question.angle, json.dumps(stored), int(correct), confidence, int(flagged), now_iso()))
     return correct
 
 

@@ -149,7 +149,7 @@ def test_backups_are_pruned(isolated):
 
 def test_reset_touches_one_certification_and_backs_up_first(isolated):
     q = SimpleNamespace(id="Q-C01-0001", section="C01", objectives=["C01-01"], domain="1.0",
-                        angle="symptom-to-attack", answer=["A"])
+                        angle="symptom-to-attack", answer=["A"], type="single")
     for cert in ("ccst-cyber", "other-cert"):
         tracker.create_session(f"{cert[:4]}" + "0" * 12, cert, "practice", ["C01"], [q.id], None)
         tracker.record_attempt(f"{cert[:4]}" + "0" * 12, cert, q, ["A"], 5, False)

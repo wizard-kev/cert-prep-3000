@@ -33,7 +33,7 @@ def _save(cert_id: str, section: str, questions: list[Question]) -> None:
     path = _pool_path(cert_id, section)
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(".json.tmp")
-    payload = {"section": section, "questions": [q.model_dump() for q in questions]}
+    payload = {"section": section, "questions": [q.stored() for q in questions]}
     tmp.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
     os.replace(tmp, path)  # atomic on the same volume
 

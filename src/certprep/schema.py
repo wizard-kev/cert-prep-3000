@@ -1,6 +1,6 @@
 """Question schema (plan section 8.3)."""
 
-from typing import Literal
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -39,8 +39,12 @@ CHAPTER_ANGLES = (
     "find-missing-element",
 )
 ANGLES = GENERIC_ANGLES + CHAPTER_ANGLES
-# Phase 1 builds single and multi first (Phase 0 decision); ordering/matching come later.
-QUESTION_TYPES = ("single", "multi")
+# single and multi (choose N) serve every certification. ordering (put the options in sequence) and
+# matching (pair each option with one of `match_targets`) are offered to certifications whose exam
+# uses them (v2 plan 7.4, phase P10). Answers: single/multi = keys; ordering = every key, in order;
+# matching = one "<key><target number>" pair per option, e.g. "A2".
+QUESTION_TYPES = ("single", "multi", "ordering", "matching")
+MAX_MATCH_TARGETS = 8
 # Question lifecycle (v2 plan section 6). Unreviewed: passed the import checks. Passive
 # (Passively-Validated): answered at least once without a dispute. Validated: the learner marked it
 # "Looks right". Disputed: reported, waiting for the learner to confirm or undo; not served.
@@ -72,8 +76,11 @@ class GeneratedQuestion(BaseModel):
     stem: str = Field(min_length=10, max_length=1200)
     # Optional log excerpt, config snippet, or command output shown in monospace under the stem.
     exhibit: str | None = Field(default=None, max_length=1500)
-    options: list[Option] = Field(min_length=4, max_length=6)
-    answer: list[str] = Field(min_length=1, max_length=3)
+    options: list[Option] = Field(min_length=3, max_length=6)
+    answer: list[Annotated[str, Field(pattern=r"^[A-F][1-8]?$")]] = Field(min_length=1, max_length=6)
+    # Matching only: the descriptions the options are paired with (numbered from 1; may include extras).
+    match_targets: list[Annotated[str, Field(min_length=1, max_length=200)]] | None = Field(
+        default=None, min_length=3, max_length=MAX_MATCH_TARGETS)
     explanation: str = Field(min_length=1, max_length=1200)
     discriminator_tested: str = Field(min_length=1, max_length=400)
 
@@ -104,3 +111,11 @@ class Question(GeneratedQuestion):
     @property
     def served(self) -> bool:
         return self.status in SERVED_STATUSES
+
+    def stored(self) -> dict:
+        """As written to a pool file: `match_targets` only on matching questions, so the pools of the
+        other types don't change shape."""
+        data = self.model_dump()
+        if data.get("match_targets") is None:
+            data.pop("match_targets", None)
+        return data

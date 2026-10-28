@@ -114,6 +114,15 @@ def _clean_item(item) -> tuple[dict | None, list[str]]:
             out["exhibit"] = security.clean_text(out["exhibit"], 1500, multiline=True) or None
         except ValueError:
             problems.append("exhibit is longer than 1500 characters")
+    if isinstance(out.get("match_targets"), list):
+        targets = []
+        for i, t in enumerate(out["match_targets"]):
+            try:
+                targets.append(security.clean_text(t, 200) if isinstance(t, str) else t)
+            except ValueError:
+                problems.append(f"match_targets[{i}] is longer than 200 characters")
+                targets.append(t)
+        out["match_targets"] = targets
     if isinstance(out.get("options"), list):
         opts = []
         for i, o in enumerate(out["options"]):

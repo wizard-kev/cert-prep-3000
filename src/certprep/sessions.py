@@ -286,7 +286,27 @@ def question_public(q: Question) -> dict:
     """What the browser sees before answering: no answer, rationales, or objective IDs."""
     return {"id": q.id, "type": q.type, "status": q.status, "status_label": STATUS_LABELS[q.status],
             "stem": q.stem, "exhibit": q.exhibit, "choose": len(q.answer) if q.type == "multi" else 1,
-            "options": [{"key": o.key, "text": o.text} for o in q.options]}
+            "options": [{"key": o.key, "text": o.text} for o in q.options],
+            **({"match_targets": q.match_targets} if q.type == "matching" else {})}
+
+
+def answer_problem(q: Question, selected: list[str]) -> str | None:
+    """Why an answer doesn't fit its question's format (None if it does). Wrong answers are fine;
+    malformed ones are refused."""
+    keys = [o.key for o in q.options]
+    if q.type == "matching":
+        pairs = {s[0]: s[1:] for s in selected}
+        if len(selected) != len(keys) or sorted(pairs) != sorted(keys) or \
+                any(not n.isdigit() or not 1 <= int(n) <= len(q.match_targets or []) for n in pairs.values()):
+            return "match every item with one of the descriptions"
+        return None
+    if any(len(s) != 1 or s not in keys for s in selected) or len(set(selected)) != len(selected):
+        return "the answer uses options this question doesn't have"
+    if q.type == "ordering" and len(selected) != len(keys):
+        return "put every step in order"
+    if q.type == "single" and len(selected) != 1:
+        return "choose one option"
+    return None
 
 
 def question_full(q: Question) -> dict:

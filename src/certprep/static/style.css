@@ -150,6 +150,17 @@ th, td { text-align: left; padding: .3rem .4rem; border-bottom: 1px solid var(--
 .conf-badge.low { color: var(--warn-fg); border-color: var(--warn-fg); }
 .start-box { position: sticky; bottom: 0; background: var(--card); border-top: 1px solid var(--line); padding: .4rem 0; margin-top: .5rem; }
 
+/* ordering and matching questions */
+.order-list { list-style: none; padding: 0; margin: .3rem 0; }
+.order-item { justify-content: space-between; align-items: center; cursor: default; }
+.order-buttons { display: flex; gap: .3rem; flex: none; }
+.order-buttons button { min-width: 2.2rem; }
+.match-targets { margin: .2rem 0 .6rem; padding-left: 1.6rem; }
+.match-targets li { margin: .15rem 0; }
+.match-item { flex-wrap: wrap; justify-content: space-between; align-items: center; cursor: default; }
+.match-item > span { flex: 1 1 14rem; }
+.match-item select { flex: 1 1 12rem; }
+
 /* help */
 .help-link { background: transparent; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px;
   width: 1.4rem; height: 1.4rem; padding: 0; font-size: .8rem; line-height: 1; vertical-align: middle; margin-left: .25rem; }

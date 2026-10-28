@@ -53,6 +53,30 @@ RULES = """1. Test the DISCRIMINATOR of the assigned objective, not a bare defin
 12. Original content only: never reproduce real exam questions. Never invent specific-looking CVE numbers.
 13. Length limits: stem 1200 characters, option text 400, rationale 600, explanation 1200, discriminator_tested 400."""
 
+# Added to RULES when a prompt asks for ordering or matching questions (v2 plan 7.4, P10).
+FORMAT_RULES = {
+    "ordering": 'type "ordering": 3 to 6 options (keys A-F), each one step of a process or sequence. "answer" lists '
+                "EVERY key exactly once, first step first. The stem asks for the order (\"In what order...\", \"Put these "
+                'steps in sequence\"). Options take no "role"; each "rationale" says why the step comes where it does. '
+                "Rules 4 and 6 don't apply.",
+    "matching": 'type "matching": 3 to 6 options (keys A-F) are the items, and "match_targets" lists 3 to 8 descriptions '
+                "(one or two may match nothing). \"answer\" pairs every key with the number of its description (1 = the "
+                'first in match_targets), like ["A2", "B1", "C3"], using each number at most once. The stem asks to match '
+                'them. Options take no "role"; each "rationale" says why the pair belongs together. Rules 4 and 6 don\'t apply.',
+}
+EXTRA_TYPE_SHARE = 0.1  # of questions asked for, per extra format the exam uses
+
+
+def extra_types(cert: certs.Cert) -> dict[str, float]:
+    """Ordering and matching questions, for certifications whose exam uses those formats."""
+    formats = {f.format for f in cert.exam.question_formats}
+    out = {}
+    if "ordering" in formats:
+        out["ordering"] = EXTRA_TYPE_SHARE
+    if formats & {"matching", "drag-and-drop"}:
+        out["matching"] = EXTRA_TYPE_SHARE
+    return out
+
 
 class PromptError(ValueError):
     pass
@@ -93,6 +117,17 @@ def _exam_label(cert: certs.Cert) -> str:
 
 def _option_line(o, keyed: bool) -> str:
     return f"{o.key}. {o.text}" + ("   <- keyed answer" if keyed else "")
+
+
+def _answer_lines(q) -> list[str]:
+    """The options and the key, in the shape of the question's type."""
+    if q.type == "ordering":
+        return [*[f"{o.key}. {o.text}" for o in q.options], "", "Correct order: " + ", ".join(q.answer)]
+    if q.type == "matching":
+        return [*[f"{o.key}. {o.text}" for o in q.options], "", "Descriptions:",
+                *[f"{i}. {t}" for i, t in enumerate(q.match_targets or [], 1)], "",
+                "Correct pairs (item and description number): " + ", ".join(q.answer)]
+    return [_option_line(o, o.key in q.answer) for o in q.options]
 
 
 def learner_notes(cert_id: str, objective_ids: list[str]) -> list[str]:
@@ -140,19 +175,32 @@ def question_prompt(cert_id: str, objective_ids: list[str], per_objective: int =
     for section in {s.code: s for s, _ in resolved}.values():
         ids = [o.id for s, o in resolved if s.code == section.code]
         targets += generator.targets_for(ids, pool.load(cert_id, section.code), per_objective,
-                                         list(PROMPT_ANGLES), rng)
+                                         list(PROMPT_ANGLES), rng, extra_types(cert))
     names = {o.id: o.objective for _, o in resolved}
-    first = targets[0]
-    example = {
-        "format": QUESTIONS_FORMAT, "format_version": QUESTIONS_FORMAT_VERSION, "cert": cert.id,
-        "questions": [{
-            "objectives": [first.objective], "type": first.type, "angle": first.angle, "difficulty": 3 if harder else 2,
-            "stem": "...", "exhibit": None,
-            "options": [{"key": k, "text": "...", "rationale": "...", "role": r}
-                        for k, r in zip("ABCD", ("best", "partial", "related", "wrong"))],
-            "answer": ["A"], "explanation": "...", "discriminator_tested": "...",
-        }],
-    }
+    types = list(dict.fromkeys(t.type for t in targets))
+    level = 3 if harder else 2
+
+    def sample(t: generator.Target) -> dict:
+        base = {"objectives": [t.objective], "type": t.type, "angle": t.angle, "difficulty": level, "stem": "...",
+                "exhibit": None}
+        if t.type == "ordering":
+            return {**base, "options": [{"key": k, "text": "a step", "rationale": "why it comes here"} for k in "ABCD"],
+                    "answer": ["C", "A", "D", "B"], "explanation": "...", "discriminator_tested": "..."}
+        if t.type == "matching":
+            return {**base, "options": [{"key": k, "text": "an item", "rationale": "why this pair"} for k in "ABC"],
+                    "match_targets": ["description 1", "description 2", "description 3", "description 4"],
+                    "answer": ["A2", "B4", "C1"], "explanation": "...", "discriminator_tested": "..."}
+        return {**base, "options": [{"key": k, "text": "...", "rationale": "...", "role": r}
+                                    for k, r in zip("ABCD", ("best", "partial", "related", "wrong"))],
+                "answer": ["A"], "explanation": "...", "discriminator_tested": "..."}
+
+    # One template per question type in this batch (single and multi share one shape).
+    shown = {}
+    for t in targets:
+        shown.setdefault("choice" if t.type in ("single", "multi") else t.type, t)
+    example = {"format": QUESTIONS_FORMAT, "format_version": QUESTIONS_FORMAT_VERSION, "cert": cert.id,
+               "questions": [sample(t) for t in shown.values()]}
+    rules = RULES + "".join(f"\n{14 + i}. {FORMAT_RULES[t]}" for i, t in enumerate(t for t in types if t in FORMAT_RULES))
     notes = learner_notes(cert_id, [o.id for _, o in resolved])
     has_history = any("not practiced yet" not in n for n in notes)
     parts = [
@@ -183,11 +231,12 @@ def question_prompt(cert_id: str, objective_ids: list[str], per_objective: int =
     if has_history:
         parts += ["", "## What this learner gets wrong (write distractors that test these misconceptions)", *notes]
     parts += [
-        "", "## Rules (the import rejects questions that break them)", RULES,
+        "", "## Rules (the import rejects questions that break them)", rules,
         "", "## Output format",
         f"Reply with exactly one JSON code block and nothing else. Keep \"format\", \"format_version\" and \"cert\" "
         f"exactly as shown, and put {'the question' if len(targets) == 1 else f'the {len(targets)} questions'} in "
-        "\"questions\" in the order listed above. Template (replace every \"...\"; options can be in any order):",
+        "\"questions\" in the order listed above. Template (replace every \"...\"; options can be in any order"
+        + ("; the template shows one question of each type in this batch" if len(example["questions"]) > 1 else "") + "):",
         "```json", json.dumps(example, indent=2), "```",
     ]
     return {"prompt": "\n".join(parts), "targets": [t.__dict__ for t in targets]}
@@ -264,15 +313,16 @@ def ask_prompt(cert_id: str, question_id: str, selected: list[str] | None = None
     q = pool.get(cert_id, question_id)
     if q is None:
         raise PromptError("unknown question")
-    selected = [k for k in (selected or []) if k in {o.key for o in q.options}]
+    keys = {o.key for o in q.options}
+    selected = [k for k in (selected or []) if k[:1] in keys and (len(k) == 2) == (q.type == "matching")]
+    right = selected == q.answer if q.type == "ordering" else sorted(selected) == sorted(q.answer)
     rows = []
     for oid in q.objectives:
         try:
             rows.append(_row(find_objective(cert_id, oid)[1]))
         except Exception:  # noqa: BLE001 - keep the prompt useful even if an objective was removed
             continue
-    mine = (", ".join(selected) + (" (correct)" if sorted(selected) == sorted(q.answer) else " (wrong)")) if selected \
-        else "not given"
+    mine = (", ".join(selected) + (" (correct)" if right else " (wrong)")) if selected else "not given"
     return "\n".join([
         f"I'm studying for the {_exam_label(cert)} exam with a practice question from my study app. Help me "
         "understand it.",
@@ -281,7 +331,7 @@ def ask_prompt(cert_id: str, question_id: str, selected: list[str] | None = None
         q.stem,
         *(["", "Exhibit:", "```", q.exhibit, "```"] if q.exhibit else []),
         "",
-        *[_option_line(o, o.key in q.answer) for o in q.options],
+        *_answer_lines(q),
         "",
         f"My answer: {mine}",
         "",

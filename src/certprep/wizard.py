@@ -30,7 +30,7 @@ MAX_PER_SECTION = 99  # objective IDs have two digits
 MAX_PROBLEMS = 40
 QUESTION_FORMATS = ("single", "multi", "ordering", "matching", "drag-and-drop", "simulation", "performance-based",
                     "fill-in", "other")
-SERVED_FORMATS = {"single", "multi"}  # what this app can serve (plan 7.4)
+SERVED_FORMATS = {"single", "multi", "ordering", "matching"}  # what this app can serve (plan 7.4)
 CONFIDENCES = ("official", "estimate", "unknown")
 _ID = re.compile(certs.CERT_ID)
 _SECTION = re.compile(certs.SECTION_CODE)

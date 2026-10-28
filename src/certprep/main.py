@@ -161,7 +161,7 @@ def study_prompt(cert_id: CertIdPath, objective: ObjectiveQuery):
 
 @app.get("/api/certs/{cert_id}/prompts/ask/{question_id}")
 def ask_prompt(cert_id: CertIdPath, question_id: QuestionIdPath,
-               selected: Annotated[list[Annotated[str, Field(pattern=r"^[A-F]$")]], Query(max_length=6)] = []):
+               selected: Annotated[list[Annotated[str, Field(pattern=r"^[A-F][1-8]?$")]], Query(max_length=6)] = []):
     cert = _cert_or_404(cert_id)
     _question_or_404(cert.id, question_id, allow_retired=True)
     return {"prompt": _prompt_or_422(lambda: prompts.ask_prompt(cert.id, question_id, selected))}
@@ -339,7 +339,8 @@ def get_session(session_id: SessionIdPath):
 
 class AnswerRequest(BaseModel):
     question_id: QuestionId
-    selected: Annotated[list[OptionKey], Field(min_length=1, max_length=6)]
+    # Option keys; for matching questions, key plus description number ("A2").
+    selected: Annotated[list[Annotated[str, Field(pattern=r"^[A-F][1-8]?$")]], Field(min_length=1, max_length=6)]
     confidence: Annotated[StrictInt, Field(ge=1, le=5)]  # 1 Guessing ... 5 Certain
     flagged: StrictBool = False  # "Mark for review" in an exam
 
@@ -355,6 +356,9 @@ def answer(session_id: SessionIdPath, req: AnswerRequest):
     if left is not None and left < -EXAM_GRACE_S:
         raise HTTPException(409, "time is up")
     q = _question_or_404(s["cert_id"], req.question_id)
+    problem = sessions.answer_problem(q, req.selected)
+    if problem:
+        raise HTTPException(422, problem)
     correct = tracker.record_attempt(s["id"], s["cert_id"], q, req.selected, req.confidence, req.flagged)
     pool.mark_seen(s["cert_id"], q.id, tracker.now_iso())  # answered: passively validated
     if s["mode"] in sessions.DEFERRED_FEEDBACK:

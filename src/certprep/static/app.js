@@ -229,21 +229,28 @@ function renderQuestion() {
     $("s-recall-note").focus();
     return;
   }
-  $("s-legend").textContent = q.type === "multi" ? `Choose ${q.choose}` : "Choose one";
-  const type = q.type === "multi" ? "checkbox" : "radio";
-  $("s-options").replaceChildren(...q.options.map((o) => {
-    const label = el("label", "opt");
-    label.dataset.key = o.key;
-    const input = el("input");
-    input.type = type;
-    input.name = "opt";
-    input.value = o.key;
-    input.checked = !!prior?.selected.includes(o.key);
-    const body = el("span");
-    body.append(el("strong", null, `${o.key}. `), el("span", null, o.text));
-    label.append(input, body);
-    return label;
-  }));
+  $("s-legend").textContent = { multi: `Choose ${q.choose}`, ordering: "Put these in order, first at the top",
+    matching: "Match each item with one description" }[q.type] ?? "Choose one";
+  if (q.type === "ordering") {
+    $("s-options").replaceChildren(el("p", "muted", "Use ↑ and ↓ to put the steps in order, first at the top."), orderingInput(q, prior));
+  } else if (q.type === "matching") {
+    $("s-options").replaceChildren(...matchingInput(q, prior));
+  } else {
+    const type = q.type === "multi" ? "checkbox" : "radio";
+    $("s-options").replaceChildren(...q.options.map((o) => {
+      const label = el("label", "opt");
+      label.dataset.key = o.key;
+      const input = el("input");
+      input.type = type;
+      input.name = "opt";
+      input.value = o.key;
+      input.checked = !!prior?.selected.includes(o.key);
+      const body = el("span");
+      body.append(el("strong", null, `${o.key}. `), el("span", null, o.text));
+      label.append(input, body);
+      return label;
+    }));
+  }
   // No default confidence: an honest rating each time is what makes progress tracking meaningful.
   for (const r of document.querySelectorAll("input[name=conf]")) {
     r.checked = prior ? Number(r.value) === prior.confidence : false;
@@ -263,14 +270,140 @@ function renderQuestion() {
   renderExamReport(q);
   renderNavigator();
   if (revealed) showFeedback(revealed.correct, revealed.question, prior.selected);
-  else $("s-options").querySelector("input")?.focus();
+  else $("s-options").querySelector("input, select, button:not(:disabled)")?.focus();
+}
+
+// Ordering: the learner's current order (kept per question while the session lasts), moved with ↑ and ↓.
+function orderingInput(q, prior) {
+  S.order ??= {};
+  const order = (S.order[q.id] ??= [...(prior?.selected ?? q.options.map((o) => o.key))]);
+  const text = Object.fromEntries(q.options.map((o) => [o.key, o.text]));
+  const list = el("ol", "order-list");
+  order.forEach((key, i) => {
+    const li = el("li", "opt order-item");
+    li.dataset.key = key;
+    const move = (step) => {
+      [order[i], order[i + step]] = [order[i + step], order[i]];
+      const fresh = orderingInput(q, prior);
+      list.replaceWith(fresh);
+      const buttons = fresh.children[i + step].querySelectorAll("button");
+      (step < 0 && !buttons[0].disabled ? buttons[0] : !buttons[1].disabled ? buttons[1] : buttons[0]).focus();
+    };
+    const up = el("button", "secondary small", "↑");
+    const down = el("button", "secondary small", "↓");
+    for (const [b, step, word] of [[up, -1, "up"], [down, 1, "down"]]) {
+      b.type = "button";
+      b.disabled = i + step < 0 || i + step >= order.length;
+      b.setAttribute("aria-label", `Move ${word}: ${text[key]}`);
+      b.addEventListener("click", () => move(step));
+    }
+    const body = el("span", "order-text");
+    body.append(el("strong", null, `${i + 1}. `), el("span", null, text[key]));
+    const buttons = el("span", "order-buttons");
+    buttons.append(up, down);
+    li.append(body, buttons);
+    list.append(li);
+  });
+  return list;
+}
+
+// Matching: the numbered descriptions, then one picker per item.
+function matchingInput(q, prior) {
+  const chosen = Object.fromEntries((prior?.selected ?? []).map((s) => [s[0], s.slice(1)]));
+  const targets = el("ol", "match-targets");
+  for (const t of q.match_targets) targets.append(el("li", null, t));
+  const items = q.options.map((o) => {
+    const row = el("label", "opt match-item");
+    const pick = el("select");
+    pick.dataset.key = o.key;
+    pick.setAttribute("aria-label", `Description for ${o.key}. ${o.text}`);
+    const blank = el("option", null, "Choose a description");
+    blank.value = "";
+    pick.append(blank, ...q.match_targets.map((t, i) => { const opt = el("option", null, `${i + 1}. ${t}`); opt.value = String(i + 1); return opt; }));
+    pick.value = chosen[o.key] ?? "";
+    const body = el("span");
+    body.append(el("strong", null, `${o.key}. `), el("span", null, o.text));
+    row.append(body, pick);
+    return row;
+  });
+  return [el("p", "muted", "Descriptions:"), targets, ...items];
+}
+
+// An answered question: every option with the keyed answer and its rationale, the learner's choices marked
+// (not by color alone). Ordering shows the correct sequence; matching shows the correct pairs.
+function answerView(q, selected = []) {
+  if (q.type === "ordering") return orderView(q, selected);
+  if (q.type === "matching") return matchView(q, selected);
+  const opts = el("div");
+  for (const o of q.options) {
+    const label = el("div", "opt");
+    label.dataset.key = o.key;
+    const body = el("span");
+    body.append(el("strong", null, `${o.key}. `), el("span", null, o.text));
+    label.append(body);
+    opts.append(label);
+  }
+  markOptions(opts, q, selected);
+  return opts;
+}
+
+const ordinal = (n) => `${n}${n % 10 === 1 && n % 100 !== 11 ? "st" : n % 10 === 2 && n % 100 !== 12 ? "nd" : n % 10 === 3 && n % 100 !== 13 ? "rd" : "th"}`;
+
+function orderView(q, selected) {
+  const byKey = Object.fromEntries(q.options.map((o) => [o.key, o]));
+  const list = el("ol", "order-list");
+  q.answer.forEach((key, i) => {
+    const yours = selected.indexOf(key);
+    const right = !selected.length || yours === i;
+    const li = el("li", `opt ${right ? "correct" : "wrong"}`);
+    const body = el("span");
+    body.append(el("strong", null, `${i + 1}. `), el("span", null, byKey[key].text));
+    if (!right) body.append(el("small", "muted", ` (you put it ${yours < 0 ? "nowhere" : ordinal(yours + 1)})`));
+    body.append(el("span", "rationale", byKey[key].rationale));
+    li.append(body);
+    list.append(li);
+  });
+  const box = el("div");
+  box.append(el("p", "muted", "The correct order:"), list);
+  return box;
+}
+
+function matchView(q, selected) {
+  const number = (s) => Number(s.slice(1));
+  const chosen = Object.fromEntries(selected.map((s) => [s[0], number(s)]));
+  const right = Object.fromEntries(q.answer.map((s) => [s[0], number(s)]));
+  const box = el("div");
+  box.append(el("p", "muted", "The correct pairs:"));
+  for (const o of q.options) {
+    const ok = !selected.length || chosen[o.key] === right[o.key];
+    const row = el("div", `opt ${ok ? "correct" : "wrong"}`);
+    const body = el("span");
+    body.append(el("strong", null, `${o.key}. ${o.text}`), el("span", null, ` → ${right[o.key]}. ${q.match_targets[right[o.key] - 1]}`));
+    if (!ok) body.append(el("small", "muted", chosen[o.key] ? ` (you chose ${chosen[o.key]}. ${q.match_targets[chosen[o.key] - 1]})` : " (not answered)"));
+    body.append(el("span", "rationale", o.rationale));
+    row.append(body);
+    box.append(row);
+  }
+  const used = new Set(Object.values(right));
+  const spare = q.match_targets.map((t, i) => [i + 1, t]).filter(([n]) => !used.has(n));
+  if (spare.length) box.append(el("p", "muted", `Matches nothing: ${spare.map(([n, t]) => `${n}. ${t}`).join("; ")}`));
+  return box;
 }
 
 async function submitAnswer(ev) {
   ev.preventDefault();
   const q = S.questions[S.i];
-  const selected = [...$("s-options").querySelectorAll("input:checked")].map((i) => i.value);
-  if (!selected.length) { $("s-msg").textContent = q.type === "multi" ? `Choose ${q.choose} options.` : "Choose an option."; return; }
+  let selected;
+  if (q.type === "ordering") {
+    selected = [...S.order[q.id]];
+  } else if (q.type === "matching") {
+    const picks = [...$("s-options").querySelectorAll("select")];
+    if (picks.some((p) => !p.value)) { $("s-msg").textContent = "Match every item with a description."; picks.find((p) => !p.value).focus(); return; }
+    selected = picks.map((p) => `${p.dataset.key}${p.value}`);
+  } else {
+    selected = [...$("s-options").querySelectorAll("input:checked")].map((i) => i.value);
+    if (!selected.length) { $("s-msg").textContent = q.type === "multi" ? `Choose ${q.choose} options.` : "Choose an option."; return; }
+  }
   const chosen = document.querySelector("input[name=conf]:checked");
   if (!chosen) { $("s-msg").textContent = "How sure are you? Pick 1 (Guessing) to 5 (Certain)."; $("s-conf").querySelector("input").focus(); return; }
   $("s-msg").textContent = "";
@@ -324,11 +457,14 @@ function setStatus(id, status) {
 
 function showFeedback(correct, full, selected) {
   setStatus(full.id, full.status);
-  markOptions($("s-options"), full, selected);
+  if (full.type === "ordering" || full.type === "matching") $("s-options").replaceChildren(answerView(full, selected));
+  else markOptions($("s-options"), full, selected);
   for (const r of document.querySelectorAll("input[name=conf]")) r.disabled = true;
+  const key = { ordering: `Correct order: ${full.answer.join(", ")}`, matching: "The correct pairs are shown above." }[full.type]
+    ?? `Answer: ${full.answer.join(", ")}`;
   const fb = $("s-feedback");
   fb.replaceChildren(
-    el("p", correct ? "verdict-ok" : "verdict-bad", correct ? "Correct" : `Incorrect. Answer: ${full.answer.join(", ")}`),
+    el("p", correct ? "verdict-ok" : "verdict-bad", correct ? "Correct" : `Incorrect. ${key}`),
     el("p", null, full.explanation),
     el("p", "muted", `Discriminator: ${full.discriminator_tested}`),
     el("p", "muted", `${full.objectives.map((o) => `${o} ${names[o] ?? ""}`.trim()).join(" · ")} · angle: ${full.angle} · ${full.id}`),
@@ -549,16 +685,7 @@ function renderReport(rep, timeUp) {
     box.append(sum, el("p", "stem", q.stem));
     const ex = exhibitEl(q);
     if (ex) box.append(ex);
-    const opts = el("div");
-    for (const o of q.options) {
-      const label = el("div", "opt");
-      label.dataset.key = o.key;
-      const body = el("span");
-      body.append(el("strong", null, `${o.key}. `), el("span", null, o.text));
-      label.append(body);
-      opts.append(label);
-    }
-    markOptions(opts, q, it.attempt?.selected ?? []);
+    const opts = answerView(q, it.attempt?.selected ?? []);
     box.append(opts, el("p", null, q.explanation), el("p", "muted", `Discriminator: ${q.discriminator_tested}`));
     if (it.attempt) {
       const c = it.attempt.confidence;
@@ -586,16 +713,7 @@ function renderReportDisputes(rep) {
     item.append(el("strong", null, `${q.id} · ${q.objectives[0]} · your reason: ${d.reason}`), el("p", "stem", q.stem));
     const ex = exhibitEl(q);
     if (ex) item.append(ex);
-    const opts = el("div");
-    for (const o of q.options) {
-      const label = el("div", "opt");
-      label.dataset.key = o.key;
-      const body = el("span");
-      body.append(el("strong", null, `${o.key}. `), el("span", null, o.text));
-      label.append(body);
-      opts.append(label);
-    }
-    markOptions(opts, q, []);
+    const opts = answerView(q);
     item.append(opts, el("p", null, q.explanation));
     const actions = el("div", "row");
     if (d.decision) {
@@ -638,16 +756,7 @@ async function openDisputes() {
         el("p", "muted", `Your reason: ${q.disputed_reason}`), el("p", "stem", q.stem));
       const ex = exhibitEl(q);
       if (ex) box.append(ex);
-      const opts = el("div");
-      for (const o of q.options) {
-        const label = el("div", "opt");
-        label.dataset.key = o.key;
-        const body = el("span");
-        body.append(el("strong", null, `${o.key}. `), el("span", null, o.text));
-        label.append(body);
-        opts.append(label);
-      }
-      markOptions(opts, q, []);
+      const opts = answerView(q);
       box.append(opts, el("p", null, q.explanation));
       const actions = el("div", "row");
       const decide = async (decision) => {
@@ -1723,16 +1832,7 @@ async function renderTooEasy(codes) {
       el("p", "stem", q.stem));
     const ex = exhibitEl(q);
     if (ex) box.append(ex);
-    const opts = el("div");
-    for (const o of q.options) {
-      const label = el("div", "opt");
-      label.dataset.key = o.key;
-      const body = el("span");
-      body.append(el("strong", null, `${o.key}. `), el("span", null, o.text));
-      label.append(body);
-      opts.append(label);
-    }
-    markOptions(opts, q, []);
+    const opts = answerView(q);
     const keep = el("button", "secondary small", "Keep it");
     keep.type = "button";
     keep.addEventListener("click", () => { kept.add(q.id); store.set(keepKey, [...kept]); box.remove(); });
