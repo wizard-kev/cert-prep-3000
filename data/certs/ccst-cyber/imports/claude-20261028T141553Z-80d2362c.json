@@ -1,0 +1,1353 @@
+{
+  "format": "certprep-questions",
+  "format_version": 1,
+  "cert": "ccst-cyber",
+  "questions": [
+    {
+      "objectives": [
+        "C01-09",
+        "C01-11",
+        "C01-10"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 3,
+      "stem": "A server at 203.0.113.20 is overwhelmed by a flood of ICMP echo replies arriving from dozens of hosts on a neighbouring subnet, none of which it contacted. A capture on that subnet shows a single echo request sent to its broadcast address carrying 203.0.113.20 as the source IP. The volume is far larger than one attacker could send directly. Which attack name BEST describes this?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Smurf attack — the victim is flooded by replies from the whole segment",
+          "rationale": "An ICMP echo to a broadcast address with the victim's spoofed source makes every host on the segment reply to the victim; the broadcast step defines it.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Reflection attack — a broad label for any bounced, source-spoofed flood",
+          "rationale": "Smurf is one kind of reflection, so the label fits loosely, but it does not name the broadcast-echo mechanism shown.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "DNS amplification — spoofed queries draw large replies from resolvers",
+          "rationale": "Amplification also spoofs the victim's source, but it abuses DNS resolvers over UDP rather than ICMP echo to a broadcast address.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "SYN flood — many half-open TCP connections exhaust the server",
+          "rationale": "A SYN flood exhausts a server with half-open TCP handshakes and uses no ICMP or broadcast traffic.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "A smurf attack spoofs the victim's address as the source of an ICMP echo sent to a subnet's broadcast address, so every host there replies to the victim at once. The broadcast echo is the signature that separates it from other source-spoofed floods.",
+      "discriminator_tested": "Only the smurf attack reaches its volume by aiming broadcast ICMP echoes at a whole segment so those hosts reply to the spoofed victim."
+    },
+    {
+      "objectives": [
+        "C01-25",
+        "C01-24",
+        "C01-26"
+      ],
+      "type": "single",
+      "angle": "interpret-config",
+      "difficulty": 2,
+      "stem": "A workstation's autostart entry launches the tool configured below. Which description BEST fits what this software does?",
+      "exhibit": "; input tool configuration\n[capture]\nmode        = keyboard_hook\nlog_file    = %APPDATA%\\svc\\input.dat\nlog_window  = true\nbuffer_kb   = 64\n[delivery]\ninterval_s  = 3600\nendpoint    = https://198.51.100.44/upload\ntls_verify  = false\n[persistence]\nrun_key     = HKCU\\Software\\...\\Run\nrun_name    = AudioSvcHelper",
+      "options": [
+        {
+          "key": "A",
+          "text": "A keylogger that hooks the keyboard and logs keystrokes to a file",
+          "rationale": "The keyboard_hook mode and the input log file show it is capturing keystrokes, which is what defines a keylogger.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Spyware that quietly gathers user activity and reports it home",
+          "rationale": "A keylogger is a kind of spyware, so the label is loosely right, but it does not name the keystroke-capture method shown here.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "A rootkit that conceals its own process from the operating system",
+          "rationale": "A rootkit hides components at the OS level; the autostart entry gives persistence but no kernel-level concealment of that type.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "A screen scraper that captures periodic screenshots of the desktop",
+          "rationale": "Nothing in the configuration captures images; it records typed input, not the screen.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "The configuration hooks the keyboard and writes typed input to a log for upload, which is exactly how a keylogger steals credentials; such tools are usually delivered by spyware or a trojan but are defined by the capture method. A hardware or software keylogger records what is typed regardless of how it arrived.",
+      "discriminator_tested": "A keylogger is identified by its keystroke-capture method, not by how it was delivered or by broader data-gathering labels."
+    },
+    {
+      "objectives": [
+        "C01-34",
+        "C01-16",
+        "C01-15"
+      ],
+      "type": "multi",
+      "angle": "scenario-with-distractor",
+      "difficulty": 3,
+      "stem": "Clients on an access switch are getting an incorrect default gateway from an unauthorized DHCP server someone plugged into a user port. A colleague suggests several fixes. Which two correctly describe how DHCP snooping addresses this? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It permits DHCP server replies from trusted ports and drops the rest",
+          "rationale": "DHCP snooping classifies ports as trusted or untrusted and discards server-sourced DHCP messages arriving on untrusted ports.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The link toward the legitimate DHCP server is designated trusted",
+          "rationale": "Only the path toward the legitimate server is trusted, so its offers are allowed while the rogue server's are dropped.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Allowing one MAC per port with port security blocks the rogue server",
+          "rationale": "Port security limits MAC addresses, but the rogue server can be that one permitted MAC, so it still hands out addresses.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "Dynamic ARP Inspection is the feature that filters the rogue offers",
+          "rationale": "Dynamic ARP Inspection validates ARP using the snooping binding table; it mitigates ARP spoofing, not rogue DHCP offers.",
+          "role": "related"
+        },
+        {
+          "key": "E",
+          "text": "Setting a dedicated native VLAN on trunks keeps the rogue offers out",
+          "rationale": "A dedicated native VLAN counters VLAN hopping, which is unrelated to a rogue DHCP server on an access port.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "DHCP snooping marks the uplink toward the authorized server as trusted and drops DHCP server messages on all untrusted user ports, which stops a rogue server. Port security limits MACs but does not distinguish a DHCP server from any other host.",
+      "discriminator_tested": "DHCP snooping stops rogue servers by trusting only designated ports for DHCP replies, something MAC limits and VLAN changes do not do."
+    },
+    {
+      "objectives": [
+        "C02-10",
+        "C02-09",
+        "C02-12"
+      ],
+      "type": "multi",
+      "angle": "attack-to-mitigation",
+      "difficulty": 2,
+      "stem": "An office occupies three floors of one building. All staff laptops, phones, and printers connect wirelessly within that building, and IT wants to harden the network against unauthorized association. Which two statements are correct? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "This is a WLAN, so WPA2-Enterprise with 802.1X is a fitting control",
+          "rationale": "A wireless LAN covering a building is a WLAN, and 802.1X with WPA2/WPA3-Enterprise authenticates each user on it.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "On a WLAN this size, wireless rogue-AP detection helps spot intruders",
+          "rationale": "Rogue-AP and evil-twin detection on the WLAN infrastructure flags unauthorized access points added to this network.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "This is a WPAN, so Bluetooth pairing PINs are the main safeguard here",
+          "rationale": "A WPAN spans only a few metres (for example Bluetooth); a building-wide network is far larger than a personal-area network.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "This is a WWAN, so the mobile carrier is responsible for securing it",
+          "rationale": "A WWAN is a carrier-run wide-area wireless network such as cellular, not an in-building Wi-Fi the company operates.",
+          "role": "related"
+        },
+        {
+          "key": "E",
+          "text": "This is a WMAN, so WiMAX base-station authentication is what applies",
+          "rationale": "A WMAN covers a metropolitan area; a single building's Wi-Fi does not reach that scale.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "A WLAN is wireless networking at the scale of a building or campus, the common home and enterprise case; WPANs (metres), WMANs (city), and WWANs (carrier-wide) describe other ranges. Classifying the office Wi-Fi correctly as a WLAN points to the right controls.",
+      "discriminator_tested": "Building- or campus-wide Wi-Fi is a WLAN, distinct from the much smaller WPAN and the much larger WMAN and WWAN scales."
+    },
+    {
+      "objectives": [
+        "C02-30",
+        "C02-29",
+        "C02-31"
+      ],
+      "type": "single",
+      "angle": "choose-response",
+      "difficulty": 2,
+      "stem": "A café must secure its wireless with a single passphrase every staff device can use, and it has no RADIUS server. It wants the AES-based protection that has been the baseline standard for years. Which configuration should it apply?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "WPA2-Personal, using AES-CCMP with one shared passphrase",
+          "rationale": "WPA2-Personal protects traffic with AES-CCMP and uses one shared passphrase, matching a small site with no authentication server.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "WPA, using TKIP with one shared passphrase for staff",
+          "rationale": "WPA relies on TKIP with RC4, an older cipher that WPA2 replaced; it is not the AES-based baseline described.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "WPA2-Enterprise, using 802.1X against a RADIUS server for each user",
+          "rationale": "WPA2-Enterprise authenticates each user via 802.1X and needs a RADIUS server, which this café does not have.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "WEP, using a static shared key with the RC4 cipher",
+          "rationale": "WEP uses the broken RC4 stream cipher and is not considered secure.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "WPA2 is defined by AES-CCMP, and its Personal mode uses a single shared passphrase, which fits a small site without a RADIUS server. WPA's TKIP/RC4 and WEP's RC4 are the older ciphers WPA2 replaced.",
+      "discriminator_tested": "WPA2 is distinguished by its use of AES-CCMP rather than the TKIP/RC4 encryption of WPA and WEP."
+    },
+    {
+      "objectives": [
+        "C02-31",
+        "C02-30",
+        "C04-11"
+      ],
+      "type": "multi",
+      "angle": "attack-to-mitigation",
+      "difficulty": 3,
+      "stem": "Everyone at a firm shares one WPA2-Personal passphrase. An employee who knew it just left, forcing IT to change the key on every device. Which two changes BEST prevent one person's knowledge from compromising the WLAN in future? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Move to WPA2-Enterprise, where each user has their own 802.1X login",
+          "rationale": "WPA2-Enterprise uses 802.1X with RADIUS so credentials are per user, and no single shared key exists to leak.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Revoke the departed user's RADIUS account to cut off only their access",
+          "rationale": "With per-user accounts, disabling one account on RADIUS removes that person's access without touching anyone else.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Keep WPA2-Personal but set a longer shared passphrase for the staff",
+          "rationale": "A longer passphrase is still one shared secret, so a departing employee's knowledge still forces a global re-key.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "Turn on WPS so staff join without entering the passphrase",
+          "rationale": "WPS is a convenience feature with known weaknesses and gives no per-user accountability.",
+          "role": "related"
+        },
+        {
+          "key": "E",
+          "text": "Switch the WLAN to TKIP, since Enterprise mode needs TKIP not AES",
+          "rationale": "Both WPA2 modes use AES-CCMP; Enterprise does not require TKIP, and TKIP would weaken the network.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "WPA2-Enterprise replaces the single shared passphrase with 802.1X authentication to a RADIUS server, giving each user individual credentials that can be revoked one at a time. The two modes share the AES-CCMP cipher and differ only in how users authenticate.",
+      "discriminator_tested": "WPA2-Enterprise authenticates each user individually through 802.1X/RADIUS rather than sharing one passphrase, while using the same AES-CCMP cipher as Personal."
+    },
+    {
+      "objectives": [
+        "C02-35",
+        "C02-31",
+        "C02-34"
+      ],
+      "type": "single",
+      "angle": "symptom-to-attack",
+      "difficulty": 3,
+      "stem": "On a high-assurance wireless network, each user signs in with their own domain credentials, the controller relays authentication to a RADIUS server, and the strongest optional encryption profile is negotiated. Which configuration produces these traits?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "WPA3-Enterprise, adding an optional 192-bit suite on top of 802.1X",
+          "rationale": "Per-user 802.1X together with the optional 192-bit suite are the hallmarks of WPA3-Enterprise's high-security mode.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "WPA2-Enterprise, running 802.1X with AES-CCMP encryption",
+          "rationale": "WPA2-Enterprise also authenticates each user by 802.1X but is the earlier generation and lacks the WPA3 192-bit suite.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "WPA3-Personal, using SAE with one shared network password",
+          "rationale": "WPA3-Personal uses SAE and a single shared password, so it is not per-user authentication.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "WPA2-Personal, using AES-CCMP with one shared passphrase",
+          "rationale": "WPA2-Personal relies on one shared passphrase with no per-user login.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "WPA3-Enterprise combines 802.1X per-user authentication with WPA3 cryptography and an optional 192-bit suite for high-security environments. Per-user login rules out the Personal modes, and the 192-bit suite points to WPA3 rather than WPA2.",
+      "discriminator_tested": "WPA3-Enterprise is marked by per-user 802.1X authentication and its optional 192-bit suite, unlike SAE-based Personal modes and the older WPA2-Enterprise."
+    },
+    {
+      "objectives": [
+        "C02-41",
+        "C02-42",
+        "C02-43"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 2,
+      "stem": "A network IDS watches a mirrored copy of traffic from a switch SPAN port. A packet matches one of its signatures. What BEST describes the effect on that traffic?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It raises an alert while the packet still reaches its destination",
+          "rationale": "An IDS detects and alerts; because it sees only a passive copy, the live packet continues to its destination.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "It records the event in its logs for later review by an analyst",
+          "rationale": "An IDS does log matches, but logging understates its defining alerting action and does not describe the effect on the traffic.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "It drops the matching packet inline before the host receives it",
+          "rationale": "Dropping a packet inline is what an IPS does; an IDS on a SPAN copy cannot stop the original.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "It quarantines the source host on the access switch automatically",
+          "rationale": "Quarantining a host is an active response an IDS by itself does not perform.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "An IDS monitors a copy of traffic and raises alerts on suspicious activity, but it is out of band and cannot block, so the original packet still arrives. Blocking inline is the role of an IPS.",
+      "discriminator_tested": "An IDS only detects and alerts on a passive traffic copy, so the live packet is never stopped the way an inline IPS would stop it."
+    },
+    {
+      "objectives": [
+        "C02-42",
+        "C02-41",
+        "C02-08"
+      ],
+      "type": "multi",
+      "angle": "attack-to-mitigation",
+      "difficulty": 3,
+      "stem": "Exploit attempts keep reaching application servers, and the current IDS only alerts after the packets arrive. The team wants a device that stops attacks in real time. Which two statements about deploying an IPS are correct? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Placed inline, it can drop malicious packets before they reach servers",
+          "rationale": "An IPS sits inline, so it can discard packets matching its signatures before they reach the target.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Because traffic flows through it, an outage can disrupt good traffic too",
+          "rationale": "Inline placement is a trade-off: if the IPS fails or is overwhelmed, the traffic through it can be interrupted.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Fed by a SPAN port copy, it still blocks the attacks from that mirror",
+          "rationale": "A SPAN port gives only a mirrored copy, which supports detection and alerting but cannot block the live flow.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "It reviews the day's logs overnight and blocks the sources afterward",
+          "rationale": "Blocking must happen in real time at the moment of attack, not from a later log review.",
+          "role": "wrong"
+        },
+        {
+          "key": "E",
+          "text": "A honeypot in the traffic path drops the attacks as they arrive",
+          "rationale": "A honeypot is a decoy that lures and observes attackers; it is not an inline control that drops traffic.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "An IPS is inline and drops malicious traffic as it passes, which is how it stops attacks in real time; the cost is that an inline failure can disrupt legitimate traffic. A device fed only a mirrored copy can detect but not block.",
+      "discriminator_tested": "An IPS blocks inline in real time, so its failure can break traffic, unlike a passive IDS that only alerts on a copy."
+    },
+    {
+      "objectives": [
+        "C02-44",
+        "C03-10",
+        "C02-38"
+      ],
+      "type": "single",
+      "angle": "choose-tool",
+      "difficulty": 2,
+      "stem": "A company wants to filter staff web access by the full URL and by user identity, cache frequently visited pages, and keep a log of the sites each person visits. Which tool BEST meets these goals?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A proxy server that relays and filters client requests",
+          "rationale": "A proxy makes web requests on behalf of clients at the application layer, so it can filter by full URL and user, cache pages, and log per-user activity.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "A DNS resolver that blocks domains on a blocklist",
+          "rationale": "A DNS resolver sees only the hostname looked up, not the user or the URL path, so its filtering is coarser.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "A stateful firewall that filters by port and IP",
+          "rationale": "A stateful firewall tracks connections by address and port and does not inspect URLs, users, or cache content.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "An IPS that matches traffic to attack signatures",
+          "rationale": "An IPS focuses on detecting and blocking attack traffic, not enforcing browsing policy or caching.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "A proxy or web filter is an application-layer intermediary that requests pages for clients, which lets it filter by full URL and user, cache content, and log visits. DNS filtering works only at the hostname level and cannot see the path or the user.",
+      "discriminator_tested": "Only an application-layer proxy acts on clients' behalf to filter full URLs per user and cache pages, which DNS and firewall filtering cannot do."
+    },
+    {
+      "objectives": [
+        "C03-12",
+        "C03-11",
+        "C01-16"
+      ],
+      "type": "single",
+      "angle": "mitigation-to-threat",
+      "difficulty": 2,
+      "stem": "A team replaces BootP, which gives each host a fixed address from a manual MAC-to-IP table, with DHCP. Which statement BEST describes the functional capability DHCP adds?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It assigns addresses dynamically from a pool, using leases",
+          "rationale": "BootP relies on a static MAC-to-IP table, while DHCP's leases let it assign and reclaim addresses from a pool automatically.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "It is a newer protocol supported by more of today's devices",
+          "rationale": "Wider support is true but is a consequence, not the functional capability of dynamic leasing that sets DHCP apart.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "It runs on different UDP ports than BootP does",
+          "rationale": "Both BootP and DHCP use UDP ports 67 and 68, so the ports are not what differs.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "It encrypts each assignment so the address stays private",
+          "rationale": "Neither protocol encrypts address assignment, and DHCP can itself be targeted by rogue servers.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "BootP predated DHCP and used a fixed, administrator-maintained MAC-to-IP mapping; DHCP added dynamic assignment from an address pool with time-limited leases. Both run over UDP 67/68, so the real difference is dynamic leasing, not ports or encryption.",
+      "discriminator_tested": "DHCP's defining addition over BootP is dynamic, lease-based assignment from a pool rather than BootP's static MAC-to-IP table."
+    },
+    {
+      "objectives": [
+        "C03-28",
+        "C03-31",
+        "C03-20"
+      ],
+      "type": "multi",
+      "angle": "assess-risk",
+      "difficulty": 2,
+      "stem": "A packet capture on an access segment shows a frame whose destination MAC is ff:ff:ff:ff:ff:ff. Which two statements about where this frame goes and its MAIN risk are correct? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Every host in the local broadcast domain processes the frame",
+          "rationale": "The all-ones destination MAC is a Layer-2 broadcast, so every host in the local broadcast domain receives and processes it.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Heavy broadcast traffic can slow every host on the segment",
+          "rationale": "Because every host must handle each broadcast, a high rate of them can degrade performance across the segment.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Members of an ARP multicast group receive the frame",
+          "rationale": "Broadcasts are not multicast; there is no ARP multicast group, and the all-ones MAC reaches everyone on the segment.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "A router forwards it toward the destination's remote subnet",
+          "rationale": "A router does not forward a Layer-2 broadcast, so it never reaches a remote subnet.",
+          "role": "related"
+        },
+        {
+          "key": "E",
+          "text": "The segment's default gateway processes the frame",
+          "rationale": "A broadcast is not delivered to the gateway alone; all local hosts receive it.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "A frame addressed to ff:ff:ff:ff:ff:ff is a Layer-2 broadcast that every device on the local segment must process, and routers do not forward it beyond that broadcast domain. The practical risk is that excessive broadcasts load every host and can cause a storm.",
+      "discriminator_tested": "An all-ones destination MAC is a broadcast reaching every host on the local segment, not a multicast to a subscribed group, and it is never routed off the segment."
+    },
+    {
+      "objectives": [
+        "C03-39",
+        "C03-38",
+        "C03-31"
+      ],
+      "type": "single",
+      "angle": "interpret-config",
+      "difficulty": 2,
+      "stem": "A technician runs a command on a router interface and sees the output below. Which statement correctly interprets one of the addresses shown?",
+      "exhibit": "R1# show ipv6 interface GigabitEthernet0/1\nGigabitEthernet0/1 is up, line protocol is up\n  IPv6 is enabled\n  Link-local address: FE80::1A2B:3CFF:FE44:5566\n  Global unicast address: 2001:DB8:AC10:1::5/64\n  Joined group address(es):\n    FF02::1\n    FF02::2\n  Loopback reachable at ::1",
+      "options": [
+        {
+          "key": "A",
+          "text": "The FE80::/10 address is link-local, used on this link",
+          "rationale": "An address in FE80::/10 is link-local, configured automatically and valid on the directly connected link.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The 2001:DB8::/32 address is the interface's link-local address",
+          "rationale": "That address is a global unicast address, not link-local; link-local addresses begin with FE80.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "FF02::1 is the device's loopback address for local tests",
+          "rationale": "FF02::1 is the all-nodes multicast group, not a loopback; the IPv6 loopback is ::1.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "The ::1 entry shown is a multicast group address",
+          "rationale": "::1 is the IPv6 loopback (the equivalent of 127.0.0.1), not a multicast address.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "In IPv6, FE80::/10 is link-local, FF02::1 is all-nodes multicast, ::1 is loopback, and :: is the unspecified address. Matching each address to its correct role is the skill being tested.",
+      "discriminator_tested": "::1 is the IPv6 loopback and FF02::1 is all-nodes multicast; link-local addresses are the ones beginning with FE80."
+    },
+    {
+      "objectives": [
+        "C04-01",
+        "C04-15",
+        "C05-11"
+      ],
+      "type": "single",
+      "angle": "choose-response",
+      "difficulty": 2,
+      "stem": "A router's local account is defined with `username admin password Cisco123`. An auditor requires the stored password to be a cryptographic hash, not reversible. Which change BEST meets this?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Redefine the account using `secret` instead of `password`",
+          "rationale": "The secret keyword stores the password as a hash, whereas password stores it in clear text.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Add `service password-encryption` to the configuration",
+          "rationale": "service password-encryption applies weak, reversible type 7 encoding, so it hides the password but is not a true hash.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "Apply `login local` to the console and VTY lines",
+          "rationale": "login local tells the line to authenticate against local accounts but does nothing to how the password is stored.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Set a longer, more complex password for the account",
+          "rationale": "Increasing length and complexity strengthens the password but leaves it stored in the same reversible form.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "On a Cisco device, username ... secret stores a hashed password while username ... password stores clear text, and service password-encryption only adds reversible type 7 encoding. Using secret satisfies a true-hash requirement.",
+      "discriminator_tested": "The secret keyword hashes the local password, unlike the clear-text password keyword or the reversible type 7 encoding from service password-encryption."
+    },
+    {
+      "objectives": [
+        "C04-07",
+        "C04-02",
+        "C04-03"
+      ],
+      "type": "single",
+      "angle": "root-cause-vs-symptom",
+      "difficulty": 3,
+      "stem": "An audit finds ex-employees retaining access across multiple systems long after departure, with provisioning handled ad hoc per system. Which BEST identifies the root cause rather than a symptom?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "No IAM program covers the identity lifecycle",
+          "rationale": "IAM is the overarching program managing identities and access from onboarding to removal; without it, lifecycle gaps like these appear.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Some orphaned accounts stayed enabled after staff left",
+          "rationale": "Orphaned accounts are the visible symptom of the gap, not the underlying cause.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "AAA was not configured on the organization's network devices",
+          "rationale": "AAA is one mechanism used within IAM; missing AAA on devices is narrower than the lifecycle governance problem.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "IAM is a part of AAA and that part was not turned on",
+          "rationale": "The relationship is reversed: IAM is the umbrella and AAA is one mechanism inside it.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "IAM is the umbrella program governing the whole identity lifecycle, and AAA is one mechanism it uses; leftover accounts are a symptom of a missing IAM process. Recognizing IAM as the broader program points to the real root cause.",
+      "discriminator_tested": "IAM is the overarching lifecycle program and AAA is a mechanism within it, so missing lifecycle governance is the cause while orphaned accounts are the symptom."
+    },
+    {
+      "objectives": [
+        "C04-15",
+        "C01-29",
+        "C01-33"
+      ],
+      "type": "multi",
+      "angle": "interpret-config",
+      "difficulty": 3,
+      "stem": "A system enforces the password policy shown. Which two statements about it are correct? (Choose two.)",
+      "exhibit": "device# show password-policy\nminimum-length ...... 8\nrequire-uppercase ... yes\nrequire-lowercase ... yes\nrequire-digit ....... yes\nrequire-symbol ...... yes\nmax-age-days ........ 90\nreuse-history ....... 5",
+      "options": [
+        {
+          "key": "A",
+          "text": "A longer minimum length helps more than extra complexity rules",
+          "rationale": "Each added character multiplies the search space far more than another required class, so length drives brute-force resistance.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The 8-character minimum is the policy's weakest point against brute force",
+          "rationale": "An 8-character minimum allows short passwords, making length the limiting factor for this policy's strength.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "The four character-class rules make length unimportant to strength",
+          "rationale": "Complexity rules help, but length still matters greatly; four classes do not make a short password strong.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "The 90-day maximum age is what most resists password guessing",
+          "rationale": "A maximum age forces rotation but does not make an individual password harder to guess.",
+          "role": "related"
+        },
+        {
+          "key": "E",
+          "text": "A history of 5 prevents reuse, so guessing attacks will fail",
+          "rationale": "Password history blocks reuse of old passwords; it does nothing to resist guessing a current one.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "Length contributes more to resistance against guessing and brute force than character complexity alone, so a short minimum length is the main weakness here. Rotation and history address reuse, not guessing strength.",
+      "discriminator_tested": "Password length raises brute-force resistance more than added character-type complexity, so a short minimum length is the key weakness."
+    },
+    {
+      "objectives": [
+        "C04-22",
+        "C02-04",
+        "C04-21"
+      ],
+      "type": "single",
+      "angle": "interpret-output",
+      "difficulty": 2,
+      "stem": "A device connects to the corporate network and NAC produces the report below. Which statement BEST explains why it was quarantined?",
+      "exhibit": "NAC Posture Report  2026-10-27 14:05\nEndpoint: personal-iphone (owner: j.rivera)\nOwnership: BYOD / unmanaged\nMDM enrollment: none\nOS: iOS 15.1 (out of date)\nAntivirus: n/a\nAccess requested: Corp-WiFi (internal VLAN)\nDecision: quarantined -> remediation VLAN",
+      "options": [
+        {
+          "key": "A",
+          "text": "It is an unmanaged BYOD device whose posture can't be verified by NAC",
+          "rationale": "The report marks the device as BYOD and unmanaged with no MDM, so its posture cannot be confirmed and NAC moves it to remediation.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "It carries personal apps and data that shouldn't reach corporate systems",
+          "rationale": "Personal data is one concern, but the underlying issue is that the device is unmanaged, so nothing about its state can be enforced.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "It failed 802.1X login, so NAC denied it network access",
+          "rationale": "The device was not rejected for bad credentials; it failed the posture check and was quarantined, not denied.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "It is a company-managed laptop that needs an OS update",
+          "rationale": "The report shows BYOD/unmanaged with no MDM, so it is not a company-managed endpoint.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "BYOD devices are personally owned and unmanaged, so the organization cannot verify patch level, MDM enrollment, or configuration, which is why NAC posture checks quarantine them. The leftover personal data is a side issue compared with the device being unmanaged.",
+      "discriminator_tested": "The defining BYOD risk is that the device is unmanaged, so its posture cannot be verified, which NAC handles with segmentation and remediation."
+    },
+    {
+      "objectives": [
+        "C05-24",
+        "C05-22",
+        "C05-19"
+      ],
+      "type": "single",
+      "angle": "mitigation-to-threat",
+      "difficulty": 3,
+      "stem": "To let OSPF run across an encrypted site-to-site link, an engineer configures a Cisco IPsec VTI instead of a policy-based crypto map. Which benefit of the VTI BEST explains why it suits this goal?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The tunnel is a routable interface that routing can run over",
+          "rationale": "A VTI is route-based: the IPsec tunnel is a virtual interface, so OSPF and other protocols treat it like any link.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The tunnel omits the GRE header that GRE-over-IPsec adds",
+          "rationale": "A VTI does avoid the GRE header, a real advantage, but that is not what lets the routing protocol run; the routable interface is.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "An extended ACL selects exactly which traffic gets encrypted",
+          "rationale": "Selecting encrypted traffic with an ACL describes the policy-based crypto-map approach the VTI replaces.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "AH in transport mode authenticates each packet end to end",
+          "rationale": "AH provides authentication without encryption and does not create a routable tunnel interface.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "A Cisco IPsec VTI is route-based, presenting the tunnel as a virtual interface so dynamic routing protocols can run directly over the encrypted path, unlike policy-based crypto maps. It also drops the GRE header, but the routable interface is what enables routing here.",
+      "discriminator_tested": "An IPsec VTI is a route-based, GRE-free virtual interface you can route over, unlike policy-based crypto maps or non-encrypting AH."
+    },
+    {
+      "objectives": [
+        "C05-26",
+        "C05-25",
+        "C05-28"
+      ],
+      "type": "single",
+      "angle": "interpret-config",
+      "difficulty": 3,
+      "stem": "A browser shows the certificate chain below for portal.example.com. What BEST explains why the browser trusts it?",
+      "exhibit": "Certificate chain for portal.example.com\n  [0] Subject: CN=portal.example.com\n      Issuer:  CN=Example Issuing CA\n  [1] Subject: CN=Example Issuing CA\n      Issuer:  CN=Example Root CA\n  [2] Subject: CN=Example Root CA\n      Issuer:  CN=Example Root CA  (self-signed)\nTrusted roots on this device: Example Root CA",
+      "options": [
+        {
+          "key": "A",
+          "text": "A root CA already in the device's trust store signed the chain",
+          "rationale": "Trust flows from a root the device already trusts; its signature validates the intermediate, which validates the server certificate.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Example Issuing CA issued the certificate for portal.example.com",
+          "rationale": "The issuing CA did sign this certificate, but it is trusted only because the trusted root signed it in turn.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "The certificate's own public key proves the site's identity directly",
+          "rationale": "A certificate's public key alone proves nothing without a trusted CA's signature vouching for it.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "The certificate is self-signed and validates on its own",
+          "rationale": "This certificate is not self-signed; it chains through an intermediate up to a trusted root.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "A CA is the trust anchor because a root the device already trusts signs the chain with its private key, and that signature is what makes the leaf certificate trustworthy. Being issued by some CA is not enough unless that CA chains to a trusted root.",
+      "discriminator_tested": "A certificate is trusted because a root CA in the trust store signed its chain, not merely because some CA issued it."
+    },
+    {
+      "objectives": [
+        "C05-31",
+        "C05-02",
+        "C05-04"
+      ],
+      "type": "single",
+      "angle": "interpret-output",
+      "difficulty": 2,
+      "stem": "A router shows the output below. Which statement BEST describes this configuration?",
+      "exhibit": "R1# show access-lists\nExtended IP access list WEB-IN\n    10 permit tcp any host 198.51.100.10 eq 443\n    20 permit tcp any host 198.51.100.10 eq 80\n    30 deny ip any any",
+      "options": [
+        {
+          "key": "A",
+          "text": "An extended named ACL filtering by destination and port",
+          "rationale": "The Extended header and the destination-host, port matches show it is an extended named ACL; the standard or extended keyword is required when creating one.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "An ACL that allows web traffic to one internal server",
+          "rationale": "It does allow web traffic to that server, but this omits that it is extended and ends with an explicit deny.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "A standard ACL that matches on source address",
+          "rationale": "A standard ACL can match source addresses; this one matches destinations and ports, so it is extended.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "An ACL whose entries each need the 'access-list' keyword",
+          "rationale": "Entries in a named ACL are entered without the access-list keyword, as the numbered lines show.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "A named ACL is created with ip access-list followed by standard or extended, and its entries are typed inside ACL config mode without the access-list keyword. The Extended header and destination/port matching identify this one as extended.",
+      "discriminator_tested": "Named ACLs require the standard or extended keyword at creation, and their entries omit the access-list keyword used by numbered ACLs."
+    },
+    {
+      "objectives": [
+        "C05-35",
+        "C05-30",
+        "C05-04"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 2,
+      "stem": "An administrator wants a single ACL entry that matches both SSH and Telnet to any destination. Which entry body BEST matches both in one line?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "tcp any any range 22 23",
+          "rationale": "A port range needs a transport protocol; tcp with range 22 23 matches TCP ports 22 and 23 in one entry, covering SSH and Telnet.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "tcp any any eq 22",
+          "rationale": "This is valid, but eq 22 matches only SSH, so it does not include Telnet.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "udp any any range 22 23",
+          "rationale": "The syntax is valid, but SSH and Telnet run over TCP, so matching UDP ports 22-23 catches the wrong traffic.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "ip any any range 22 23",
+          "rationale": "The ip keyword matches all IP traffic and cannot take port numbers, so this entry is rejected.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Port numbers require a transport protocol keyword such as tcp or udp, and the range operator takes two ports; ip matches every protocol and cannot specify ports. Since SSH and Telnet are TCP, tcp ... range 22 23 is the correct single entry.",
+      "discriminator_tested": "Ports require tcp or udp and a port operator; the ip keyword matches all traffic and cannot take port numbers."
+    },
+    {
+      "objectives": [
+        "C06-01",
+        "C02-40",
+        "C02-36"
+      ],
+      "type": "single",
+      "angle": "find-missing-element",
+      "difficulty": 3,
+      "stem": "An analyst documents how a laptop's Windows Defender Firewall should behave as it moves between networks. The notes read: inbound is blocked unless a rule allows it; outbound is allowed by default; the Domain profile applies on the corporate LAN; the Private profile applies on the home network. Which element is MOST clearly missing?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The Public profile on untrusted networks",
+          "rationale": "The notes cover Domain and Private but omit the Public profile, which applies on untrusted networks like hotel Wi-Fi and most needs tight rules.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "That inbound stays blocked unless a rule allows it",
+          "rationale": "Inbound blocking is true, but it holds on every profile, so it is not the element missing from a per-profile plan.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "The inbound rules needed to allow Remote Desktop",
+          "rationale": "Specific allow rules are details that live within a profile, not the missing profile itself.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "The outbound rule needed to browse the web",
+          "rationale": "Outbound is allowed by default, so no special outbound rule is needed for browsing.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Windows Defender Firewall applies one of three profiles, Domain, Private, or Public, based on the detected network, and the Public profile governs untrusted networks. A plan listing only Domain and Private is missing the Public profile, which is exactly the hotel Wi-Fi case.",
+      "discriminator_tested": "The active firewall profile changes with network location; the Public profile for untrusted networks is the piece omitted here, not the always-true inbound blocking."
+    },
+    {
+      "objectives": [
+        "C06-03",
+        "C04-08",
+        "C01-38"
+      ],
+      "type": "single",
+      "angle": "interpret-config",
+      "difficulty": 2,
+      "stem": "Based on the configuration below, which statement BEST describes the host's security posture?",
+      "exhibit": "Host: WS-2291  (Windows 11)\nLogged-on user: jmorgan  (Administrators group)\nLocal accounts: Administrator (enabled), Guest (enabled), jmorgan\nServices running: Remote Registry, Print Spooler, Telnet\nBitLocker: Off\nMicrosoft Defender real-time protection: On",
+      "options": [
+        {
+          "key": "A",
+          "text": "A wide attack surface from unneeded enabled components",
+          "rationale": "Daily use as an administrator plus enabled Guest, Telnet, and Remote Registry all widen the attack surface; hardening would pare these back.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "A hardened host, since Defender real-time protection is on",
+          "rationale": "Defender being on is a genuine control, but it does not offset the admin login and the unused accounts and services still exposed.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "An encrypted host, so lost-device data stays protected",
+          "rationale": "BitLocker is Off, so the disk is not encrypted and lost-device data would not be protected.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "A host whose one real weakness is the enabled Guest account",
+          "rationale": "Several issues exist beyond Guest, including admin daily use and extra running services.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Windows hardening reduces attack surface through layered steps: daily use as a standard user, disabling unused accounts and services, antimalware, and disk encryption. This host does the opposite on most counts, so its surface is wide despite Defender being enabled.",
+      "discriminator_tested": "Hardening shrinks attack surface with layered controls, so admin daily use and unused enabled accounts and services outweigh one antimalware control being on."
+    },
+    {
+      "objectives": [
+        "C06-08",
+        "C06-06",
+        "C06-04"
+      ],
+      "type": "single",
+      "angle": "attack-to-mitigation",
+      "difficulty": 2,
+      "stem": "An attacker with a compromised local administrator password copied files from a workstation's C$ share over the network. A technician assumed C$ was safe because the $ hides it. Which is the BEST way to reduce this exposure?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Control and protect privileged credentials, which $ does not secure",
+          "rationale": "Administrative shares like C$ are reachable over SMB by anyone with admin rights; the $ hides them from browsing, so controlling credentials is what protects them.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Give the C$ share a name that does not end in $",
+          "rationale": "The $ is not what secures the share, so renaming changes visibility and does not stop an attacker who already has admin rights.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "Filter inbound TCP 445 at the firewall on untrusted networks",
+          "rationale": "Filtering SMB can help on untrusted networks but is a blunt control that breaks legitimate sharing and ignores the misused credentials.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Enable encryption on C$, since admin shares are otherwise plaintext",
+          "rationale": "The $ hides a share from browsing; it does not encrypt it, and there is no plaintext-vs-encrypted toggle to flip here.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Hidden administrative shares (C$, ADMIN$) end in $, which only removes them from browse lists; they remain reachable over SMB (TCP 445) by anyone with the right credentials. Protecting them means controlling administrative access and permissions, not relying on the $.",
+      "discriminator_tested": "A $ suffix merely hides a share from browsing; it provides no security, so access control over SMB is what actually protects it."
+    },
+    {
+      "objectives": [
+        "C06-13",
+        "C07-30",
+        "C06-11"
+      ],
+      "type": "multi",
+      "angle": "mitigation-to-threat",
+      "difficulty": 2,
+      "stem": "A company tells Mac users to install software only from the Mac App Store. Which two problems does this practice help address? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Users receive Apple-reviewed, sandboxed apps, lowering malware risk",
+          "rationale": "App Store apps are reviewed by Apple and run sandboxed, which limits what malicious code could do.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Software comes from one curated source, not unvetted download sites",
+          "rationale": "Using one curated channel avoids tampered or fake installers found on arbitrary websites.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "The store's review also vets apps downloaded from outside sites",
+          "rationale": "The App Store review covers only apps distributed through the store; apps from outside sites are checked by Gatekeeper.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "Gatekeeper is the store's tool for sandboxing each installed app",
+          "rationale": "Gatekeeper governs apps obtained outside the store, verifying identified or notarized developers, not the store's own curation.",
+          "role": "related"
+        },
+        {
+          "key": "E",
+          "text": "Installed apps are encrypted on disk by the store's FileVault check",
+          "rationale": "Disk encryption on a Mac is FileVault and is unrelated to where apps are obtained.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "Installing only from the Mac App Store gives Apple-reviewed, sandboxed apps from a single curated source, which reduces malware and tampering risk. Gatekeeper is the separate feature that checks apps obtained outside the store, so it is not what the store itself provides.",
+      "discriminator_tested": "The Mac App Store is the curated, reviewed source for apps, while Gatekeeper is what vets apps installed from outside the store."
+    },
+    {
+      "objectives": [
+        "C06-17",
+        "C06-07",
+        "C04-08"
+      ],
+      "type": "single",
+      "angle": "symptom-to-attack",
+      "difficulty": 2,
+      "stem": "A user lists the files in /data/reports with ls, but cd into it fails with 'Permission denied'. The directory's mode is 644. What BEST explains this?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Entering a directory needs the execute bit, which this mode lacks",
+          "rationale": "On a directory, the execute bit grants the right to enter and traverse it; mode 644 has no execute bits, so entry is denied even though read lists names.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The directory also needs write permission to be entered",
+          "rationale": "Write permission controls creating or deleting entries within a directory, not the ability to enter it.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "Listing the names also requires execute, so ls should have failed",
+          "rationale": "Listing names needs read, which 644 grants; execute is what entry needs, so ls succeeding while cd fails is expected.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "The user must be the directory's owner to enter it",
+          "rationale": "Access is set by the permission bits for owner, group, and others, not by ownership alone; here others still have read.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Linux permissions are read/write/execute for owner, group, and others; on a directory, execute means the right to enter it, while read lists its contents. Mode 644 gives read but no execute, so listing works but cd is denied.",
+      "discriminator_tested": "On a directory the execute bit grants entry (traversal), separate from read, which only allows listing the names."
+    },
+    {
+      "objectives": [
+        "C06-25",
+        "C06-22",
+        "C06-24"
+      ],
+      "type": "single",
+      "angle": "find-missing-element",
+      "difficulty": 2,
+      "stem": "An administrator wants the syslog server to receive warnings and everything more severe, and lists the severities to send as Emergency (0), Alert (1), Critical (2), and Error (3). Which level is MOST clearly missing from the list?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Warning (level 4)",
+          "rationale": "Warnings are severity 4, so 'warnings and more severe' means levels 0 through 4; level 4 is the one left off.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Notification (level 5)",
+          "rationale": "Notification is level 5, less severe than warning, so it falls outside 'warnings and more severe'.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Informational (level 6)",
+          "rationale": "Informational is level 6, less severe than warning, so it is not part of the requested range.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Debugging (level 7)",
+          "rationale": "Debugging is level 7, the least severe, well outside the warning-and-above range.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Syslog severities run 0 (Emergency) to 7 (Debugging), with lower numbers more severe; capturing warnings and more severe means levels 0-4. Warning is level 4, so omitting it leaves the list short by exactly that level.",
+      "discriminator_tested": "Warning is severity 4, and selecting a level captures that level plus every more-severe, lower-numbered one."
+    },
+    {
+      "objectives": [
+        "C07-14",
+        "C07-12",
+        "C07-13"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 2,
+      "stem": "During onboarding, a technician attaches a barcode asset tag to a laptop and scans it into the asset system. What does this step MOST directly accomplish?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The physical laptop is linked to its inventory record",
+          "rationale": "Scanning the tag's unique ID associates the physical device with its entry in the inventory system, which is the point of asset tagging.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The laptop now carries a unique ID in barcode form",
+          "rationale": "The tag does carry a unique barcode ID, but that describes the tag itself; the accomplishment is linking device to record.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "The laptop is enrolled in MDM for policy enforcement",
+          "rationale": "MDM enrollment is a separate task that manages configuration, not the physical-to-record link a tag provides.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "The laptop's disk is encrypted to protect data at rest",
+          "rationale": "Asset tagging is a labeling and tracking step and does nothing to encrypt the device.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "An asset tag is a unique physical label, often a barcode or RFID, whose purpose is to tie the physical device to its inventory record so it can be tracked and audited. Carrying a unique ID is how it works; linking device to record is what it accomplishes.",
+      "discriminator_tested": "The function of an asset tag is to connect a physical device to its inventory record, beyond merely carrying a unique identifier."
+    },
+    {
+      "objectives": [
+        "C07-21",
+        "C07-20",
+        "C07-23"
+      ],
+      "type": "single",
+      "angle": "root-cause-vs-symptom",
+      "difficulty": 3,
+      "stem": "A team overwrites decommissioned SSDs with a single pass of zeros, but a later forensic exam still recovers fragments of old files. Which BEST identifies the root cause rather than a symptom?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Wear-leveling leaves data in SSD spare blocks the overwrite misses",
+          "rationale": "SSD controllers remap and wear-level, so some data sits in spare or retired blocks a logical overwrite cannot reach, which is why fragments survive.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Just one pass was used; more passes would have cleared it",
+          "rationale": "Extra passes matter mainly on magnetic drives; on an SSD the controller's remapping, not pass count, is what leaves data behind.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "A quick format was run rather than a full overwrite of the drive",
+          "rationale": "Formatting only resets file-system structures, but even a true overwrite can miss SSD spare areas, so the method name is not the cause.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "The zeros written over the data can be decrypted back to the files",
+          "rationale": "Overwriting replaces data with patterns rather than encrypting it, so there is nothing to decrypt.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Overwriting writes patterns across addressable areas, which works reasonably on hard drives but is unreliable on SSDs because wear-leveling and bad-block remapping keep data in areas the write never touches. The surviving fragments are a symptom; the SSD's block remapping is the cause.",
+      "discriminator_tested": "Overwriting is unreliable on SSDs because wear-leveling and remapping place data in spare blocks beyond the reach of a logical overwrite."
+    },
+    {
+      "objectives": [
+        "C08-01",
+        "C08-12",
+        "C08-13"
+      ],
+      "type": "multi",
+      "angle": "mitigation-to-threat",
+      "difficulty": 3,
+      "stem": "A manager asks the team to 'eliminate all cyber risk by year end.' Which two statements BEST reframe this goal correctly? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Risk management aims to reduce risk to an acceptable level, not to zero",
+          "rationale": "Risk management brings risk down to a level the organization accepts; some residual risk always remains, so zero is not the goal.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "It is an ongoing cycle, so risk is managed over time, not finished once",
+          "rationale": "It is a repeating cycle of identifying, assessing, and treating risk, not a task completed and then done.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Adding more controls will keep reducing the remaining risk",
+          "rationale": "Adding controls does reduce residual risk, but it still cannot reach zero, so it does not fix the premise of eliminating all risk.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "Buying cyber insurance transfers the risk so nothing is left",
+          "rationale": "Insurance transfers financial impact but does not make risk disappear; residual risk remains.",
+          "role": "related"
+        },
+        {
+          "key": "E",
+          "text": "A single penetration test will remove the organization's risk",
+          "rationale": "A penetration test assesses weaknesses at a point in time; it does not by itself remove risk.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A",
+        "B"
+      ],
+      "explanation": "Risk management is a continuous process of identifying, assessing, and reducing risk to an acceptable level, not eliminating it; residual risk always remains. Framing the goal as reduce-to-acceptable and continuous corrects the manager's premise.",
+      "discriminator_tested": "Risk management reduces risk to an acceptable level as an ongoing cycle; it does not eliminate risk entirely."
+    }
+  ]
+}

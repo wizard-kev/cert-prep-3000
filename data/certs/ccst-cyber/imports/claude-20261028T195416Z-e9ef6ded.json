@@ -1,0 +1,730 @@
+{
+  "format": "certprep-questions",
+  "format_version": 1,
+  "cert": "ccst-cyber",
+  "questions": [
+    {
+      "objectives": [
+        "C01-25",
+        "C01-21",
+        "C01-29"
+      ],
+      "type": "multi",
+      "angle": "mitigation-to-threat",
+      "difficulty": 2,
+      "stem": "After an account takeover, a company adds three controls: technicians inspect the back of each desktop for unfamiliar USB adapters plugged in-line with peripherals, administrators sign in with password-manager autofill rather than entering passwords by hand, and logins require a one-time code from a hardware token. Which two threats are these controls BEST aimed at? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A trojan disguised as a free download utility",
+          "rationale": "A trojan is the disguise that delivers malware. These controls don't stop the download itself; they target what a keylogger would capture.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "A hardware keylogger recording keystrokes",
+          "rationale": "Correct: the inline-adapter check finds a hardware keylogger, and autofill plus one-time codes make any recorded keystrokes far less useful.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Brute-force guessing of weak credentials",
+          "rationale": "One-time codes do blunt brute force, but inspecting for inline adapters and avoiding typed passwords target the recording of input, not guessing.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "A software keylogger hidden on the endpoint",
+          "rationale": "Correct: a software keylogger captures input in the background; autofill leaves fewer keystrokes to record, and a one-time code stops a captured password from working by itself.",
+          "role": "best"
+        },
+        {
+          "key": "E",
+          "text": "A rootkit that conceals malicious processes",
+          "rationale": "A rootkit hides malware from detection tools; these controls don't look for concealed processes.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "B",
+        "D"
+      ],
+      "explanation": "A keylogger records keystrokes to steal credentials, either as a small inline hardware device or as software often delivered by spyware or a trojan. Physical inspection finds the hardware kind, while avoiding typed passwords and adding MFA reduce the value of anything captured.",
+      "discriminator_tested": "Keylogging is a capture method, in hardware or software form, and is separate from the trojan or spyware that may deliver it."
+    },
+    {
+      "objectives": [
+        "C02-35",
+        "C02-34",
+        "C02-31"
+      ],
+      "type": "multi",
+      "angle": "scenario-with-distractor",
+      "difficulty": 3,
+      "stem": "A defense contractor is replacing its Wi-Fi. Each engineer must sign in with an individual identity, and the security office requires the strongest cryptographic suite the standard offers. A vendor pitches SAE because it resists offline dictionary attacks. Which two choices BEST meet the requirements? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "WPA2-Enterprise with PEAP and AES-CCMP",
+          "rationale": "This is per-user authentication, but it is the previous generation and lacks WPA3's required protections and 192-bit suite.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "802.1X authentication via a RADIUS server",
+          "rationale": "Correct: Enterprise mode gives each user their own credentials, checked by RADIUS, which meets the individual-identity requirement.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "WPA3-Enterprise standard mode with AES-128",
+          "rationale": "This is per-user WPA3-Enterprise, but its 128-bit suite is not the strongest option the standard offers.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "SAE with a passphrase shared by the team",
+          "rationale": "SAE with a shared passphrase is WPA3-Personal. It resists dictionary attacks but doesn't identify individual users.",
+          "role": "related"
+        },
+        {
+          "key": "E",
+          "text": "The 192-bit mode with GCMP-256 and EAP-TLS",
+          "rationale": "Correct: WPA3-Enterprise 192-bit mode is the CNSA-aligned suite intended for high-security environments such as defense.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "B",
+        "E"
+      ],
+      "explanation": "WPA3-Enterprise authenticates each user through 802.1X and RADIUS, while WPA3-Personal uses SAE with a shared passphrase. For high-security sites, WPA3-Enterprise's optional 192-bit mode adds GCMP-256 encryption and requires EAP-TLS.",
+      "discriminator_tested": "Per-user 802.1X login marks Enterprise mode, and the 192-bit suite is the high-assurance option within it."
+    },
+    {
+      "objectives": [
+        "C02-44",
+        "C03-10",
+        "C02-37"
+      ],
+      "type": "multi",
+      "angle": "attack-to-mitigation",
+      "difficulty": 3,
+      "stem": "Employees keep downloading malware from specific paths on a popular file-sharing site that the business still relies on for legitimate work. The security team must block the harmful pages, record which employee requested them, and leave the rest of the site reachable. Which two measures BEST address this? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Route browsing through a proxy that filters by URL",
+          "rationale": "Correct: a proxy makes requests on the client's behalf at the application level, so it sees the full URL and the user and can block individual paths.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Add the file-sharing domain to a DNS blocklist",
+          "rationale": "DNS filtering sees hostnames, not full URLs or users, so it would block the whole site and couldn't log who requested which path.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Schedule regular antivirus scans on user endpoints",
+          "rationale": "Endpoint scanning may catch some downloads after the fact, but it doesn't block specific pages or log web requests per user.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "Block outbound web traffic that bypasses the proxy",
+          "rationale": "Correct: forcing traffic through the proxy stops clients from skipping the filter by connecting to sites directly.",
+          "role": "best"
+        },
+        {
+          "key": "E",
+          "text": "Permit outbound TCP 443 through a stateless ACL",
+          "rationale": "A stateless ACL matches addresses and ports, not URL paths, so it can't tell harmful pages from legitimate ones on the same site.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A",
+        "D"
+      ],
+      "explanation": "A proxy server or web filter acts as an application-level intermediary for clients, so it can allow or block individual URLs and record who requested them. DNS filtering and ACLs work at the hostname or port level and can't separate one path on a site from another.",
+      "discriminator_tested": "Because it fetches pages on the client's behalf, a proxy sees the full URL and the user identity that DNS and packet filters miss."
+    },
+    {
+      "objectives": [
+        "C03-12",
+        "C03-11",
+        "C03-13"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 2,
+      "stem": "A legacy diskless terminal on a factory floor powers up and broadcasts a request. A server looks up the terminal's hardware address in a manually maintained list and returns the same IP address every time; nothing is leased, renewed, or reclaimed. A technician says it must be DHCP because packet captures show UDP ports 67 and 68. Which protocol BEST explains this behavior?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "DHCP on UDP ports 67 and 68",
+          "rationale": "DHCP shares ports 67 and 68 and can reserve addresses, but its defining feature is dynamic, leased assignment, which is absent here.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "APIPA on the 169.254.0.0/16 range",
+          "rationale": "APIPA is a host assigning itself a 169.254.x.x address when no server answers; here a server supplies the address.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "BootP on UDP ports 67 and 68",
+          "rationale": "Correct: BootP maps each MAC address to a fixed IP in a static table with no leases, and it uses the same UDP ports that DHCP later inherited.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "TFTP on UDP port 69",
+          "rationale": "TFTP often delivers a diskless device's boot file, but it transfers files and doesn't assign IP addresses.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "BootP, the predecessor of DHCP, hands out addresses from a static MAC-to-IP table and has no lease concept. DHCP kept the same UDP 67/68 ports but added dynamic assignment from a pool, so the shared ports alone don't identify DHCP.",
+      "discriminator_tested": "A fixed hardware-address-to-IP mapping with no leases marks BootP, while lease-based dynamic assignment marks DHCP."
+    },
+    {
+      "objectives": [
+        "C04-15",
+        "C01-29",
+        "C01-30"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 3,
+      "stem": "An administrator changes the password policy from a minimum of 8 characters that must mix four character types to a minimum of 16 characters with no type rules. Most users now pick long lowercase passphrases. What is the MAIN effect on resistance to brute-force attacks?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It falls, because dropping type rules shrinks the set of possible passwords",
+          "rationale": "Fewer symbol types per position does shrink each position's options, but doubling the length grows the total far more.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "It rises, though passphrases built from common words still invite dictionary attacks",
+          "rationale": "Common-word passphrases are a real caveat, but the main effect of the change is a much larger search space for brute force.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "It stays the same, because account lockout limits the guesses an attacker gets",
+          "rationale": "Lockout limits online guessing but doesn't change password strength, and offline cracking of stolen hashes ignores lockout.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "It rises sharply, because each extra character multiplies the guesses needed",
+          "rationale": "Correct: 16 lowercase letters give about 4.4 x 10^22 combinations, versus about 6.6 x 10^15 for 8 characters drawn from 95 symbols.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Password strength grows exponentially with length: moving from 8 characters of 95 possible symbols to 16 lowercase letters raises the possibilities from about 6.6 x 10^15 to about 4.4 x 10^22. Complexity helps, but length adds more strength, as long as users avoid common words.",
+      "discriminator_tested": "Adding characters multiplies the search space more than widening the character set does, so length outweighs complexity alone."
+    },
+    {
+      "objectives": [
+        "C05-24",
+        "C05-22",
+        "C05-23"
+      ],
+      "type": "multi",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 3,
+      "stem": "An engineer replaces a policy-based crypto map between two sites with a Cisco IPsec static VTI (tunnel mode ipsec ipv4) and then configures dynamic routing between the sites. Which two effects BEST describe the result of this change? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "OSPF hellos now cross the link, so neighbors can form",
+          "rationale": "Correct: a VTI is a routable virtual interface that carries multicast, so routing-protocol hellos pass and adjacencies form; a crypto map offers no interface to peer over.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Traffic is still protected by ESP, as it was before",
+          "rationale": "ESP does still provide encryption, but that isn't an effect of the change; both designs use IPsec ESP.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "Branch sites now build direct tunnels to each other on demand",
+          "rationale": "On-demand spoke-to-spoke tunnels describe Cisco DMVPN, not a point-to-point static VTI.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Packets drop a GRE header that the crypto map used to add",
+          "rationale": "Crypto maps don't add a GRE header; GRE appears in GRE-over-IPsec designs, which a VTI makes unnecessary.",
+          "role": "wrong"
+        },
+        {
+          "key": "E",
+          "text": "Routes toward the tunnel decide what traffic is encrypted",
+          "rationale": "Correct: with a route-based VTI, whatever is routed into the tunnel interface is encrypted, replacing the crypto ACL that a policy-based crypto map uses to select traffic.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "A",
+        "E"
+      ],
+      "explanation": "A Cisco IPsec VTI makes the tunnel a routable interface: routing protocols run over it and the routing table decides what is encrypted. A policy-based crypto map instead selects traffic with a crypto ACL and has no interface, which is why designs that needed routing used to add GRE over IPsec.",
+      "discriminator_tested": "VTIs are route-based and steer traffic into encryption through routing, whereas crypto maps are policy-based and match traffic with an ACL."
+    },
+    {
+      "objectives": [
+        "C05-26",
+        "C05-27",
+        "C05-28"
+      ],
+      "type": "single",
+      "angle": "classify-element",
+      "difficulty": 2,
+      "stem": "An analyst inspects the certificate shown in the exhibit on a company laptop. What BEST classifies this certificate?",
+      "exhibit": "Subject:            CN=Example Root CA, O=Example Corp\nIssuer:             CN=Example Root CA, O=Example Corp\nBasic Constraints:  CA:TRUE\nKey Usage:          Certificate Sign, CRL Sign\nStore:              Trusted Root Certification Authorities\nHas signed:         CN=Example Issuing CA, O=Example Corp",
+      "options": [
+        {
+          "key": "A",
+          "text": "An intermediate CA certificate that issues to users",
+          "rationale": "It is a CA certificate, but an intermediate is issued by a different CA; here the subject and issuer are the same, which marks the root.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "A root CA certificate acting as the trust anchor",
+          "rationale": "Correct: subject and issuer match, it is a CA that signs other CA certificates, and it sits in the trusted root store, so it is the trust anchor whose private key signs the chain.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "A certificate template defining issuance settings",
+          "rationale": "A certificate template is a configuration on the CA that sets options for issued certificates; it isn't a certificate in the trust store.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "A self-signed server certificate the browser should reject",
+          "rationale": "Self-signed doesn't mean untrusted: roots are self-signed by design, and this one is a CA in the trusted root store, not a server certificate.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "A certificate authority is trusted because it signs certificates with its own private key, and the root CA is self-signed and stored as the trust anchor. Intermediate CAs are trusted only because the root signed them.",
+      "discriminator_tested": "Matching subject and issuer plus placement in the trusted store identify the root CA, the anchor that every chain leads back to."
+    },
+    {
+      "objectives": [
+        "C05-31",
+        "C05-32",
+        "C05-36"
+      ],
+      "type": "single",
+      "angle": "assess-risk",
+      "difficulty": 3,
+      "stem": "An administrator pastes the configuration in the exhibit into a router during a change window. The router reports errors on the first three lines but accepts the interface commands, and the administrator closes the ticket without verifying. What is the MOST likely consequence?",
+      "exhibit": "ip access-list WEB-IN\n permit tcp any host 203.0.113.10 eq 443\n deny ip any any log\n!\ninterface GigabitEthernet0/1\n ip access-group WEB-IN in",
+      "options": [
+        {
+          "key": "A",
+          "text": "Inbound traffic passes unfiltered; no WEB-IN ACL exists",
+          "rationale": "Correct: without the standard or extended keyword the ACL isn't created, its entries are rejected too, and an access-group that references an undefined ACL filters nothing.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The HTTPS server stays reachable as the change intended",
+          "rationale": "HTTPS does stay reachable, but so does every other inbound flow, which is the real exposure.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "Traffic is dropped by the implicit deny at the ACL's end",
+          "rationale": "The implicit deny applies to an ACL that has entries; an access-group pointing at an ACL that doesn't exist lets traffic through instead.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "HTTPS alone reaches the server, as the entries intended",
+          "rationale": "This assumes the ACL was built, but the missing extended keyword made the router reject it and its entries.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "A named ACL must be created with 'ip access-list standard' or 'ip access-list extended' followed by the name, and its entries are then typed without the 'access-list' keyword. Leaving out the type keyword means the ACL is never created, so the interface ends up with no filtering.",
+      "discriminator_tested": "Creating a named ACL requires the standard or extended type keyword before the name; without it, no list is built."
+    },
+    {
+      "objectives": [
+        "C05-35",
+        "C05-30",
+        "C03-17"
+      ],
+      "type": "single",
+      "angle": "choose-tool",
+      "difficulty": 2,
+      "stem": "An administrator needs one extended ACL entry that lets hosts in 192.0.2.0/24 open SSH and Telnet sessions to a server at 198.51.100.25 without opening other services on that server. Which entry BEST meets the goal?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "permit ip 192.0.2.0 0.0.0.255 host 198.51.100.25 range 22 23",
+          "rationale": "The ip keyword matches every IP packet and doesn't accept port operators, so the router rejects this entry.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "permit tcp 192.0.2.0 0.0.0.255 host 198.51.100.25 gt 21",
+          "rationale": "This matches SSH and Telnet, but gt 21 also permits every TCP port above 23, which is broader than the goal.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "permit tcp 192.0.2.0 0.0.0.255 host 198.51.100.25 range 22 23",
+          "rationale": "Correct: the tcp keyword allows port matching, and range 22 23 covers SSH (22) and Telnet (23) in one entry.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "permit udp 192.0.2.0 0.0.0.255 host 198.51.100.25 range 22 23",
+          "rationale": "SSH and Telnet run over TCP, so a udp entry with these ports wouldn't match the sessions.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Port operators such as eq, neq, gt, lt, and range work only after the tcp or udp keyword, because ports belong to those transport protocols. The ip keyword matches all IP traffic and cannot take ports, so 'tcp ... range 22 23' is the precise single-line match.",
+      "discriminator_tested": "Port numbers attach to tcp or udp entries, while an ip entry can match by address but not by port."
+    },
+    {
+      "objectives": [
+        "C07-14",
+        "C07-12",
+        "C07-13"
+      ],
+      "type": "single",
+      "angle": "root-cause-vs-symptom",
+      "difficulty": 2,
+      "stem": "During an annual audit, the asset management system lists four laptops whose status is unknown, and a technician finds an unlisted laptop in a storage closet that can't be matched to anyone. Each device carries only the manufacturer's model sticker, which is identical across the fleet. What is the MAIN underlying cause of these audit findings?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Several laptops show an unknown status in the system",
+          "rationale": "This is what the audit observed, a symptom; it happened because devices can't be matched to their records.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "The software inventory is missing installed-app details",
+          "rationale": "Software inventory tracks installed applications; it wouldn't help match a physical laptop to its owner or record.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Model stickers use barcodes rather than RFID chips",
+          "rationale": "Barcode and RFID are both valid tag formats; the problem is that the sticker isn't unique to each device, not its technology.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "No unique label ties each device to its inventory record",
+          "rationale": "Correct: asset tags give each unit a unique ID that ties the physical device to its record, and identical model stickers can't do that.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "An asset tag carries a unique ID, as a label, barcode, or RFID tag, so each physical device can be tied to its inventory record. Unknown statuses and an unmatched laptop are symptoms; the root cause is the missing per-device identifier.",
+      "discriminator_tested": "An asset tag's value is the link between one physical unit and its inventory entry, not the format of the label."
+    },
+    {
+      "objectives": [
+        "C07-21",
+        "C07-20",
+        "C07-23"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 2,
+      "stem": "A school wipes a batch of retired magnetic hard disks and solid-state drives with one pass of zeros, then donates them. Several disks had logged failing blocks that their firmware reallocated. What is the MOST likely result of this process?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The drives stay usable, so the school can donate them",
+          "rationale": "Reuse is a real advantage of overwriting, but it doesn't address what the process may leave behind.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "Remapped areas and flash spare cells may still hold old data",
+          "rationale": "Correct: overwriting reaches addressable areas, so data in remapped bad sectors and in SSD spare or wear-leveled cells can survive.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "The drives are unusable, as with shredding or degaussing",
+          "rationale": "Making media unusable describes physical destruction or degaussing; overwriting leaves the drive working.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "The zeros can be decrypted to rebuild the original stored data",
+          "rationale": "Overwriting isn't encryption, so there is no key to decrypt with; the risk lies in areas the pass didn't reach.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "Overwriting writes patterns over every addressable area of the media, which sanitizes it while leaving the drive reusable. It is less reliable on SSDs, whose wear leveling and spare cells hide data from the host, and on failed sectors that the drive has remapped.",
+      "discriminator_tested": "An overwrite touches only what the host can address, so remapped and SSD spare areas can keep data even though the drive remains reusable."
+    },
+    {
+      "objectives": [
+        "C10-09",
+        "C10-07",
+        "C10-10"
+      ],
+      "type": "single",
+      "angle": "root-cause-vs-symptom",
+      "difficulty": 3,
+      "stem": "A company takes a full backup every Sunday, and Monday through Saturday it backs up only what changed since the previous night's backup. A server fails on Friday. The restore drags on for hours and then fails because Wednesday's set can't be found. What is the MAIN underlying cause of the slow, fragile restore?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Incremental sets chain, so each after Sunday's is needed",
+          "rationale": "Correct: an incremental captures changes since the last backup of any type, so a restore needs the full plus each incremental after it, and one missing set breaks the chain.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The Wednesday set was misplaced from the storage location",
+          "rationale": "The missing set triggered the failure, a symptom of the design; with a differential scheme, Wednesday's set wouldn't have been needed.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "Differential sets grow each day, slowing the nightly jobs",
+          "rationale": "That describes differential backups, which this company isn't using; a differential restore needs just the full plus the latest differential.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Sunday's full backup left out the operating system files",
+          "rationale": "Nothing suggests the full backup was incomplete; the restore failed at a missing nightly set.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Incremental backups are the fastest to run but the slowest to restore, because recovery needs the full backup plus each incremental in order. A differential scheme would need only the full and the latest differential, so a lost midweek set wouldn't block recovery.",
+      "discriminator_tested": "Incrementals depend on an unbroken chain back to the full, whereas a differential restore needs just two sets."
+    },
+    {
+      "objectives": [
+        "C10-42",
+        "C10-41",
+        "C10-44"
+      ],
+      "type": "multi",
+      "angle": "choose-response",
+      "difficulty": 2,
+      "stem": "A small retailer picks a cloud provider's on-demand environment as its disaster recovery site so it can avoid buying a second data center. Leadership asks what to do now so the plan works during a real outage. Which two actions BEST address the plan's main dependencies? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Purchase standby servers in advance for the recovery site",
+          "rationale": "Buying hardware in advance is what a cloud site avoids, because capacity is provisioned on demand.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "Sign a lease for a hot site with mirrored hardware",
+          "rationale": "A hot site with mirrored hardware is a different, costlier recovery option, not a way to make the cloud plan work.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Run scheduled failover tests to the recovery environment",
+          "rationale": "Correct: a cloud site helps only if failover has been proven, and regular tests confirm that images, data, and scaling work as expected.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "List the provider's support contacts in the DR plan",
+          "rationale": "Provider contacts are worth documenting, but they don't address the connectivity and untested-failover risks.",
+          "role": "partial"
+        },
+        {
+          "key": "E",
+          "text": "Add a second internet link from a different carrier",
+          "rationale": "Correct: a cloud site depends on connectivity to the provider, so diverse internet paths reduce the chance that the outage also cuts off recovery.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "C",
+        "E"
+      ],
+      "explanation": "A cloud site is a recovery environment at a cloud provider that scales on demand, giving lower upfront cost and elasticity. Its weak points are reliance on connectivity, on the provider, and on testing, so a sound plan adds diverse links and regular failover tests.",
+      "discriminator_tested": "Cloud recovery trades upfront hardware for dependence on network access, the provider, and proven failover."
+    },
+    {
+      "objectives": [
+        "C11-11",
+        "C01-40",
+        "C02-43"
+      ],
+      "type": "single",
+      "angle": "mitigation-to-threat",
+      "difficulty": 2,
+      "stem": "A company deploys a tool that learns each employee's normal sign-in times, data volumes, and file shares, then scores deviations, such as a finance clerk reading engineering folders at 2 a.m. after a legitimate login. Which threat is this control BEST suited to detect?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Repeated password guessing against a public login portal",
+          "rationale": "Behavior analytics may notice a burst of failed logins, but lockout and MFA address guessing; UEBA's strength is accounts that sign in successfully.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "Malware that matches a known antivirus signature",
+          "rationale": "Signature matching identifies known malware; UEBA looks for behavior that departs from a baseline, not known patterns.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "A volumetric flood saturating the internet link",
+          "rationale": "A volumetric DDoS is a network-capacity problem handled by upstream filtering, not by user behavior baselines.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "An insider or hijacked account abusing its own access",
+          "rationale": "Correct: UEBA baselines each user and entity and flags departures, which is how it surfaces insiders and compromised accounts that pass authentication.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "UEBA (User and Entity Behavior Analytics) builds a baseline of normal activity for each user and device and flags unusual behavior. Because the activity uses legitimate credentials, it targets compromised accounts and insider threats that signature tools and firewalls allow.",
+      "discriminator_tested": "UEBA judges whether an authenticated account is acting like itself, rather than matching known attack signatures."
+    },
+    {
+      "objectives": [
+        "C11-14",
+        "C11-02",
+        "C11-15"
+      ],
+      "type": "single",
+      "angle": "symptom-to-attack",
+      "difficulty": 2,
+      "stem": "Minutes after a user reports a suspicious email, a junior analyst notices the message has vanished from 40 mailboxes, the sender's domain is on the mail gateway blocklist, the user's laptop has been network-isolated by the EDR agent, and a ticket describing all of this is already open. No one on the team took these steps. What BEST explains what the analyst observed?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A SIEM correlating related events into one alert",
+          "rationale": "A SIEM detects and correlates events into alerts; it doesn't pull emails, block domains, or isolate hosts by itself.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "A SOAR playbook acting through several tools",
+          "rationale": "Correct: SOAR orchestrates the mail gateway, EDR, and ticketing tools and runs a predefined playbook, so the response happens without an analyst.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "An IPS dropping malicious traffic inline by itself",
+          "rationale": "An IPS can block traffic automatically, but inline on the network; it doesn't remove mail or open tickets across tools.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "An attacker erasing evidence to hide the intrusion",
+          "rationale": "Attacker cleanup wouldn't block the attacker's own domain, isolate the host, and document it in a ticket; these are defensive actions.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "B"
+      ],
+      "explanation": "SOAR (Security Orchestration, Automation, and Response) connects security tools and runs playbooks that act on detections, such as removing a phishing email, blocking the sender, and isolating the host. A SIEM detects and correlates; SOAR acts on what was detected.",
+      "discriminator_tested": "Coordinated actions across several tools with no analyst involved point to SOAR, while detection and correlation alone point to a SIEM."
+    },
+    {
+      "objectives": [
+        "C13-17",
+        "C13-19",
+        "C13-25"
+      ],
+      "type": "single",
+      "angle": "assess-risk",
+      "difficulty": 2,
+      "stem": "A team follows the SANS incident response process. During a ransomware outbreak, they disconnect infected servers, then immediately restore them from last night's backups and reconnect them, planning to hunt for the attacker's backdoors later. What is the MAIN risk of this approach?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Loss of forensic evidence from the restored servers",
+          "rationale": "Restoring can destroy evidence, a real concern, but the bigger danger is putting systems back online with the attacker's access intact.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "A skipped lessons-learned review after the incident",
+          "rationale": "Lessons learned is the final SANS step and can still be held; this choice doesn't skip it.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Reinfection through access that wasn't eradicated first",
+          "rationale": "Correct: SANS keeps eradication as its own step between containment and recovery, and restoring before removing backdoors lets the attacker return.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "A breach of NIST's rule keeping recovery in its own phase",
+          "rationale": "NIST SP 800-61 Rev 2 groups containment, eradication, and recovery into one phase, so it has no such rule.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "SANS separates containment, eradication, and recovery: isolate the threat, remove it and its persistence, then restore. Jumping from containment straight to recovery returns systems to the network while the attacker can still get back in.",
+      "discriminator_tested": "In SANS, eradication is a distinct step that must be finished before recovery begins."
+    }
+  ]
+}

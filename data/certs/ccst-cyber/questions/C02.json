@@ -5384,10 +5384,10 @@
       "source_ref": "objectives/C02.md#C02-06",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:55+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T18:37:44+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -5553,10 +5553,10 @@
       "source_ref": "objectives/C02.md#C02-09",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:55+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T15:27:08+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -5618,10 +5618,10 @@
       "source_ref": "objectives/C02.md#C02-10",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:55+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T20:35:36+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -5788,10 +5788,10 @@
       "source_ref": "objectives/C02.md#C02-13",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:55+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T18:39:59+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -5845,10 +5845,10 @@
       "source_ref": "objectives/C02.md#C02-14",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:55+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T20:12:24+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -6072,10 +6072,10 @@
       "source_ref": "objectives/C02.md#C02-18",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:55+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-30T14:06:56+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -6811,10 +6811,10 @@
       "source_ref": "objectives/C02.md#C02-31",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:56+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-30T15:47:57+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -7275,10 +7275,10 @@
       "source_ref": "objectives/C02.md#C02-39",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:56+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-29T18:36:27+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -7797,10 +7797,10 @@
       "source_ref": "objectives/C02.md#C02-04",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:56+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-30T13:28:23+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -8143,10 +8143,10 @@
       "source_ref": "objectives/C02.md#C02-10",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:56+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T15:13:43+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -8258,10 +8258,10 @@
       "source_ref": "objectives/C02.md#C02-12",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:56+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T18:36:57+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -8542,10 +8542,10 @@
       "source_ref": "objectives/C02.md#C02-17",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:56+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-30T15:40:44+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -9011,10 +9011,10 @@
       "source_ref": "objectives/C02.md#C02-25",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:57+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-30T18:55:59+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -9188,10 +9188,10 @@
       "source_ref": "objectives/C02.md#C02-28",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:57+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T20:31:38+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -9245,10 +9245,10 @@
       "source_ref": "objectives/C02.md#C02-29",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:57+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T20:00:20+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -9715,10 +9715,10 @@
       "source_ref": "objectives/C02.md#C02-37",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:57+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T19:29:01+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -10007,10 +10007,10 @@
       "source_ref": "objectives/C02.md#C02-42",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:07:57+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T20:41:05+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -10122,6 +10122,730 @@
       "model": "claude-opus-5-5",
       "status": "unreviewed",
       "created_at": "2026-10-21T19:07:57+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-10",
+        "C02-09",
+        "C02-12"
+      ],
+      "type": "multi",
+      "angle": "attack-to-mitigation",
+      "difficulty": 2,
+      "stem": "An office occupies three floors of one building. All staff laptops, phones, and printers connect wirelessly within that building, and IT wants to harden the network against unauthorized association. Which two statements are correct? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "On a WLAN this size, wireless rogue-AP detection helps spot intruders",
+          "rationale": "Rogue-AP and evil-twin detection on the WLAN infrastructure flags unauthorized access points added to this network.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "This is a WMAN, so WiMAX base-station authentication is what applies",
+          "rationale": "A WMAN covers a metropolitan area; a single building's Wi-Fi does not reach that scale.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "This is a WWAN, so the mobile carrier is responsible for securing it",
+          "rationale": "A WWAN is a carrier-run wide-area wireless network such as cellular, not an in-building Wi-Fi the company operates.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "This is a WLAN, so WPA2-Enterprise with 802.1X is a fitting control",
+          "rationale": "A wireless LAN covering a building is a WLAN, and 802.1X with WPA2/WPA3-Enterprise authenticates each user on it.",
+          "role": "best"
+        },
+        {
+          "key": "E",
+          "text": "This is a WPAN, so Bluetooth pairing PINs are the main safeguard here",
+          "rationale": "A WPAN spans only a few metres (for example Bluetooth); a building-wide network is far larger than a personal-area network.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A",
+        "D"
+      ],
+      "explanation": "A WLAN is wireless networking at the scale of a building or campus, the common home and enterprise case; WPANs (metres), WMANs (city), and WWANs (carrier-wide) describe other ranges. Classifying the office Wi-Fi correctly as a WLAN points to the right controls.",
+      "discriminator_tested": "Building- or campus-wide Wi-Fi is a WLAN, distinct from the much smaller WPAN and the much larger WMAN and WWAN scales.",
+      "id": "Q-C02-0177",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-10",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T14:15:53+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-30",
+        "C02-29",
+        "C02-31"
+      ],
+      "type": "single",
+      "angle": "choose-response",
+      "difficulty": 2,
+      "stem": "A café must secure its wireless with a single passphrase every staff device can use, and it has no RADIUS server. It wants the AES-based protection that has been the baseline standard for years. Which configuration should it apply?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "WEP, using a static shared key with the RC4 cipher",
+          "rationale": "WEP uses the broken RC4 stream cipher and is not considered secure.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "WPA2-Enterprise, using 802.1X against a RADIUS server for each user",
+          "rationale": "WPA2-Enterprise authenticates each user via 802.1X and needs a RADIUS server, which this café does not have.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "WPA, using TKIP with one shared passphrase for staff",
+          "rationale": "WPA relies on TKIP with RC4, an older cipher that WPA2 replaced; it is not the AES-based baseline described.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "WPA2-Personal, using AES-CCMP with one shared passphrase",
+          "rationale": "WPA2-Personal protects traffic with AES-CCMP and uses one shared passphrase, matching a small site with no authentication server.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "WPA2 is defined by AES-CCMP, and its Personal mode uses a single shared passphrase, which fits a small site without a RADIUS server. WPA's TKIP/RC4 and WEP's RC4 are the older ciphers WPA2 replaced.",
+      "discriminator_tested": "WPA2 is distinguished by its use of AES-CCMP rather than the TKIP/RC4 encryption of WPA and WEP.",
+      "id": "Q-C02-0178",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-30",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T14:15:53+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-35",
+        "C02-31",
+        "C02-34"
+      ],
+      "type": "single",
+      "angle": "symptom-to-attack",
+      "difficulty": 3,
+      "stem": "On a high-assurance wireless network, each user signs in with their own domain credentials, the controller relays authentication to a RADIUS server, and the strongest optional encryption profile is negotiated. Which configuration produces these traits?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "WPA2-Personal, using AES-CCMP with one shared passphrase",
+          "rationale": "WPA2-Personal relies on one shared passphrase with no per-user login.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "WPA3-Personal, using SAE with one shared network password",
+          "rationale": "WPA3-Personal uses SAE and a single shared password, so it is not per-user authentication.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "WPA3-Enterprise, adding an optional 192-bit suite on top of 802.1X",
+          "rationale": "Per-user 802.1X together with the optional 192-bit suite are the hallmarks of WPA3-Enterprise's high-security mode.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "WPA2-Enterprise, running 802.1X with AES-CCMP encryption",
+          "rationale": "WPA2-Enterprise also authenticates each user by 802.1X but is the earlier generation and lacks the WPA3 192-bit suite.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "WPA3-Enterprise combines 802.1X per-user authentication with WPA3 cryptography and an optional 192-bit suite for high-security environments. Per-user login rules out the Personal modes, and the 192-bit suite points to WPA3 rather than WPA2.",
+      "discriminator_tested": "WPA3-Enterprise is marked by per-user 802.1X authentication and its optional 192-bit suite, unlike SAE-based Personal modes and the older WPA2-Enterprise.",
+      "id": "Q-C02-0179",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-35",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "passive",
+      "created_at": "2026-10-28T14:15:53+00:00",
+      "verified_at": null,
+      "seen_at": "2026-10-28T20:06:59+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-41",
+        "C02-42",
+        "C02-43"
+      ],
+      "type": "single",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 2,
+      "stem": "A network IDS watches a mirrored copy of traffic from a switch SPAN port. A packet matches one of its signatures. What BEST describes the effect on that traffic?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "It quarantines the source host on the access switch automatically",
+          "rationale": "Quarantining a host is an active response an IDS by itself does not perform.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "It records the event in its logs for later review by an analyst",
+          "rationale": "An IDS does log matches, but logging understates its defining alerting action and does not describe the effect on the traffic.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "It drops the matching packet inline before the host receives it",
+          "rationale": "Dropping a packet inline is what an IPS does; an IDS on a SPAN copy cannot stop the original.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "It raises an alert while the packet still reaches its destination",
+          "rationale": "An IDS detects and alerts; because it sees only a passive copy, the live packet continues to its destination.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "An IDS monitors a copy of traffic and raises alerts on suspicious activity, but it is out of band and cannot block, so the original packet still arrives. Blocking inline is the role of an IPS.",
+      "discriminator_tested": "An IDS only detects and alerts on a passive traffic copy, so the live packet is never stopped the way an inline IPS would stop it.",
+      "id": "Q-C02-0180",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-41",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T14:15:53+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-42",
+        "C02-41",
+        "C02-08"
+      ],
+      "type": "multi",
+      "angle": "attack-to-mitigation",
+      "difficulty": 3,
+      "stem": "Exploit attempts keep reaching application servers, and the current IDS only alerts after the packets arrive. The team wants a device that stops attacks in real time. Which two statements about deploying an IPS are correct? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Because traffic flows through it, an outage can disrupt good traffic too",
+          "rationale": "Inline placement is a trade-off: if the IPS fails or is overwhelmed, the traffic through it can be interrupted.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Fed by a SPAN port copy, it still blocks the attacks from that mirror",
+          "rationale": "A SPAN port gives only a mirrored copy, which supports detection and alerting but cannot block the live flow.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "Placed inline, it can drop malicious packets before they reach servers",
+          "rationale": "An IPS sits inline, so it can discard packets matching its signatures before they reach the target.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "A honeypot in the traffic path drops the attacks as they arrive",
+          "rationale": "A honeypot is a decoy that lures and observes attackers; it is not an inline control that drops traffic.",
+          "role": "related"
+        },
+        {
+          "key": "E",
+          "text": "It reviews the day's logs overnight and blocks the sources afterward",
+          "rationale": "Blocking must happen in real time at the moment of attack, not from a later log review.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A",
+        "C"
+      ],
+      "explanation": "An IPS is inline and drops malicious traffic as it passes, which is how it stops attacks in real time; the cost is that an inline failure can disrupt legitimate traffic. A device fed only a mirrored copy can detect but not block.",
+      "discriminator_tested": "An IPS blocks inline in real time, so its failure can break traffic, unlike a passive IDS that only alerts on a copy.",
+      "id": "Q-C02-0181",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-42",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T14:15:53+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-10",
+        "C02-09",
+        "C02-12"
+      ],
+      "type": "single",
+      "angle": "root-cause-vs-symptom",
+      "difficulty": 2,
+      "stem": "Staff across one office building report their laptops and phones keep dropping the wireless connection in some rooms. Which statement BEST identifies the type of network involved rather than just a symptom?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The office-wide Wi-Fi is a WLAN, so coverage sets the limits",
+          "rationale": "A wireless network spanning a building is a WLAN; its scale is what determines coverage and capacity.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Individual laptops are losing signal in a few rooms",
+          "rationale": "Dropped signal in a few rooms is a symptom of the coverage issue, not the underlying type of network.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "It is a WWAN operated by a mobile carrier regionally",
+          "rationale": "A WWAN is a carrier-operated wide-area wireless network like cellular, not in-building Wi-Fi.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "It is a WPAN, spanning just a few metres around each personal device",
+          "rationale": "A WPAN reaches only a few metres (such as Bluetooth); a building-wide network is far larger.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "Wi-Fi covering a home, office, or campus is a WLAN, the common enterprise and home scale; WPANs span metres and WWANs span carrier-wide areas. Naming it a WLAN identifies the network, while dropped connections are just a symptom.",
+      "discriminator_tested": "A building- or home-wide Wi-Fi is a WLAN, distinct from the metre-scale WPAN and the carrier-scale WWAN.",
+      "id": "Q-C02-0182",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-10",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T18:03:48+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-30",
+        "C02-29",
+        "C02-31"
+      ],
+      "type": "multi",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 3,
+      "stem": "An administrator switches a small office access point from WPA to WPA2-Personal and keeps a single passphrase. Which two results follow from this change? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Devices keep joining with one shared secret, not a per-user login",
+          "rationale": "WPA2-Personal still uses a single shared key, so there is no individual authentication.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "Each user now authenticates separately to a RADIUS server",
+          "rationale": "Per-user RADIUS authentication belongs to Enterprise mode, not Personal.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "The network drops to the RC4 stream cipher used by WEP",
+          "rationale": "WPA2 moves up to AES-CCMP; RC4 is the older cipher it leaves behind, not adopts.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "Traffic is now protected with the AES-CCMP cipher instead of TKIP",
+          "rationale": "Moving to WPA2 replaces TKIP/RC4 with AES-CCMP as the encryption cipher.",
+          "role": "best"
+        },
+        {
+          "key": "E",
+          "text": "Clients must now pass an 802.1X check before joining",
+          "rationale": "802.1X admission control is an Enterprise feature and is not part of Personal mode.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A",
+        "D"
+      ],
+      "explanation": "Moving from WPA to WPA2 replaces TKIP/RC4 with the AES-CCMP cipher, and WPA2-Personal keeps a single shared passphrase rather than per-user logins. Per-user 802.1X and a RADIUS server belong to Enterprise mode, and WEP's RC4 is older still.",
+      "discriminator_tested": "WPA2 is marked by AES-CCMP (not TKIP or RC4), and its Personal mode still uses one shared passphrase.",
+      "id": "Q-C02-0183",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-30",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "passive",
+      "created_at": "2026-10-28T18:03:48+00:00",
+      "verified_at": null,
+      "seen_at": "2026-10-30T13:52:29+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-31",
+        "C02-30",
+        "C02-35"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 3,
+      "stem": "A company wants its Wi-Fi to give every employee their own login that can be revoked individually, and it already runs a RADIUS server. A technician notes the cipher will still be AES-CCMP. Which configuration does this describe?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "WPA2-Personal, which also uses the AES-CCMP cipher",
+          "rationale": "WPA2-Personal shares the same cipher but uses one passphrase, so it cannot give per-user, revocable logins.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "WPA3-Enterprise, the newer standard offering an optional 192-bit mode",
+          "rationale": "WPA3-Enterprise also authenticates per user but is the newer generation with an optional 192-bit suite.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "WPA2-Enterprise, authenticating each user via 802.1X to RADIUS",
+          "rationale": "WPA2-Enterprise uses 802.1X to a RADIUS server, giving each user a credential that can be revoked individually.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "WEP, keyed with a static shared RC4 secret",
+          "rationale": "WEP uses a static RC4 key and provides neither per-user login nor modern encryption.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "The giveaway is per-user logins revocable one at a time against a RADIUS server, which is WPA2-Enterprise; the shared AES-CCMP cipher is common to both WPA2 modes and does not make it Personal. Enterprise and Personal differ in authentication, not cipher.",
+      "discriminator_tested": "WPA2-Enterprise is distinguished by per-user 802.1X/RADIUS credentials, not by its cipher, which it shares with Personal.",
+      "id": "Q-C02-0184",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-31",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T18:03:48+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-35",
+        "C02-34",
+        "C02-31"
+      ],
+      "type": "single",
+      "angle": "choose-tool",
+      "difficulty": 3,
+      "stem": "A defense contractor must secure its wireless to the strongest available standard, give every member their own revocable credential, and enable the high-security cryptographic mode reserved for sensitive sites. Which configuration should it choose?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "WPA2-Personal, using one shared AES-CCMP passphrase",
+          "rationale": "WPA2-Personal shares one passphrase and is neither per-user nor the strongest available standard.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "WPA2-Enterprise, pairing per-user 802.1X with AES-CCMP",
+          "rationale": "WPA2-Enterprise also uses per-user 802.1X but is the previous generation without the WPA3 192-bit suite.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "WPA3-Enterprise, adding an optional 192-bit suite to 802.1X",
+          "rationale": "WPA3-Enterprise authenticates each user via 802.1X and offers the optional 192-bit suite for high-security sites.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "WPA3-Personal, using SAE with a single shared password",
+          "rationale": "WPA3-Personal uses SAE with one shared password, so it is not per-user authentication.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "The strongest current standard with per-user authentication and an optional 192-bit mode is WPA3-Enterprise. SAE with a shared password is WPA3-Personal, and WPA2-Enterprise, though per-user, is the older generation.",
+      "discriminator_tested": "WPA3-Enterprise means per-user 802.1X plus WPA3's optional 192-bit suite, unlike SAE-based Personal or the older WPA2-Enterprise.",
+      "id": "Q-C02-0185",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-35",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "passive",
+      "created_at": "2026-10-28T18:03:48+00:00",
+      "verified_at": null,
+      "seen_at": "2026-10-30T14:01:54+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-41",
+        "C02-42",
+        "C02-43"
+      ],
+      "type": "single",
+      "angle": "interpret-output",
+      "difficulty": 2,
+      "stem": "The sensor output below is from a device watching a SPAN copy of traffic. Which statement BEST describes what happened to the flagged packet?",
+      "exhibit": "IDS sensor: sensor-02 (monitoring SPAN copy)\n2026-10-27 09:14:02  ALERT  sig 5841 \"SQL injection attempt\"\n   src 203.0.113.9 -> dst 198.51.100.20:443\n   action: alert-only   packet forwarded: yes (passive tap)\n2026-10-27 09:14:02  pkt delivered to 198.51.100.20",
+      "options": [
+        {
+          "key": "A",
+          "text": "It was allowed to reach its destination while an alert was raised",
+          "rationale": "On a passive SPAN copy the device can only alert; the real packet keeps flowing, as the 'packet forwarded' line shows.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "It was dropped inline by the sensor before reaching the destination host",
+          "rationale": "Dropping a packet inline is what an IPS does; a sensor on a SPAN copy cannot stop the original.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "It was written to the sensor's log for later review",
+          "rationale": "The event is logged, but logging is incidental; the defining IDS action is the alert, and the packet still passed.",
+          "role": "partial"
+        },
+        {
+          "key": "D",
+          "text": "Its source host was automatically blocked at the switch",
+          "rationale": "Automatically blocking the source is an active response the IDS alone does not perform.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "An IDS monitors a copy of traffic and alerts on matches, but being out of band it cannot block, so the flagged packet still reaches its target. Inline blocking is the role of an IPS.",
+      "discriminator_tested": "An IDS only detects and alerts on a passive copy; it never stops the live packet the way an inline IPS would.",
+      "id": "Q-C02-0186",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-41",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T18:03:48+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-42",
+        "C02-41",
+        "C02-08"
+      ],
+      "type": "single",
+      "angle": "assess-risk",
+      "difficulty": 2,
+      "stem": "A team places an IPS inline so it can drop attacks in real time on the path to its servers. Which is the MAIN operational risk of deploying it this way?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "An IPS failure or overload can interrupt legitimate traffic",
+          "rationale": "Because the IPS sits in the path, a crash or overload in the device can break the very traffic it protects.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "It adds some processing latency to each packet it must inspect inline",
+          "rationale": "Inline inspection does add latency, but that is minor next to the availability risk of an inline failure.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "It fails to detect attacks matching its signatures",
+          "rationale": "Detecting signature matches is exactly what an IPS does, so this is not a real risk of the design.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "Fed a mirrored copy, an IPS would be unable to block",
+          "rationale": "On a mirrored copy it could only alert; that describes IDS placement, not the inline risk being asked about.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "An IPS blocks inline in real time, which is its strength, but that same placement means a failure or overload can interrupt legitimate traffic. A device fed only a passive copy avoids that risk but cannot block at all.",
+      "discriminator_tested": "An inline IPS can stop attacks but also becomes a single point whose failure disrupts traffic, unlike a passive IDS.",
+      "id": "Q-C02-0187",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-42",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T18:03:48+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C02-35",
+        "C02-34",
+        "C02-31"
+      ],
+      "type": "multi",
+      "angle": "scenario-with-distractor",
+      "difficulty": 3,
+      "stem": "A defense contractor is replacing its Wi-Fi. Each engineer must sign in with an individual identity, and the security office requires the strongest cryptographic suite the standard offers. A vendor pitches SAE because it resists offline dictionary attacks. Which two choices BEST meet the requirements? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The 192-bit mode with GCMP-256 and EAP-TLS",
+          "rationale": "Correct: WPA3-Enterprise 192-bit mode is the CNSA-aligned suite intended for high-security environments such as defense.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "WPA3-Enterprise standard mode with AES-128",
+          "rationale": "This is per-user WPA3-Enterprise, but its 128-bit suite is not the strongest option the standard offers.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "SAE with a passphrase shared by the team",
+          "rationale": "SAE with a shared passphrase is WPA3-Personal. It resists dictionary attacks but doesn't identify individual users.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "802.1X authentication via a RADIUS server",
+          "rationale": "Correct: Enterprise mode gives each user their own credentials, checked by RADIUS, which meets the individual-identity requirement.",
+          "role": "best"
+        },
+        {
+          "key": "E",
+          "text": "WPA2-Enterprise with PEAP and AES-CCMP",
+          "rationale": "This is per-user authentication, but it is the previous generation and lacks WPA3's required protections and 192-bit suite.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A",
+        "D"
+      ],
+      "explanation": "WPA3-Enterprise authenticates each user through 802.1X and RADIUS, while WPA3-Personal uses SAE with a shared passphrase. For high-security sites, WPA3-Enterprise's optional 192-bit mode adds GCMP-256 encryption and requires EAP-TLS.",
+      "discriminator_tested": "Per-user 802.1X login marks Enterprise mode, and the 192-bit suite is the high-assurance option within it.",
+      "id": "Q-C02-0188",
+      "section": "C02",
+      "domain": null,
+      "source_ref": "objectives/C02.md#C02-35",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T19:54:16+00:00",
       "verified_at": null,
       "seen_at": null,
       "retired_reason": null,

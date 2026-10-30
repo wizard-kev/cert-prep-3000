@@ -4387,10 +4387,10 @@
       "source_ref": "objectives/C05.md#C05-03",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-30T13:53:10+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -4558,10 +4558,10 @@
       "source_ref": "objectives/C05.md#C05-06",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-29T16:31:43+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -4614,10 +4614,10 @@
       "source_ref": "objectives/C05.md#C05-07",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-30T14:11:52+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -4728,10 +4728,10 @@
       "source_ref": "objectives/C05.md#C05-09",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T18:44:04+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -5020,10 +5020,10 @@
       "source_ref": "objectives/C05.md#C05-14",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T15:29:48+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -5255,10 +5255,10 @@
       "source_ref": "objectives/C05.md#C05-18",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-29T19:24:18+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -5312,10 +5312,10 @@
       "source_ref": "objectives/C05.md#C05-19",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-29T16:40:48+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -5597,10 +5597,10 @@
       "source_ref": "objectives/C05.md#C05-24",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T19:32:39+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -5655,10 +5655,10 @@
       "source_ref": "objectives/C05.md#C05-25",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T15:18:12+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -6168,10 +6168,10 @@
       "source_ref": "objectives/C05.md#C05-34",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T19:34:19+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -6232,10 +6232,10 @@
       "source_ref": "objectives/C05.md#C05-35",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-29T16:18:33+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -6289,15 +6289,15 @@
       "source_ref": "objectives/C05.md#C05-36",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "disputed",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-30T14:18:55+00:00",
       "retired_reason": null,
-      "disputed_reason": null,
-      "disputed_at": null,
-      "disputed_session": null,
-      "status_before_dispute": null
+      "disputed_reason": "ambiguous",
+      "disputed_at": "2026-10-30T14:26:36+00:00",
+      "disputed_session": "9204ae9407444475",
+      "status_before_dispute": "passive"
     },
     {
       "objectives": [
@@ -6346,10 +6346,10 @@
       "source_ref": "objectives/C05.md#C05-37",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T18:06:06+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -6516,10 +6516,10 @@
       "source_ref": "objectives/C05.md#C05-03",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-29T16:17:52+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -6923,10 +6923,10 @@
       "source_ref": "objectives/C05.md#C05-10",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T15:40:11+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -7037,10 +7037,10 @@
       "source_ref": "objectives/C05.md#C05-12",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:50+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T20:10:17+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -7556,10 +7556,10 @@
       "source_ref": "objectives/C05.md#C05-21",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:51+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T18:30:41+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -7613,10 +7613,10 @@
       "source_ref": "objectives/C05.md#C05-22",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:51+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T18:24:14+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -7791,10 +7791,10 @@
       "source_ref": "objectives/C05.md#C05-25",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:51+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-28T20:31:54+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -8026,10 +8026,10 @@
       "source_ref": "objectives/C05.md#C05-29",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:51+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-30T15:53:05+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -8196,10 +8196,10 @@
       "source_ref": "objectives/C05.md#C05-32",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:51+00:00",
       "verified_at": null,
-      "seen_at": null,
+      "seen_at": "2026-10-29T16:44:37+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
@@ -8480,10 +8480,734 @@
       "source_ref": "objectives/C05.md#C05-37",
       "provider": "claude",
       "model": "claude-opus-5-5",
-      "status": "unreviewed",
+      "status": "passive",
       "created_at": "2026-10-21T19:39:51+00:00",
       "verified_at": null,
+      "seen_at": "2026-10-28T20:23:21+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-24",
+        "C05-22",
+        "C05-19"
+      ],
+      "type": "single",
+      "angle": "mitigation-to-threat",
+      "difficulty": 3,
+      "stem": "To let OSPF run across an encrypted site-to-site link, an engineer configures a Cisco IPsec VTI instead of a policy-based crypto map. Which benefit of the VTI BEST explains why it suits this goal?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "The tunnel is a routable interface that routing can run over",
+          "rationale": "A VTI is route-based: the IPsec tunnel is a virtual interface, so OSPF and other protocols treat it like any link.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The tunnel omits the GRE header that GRE-over-IPsec adds",
+          "rationale": "A VTI does avoid the GRE header, a real advantage, but that is not what lets the routing protocol run; the routable interface is.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "AH in transport mode authenticates each packet end to end",
+          "rationale": "AH provides authentication without encryption and does not create a routable tunnel interface.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "An extended ACL selects exactly which traffic gets encrypted",
+          "rationale": "Selecting encrypted traffic with an ACL describes the policy-based crypto-map approach the VTI replaces.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "A Cisco IPsec VTI is route-based, presenting the tunnel as a virtual interface so dynamic routing protocols can run directly over the encrypted path, unlike policy-based crypto maps. It also drops the GRE header, but the routable interface is what enables routing here.",
+      "discriminator_tested": "An IPsec VTI is a route-based, GRE-free virtual interface you can route over, unlike policy-based crypto maps or non-encrypting AH.",
+      "id": "Q-C05-0149",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-24",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "passive",
+      "created_at": "2026-10-28T14:15:53+00:00",
+      "verified_at": null,
+      "seen_at": "2026-10-28T16:23:16+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-26",
+        "C05-25",
+        "C05-28"
+      ],
+      "type": "single",
+      "angle": "interpret-config",
+      "difficulty": 3,
+      "stem": "A browser shows the certificate chain below for portal.example.com. What BEST explains why the browser trusts it?",
+      "exhibit": "Certificate chain for portal.example.com\n  [0] Subject: CN=portal.example.com\n      Issuer:  CN=Example Issuing CA\n  [1] Subject: CN=Example Issuing CA\n      Issuer:  CN=Example Root CA\n  [2] Subject: CN=Example Root CA\n      Issuer:  CN=Example Root CA  (self-signed)\nTrusted roots on this device: Example Root CA",
+      "options": [
+        {
+          "key": "A",
+          "text": "The certificate's own public key proves the site's identity directly",
+          "rationale": "A certificate's public key alone proves nothing without a trusted CA's signature vouching for it.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Example Issuing CA issued the certificate for portal.example.com",
+          "rationale": "The issuing CA did sign this certificate, but it is trusted only because the trusted root signed it in turn.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "A root CA already in the device's trust store signed the chain",
+          "rationale": "Trust flows from a root the device already trusts; its signature validates the intermediate, which validates the server certificate.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "The certificate is self-signed and validates on its own",
+          "rationale": "This certificate is not self-signed; it chains through an intermediate up to a trusted root.",
+          "role": "wrong"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "A CA is the trust anchor because a root the device already trusts signs the chain with its private key, and that signature is what makes the leaf certificate trustworthy. Being issued by some CA is not enough unless that CA chains to a trusted root.",
+      "discriminator_tested": "A certificate is trusted because a root CA in the trust store signed its chain, not merely because some CA issued it.",
+      "id": "Q-C05-0150",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-26",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T14:15:53+00:00",
+      "verified_at": null,
       "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-31",
+        "C05-02",
+        "C05-04"
+      ],
+      "type": "single",
+      "angle": "interpret-output",
+      "difficulty": 2,
+      "stem": "A router shows the output below. Which statement BEST describes this configuration?",
+      "exhibit": "R1# show access-lists\nExtended IP access list WEB-IN\n    10 permit tcp any host 198.51.100.10 eq 443\n    20 permit tcp any host 198.51.100.10 eq 80\n    30 deny ip any any",
+      "options": [
+        {
+          "key": "A",
+          "text": "An ACL whose entries each need the 'access-list' keyword",
+          "rationale": "Entries in a named ACL are entered without the access-list keyword, as the numbered lines show.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "A standard ACL that matches on source address",
+          "rationale": "A standard ACL can match source addresses; this one matches destinations and ports, so it is extended.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "An extended named ACL filtering by destination and port",
+          "rationale": "The Extended header and the destination-host, port matches show it is an extended named ACL; the standard or extended keyword is required when creating one.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "An ACL that allows web traffic to one internal server",
+          "rationale": "It does allow web traffic to that server, but this omits that it is extended and ends with an explicit deny.",
+          "role": "partial"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "A named ACL is created with ip access-list followed by standard or extended, and its entries are typed inside ACL config mode without the access-list keyword. The Extended header and destination/port matching identify this one as extended.",
+      "discriminator_tested": "Named ACLs require the standard or extended keyword at creation, and their entries omit the access-list keyword used by numbered ACLs.",
+      "id": "Q-C05-0151",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-31",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T14:15:53+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-35",
+        "C05-30",
+        "C05-04"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 2,
+      "stem": "An administrator wants a single ACL entry that matches both SSH and Telnet to any destination. Which entry body BEST matches both in one line?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "ip any any range 22 23",
+          "rationale": "The ip keyword matches all IP traffic and cannot take port numbers, so this entry is rejected.",
+          "role": "wrong"
+        },
+        {
+          "key": "B",
+          "text": "udp any any range 22 23",
+          "rationale": "The syntax is valid, but SSH and Telnet run over TCP, so matching UDP ports 22-23 catches the wrong traffic.",
+          "role": "related"
+        },
+        {
+          "key": "C",
+          "text": "tcp any any range 22 23",
+          "rationale": "A port range needs a transport protocol; tcp with range 22 23 matches TCP ports 22 and 23 in one entry, covering SSH and Telnet.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "tcp any any eq 22",
+          "rationale": "This is valid, but eq 22 matches only SSH, so it does not include Telnet.",
+          "role": "partial"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "Port numbers require a transport protocol keyword such as tcp or udp, and the range operator takes two ports; ip matches every protocol and cannot specify ports. Since SSH and Telnet are TCP, tcp ... range 22 23 is the correct single entry.",
+      "discriminator_tested": "Ports require tcp or udp and a port operator; the ip keyword matches all traffic and cannot take port numbers.",
+      "id": "Q-C05-0152",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-35",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T14:15:53+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-24",
+        "C05-22",
+        "C05-19"
+      ],
+      "type": "single",
+      "angle": "assess-risk",
+      "difficulty": 3,
+      "stem": "An engineer replaces a policy-based crypto map with a route-based IPsec VTI so OSPF can run over the tunnel. Because a VTI is a routable interface, what is the MAIN consequence the engineer must plan for?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "An extended ACL must still spell out exactly which traffic to encrypt first",
+          "rationale": "Selecting encrypted traffic with an ACL is the policy-based crypto-map method the VTI replaces, not something still required.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "It removes the GRE header that GRE-over-IPsec would add",
+          "rationale": "Dropping the GRE header is a real VTI advantage, but it is a benefit, not the operational consequence to manage.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "AH will authenticate but not encrypt the tunneled packets",
+          "rationale": "AH authenticates without encrypting and does not create a routable tunnel, so it is unrelated to this design.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "Routing, not an ACL, now decides which traffic the tunnel protects",
+          "rationale": "A VTI is route-based, so whatever routing sends into the interface is encrypted; a routing mistake can misdirect or expose traffic.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D"
+      ],
+      "explanation": "Because a VTI presents IPsec as a routable interface, routing (not an ACL) determines what is protected, so routing errors become a security and availability concern. Dropping the GRE header is a benefit of the VTI, and ACL-based selection describes the crypto-map approach it replaces.",
+      "discriminator_tested": "A route-based VTI protects whatever routing sends into it, shifting traffic selection from an ACL to the routing table.",
+      "id": "Q-C05-0153",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-24",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "passive",
+      "created_at": "2026-10-28T18:03:48+00:00",
+      "verified_at": null,
+      "seen_at": "2026-10-28T19:58:00+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-25",
+        "C05-26",
+        "C05-27"
+      ],
+      "type": "multi",
+      "angle": "interpret-config",
+      "difficulty": 3,
+      "stem": "A team stands up the components summarized below. Which two statements BEST describe what has been built? (Choose two.)",
+      "exhibit": "InternalTrust deployment summary\n  Root CA:            corp-root-ca (offline)\n  Issuing CA:         corp-issuing-ca\n  Certificate templates: Workstation, WebServer, User\n  Policies:           issuance + revocation (CRL every 24h)\n  Enrollment:         auto-enroll for domain laptops",
+      "options": [
+        {
+          "key": "A",
+          "text": "A public key infrastructure (PKI), the full trust system",
+          "rationale": "CAs, templates, issuance and revocation policies, and enrollment together form a PKI, the overall certificate-trust system.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "A symmetric-key system where parties share one secret key",
+          "rationale": "Symmetric-key systems share one secret and are unrelated to certificate-based public-key trust.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "A single server certificate issued for one public website",
+          "rationale": "A lone server certificate is a single artifact a PKI can issue, not the whole infrastructure described.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "A certificate authority, which is just one part of this build",
+          "rationale": "A CA is only one component of what was built; the deployment also includes templates, policies, and enrollment.",
+          "role": "partial"
+        },
+        {
+          "key": "E",
+          "text": "A framework binding public keys to identities via CAs",
+          "rationale": "PKI is precisely a framework that binds public keys to identities using CAs and policies, which the summary lists.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "A",
+        "E"
+      ],
+      "explanation": "A PKI is the entire framework of CAs, certificates, templates, policies, and enrollment that binds public keys to identities. Naming only the certificate authority captures a single component, not the system as a whole.",
+      "discriminator_tested": "PKI is the complete certificate trust framework; a CA is just one part within it.",
+      "id": "Q-C05-0154",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-25",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "passive",
+      "created_at": "2026-10-28T18:03:48+00:00",
+      "verified_at": null,
+      "seen_at": "2026-10-29T20:36:46+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-26",
+        "C05-25",
+        "C05-28"
+      ],
+      "type": "single",
+      "angle": "scenario-with-distractor",
+      "difficulty": 3,
+      "stem": "A browser trusts portal.example.com. The site's certificate was issued by 'Example Issuing CA', which in turn chains up to 'Example Root CA', and that root is the one in the browser's trust store. What BEST explains the trust?",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "A root CA already trusted by the browser signed the chain",
+          "rationale": "Trust flows from a root the browser already holds; its signature validates the issuing CA, which validates the site certificate.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The certificate is self-signed and needs no issuer",
+          "rationale": "This certificate is not self-signed; it chains through an issuing CA up to the trusted root.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "The certificate's own public key vouches for the site",
+          "rationale": "A certificate's public key alone proves nothing without a trusted CA's signature over it.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "The issuing CA that signed the certificate is named in it",
+          "rationale": "The issuing CA did sign the certificate, but that matters only because the trusted root vouches for that issuing CA.",
+          "role": "partial"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "A certificate is trusted because a CA already in the trust store signed the chain with its private key, anchoring the issuing CA and then the site certificate. Being issued by some CA is not enough unless that CA chains to a trusted root.",
+      "discriminator_tested": "Trust comes from a root CA in the trust store signing the chain, not merely from the certificate having an issuer.",
+      "id": "Q-C05-0155",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-26",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T18:03:48+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-31",
+        "C05-04",
+        "C05-02"
+      ],
+      "type": "multi",
+      "angle": "interpret-config",
+      "difficulty": 3,
+      "stem": "The configuration below creates a named ACL. Which two statements about this syntax are correct? (Choose two.)",
+      "exhibit": "R1(config)# ip access-list extended WEB-IN\nR1(config-ext-nacl)# permit tcp any host 198.51.100.10 eq 443\nR1(config-ext-nacl)# deny ip any any",
+      "options": [
+        {
+          "key": "A",
+          "text": "The same rule could be written as a numbered standard ACL",
+          "rationale": "This rule matches on destination and port, which a standard ACL cannot express, so it is not interchangeable.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "Each permit or deny line must start with `access-list`",
+          "rationale": "Beginning each line with `access-list` is numbered-ACL syntax; named ACL entries do not, so this is the common mistake.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "Naming the ACL requires the `standard` or `extended` keyword",
+          "rationale": "A named ACL must be created with `ip access-list` followed by `standard` or `extended`; the keyword is mandatory.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "A named ACL's name must be a number from 100 to 199",
+          "rationale": "A named ACL uses a name, not a 100-199 number; that range belongs to numbered extended ACLs.",
+          "role": "related"
+        },
+        {
+          "key": "E",
+          "text": "Its entries omit the `access-list` keyword",
+          "rationale": "Inside ACL config mode the permit/deny entries are entered without the `access-list` keyword numbered ACLs use.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "C",
+        "E"
+      ],
+      "explanation": "Named ACLs require `standard` or `extended` at creation and then take entries without the `access-list` keyword. Beginning each entry with `access-list` is the numbered-ACL syntax and is the frequent error.",
+      "discriminator_tested": "Named ACLs need the standard/extended keyword and drop the `access-list` prefix on their entries.",
+      "id": "Q-C05-0156",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-31",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "passive",
+      "created_at": "2026-10-28T18:03:48+00:00",
+      "verified_at": null,
+      "seen_at": "2026-10-29T19:31:10+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-35",
+        "C05-30",
+        "C05-04"
+      ],
+      "type": "multi",
+      "angle": "symptom-to-attack",
+      "difficulty": 3,
+      "stem": "An administrator tries to permit both SSH and Telnet in one ACL entry and types `permit ip any any range 22 23`, but the router rejects it. Which two facts explain the failure? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "SSH and Telnet use UDP, so `udp` is required here",
+          "rationale": "SSH and Telnet run over TCP, not UDP, so `udp` would match the wrong traffic.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "The `ip` keyword matches all protocols and cannot specify ports",
+          "rationale": "`ip` matches every protocol and has no concept of ports, so appending a port range is invalid.",
+          "role": "best"
+        },
+        {
+          "key": "C",
+          "text": "Port numbers like 22 and 23 require `tcp` or `udp` instead",
+          "rationale": "Port numbers need a transport protocol keyword; `tcp` must replace `ip` to use ports 22 and 23.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "`range 22 23` is invalid because ranges need three ports",
+          "rationale": "A `range` takes two ports, not three; the range itself is fine once the protocol is `tcp`.",
+          "role": "wrong"
+        },
+        {
+          "key": "E",
+          "text": "The entry must use `eq` since `range` is not a valid operator",
+          "rationale": "`range` is a valid operator; the problem is `ip` cannot take ports, not the operator.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "B",
+        "C"
+      ],
+      "explanation": "Port numbers are only valid with a transport protocol such as `tcp` or `udp`; the `ip` keyword matches all protocols and cannot specify ports. Using `permit tcp any any range 22 23` would correctly match SSH and Telnet.",
+      "discriminator_tested": "Ports require `tcp`/`udp`; the `ip` keyword matches all traffic and rejects port operands.",
+      "id": "Q-C05-0157",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-35",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "passive",
+      "created_at": "2026-10-28T18:03:48+00:00",
+      "verified_at": null,
+      "seen_at": "2026-10-28T19:30:44+00:00",
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-24",
+        "C05-22",
+        "C05-23"
+      ],
+      "type": "multi",
+      "angle": "cause-and-effect-ordering",
+      "difficulty": 3,
+      "stem": "An engineer replaces a policy-based crypto map between two sites with a Cisco IPsec static VTI (tunnel mode ipsec ipv4) and then configures dynamic routing between the sites. Which two effects BEST describe the result of this change? (Choose two.)",
+      "exhibit": null,
+      "options": [
+        {
+          "key": "A",
+          "text": "Traffic is still protected by ESP, as it was before",
+          "rationale": "ESP does still provide encryption, but that isn't an effect of the change; both designs use IPsec ESP.",
+          "role": "partial"
+        },
+        {
+          "key": "B",
+          "text": "Packets drop a GRE header that the crypto map used to add",
+          "rationale": "Crypto maps don't add a GRE header; GRE appears in GRE-over-IPsec designs, which a VTI makes unnecessary.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "Branch sites now build direct tunnels to each other on demand",
+          "rationale": "On-demand spoke-to-spoke tunnels describe Cisco DMVPN, not a point-to-point static VTI.",
+          "role": "related"
+        },
+        {
+          "key": "D",
+          "text": "OSPF hellos now cross the link, so neighbors can form",
+          "rationale": "Correct: a VTI is a routable virtual interface that carries multicast, so routing-protocol hellos pass and adjacencies form; a crypto map offers no interface to peer over.",
+          "role": "best"
+        },
+        {
+          "key": "E",
+          "text": "Routes toward the tunnel decide what traffic is encrypted",
+          "rationale": "Correct: with a route-based VTI, whatever is routed into the tunnel interface is encrypted, replacing the crypto ACL that a policy-based crypto map uses to select traffic.",
+          "role": "best"
+        }
+      ],
+      "answer": [
+        "D",
+        "E"
+      ],
+      "explanation": "A Cisco IPsec VTI makes the tunnel a routable interface: routing protocols run over it and the routing table decides what is encrypted. A policy-based crypto map instead selects traffic with a crypto ACL and has no interface, which is why designs that needed routing used to add GRE over IPsec.",
+      "discriminator_tested": "VTIs are route-based and steer traffic into encryption through routing, whereas crypto maps are policy-based and match traffic with an ACL.",
+      "id": "Q-C05-0158",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-24",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T19:54:16+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-26",
+        "C05-27",
+        "C05-28"
+      ],
+      "type": "single",
+      "angle": "classify-element",
+      "difficulty": 2,
+      "stem": "An analyst inspects the certificate shown in the exhibit on a company laptop. What BEST classifies this certificate?",
+      "exhibit": "Subject:            CN=Example Root CA, O=Example Corp\nIssuer:             CN=Example Root CA, O=Example Corp\nBasic Constraints:  CA:TRUE\nKey Usage:          Certificate Sign, CRL Sign\nStore:              Trusted Root Certification Authorities\nHas signed:         CN=Example Issuing CA, O=Example Corp",
+      "options": [
+        {
+          "key": "A",
+          "text": "A certificate template defining issuance settings",
+          "rationale": "A certificate template is a configuration on the CA that sets options for issued certificates; it isn't a certificate in the trust store.",
+          "role": "related"
+        },
+        {
+          "key": "B",
+          "text": "A self-signed server certificate the browser should reject",
+          "rationale": "Self-signed doesn't mean untrusted: roots are self-signed by design, and this one is a CA in the trusted root store, not a server certificate.",
+          "role": "wrong"
+        },
+        {
+          "key": "C",
+          "text": "A root CA certificate acting as the trust anchor",
+          "rationale": "Correct: subject and issuer match, it is a CA that signs other CA certificates, and it sits in the trusted root store, so it is the trust anchor whose private key signs the chain.",
+          "role": "best"
+        },
+        {
+          "key": "D",
+          "text": "An intermediate CA certificate that issues to users",
+          "rationale": "It is a CA certificate, but an intermediate is issued by a different CA; here the subject and issuer are the same, which marks the root.",
+          "role": "partial"
+        }
+      ],
+      "answer": [
+        "C"
+      ],
+      "explanation": "A certificate authority is trusted because it signs certificates with its own private key, and the root CA is self-signed and stored as the trust anchor. Intermediate CAs are trusted only because the root signed them.",
+      "discriminator_tested": "Matching subject and issuer plus placement in the trusted store identify the root CA, the anchor that every chain leads back to.",
+      "id": "Q-C05-0159",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-26",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "unreviewed",
+      "created_at": "2026-10-28T19:54:16+00:00",
+      "verified_at": null,
+      "seen_at": null,
+      "retired_reason": null,
+      "disputed_reason": null,
+      "disputed_at": null,
+      "disputed_session": null,
+      "status_before_dispute": null
+    },
+    {
+      "objectives": [
+        "C05-31",
+        "C05-32",
+        "C05-36"
+      ],
+      "type": "single",
+      "angle": "assess-risk",
+      "difficulty": 3,
+      "stem": "An administrator pastes the configuration in the exhibit into a router during a change window. The router reports errors on the first three lines but accepts the interface commands, and the administrator closes the ticket without verifying. What is the MOST likely consequence?",
+      "exhibit": "ip access-list WEB-IN\n permit tcp any host 203.0.113.10 eq 443\n deny ip any any log\n!\ninterface GigabitEthernet0/1\n ip access-group WEB-IN in",
+      "options": [
+        {
+          "key": "A",
+          "text": "Inbound traffic passes unfiltered; no WEB-IN ACL exists",
+          "rationale": "Correct: without the standard or extended keyword the ACL isn't created, its entries are rejected too, and an access-group that references an undefined ACL filters nothing.",
+          "role": "best"
+        },
+        {
+          "key": "B",
+          "text": "The HTTPS server stays reachable as the change intended",
+          "rationale": "HTTPS does stay reachable, but so does every other inbound flow, which is the real exposure.",
+          "role": "partial"
+        },
+        {
+          "key": "C",
+          "text": "HTTPS alone reaches the server, as the entries intended",
+          "rationale": "This assumes the ACL was built, but the missing extended keyword made the router reject it and its entries.",
+          "role": "wrong"
+        },
+        {
+          "key": "D",
+          "text": "Traffic is dropped by the implicit deny at the ACL's end",
+          "rationale": "The implicit deny applies to an ACL that has entries; an access-group pointing at an ACL that doesn't exist lets traffic through instead.",
+          "role": "related"
+        }
+      ],
+      "answer": [
+        "A"
+      ],
+      "explanation": "A named ACL must be created with 'ip access-list standard' or 'ip access-list extended' followed by the name, and its entries are then typed without the 'access-list' keyword. Leaving out the type keyword means the ACL is never created, so the interface ends up with no filtering.",
+      "discriminator_tested": "Creating a named ACL requires the standard or extended type keyword before the name; without it, no list is built.",
+      "id": "Q-C05-0160",
+      "section": "C05",
+      "domain": null,
+      "source_ref": "objectives/C05.md#C05-31",
+      "provider": "claude",
+      "model": "claude-chat",
+      "status": "passive",
+      "created_at": "2026-10-28T19:54:16+00:00",
+      "verified_at": null,
+      "seen_at": "2026-10-29T18:33:38+00:00",
       "retired_reason": null,
       "disputed_reason": null,
       "disputed_at": null,
