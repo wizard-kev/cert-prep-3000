@@ -50,6 +50,7 @@ Local web app for certification exam practice. Each certification has objective 
 - Not tracked (`.gitignore`): `.env`, `.venv`, caches, `install/install.log`, `data/*.db` (progress), `data/backups/`. Back up progress separately before risky changes ("Back up now" on the app's Backups page, or `tracker.backup("manual")`).
 - `.gitattributes` sets `* -text` so files are stored byte-exact. CRLF: the pool JSON, the CCST `imports/` archives and `src/certprep/static/app.js`; everything else is LF. Don't add line-ending normalization, and keep each file's endings. Git Bash's `sed -i` silently turns CRLF into LF (it did to `app.js` once), so edit those files with the Edit tool or Python.
 - Commit one logical change at a time; never commit progress databases or `.env`.
+- Remote `origin`: https://github.com/wizard-kev/cert-prep-3000. It is **private** and must stay so (the CCST objective files derive from a copyrighted study guide). The GitHub CLI is installed and signed in as `wizard-kev`. Push only when the user asks: `git push`, plus `git push origin --tags` for new tags. The question bank is shared through git too, so commit it after the user imports or reviews questions.
 
 ## Adding a certification
 - In the app: "Add a certification" (top bar), or "Something else" in the first-start dialog. The wizard steps are name → exam facts (prompt, paste reply, check and correct) → objectives (paste the official list, prompt, paste reply, check) → Create → first questions in batches until each objective has two → Finish. It can be left and resumed from home.

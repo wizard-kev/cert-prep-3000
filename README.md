@@ -15,6 +15,24 @@ paste Claude's reply back.
 - **Run:** use the desktop shortcut, or `.\run.ps1`. The app opens at http://127.0.0.1:8000.
 - **Uninstall:** run `install\uninstall.cmd`. Your progress and certifications are kept unless you add `-RemoveProgress`.
 
+## On another device
+
+The project lives in a **private** GitHub repository, https://github.com/wizard-kev/cert-prep-3000. Keep it
+private: the CCST objective files were built from a copyrighted study guide.
+
+1. Install Git and Python 3.12 or newer.
+2. Clone it: `git clone https://github.com/wizard-kev/cert-prep-3000.git`
+3. Run `install\install.cmd` in the new folder (Windows; on a Mac or Linux, create a virtual environment from
+   `requirements.txt` and start the app with `python -m certprep.launch`, with `src` on `PYTHONPATH`).
+4. Later, to get updates: `git pull`.
+
+Progress doesn't travel through GitHub. To carry yours over, open **Backups** on the old device and download a
+backup, put the file in the new device's `data\backups` folder, then **Restore** it there. Restoring replaces that
+device's progress.
+
+To give someone access, add them on GitHub under the repository's **Settings > Collaborators**. Each person keeps
+their own progress.
+
 ## What it does
 
 - **Practice:** feedback after every answer. It leans toward your weak objectives, brings back what you missed, and
